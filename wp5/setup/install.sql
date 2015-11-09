@@ -43,6 +43,37 @@ ALTER TABLE users
   OWNER TO "testDB";
 
   
+  
+-- Table: notifications
+
+-- DROP TABLE notifications;
+
+CREATE TABLE notifications
+(
+  notification_id bigint NOT NULL,
+  message text NOT NULL,
+  user_id bigint,
+  CONSTRAINT notifications_primary_key PRIMARY KEY (notification_id),
+  CONSTRAINT users_foreign_key FOREIGN KEY (user_id)
+      REFERENCES users (user_id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE notifications
+  OWNER TO "testDB";
+
+-- Index: fki_users_foreign_key
+
+-- DROP INDEX fki_users_foreign_key;
+
+CREATE INDEX fki_users_foreign_key
+  ON notifications
+  USING btree
+  (user_id);
+
+  
 
 -- INSERT TEST DATA
 
