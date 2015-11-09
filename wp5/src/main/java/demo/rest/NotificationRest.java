@@ -28,9 +28,9 @@ public class NotificationRest {
     private NotificationsJpa notifications;
 	
 	@RequestMapping("/createForUsers")
-	public void createForUsers(@RequestParam(required=true) List<Long> users, @RequestParam(required=true) String message) 
+	public void createForUsers(@RequestParam(required=true) List<String> usersEmail, @RequestParam(required=true) String message) 
 	{
-		notifier.createForUsers(users, message);
+		notifier.createForUsers(usersEmail, message);
 	}
 	
 	@RequestMapping("/createForRole")
