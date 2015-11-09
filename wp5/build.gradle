@@ -39,6 +39,8 @@ dependencies {
     testCompile('org.springframework.boot:spring-boot-starter-test')
     
     compile("org.postgresql:postgresql:9.4-1205-jdbc41")
+    
+    compile("org.springframework.boot:spring-boot-starter-mail")
 }
 
 

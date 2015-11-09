@@ -4,7 +4,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -16,12 +23,17 @@ import demo.model.User;
 @Component
 public class Notifier {
 
+	private final Logger log = LoggerFactory.getLogger(this.getClass());
+	
 	@Autowired
     private UsersJpa users;
 	
 	@Autowired
     private NotificationsJpa notifications;
 
+	@Autowired
+	private JavaMailSender javaMailSender;
+	
 	private final ArrayList<Notification> notificationsToSendEmail = new ArrayList<Notification>();
 	private final ArrayList<Notification> internalNotificationsToSendEmail = new ArrayList<Notification>();
 	private final ArrayList<Notification> notificationsToRemove = new ArrayList<Notification>();
@@ -92,9 +104,27 @@ public class Notifier {
 		notificationsToRemove.clear();
     }
 	
+	private final String emailTemplate = "Hi %s, \nyou have just received a supersede notification.";
+	
 	private void sendEmail(Notification n)
 	{
-		
+		try
+		{
+			MimeMessage message = javaMailSender.createMimeMessage();
+			MimeMessageHelper helper;
+			// SSL Certhificate.
+			helper = new MimeMessageHelper(message, true);
+			// Multipart messages.
+			helper.setSubject("Supersede notification");
+			helper.setTo(n.getUser().getEmail());
+			helper.setText(String.format(emailTemplate, n.getUser().getName()), true);
+			javaMailSender.send(message);
+		}
+		catch(MessagingException ex)
+		{
+			log.error("Exception while send an email: " + ex.getMessage());
+			ex.printStackTrace();
+		}
 	}
 	
 	
