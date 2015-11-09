@@ -53,6 +53,9 @@ CREATE TABLE notifications
   notification_id bigint NOT NULL,
   message text NOT NULL,
   user_id bigint,
+  read boolean NOT NULL,
+  email_sent boolean NOT NULL,
+  creation_time timestamp with time zone NOT NULL,
   CONSTRAINT notifications_primary_key PRIMARY KEY (notification_id),
   CONSTRAINT users_foreign_key FOREIGN KEY (user_id)
       REFERENCES users (user_id) MATCH SIMPLE

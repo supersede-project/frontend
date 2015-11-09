@@ -17,13 +17,13 @@ public class Notifier {
     private UsersJpa users;
 	
 	@Autowired
-    private NotificationsJpa notifies;
+    private NotificationsJpa notifications;
 	
 	public void createForUsers(List<Long> ids, String message) {
 		for(Long id : ids)
 		{
 			User u = users.findByUserId(id);
-			notifies.save(new Notification(message, u));
+			notifications.save(new Notification(message, u));
 		}
 	}
 
@@ -31,7 +31,7 @@ public class Notifier {
 		List<User> us = users.findByRole(role);
 		for(User u : us)
 		{
-			notifies.save(new Notification(message, u));
+			notifications.save(new Notification(message, u));
 		}
 		
 	}

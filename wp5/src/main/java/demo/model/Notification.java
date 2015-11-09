@@ -1,5 +1,8 @@
 package demo.model;
 
+import java.util.Date;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -8,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -22,6 +27,11 @@ public class Notification {
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="user_id")
     private User user;
+    private Boolean read;
+    private Boolean emailSent;
+    @Column(columnDefinition= "TIMESTAMP WITH TIME ZONE")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date creationTime;
     
     public Notification()
     {}
@@ -29,6 +39,9 @@ public class Notification {
     public Notification(String message, User user) {
         this.message = message;
         this.user = user;
+        read = false;
+        emailSent = false;
+        creationTime = new Date();
     }
  
     public Long getNotificationId() {
@@ -54,5 +67,29 @@ public class Notification {
  
     public void setUser(User user) {
         this.user = user;
+    }
+    
+    public Boolean getRead() {
+        return read;
+    }
+ 
+    public void setRead(Boolean read) {
+        this.read = read;
+    }
+    
+    public Boolean getEmailSent() {
+        return emailSent;
+    }
+ 
+    public void setEmailSent(Boolean emailSent) {
+        this.emailSent = emailSent;
+    }
+    
+    public Date getCreationTime() {
+        return creationTime;
+    }
+ 
+    public void setCreationTime(Date creationTime) {
+        this.creationTime = creationTime;
     }
 }

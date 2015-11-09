@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,22 +25,47 @@ public class NotificationRest {
     private UsersJpa users;
 
 	@Autowired
-    private NotificationsJpa notifies;
+    private NotificationsJpa notifications;
 	
 	@RequestMapping("/createForUsers")
-	public void createForUsers(@RequestParam List<Long> users, @RequestParam String message) {
+	public void createForUsers(@RequestParam(required=true) List<Long> users, @RequestParam(required=true) String message) 
+	{
 		notifier.createForUsers(users, message);
 	}
 	
 	@RequestMapping("/createForRole")
-	public void createForRole(@RequestParam String role, @RequestParam String message) {
+	public void createForRole(@RequestParam(required=true) String role, @RequestParam(required=true) String message) 
+	{
 		notifier.createForRole(role, message);
 	}
 	
-	@RequestMapping("/get")
-	public List<Notification> createForUsers(@RequestParam Long userId) {
+	@RequestMapping("")
+	public List<Notification> getByUserId(@RequestParam(required=true) Long userId, @RequestParam(defaultValue="true") Boolean toRead)
+	{
 		User u = users.findByUserId(userId);
-		return notifies.findByUser(u);
+		List<Notification> ns;
+		if(toRead)
+		{
+			ns = notifications.findByUserAndRead(u, !toRead);
+		}
+		else
+		{
+			ns = notifications.findByUser(u);
+		}
+		
+		return ns;
 	}
 	
+	@RequestMapping("/read")
+	public void setRead(@RequestParam(required=true) Long notificationId) {
+		Notification n = notifications.findByNotificationId(notificationId);
+		n.setRead(true);
+		notifications.save(n);
+	}
+	
+	@RequestMapping(method=RequestMethod.DELETE)
+	public void delete(@RequestParam(required=true) Long notificationId)
+	{
+		notifications.delete(notificationId);
+	}
 }
