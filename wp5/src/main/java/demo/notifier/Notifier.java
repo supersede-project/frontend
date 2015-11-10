@@ -28,7 +28,7 @@ import demo.model.Notification;
 import demo.model.User;
 
 @Component
-@PropertySource("classpath:notifier.properties")
+@PropertySource("classpath:wp5.properties")
 public class Notifier {
 
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
