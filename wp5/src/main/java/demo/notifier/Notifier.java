@@ -10,8 +10,10 @@ import javax.mail.internet.MimeMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.mail.MailAuthenticationException;
 import org.springframework.mail.MailException;
 import org.springframework.mail.MailSendException;
@@ -26,6 +28,7 @@ import demo.model.Notification;
 import demo.model.User;
 
 @Component
+@PropertySource("classpath:notifier.properties")
 public class Notifier {
 
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
@@ -43,8 +46,8 @@ public class Notifier {
 	private final ArrayList<Notification> internalNotificationsToSendEmail = new ArrayList<Notification>();
 	private final ArrayList<Notification> notificationsToRemove = new ArrayList<Notification>();
 	
-	//private final int MAX_TIME = 20 * 60 * 1000; // 20 minutes
-	private final int MAX_TIME = 1 * 60 * 1000; // 20 minutes
+	@Value("${notifier.mail.sender.delay}")
+	private int SENDER_DELAY;
 	
 	public void createForUsers(List<String> usersEmail, String message)
 	{
@@ -79,7 +82,7 @@ public class Notifier {
 		
 	}
 
-	@Scheduled(fixedRate = 15000)
+	@Scheduled(fixedRateString = "${notifier.mail.sender.checkRate}")
     public void checkNotifications()
 	{
 		log.debug("check notifications");
@@ -104,7 +107,7 @@ public class Notifier {
 				log.debug("notification read");
 			}
 			//if notification has been created more than 'MAX_TIME' minutes ago, send an email
-			else if((now.getTime() - n.getCreationTime().getTime()) >= MAX_TIME)
+			else if((now.getTime() - n.getCreationTime().getTime()) >= SENDER_DELAY)
 			{
 				log.debug("send email to " + n.getUser().getEmail());
 				sendEmail(n);
