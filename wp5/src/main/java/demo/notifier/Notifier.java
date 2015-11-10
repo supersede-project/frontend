@@ -26,7 +26,6 @@ import demo.model.Notification;
 import demo.model.User;
 
 @Component
-@ConfigurationProperties(prefix = "mail")
 public class Notifier {
 
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
