@@ -133,27 +133,12 @@ public class Notifier {
 			helper.setText(String.format(emailTemplate, n.getUser().getName()), true);
 			javaMailSender.send(message);
 		}
-		catch(MailAuthenticationException ex)
-		{
-			log.error("Exception while send an email: " + ex.getMessage());
-			ex.printStackTrace();
-		}
-		catch(MailSendException ex)
-		{
-			log.error("Exception while send an email: " + ex.getMessage());
-			ex.printStackTrace();
-		}
 		catch(MailException ex)
 		{
 			log.error("Exception while send an email: " + ex.getMessage());
 			ex.printStackTrace();
 		}
 		catch(MessagingException ex)
-		{
-			log.error("Exception while send an email: " + ex.getMessage());
-			ex.printStackTrace();
-		}
-		catch(Exception ex)
 		{
 			log.error("Exception while send an email: " + ex.getMessage());
 			ex.printStackTrace();
