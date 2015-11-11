@@ -1,6 +1,8 @@
 package demo.security;
 
 import java.io.IOException;
+import java.io.ObjectOutputStream.PutField;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -46,8 +48,15 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Value("#{'${web.security.permit.urls}'.split(',')}") 
 	private String[] PERMIT_URLS;
 	
-	@Value("${web.security.auth}")
-	private Map<String, String> AUTHORITIES;
+	//@Value("#{PropertySplitter.map('${web.security.auth.admin}')}")
+	//private Map<String, String[]> AUTH;
+	
+	private static final Map<String, String[]> AUTH = new HashMap<String, String[]>() {
+		{
+			put("admin", new String[]{"ADMIN", "USER"});
+			put("user", new String[]{"USER"});
+		}
+	};
 	
 	@Autowired
 	private UsersJpa users;
@@ -66,7 +75,7 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				demo.model.User user = users.findByEmail(email);
 
 				if (user != null) {
-					List<GrantedAuthority> permissions = AuthorityUtils.createAuthorityList(AUTHORITIES.get(user.getRole()));
+					List<GrantedAuthority> permissions = AuthorityUtils.createAuthorityList(AUTH.get(user.getRole()));
 					return new User(user.getEmail(), user.getPassword(), true, true, true, true, permissions);
 				}
 				
