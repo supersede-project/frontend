@@ -16,11 +16,13 @@ apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'spring-boot' 
 apply plugin: 'io.spring.dependency-management' 
+apply plugin: 'war'
 
-jar {
+war {
     baseName = 'wp5'
     version = '0.0.1-SNAPSHOT'
 }
+
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
@@ -28,6 +30,9 @@ repositories {
     mavenCentral()
 }
 
+configurations {
+    providedRuntime
+}
 
 dependencies {
     compile('org.springframework.boot:spring-boot-starter-security')
@@ -41,6 +46,8 @@ dependencies {
     compile("org.postgresql:postgresql:9.4-1205-jdbc41")
     
     compile("org.springframework.boot:spring-boot-starter-mail")
+    
+    providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
 }
 
 

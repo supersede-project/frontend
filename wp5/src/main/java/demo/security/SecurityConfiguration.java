@@ -79,7 +79,6 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				}
 				
 				throw new UsernameNotFoundException("could not find the user '" + email + "'");
-
 			}
 		};
 	}
