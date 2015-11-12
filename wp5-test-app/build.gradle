@@ -19,7 +19,7 @@ apply plugin: 'io.spring.dependency-management'
 apply plugin: 'war'
 
 war {
-    baseName = 'wp5'
+    baseName = 'wp5-test-app'
     version = '0.0.1-SNAPSHOT'
 }
 
@@ -38,14 +38,7 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-security')
     compile('org.springframework.boot:spring-boot-starter-web')
     
-    compile("org.springframework.boot:spring-boot-starter-jdbc")
-	compile("org.springframework.boot:spring-boot-starter-data-jpa")
-    
     testCompile('org.springframework.boot:spring-boot-starter-test')
-    
-    compile("org.postgresql:postgresql:9.4-1205-jdbc41")
-    
-    compile("org.springframework.boot:spring-boot-starter-mail")
     
     providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
     

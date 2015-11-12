@@ -90,7 +90,7 @@ angular.module('hello', [ 'ngRoute' ]).config(function($routeProvider, $httpProv
 			}
 
 		}).controller('home', function($scope, $http) {
-	$http.get('/resource/').success(function(data) {
+	$http.get('wp5-test-app/resource').success(function(data) {
 		$scope.greeting = data;
 	})
 });
