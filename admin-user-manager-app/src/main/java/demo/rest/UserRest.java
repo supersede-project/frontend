@@ -1,5 +1,6 @@
 package demo.rest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,8 @@ import demo.model.User;
 @RequestMapping("/user")
 public class UserRest {
 
+	private static List<String> roles = new ArrayList<String>() {{add("user"); add("admin");}};
+	
 	@Autowired
     private UsersJpa users;
 	
@@ -62,5 +65,11 @@ public class UserRest {
 	@RequestMapping("/count")
 	public Long count() {
 		return users.count();
+	}
+	
+	@Secured({"ROLE_ADMIN"})
+	@RequestMapping("/roles")
+	public List<String> getRoles() {
+		return roles;
 	}
 }
