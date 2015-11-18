@@ -1,4 +1,4 @@
-angular.module('hello', [ 'ngRoute' ]).config(function($routeProvider, $httpProvider) {
+var app = angular.module('w5app', [ 'ngRoute' ]).config(function($routeProvider, $httpProvider, $controllerProvider, $compileProvider, $filterProvider, $provide) {
 
 	$routeProvider.when('/', {
 		templateUrl : 'home.html',
@@ -9,21 +9,30 @@ angular.module('hello', [ 'ngRoute' ]).config(function($routeProvider, $httpProv
 	}).when('/:name*', {
 		templateUrl : function(urlattr){
             return urlattr.name + '.html';
-        },
-		controller : 'navigation'
+        }
 	}).otherwise('/');
 
 	$httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+	
+	app.controllerProvider = $controllerProvider;
+    app.compileProvider    = $compileProvider;
+    app.routeProvider      = $routeProvider;
+    app.filterProvider     = $filterProvider;
+    app.provide            = $provide;
 
-}).controller('navigation', function($rootScope, $scope, $http, $location, $route) {
+});
 
+app.controller('navigation', function($rootScope, $scope, $http, $location, $route) {
+
+			window.MY_SCOPE = $scope;
+	
 			$scope.tab = function(route) {
 				return $route.current && route === $route.current.controller;
 			};
 
 			$rootScope.roles = [];
-			$scope.userApplications = [];
-			$scope.adminApplications = [];
+			$rootScope.userApplications = [];
+			$rootScope.adminApplications = [];
 			
 			var authenticate = function(credentials, callback) {
 
@@ -69,7 +78,11 @@ angular.module('hello', [ 'ngRoute' ]).config(function($routeProvider, $httpProv
 				$http.get('application', {
 					params: { role : role}
 				}).success(function(data) {
-					angular.extend(appl, data);
+					appl.length = 0;
+					for(var i = 0; i < data.length; i++)
+					{
+						appl.push(data[i]);
+					}
 				});
 			}
 			
@@ -77,8 +90,8 @@ angular.module('hello', [ 'ngRoute' ]).config(function($routeProvider, $httpProv
 			{
 				$rootScope.authenticated = false;
 				$rootScope.roles = [];
-				$scope.userApplications = [];
-				$scope.adminApplications = [];
+				$rootScope.userApplications = [];
+				$rootScope.adminApplications = [];
 			}
 			
 			authenticate();
@@ -102,17 +115,17 @@ angular.module('hello', [ 'ngRoute' ]).config(function($routeProvider, $httpProv
 
 			$scope.logout = function() {
 				$http.post('logout', {}).success(function() {
-					$rootScope.authenticated = false;
-					$rootScope.roles = [];
+					cleanAuth();
 					$location.path("/");
 				}).error(function(data) {
 					console.log("Logout failed")
-					$rootScope.authenticated = false;
-					$rootScope.roles = [];
+					cleanAuth();
 				});
 			}
 
-}).controller('home', function($scope, $http) {
+});
+
+app.controller('home', function($scope, $http) {
 	$http.get('wp5-test-app/resource').success(function(data) {
 		$scope.greeting = data;
 	})

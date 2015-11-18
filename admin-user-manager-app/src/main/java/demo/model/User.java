@@ -3,6 +3,7 @@ package demo.model;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name="users")
@@ -54,7 +55,8 @@ public class User {
     public String getPassword() {
         return password;
     }
- 
+
+    @JsonProperty("password")
     public void setPassword(String password) {
         this.password = password;
     }

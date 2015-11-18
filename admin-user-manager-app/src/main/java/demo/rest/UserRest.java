@@ -28,8 +28,8 @@ public class UserRest {
 	@Autowired
     private UsersJpa users;
 	
-	@Secured({"ROLE_ADMIN"})
-	@RequestMapping(value = "/", method = RequestMethod.POST)
+	//@Secured({"ROLE_ADMIN"})
+	@RequestMapping(value = "", method = RequestMethod.POST)
 	public ResponseEntity<?> createUser(@RequestBody User user) {
 		user.setUserId(null);
 		user = users.save(user);
@@ -41,7 +41,7 @@ public class UserRest {
 		return new ResponseEntity<>(null, httpHeaders, HttpStatus.CREATED);
 	}
 	
-	@Secured({"ROLE_ADMIN"})
+	//@Secured({"ROLE_ADMIN"})
 	@RequestMapping("/{userId}")
 	public User getUser(@PathVariable Long userId)
 	{
@@ -54,20 +54,20 @@ public class UserRest {
 		return u;
 	}
 	
-	@Secured({"ROLE_ADMIN"})
-	@RequestMapping()
+	//@Secured({"ROLE_ADMIN"})
+	@RequestMapping(value = "", method = RequestMethod.GET)
 	public List<User> getUsers() 
 	{
 		return users.findAll();
 	}
 	
-	@Secured({"ROLE_ADMIN"})
+	//@Secured({"ROLE_ADMIN"})
 	@RequestMapping("/count")
 	public Long count() {
 		return users.count();
 	}
 	
-	@Secured({"ROLE_ADMIN"})
+	//@Secured({"ROLE_ADMIN"})
 	@RequestMapping("/roles")
 	public List<String> getRoles() {
 		return roles;

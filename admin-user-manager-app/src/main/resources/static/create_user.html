@@ -1,1 +1,64 @@
+<script src="admin-user-manager-app/js/admin-user-manager-app.js"></script>
 <h1>Create User</h1>
+<form ng-controller="users-admin" ng-submit="createUser()">
+
+	<div class="well">
+		<fieldset>
+			<div class="control-group">
+				<!-- Username -->
+				<label class="control-label" for="username">Name</label>
+				<div class="controls">
+					<input type="text" ng-model="user.name" placeholder=""
+						class="input-xlarge">
+					<p class="help-block">Please provide name</p>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<!-- E-mail -->
+				<label class="control-label" for="email">E-mail</label>
+				<div class="controls">
+					<input type="text" ng-model="user.email" placeholder=""
+						class="input-xlarge">
+					<p class="help-block">Please provide E-mail</p>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<!-- Password-->
+				<label class="control-label" for="password">Password</label>
+				<div class="controls">
+					<input type="password" ng-model="user.password" placeholder=""
+						class="input-xlarge">
+					<p class="help-block">Password should be at least 4 characters</p>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<!-- Password -->
+				<label class="control-label" for="password_confirm">Password
+					(Confirm)</label>
+				<div class="controls">
+					<input type="password" ng-model="user.confirm_password"
+						placeholder="" class="input-xlarge">
+					<p class="help-block">Please confirm password</p>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<div ng-repeat="role in roles">
+					<input type="radio" ng-model="user.role" ng-value="role"
+						name="test" /> {{role}}
+				</div>
+			</div>
+
+			<div class="control-group">
+				<!-- Button -->
+				<div class="controls">
+					<button type="submit" class="btn btn-success">Add user</button>
+				</div>
+			</div>
+
+		</fieldset>
+	</div>
+</form>
