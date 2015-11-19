@@ -29,6 +29,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
@@ -57,12 +58,14 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		}
 	};
 	
+	private static final BCryptPasswordEncoder bcryptEncoder = new BCryptPasswordEncoder();
+	
 	@Autowired
 	private UsersJpa users;
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(dbUserDetailsService());
+		auth.userDetailsService(dbUserDetailsService()).passwordEncoder(bcryptEncoder);
 	}
 	
 	@Bean

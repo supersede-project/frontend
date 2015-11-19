@@ -36,8 +36,7 @@
 
 			<div class="control-group">
 				<!-- Password -->
-				<label class="control-label" for="password_confirm">Password
-					(Confirm)</label>
+				<label class="control-label" for="password_confirm">Password (Confirm)</label>
 				<div class="controls">
 					<input type="password" ng-model="user.confirm_password"
 						placeholder="" class="input-xlarge">
@@ -46,9 +45,11 @@
 			</div>
 
 			<div class="control-group">
-				<div ng-repeat="role in roles">
-					<input type="radio" ng-model="user.role" ng-value="role"
-						name="test" /> {{role}}
+				<div class="controls">
+					<div ng-repeat="role in roles">
+						<input type="radio" ng-model="user.role" ng-value="role"
+							name="test" /> {{role}}
+					</div>
 				</div>
 			</div>
 

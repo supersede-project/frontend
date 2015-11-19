@@ -12,8 +12,10 @@ app.controllerProvider.register('users-admin', function($scope, $http) {
 		        data: $scope.user,
 		        method: 'POST'
 		    }).success(function(data){
-		        console.log("OK", data)
-		    }).error(function(err){"ERR", console.log(err)});
+		    	angular.copy({}, $scope.user);
+		    }).error(function(err){
+		    	console.log(err);
+		    });
 	};
 	
 	$http.get('admin-user-manager-app/user/roles')

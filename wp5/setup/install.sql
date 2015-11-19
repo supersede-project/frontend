@@ -80,4 +80,4 @@ CREATE INDEX fki_users_foreign_key
 
 -- INSERT TEST DATA
 
-INSERT INTO users VALUES (0, 'Test', 'test@test.com', 'test', 'admin');
+INSERT INTO users VALUES (-1, 'admin', 'wp_admin', '$2a$10$EblZqNptyYvcLm/VwDCVAuBjzZOI7khzdyGPBr08PpIi0na624b8.', 'admin')
