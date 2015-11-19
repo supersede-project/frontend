@@ -24,8 +24,6 @@ var app = angular.module('w5app', [ 'ngRoute' ]).config(function($routeProvider,
 
 app.controller('navigation', function($rootScope, $scope, $http, $location, $route) {
 
-			window.MY_SCOPE = $scope;
-	
 			$scope.tab = function(route) {
 				return $route.current && route === $route.current.controller;
 			};
