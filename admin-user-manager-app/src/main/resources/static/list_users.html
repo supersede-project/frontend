@@ -24,19 +24,17 @@
 
 		<tfoot>
 			<td colspan="4">
-				<div class="pagination pull-right">
-					<ul>
-						<li ng-class="{disabled: currentPage == 0}"><a href
-							ng-click="prevPage()">« Prev</a></li>
+				<div class="paging_simple_numbers">
+					<ul class="pagination">
+						<li class="paginate_button previous" ng-class="{disabled: currentPage == 0}"><a href
+							ng-click="prevPage()">Previous</a></li>
 
-						<li
-							ng-repeat="n in range() "
-							ng-class="{active: n == currentPage}" ng-click="setPage()">
+						<li class="paginate_button" ng-repeat="n in range()" ng-class="{active: n == (currentPage + 1)}" ng-click="setPage()">
 							<a href ng-bind="n">1</a>
 						</li>
 
-						<li ng-class="{disabled: (currentPage) == pagedItems.length - 1}">
-							<a href ng-click="nextPage()">Next »</a>
+						<li class="paginate_button next" ng-class="{disabled: (currentPage) == pagedItems.length - 1}">
+							<a href ng-click="nextPage()">Next</a>
 						</li>
 					</ul>
 				</div>
