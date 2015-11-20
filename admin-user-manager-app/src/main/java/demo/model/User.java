@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name="users")
@@ -59,6 +60,7 @@ public class User {
         return password;
     }
  
+    @JsonProperty("password")
     public void setPassword(String password) {
         this.password = password;
     }

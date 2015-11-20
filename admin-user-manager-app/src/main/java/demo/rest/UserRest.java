@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import demo.exception.NotFoundException;
+import demo.jpa.ProfilesJpa;
 import demo.jpa.UsersJpa;
+import demo.model.Profile;
 import demo.model.User;
 
 @RestController
@@ -23,9 +25,12 @@ import demo.model.User;
 public class UserRest {
 	
 	private static final BCryptPasswordEncoder bcryptEncoder = new BCryptPasswordEncoder();
-	
+
 	@Autowired
     private UsersJpa users;
+	
+	@Autowired
+    private ProfilesJpa profiles;
 	
 	//@PreAuthorize("hasAuthority('ADMIN')")
 	//@Secured({"ROLE_ADMIN"})
@@ -35,6 +40,13 @@ public class UserRest {
 		//remove id and encrypt password
 		user.setUserId(null);
 		user.setPassword(bcryptEncoder.encode(user.getPassword()));
+		
+		//re-attach detached profiles
+		List<Profile> ps = user.getProfiles();
+		for(int i = 0; i < ps.size(); i++)
+		{
+			ps.set(i, profiles.findOne(ps.get(i).getProfileId()));
+		}
 		
 		user = users.save(user);
 		

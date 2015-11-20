@@ -1,6 +1,5 @@
 package demo.rest;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,15 +18,7 @@ public class ProfileRest {
 	
 	//@Secured({"ROLE_ADMIN"})
 	@RequestMapping("")
-	public List<String> getProfiles() {
-		List<Profile> ps = profiles.findAll();
-		
-		List<String> ret = new ArrayList<String>();
-		for(Profile p : ps)
-		{
-			ret.add(p.getName());
-		}
-		
-		return ret;
+	public List<Profile> getProfiles() {
+		return profiles.findAll();
 	}
 }

@@ -2,17 +2,26 @@ var app = angular.module('w5app');
 
 app.controllerProvider.register('users-admin', function($scope, $http) {
 	
-	$scope.roles = [];
-	$scope.user = {};
+	$scope.profiles = [];
+	$scope.user = {profiles : []};
 		
 	$scope.createUser = function()
 	{
-		 $http({
-		        url: "admin-user-manager-app/user",
+		var tmpProfiles = $scope.user.profiles;
+		for(var i = tmpProfiles.length -1; i >= 0; i--)
+		{
+			if(tmpProfiles[i] == null)
+			{
+				tmpProfiles.splice(i, 1);
+			}
+		}
+		
+		$http({
+				url: "admin-user-manager-app/user",
 		        data: $scope.user,
 		        method: 'POST'
 		    }).success(function(data){
-		    	angular.copy({}, $scope.user);
+		    	angular.copy({profiles : []}, $scope.user);
 		    }).error(function(err){
 		    	console.log(err);
 		    });
@@ -20,10 +29,10 @@ app.controllerProvider.register('users-admin', function($scope, $http) {
 	
 	$http.get('admin-user-manager-app/profile')
 		.success(function(data) {
-			$scope.roles.length = 0;
+			$scope.profiles.length = 0;
 			for(var i = 0; i < data.length; i++)
 			{
-				$scope.roles.push(data[i]);
+				$scope.profiles.push(data[i]);
 			}
 			
 		});

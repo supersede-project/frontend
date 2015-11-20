@@ -46,9 +46,8 @@
 
 			<div class="control-group">
 				<div class="controls">
-					<div ng-repeat="role in roles">
-						<input type="radio" ng-model="user.role" ng-value="role"
-							name="test" /> {{role}}
+					<div ng-repeat="profile in profiles | orderBy:'name'">
+						<input type="checkbox" ng-model="user.profiles[$index]" ng-true-value="{{profile}}" ng-false-value="{{undefined}}" /> {{profile.name}}
 					</div>
 				</div>
 			</div>
@@ -59,6 +58,8 @@
 					<button type="submit" class="btn btn-success">Add user</button>
 				</div>
 			</div>
+
+			<pre>{{user | json}}</pre>
 
 		</fieldset>
 	</div>
