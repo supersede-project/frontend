@@ -15,4 +15,8 @@ public interface NotificationsJpa extends JpaRepository<Notification, Long> {
 
 	List<Notification> findByUserAndRead(User u, boolean b);
 	
+	Long countByUser(User u);
+	
+	Long countByUserAndRead(User u, boolean b);
+	
 }

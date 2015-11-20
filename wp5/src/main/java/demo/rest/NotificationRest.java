@@ -1,8 +1,11 @@
 package demo.rest;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -40,9 +43,10 @@ public class NotificationRest {
 	}
 	
 	@RequestMapping("")
-	public List<Notification> getByUserId(@RequestParam(required=true) Long userId, @RequestParam(defaultValue="true") Boolean toRead)
+	public List<Notification> getByUserId(Authentication authentication, @RequestParam(defaultValue="true") Boolean toRead)
 	{
-		User u = users.findByUserId(userId);
+		UserDetails currentUser = (UserDetails) authentication.getPrincipal();
+		User u = users.findByEmail(currentUser.getUsername());
 		List<Notification> ns;
 		if(toRead)
 		{
@@ -54,6 +58,24 @@ public class NotificationRest {
 		}
 		
 		return ns;
+	}
+	
+	@RequestMapping("/count")
+	public Long countByUserId(Authentication authentication, @RequestParam(defaultValue="true") Boolean toRead)
+	{
+		UserDetails currentUser = (UserDetails) authentication.getPrincipal();
+		User u = users.findByEmail(currentUser.getUsername());
+		Long c;
+		if(toRead)
+		{
+			c = notifications.countByUserAndRead(u, !toRead);
+		}
+		else
+		{
+			c = notifications.countByUser(u);
+		}
+		
+		return c;
 	}
 	
 	@RequestMapping("/read")

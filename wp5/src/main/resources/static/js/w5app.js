@@ -22,12 +22,13 @@ var app = angular.module('w5app', [ 'ngRoute' ]).config(function($routeProvider,
 
 });
 
-app.controller('navigation', function($rootScope, $scope, $http, $location, $route) {
+app.controller('navigation', function($rootScope, $scope, $http, $location, $route, $interval) {
 
 			$scope.tab = function(route) {
 				return $route.current && route === $route.current.controller;
 			};
 
+			$rootScope.notificationsCount = 0;
 			$rootScope.profiles = [];
 			$rootScope.applications = [];
 			$rootScope.roles = [];
@@ -129,6 +130,17 @@ app.controller('navigation', function($rootScope, $scope, $http, $location, $rou
 					$location.path("/");
 				});
 			}
+			
+			var stop;
+			
+			stop = $interval(function() {
+				if($rootScope.authenticated)
+				{
+					$http.get('notification/count').success(function(data) {
+						$rootScope.notificationsCount = data;
+					});
+				}
+	        	}, 1000);
 			
 
 });
