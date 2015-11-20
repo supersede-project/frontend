@@ -1,5 +1,7 @@
 package demo.model;
 
+import java.util.List;
+
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -14,16 +16,18 @@ public class User {
     private String name;
     private String email;
     private String password;
-    private String role;
+    @ManyToMany(cascade=CascadeType.ALL)  
+    @JoinTable(name="users_profiles", joinColumns=@JoinColumn(name="user_id"), inverseJoinColumns=@JoinColumn(name="profile_id"))  
+    private List<Profile> profiles;
  
     public User() {
     }
  
-    public User(String name, String email, String password, String role) {
+    public User(String name, String email, String password, List<Profile> profiles) {
         this.name = name;
         this.email = email;
         this.password = password;
-        this.role = role;
+        this.profiles = profiles;
     }
  
     public Long getUserId() {
@@ -59,11 +63,11 @@ public class User {
         this.password = password;
     }
  
-    public String getRole() {
-        return role;
+    public List<Profile> getProfiles() {
+        return profiles;
     }
  
-    public void setRole(String role) {
-        this.role = role;
+    public void setProfiles(List<Profile> profiles) {
+        this.profiles = profiles;
     }
 }

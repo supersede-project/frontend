@@ -9,7 +9,7 @@
 				<th class="id" custom-sort order="'id'" sort="sort">Id&nbsp;</th>
 				<th class="name" custom-sort order="'name'" sort="sort">Name&nbsp;</th>
 				<th class="email" custom-sort order="'email'" sort="sort">Email&nbsp;</th>
-				<th class="role" custom-sort order="'role'" sort="sort">Roles&nbsp;</th>
+				<th class="profiles" custom-sort order="'profiles'" sort="sort">Profiles&nbsp;</th>
 			</tr>
 		</thead>
 
@@ -18,7 +18,11 @@
 				<td>{{user.userId}}</td>
 				<td>{{user.name}}</td>
 				<td>{{user.email}}</td>
-				<td>{{user.role}}</td>
+				<td>
+					<div ng-repeat="profile in user.profiles | orderBy:'name'">
+					    {{profile.name}}
+					</div>
+				</td>
 			</tr>
 		</tbody>
 

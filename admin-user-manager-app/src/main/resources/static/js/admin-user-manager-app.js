@@ -18,7 +18,7 @@ app.controllerProvider.register('users-admin', function($scope, $http) {
 		    });
 	};
 	
-	$http.get('admin-user-manager-app/user/roles')
+	$http.get('admin-user-manager-app/profile')
 		.success(function(data) {
 			$scope.roles.length = 0;
 			for(var i = 0; i < data.length; i++)

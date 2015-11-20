@@ -1,13 +1,11 @@
 package demo.rest;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,8 +21,6 @@ import demo.model.User;
 @RestController
 @RequestMapping("/user")
 public class UserRest {
-
-	private static List<String> roles = new ArrayList<String>() {{add("user"); add("admin");}};
 	
 	private static final BCryptPasswordEncoder bcryptEncoder = new BCryptPasswordEncoder();
 	
@@ -73,11 +69,5 @@ public class UserRest {
 	@RequestMapping("/count")
 	public Long count() {
 		return users.count();
-	}
-	
-	//@Secured({"ROLE_ADMIN"})
-	@RequestMapping("/roles")
-	public List<String> getRoles() {
-		return roles;
 	}
 }

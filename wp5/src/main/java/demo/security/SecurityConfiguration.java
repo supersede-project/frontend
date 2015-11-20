@@ -1,9 +1,7 @@
 package demo.security;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -11,7 +9,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
@@ -38,6 +39,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.WebUtils;
 
 import demo.jpa.UsersJpa;
+import demo.model.Profile;
 
 @Configuration
 @EnableWebSecurity
@@ -45,18 +47,10 @@ import demo.jpa.UsersJpa;
 @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
 class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	
+	private final Logger log = LoggerFactory.getLogger(this.getClass());
+	
 	@Value("#{'${web.security.permit.urls}'.split(',')}") 
 	private String[] PERMIT_URLS;
-	
-	//@Value("#{PropertySplitter.map('${web.security.auth.admin}')}")
-	//private Map<String, String[]> AUTH;
-	
-	private static final Map<String, String[]> AUTH = new HashMap<String, String[]>() {
-		{
-			put("admin", new String[]{"ADMIN", "USER"});
-			put("user", new String[]{"USER"});
-		}
-	};
 	
 	private static final BCryptPasswordEncoder bcryptEncoder = new BCryptPasswordEncoder();
 	
@@ -73,14 +67,33 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		return new UserDetailsService() {
 
 			@Override
+			@Transactional
 			public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 				demo.model.User user = users.findByEmail(email);
-
+				
+				try
+				{
 				if (user != null) {
-					List<GrantedAuthority> permissions = AuthorityUtils.createAuthorityList(AUTH.get(user.getRole()));
+					log.debug("User found");
+					//get authorities from profiles
+					List<Profile> profiles = user.getProfiles();
+					String[] authorities = new String[profiles.size()];
+					for(int i = 0; i < profiles.size(); i++)
+					{
+						authorities[i] = profiles.get(i).getName();
+					}
+					
+					log.debug("User has " + authorities.length + " authorities");
+					
+					List<GrantedAuthority> permissions = AuthorityUtils.createAuthorityList(authorities);
 					return new User(user.getEmail(), user.getPassword(), true, true, true, true, permissions);
 				}
-				
+				}
+				catch(Exception ex)
+				{
+					ex.printStackTrace();
+					log.error(ex.getMessage());
+				}
 				throw new UsernameNotFoundException("could not find the user '" + email + "'");
 			}
 		};

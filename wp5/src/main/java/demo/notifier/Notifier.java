@@ -23,8 +23,10 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import demo.jpa.NotificationsJpa;
+import demo.jpa.ProfilesJpa;
 import demo.jpa.UsersJpa;
 import demo.model.Notification;
+import demo.model.Profile;
 import demo.model.User;
 
 @Component
@@ -32,9 +34,12 @@ import demo.model.User;
 public class Notifier {
 
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
-	
+
 	@Autowired
     private UsersJpa users;
+	
+	@Autowired
+    private ProfilesJpa profiles;
 	
 	@Autowired
     private NotificationsJpa notifications;
@@ -66,9 +71,10 @@ public class Notifier {
 		}
 	}
 
-	public void createForRole(String role, String message)
+	public void createForProfile(String profile, String message)
 	{
-		List<User> us = users.findByRole(role);
+		Profile p = profiles.findByName(profile);
+		List<User> us = p.getUsers();
 		for(User u : us)
 		{
 			Notification n = new Notification(message, u);

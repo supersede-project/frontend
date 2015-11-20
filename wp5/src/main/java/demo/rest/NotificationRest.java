@@ -33,10 +33,10 @@ public class NotificationRest {
 		notifier.createForUsers(usersEmail, message);
 	}
 	
-	@RequestMapping("/createForRole")
-	public void createForRole(@RequestParam(required=true) String role, @RequestParam(required=true) String message) 
+	@RequestMapping("/createForProfile")
+	public void createForRole(@RequestParam(required=true) String profile, @RequestParam(required=true) String message) 
 	{
-		notifier.createForRole(role, message);
+		notifier.createForProfile(profile, message);
 	}
 	
 	@RequestMapping("")
