@@ -28,9 +28,9 @@ app.controller('navigation', function($rootScope, $scope, $http, $location, $rou
 				return $route.current && route === $route.current.controller;
 			};
 
+			$rootScope.profiles = [];
+			$rootScope.applications = [];
 			$rootScope.roles = [];
-			$rootScope.userApplications = [];
-			$rootScope.adminApplications = [];
 			
 			var authenticate = function(credentials, callback) {
 
@@ -46,11 +46,7 @@ app.controller('navigation', function($rootScope, $scope, $http, $location, $rou
 					if (data.name) {
 						$rootScope.authenticated = true;
 						$rootScope.roles = data.authorities;
-						if($scope.isAdmin())
-						{
-							getApplications("admin", $scope.adminApplications);
-						}
-						getApplications("user", $scope.userApplications);
+						getProfiles();
 					} else {
 						cleanAuth();
 					}
@@ -62,34 +58,46 @@ app.controller('navigation', function($rootScope, $scope, $http, $location, $rou
 
 			}
 
-			$scope.isAdmin = function() {
-				for(var i = 0; i < $rootScope.roles.length; i++) {
-				    if ($rootScope.roles[i].authority == 'ADMIN') {
+			$scope.hasProfile = function(profile) {
+				for(var i = 0; i < $rootScope.profiles.length; i++) {
+				    if ($rootScope.profiles[i].authority == profile) {
 				        return true;
 				    }
 				}
 				return false;
 			}
 			
-			var getApplications = function(role, appl)
+			var getApplications = function(profile)
 			{
 				$http.get('application', {
-					params: { role : role}
+					params: { profileId : profile.profileId}
 				}).success(function(data) {
-					appl.length = 0;
+					$rootScope.applications[profile.name] = data;
+				});
+			}
+			
+			var getProfiles = function()
+			{
+				$http.get('profile')
+				.success(function(data) {
+					//clean
+					$rootScope.profiles.length = 0;
+					angular.copy({}, $rootScope.applications);
+					
 					for(var i = 0; i < data.length; i++)
 					{
-						appl.push(data[i]);
+						$rootScope.profiles.push(data[i]);
+						getApplications(data[i]);
 					}
+					
 				});
 			}
 			
 			var cleanAuth = function()
 			{
 				$rootScope.authenticated = false;
-				$rootScope.roles = [];
-				$rootScope.userApplications = [];
-				$rootScope.adminApplications = [];
+				$rootScope.profiles = [];
+				$rootScope.applications = [];
 			}
 			
 			authenticate();
@@ -118,8 +126,10 @@ app.controller('navigation', function($rootScope, $scope, $http, $location, $rou
 				}).error(function(data) {
 					console.log("Logout failed")
 					cleanAuth();
+					$location.path("/");
 				});
 			}
+			
 
 });
 

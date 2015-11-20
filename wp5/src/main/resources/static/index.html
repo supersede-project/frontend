@@ -16,16 +16,11 @@
 			    <li class="active"><a href="#/">home</a></li>
 			    <li ng-show="!(authenticated)"><a href="#/login">login</a></li>
 			    <li ng-show="authenticated"><a href="" ng-click="logout()">logout</a></li>
-			    <li class="dropdown" ng-show="authenticated">
-			    	<a href="" class="dropdown-toggle" data-toggle="dropdown">user<b class="caret"></b></a>
+			    
+			    <li ng-repeat="profile in profiles | orderBy:'name'" class="dropdown" ng-show="authenticated">
+			    	<a href="" class="dropdown-toggle" data-toggle="dropdown">{{profile.name}}<b class="caret"></b></a>
 			    	<ul class="dropdown-menu">
-				        <li ng-repeat="appl in userApplications"><a ng-href="{{appl.mainPage}}">{{appl.name}}</a></li>
-				   	</ul>
-			    </li>
-			    <li class="dropdown" ng-show="isAdmin()">
-			    	<a href="" class="dropdown-toggle" data-toggle="dropdown">admin<b class="caret"></b></a>
-			    	<ul class="dropdown-menu">
-				        <li ng-repeat="appl in adminApplications"><a ng-href="#/{{appl.name}}/{{appl.mainPage}}">{{appl.name}}/{{appl.mainPage}}</a></li>
+				        <li ng-repeat="appl in applications[profile.name]"><a ng-href="#/{{appl.name}}/{{appl.mainPage}}">{{appl.name}}/{{appl.mainPage}}</a></li>
 				   	</ul>
 			    </li>
 			</ul>

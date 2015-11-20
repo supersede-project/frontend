@@ -18,16 +18,16 @@ public class ApplicationRest {
     private ApplicationsJpa applications;
 	
 	@RequestMapping("")
-	public List<Application> getAll(@RequestParam(required=false) String role) 
+	public List<Application> getAll(@RequestParam(required=false) Long profileId) 
 	{
 		List<Application> r;
-		if(role == null)
+		if(profileId == null)
 		{
 			r = applications.findAll();
 		}
 		else
 		{
-			r = applications.findByRequiredRole(role);
+			r = applications.findByRequiredProfileId(profileId);
 		}
 		
 		return r;

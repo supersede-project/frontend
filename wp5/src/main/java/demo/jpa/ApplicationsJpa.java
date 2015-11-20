@@ -8,6 +8,6 @@ import demo.model.Application;
 
 public interface ApplicationsJpa extends JpaRepository<Application, Long> {
 
-	List<Application> findByRequiredRole(String requiredRole);
+	List<Application> findByRequiredProfileId(Long requiredProfileId);
 
 }

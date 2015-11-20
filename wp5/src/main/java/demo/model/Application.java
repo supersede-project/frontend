@@ -15,16 +15,16 @@ public class Application {
     private Long applicationId;
 	private String name;
     private String mainPage;
-    private String requiredRole;
+    private Long requiredProfileId;
 	
     public Application()
     {}
     
-    public Application(String name, String mainPage, String requiredRole)
+    public Application(String name, String mainPage, Long requiredProfileId)
     {
     	this.name = name;
     	this.mainPage = mainPage;
-    	this.requiredRole = requiredRole;
+    	this.requiredProfileId = requiredProfileId;
     }
     
     public Long getApplicationId() {
@@ -51,12 +51,12 @@ public class Application {
         this.mainPage = mainPage;
     }
     
-    public String getRequiredRole() {
-        return requiredRole;
+    public Long getRequiredProfileId() {
+        return requiredProfileId;
     }
  
-    public void setRequiredRole(String requiredRole) {
-        this.requiredRole = requiredRole;
+    public void setRequiredProfileId(Long requiredProfileId) {
+        this.requiredProfileId = requiredProfileId;
     }
     
 }
