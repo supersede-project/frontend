@@ -29,6 +29,7 @@ app.controller('navigation', function($rootScope, $scope, $http, $location, $rou
 			};
 
 			$rootScope.notificationsCount = 0;
+			$rootScope.notifications = [];
 			$rootScope.profiles = [];
 			$rootScope.applications = [];
 			$rootScope.roles = [];
@@ -60,8 +61,8 @@ app.controller('navigation', function($rootScope, $scope, $http, $location, $rou
 			}
 
 			$scope.hasProfile = function(profile) {
-				for(var i = 0; i < $rootScope.profiles.length; i++) {
-				    if ($rootScope.profiles[i].authority == profile) {
+				for(var i = 0; i < $rootScope.roles.length; i++) {
+				    if ($rootScope.roles[i].authority == profile) {
 				        return true;
 				    }
 				}
@@ -87,8 +88,11 @@ app.controller('navigation', function($rootScope, $scope, $http, $location, $rou
 					
 					for(var i = 0; i < data.length; i++)
 					{
-						$rootScope.profiles.push(data[i]);
-						getApplications(data[i]);
+						if($scope.hasProfile(data[i].name))
+						{
+							$rootScope.profiles.push(data[i]);
+							getApplications(data[i]);
+						}
 					}
 					
 				});
@@ -137,7 +141,20 @@ app.controller('navigation', function($rootScope, $scope, $http, $location, $rou
 				if($rootScope.authenticated)
 				{
 					$http.get('notification/count').success(function(data) {
-						$rootScope.notificationsCount = data;
+						if($rootScope.notificationsCount != data)
+						{
+							$rootScope.notificationsCount = data;
+							$http.get('notification').success(function(data) {
+								//clean
+								$rootScope.notifications.length = 0;
+								angular.copy({}, $rootScope.notifications);
+								
+								for(var i = 0; i < data.length; i++)
+								{
+									$rootScope.notifications.push(data[i]);
+								}
+							});
+						}
 					});
 				}
 	        	}, 1000);

@@ -19,18 +19,26 @@
 		    </div>
 		    <div class="collapse navbar-collapse" id="myNavbar">
 		      <ul class="nav navbar-nav">
-		        <li ><a href="#/">Home</a></li>
+		        <li><a href="#/">Home</a></li>
 		        
 		        <li ng-repeat="profile in profiles | orderBy:'name'" class="dropdown" ng-show="authenticated">
 			    	<a href="" class="dropdown-toggle" data-toggle="dropdown">{{profile.name}}<b class="caret"></b></a>
-			    	<ul class="dropdown-menu">
+			    	<ul class="dropdown-menu" ng-show="applications[profile.name].length > 0">
 				        <li ng-repeat="appl in applications[profile.name]"><a ng-href="#/{{appl.name}}/{{appl.mainPage}}">{{appl.name}}/{{appl.mainPage}}</a></li>
 				   	</ul>
 			    </li>
 			    
 		      </ul>
+		      
 		      <ul class="nav navbar-nav navbar-right">
-		     	<li ng-show="authenticated"><a>{{notificationsCount}}</a></li>
+		     	<li ng-show="authenticated">
+		     		<a href="" class="dropdown-toggle" data-toggle="dropdown">{{notificationsCount}}</a>
+		     		<ul class="dropdown-menu" ng-show="notificationsCount > 0">
+				        <li ng-repeat="notif in notifications">
+				        	<a>{{notif.message}}</a>
+				        </li>
+				   	</ul>
+		     	</li>
 		        <li ng-show="!(authenticated)"><a href="#/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
 			    <li ng-show="authenticated"><a href="" ng-click="logout()"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
 		      </ul>
