@@ -135,6 +135,24 @@ app.controller('navigation', function($rootScope, $scope, $http, $location, $rou
 				});
 			}
 			
+			$scope.readNotification = function()
+			{
+				var notificationId = this.notif.notificationId;
+				$http.put('notification/' + notificationId + '/read').
+					success(function(data) {
+						
+					});
+			}
+			
+			$scope.deleteNotification = function()
+			{
+				var notificationId = this.notif.notificationId;
+				$http.delete('notification/' + notificationId).
+					success(function(data) {
+					
+					});
+			}
+			
 			var stop;
 			
 			stop = $interval(function() {
