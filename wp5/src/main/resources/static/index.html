@@ -3,6 +3,7 @@
 <head>
 <title>Supersede</title>
 <link href="js/bootstrap-3.3.5-dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="css/wp5app.css" rel="stylesheet">
 <style type="text/css">
 [ng\:cloak], [ng-cloak], .ng-cloak {
   display: none !important;
@@ -34,9 +35,9 @@
 		     	
 		     	<li ng-show="authenticated">
 		     		<a href="" class="dropdown-toggle" data-toggle="dropdown">{{notificationsCount}} <span class="glyphicon glyphicon-comment"></span></a>
-		     		<ul class="dropdown-menu" ng-show="notificationsCount > 0">
+		     		<ul class="dropdown-menu">
 				        
-				        <li ng-repeat="notif in notifications | orderBy:'creationTime' | limitTo:5">
+				        <li class="dropdown-inline" ng-repeat="notif in notifications | orderBy:'creationTime' | limitTo:5">
 				        	<a ng-click="readNotification()"><span class="glyphicon glyphicon-check"></span></a>
 				        	<a>{{notif.message}}</a>
 				        	<a ng-click="deleteNotification()"><span class="glyphicon glyphicon-remove"></span></a>

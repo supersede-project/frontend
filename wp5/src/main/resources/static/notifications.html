@@ -1,0 +1,47 @@
+<h1>Notifications</h1>
+<div class="well">
+
+	<table class="table table-striped table-condensed table-hover">
+
+		<thead>
+			<tr>
+				<th>Read&nbsp;</th>
+				<th width="100%">Message&nbsp;</th>
+				<th>Delete&nbsp;</th>
+			</tr>
+		</thead>
+
+		<tbody>
+			<tr	ng-repeat="notif in notifications | limitTo:5:currentPage*itemsPerPage">
+				<td>
+					<a ng-click="readNotification()">
+						<span class="glyphicon" ng-class="{'glyphicon-check': notif.read == true, 'glyphicon-unchecked': notif.read == false}"></span>
+					</a>
+				</td>
+				<td>{{notif.message}}</td>
+				<td><a ng-click="deleteNotification()"><span class="glyphicon glyphicon-remove"></span></a></td>
+			</tr>
+		</tbody>
+
+		<tfoot>
+			<td colspan="4">
+				<div class="paging_simple_numbers">
+					<ul class="pagination">
+						<li class="paginate_button previous" ng-class="{disabled: currentPage == 0}"><a href
+							ng-click="prevPage()">Previous</a></li>
+
+						<li class="paginate_button" ng-repeat="n in range()" ng-class="{active: n == (currentPage + 1)}" ng-click="setPage()">
+							<a href ng-bind="n">1</a>
+						</li>
+
+						<li class="paginate_button next" ng-class="{disabled: (currentPage) == totalPages - 1}">
+							<a href ng-click="nextPage()">Next</a>
+						</li>
+					</ul>
+				</div>
+			</td>
+		</tfoot>
+
+	</table>
+
+</div>

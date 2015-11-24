@@ -9,11 +9,9 @@ import demo.model.User;
 
 public interface NotificationsJpa extends JpaRepository<Notification, Long> {
 
-	List<Notification> findByUser(User u);
+	List<Notification> findByUserOrderByCreationTimeDesc(User u);
 
-	Notification findByNotificationId(Long notificationId);
-
-	List<Notification> findByUserAndRead(User u, boolean b);
+	List<Notification> findByUserAndReadOrderByCreationTimeDesc(User u, boolean b);
 	
 	Long countByUser(User u);
 	

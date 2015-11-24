@@ -185,11 +185,54 @@ app.controller('navigation', function($rootScope, $scope, $http, $location, $rou
 
 app.controller('notifications', function($scope, $http) {
 	
+	$scope.totalPages = 1;
+	$scope.notificationsLength = 0;
+    $scope.itemsPerPage = 5;
+    $scope.currentPage = 0;
 	$scope.notifications = [];
 	
-	$scope.getNotifications() = function()
+	$scope.range = function () {
+        var ret = [];
+        var showPages = Math.min(5, $scope.totalPages);
+        
+        var start = Math.max(1, $scope.currentPage - Math.floor(showPages / 2));
+        var end = Math.min($scope.totalPages, $scope.currentPage + Math.ceil(showPages / 2))
+        
+        if(start == 1)
+        {
+        	end = start + showPages - 1;
+        }
+        if(end == $scope.totalPages)
+        {
+        	start = end - showPages + 1;
+        }
+        
+        for (var i = start; i < start + showPages; i++) {
+            ret.push(i);
+        }
+        
+        return ret;
+    };
+    
+    $scope.prevPage = function () {
+        if ($scope.currentPage > 0) {
+            $scope.currentPage--;
+        }
+    };
+    
+    $scope.nextPage = function () {
+        if ($scope.currentPage < $scope.totalPages - 1) {
+            $scope.currentPage++;
+        }
+    };
+    
+    $scope.setPage = function () {
+        $scope.currentPage = this.n -1;
+    };
+	
+	$scope.getNotifications = function()
 	{
-		$http.get('notifications', {params: 
+		$http.get('notification', {params: 
 				{
 					toRead : false
 				}
@@ -201,6 +244,8 @@ app.controller('notifications', function($scope, $http) {
 				{
 					$scope.notifications.push(data[i]);
 				}
+				$scope.notificationsLength = data.length;
+				$scope.totalPages = Math.max(1, Math.ceil($scope.notificationsLength / $scope.itemsPerPage));
 		});
 	}
 	
@@ -211,6 +256,15 @@ app.controller('notifications', function($scope, $http) {
 			success(function(data) {
 				
 			});
+		
+		for(var i = 0; i < $scope.notifications.length; i++)
+		{
+			if($scope.notifications[i].notificationId == notificationId)
+			{
+				$scope.notifications[i].read = true;
+				break;
+			}
+		}
 	}
 	
 	$scope.deleteNotification = function()
@@ -220,6 +274,21 @@ app.controller('notifications', function($scope, $http) {
 			success(function(data) {
 			
 			});
+		
+		for(var i = 0; i < $scope.notifications.length; i++)
+		{
+			if($scope.notifications[i].notificationId == notificationId)
+			{
+				$scope.notifications.splice(i, 1);
+				break;
+			}
+		}
+		$scope.notificationsLength--;
+		$scope.totalPages = Math.max(1, Math.ceil($scope.notificationsLength / $scope.itemsPerPage));
+		if($scope.totalPages == $scope.currentPage && $scope.currentPage != 0)
+		{
+			$scope.currentPage--;
+		}
 	}
 	
 	$scope.getNotifications();

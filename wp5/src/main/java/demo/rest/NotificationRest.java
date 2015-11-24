@@ -1,6 +1,5 @@
 package demo.rest;
 
-import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,11 +50,11 @@ public class NotificationRest {
 		List<Notification> ns;
 		if(toRead)
 		{
-			ns = notifications.findByUserAndRead(u, !toRead);
+			ns = notifications.findByUserAndReadOrderByCreationTimeDesc(u, !toRead);
 		}
 		else
 		{
-			ns = notifications.findByUser(u);
+			ns = notifications.findByUserOrderByCreationTimeDesc(u);
 		}
 		
 		return ns;
@@ -81,7 +80,7 @@ public class NotificationRest {
 	
 	@RequestMapping(method = RequestMethod.PUT, value="/{notificationId}/read")
 	public void setRead(@PathVariable Long notificationId) {
-		Notification n = notifications.findByNotificationId(notificationId);
+		Notification n = notifications.findOne(notificationId);
 		n.setRead(true);
 		notifications.save(n);
 	}

@@ -6,17 +6,14 @@ import java.util.List;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.mail.MailAuthenticationException;
 import org.springframework.mail.MailException;
-import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -89,6 +86,7 @@ public class Notifier {
 	}
 
 	@Scheduled(fixedRateString = "${notifier.mail.sender.checkRate}")
+	@Transactional
     public void checkNotifications()
 	{
 		log.debug("check notifications");
@@ -106,18 +104,18 @@ public class Notifier {
 		
 		for(Notification n : internalNotificationsToSendEmail)
 		{
-			if(n.getRead())
-			{
-				//the notification has been read, so just forget about it
-				notificationsToRemove.add(n);
-				log.debug("notification read");
-			}
 			//if notification has been created more than 'MAX_TIME' minutes ago, send an email
-			else if((now.getTime() - n.getCreationTime().getTime()) >= SENDER_DELAY)
+			if((now.getTime() - n.getCreationTime().getTime()) >= SENDER_DELAY)
 			{
-				log.debug("send email to " + n.getUser().getEmail());
-				sendEmail(n);
+				//refresh notification and check if it was read on database
+				Notification nTemp = notifications.findOne(n.getNotificationId());
+				if(nTemp != null && !nTemp.getRead())
+				{
+					log.debug("send email to " + n.getUser().getEmail());
+					sendEmail(n);
+				}
 				
+				//else the notification has been read, so just forget about it
 				notificationsToRemove.add(n);
 			}
 		}
