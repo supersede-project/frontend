@@ -35,10 +35,15 @@
 		     	<li ng-show="authenticated">
 		     		<a href="" class="dropdown-toggle" data-toggle="dropdown">{{notificationsCount}} <span class="glyphicon glyphicon-comment"></span></a>
 		     		<ul class="dropdown-menu" ng-show="notificationsCount > 0">
-				        <li ng-repeat="notif in notifications">
+				        
+				        <li ng-repeat="notif in notifications | orderBy:'creationTime' | limitTo:5">
 				        	<a ng-click="readNotification()"><span class="glyphicon glyphicon-check"></span></a>
 				        	<a>{{notif.message}}</a>
 				        	<a ng-click="deleteNotification()"><span class="glyphicon glyphicon-remove"></span></a>
+				        </li>
+				        
+				        <li>
+				        	<a href="#/notifications">Show all</a>
 				        </li>
 				   	</ul>
 		     	</li>

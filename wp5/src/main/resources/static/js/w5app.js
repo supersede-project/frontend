@@ -6,6 +6,9 @@ var app = angular.module('w5app', [ 'ngRoute' ]).config(function($routeProvider,
 	}).when('/login', {
 		templateUrl : 'login.html',
 		controller : 'navigation'
+	}).when('/notifications', {
+		templateUrl : 'notifications.html',
+		controller : 'notifications'
 	}).when('/:name*', {
 		templateUrl : function(urlattr){
             return urlattr.name + '.html';
@@ -180,8 +183,51 @@ app.controller('navigation', function($rootScope, $scope, $http, $location, $rou
 
 });
 
+app.controller('notifications', function($scope, $http) {
+	
+	$scope.notifications = [];
+	
+	$scope.getNotifications() = function()
+	{
+		$http.get('notifications', {params: 
+				{
+					toRead : false
+				}
+			}).
+			success(function(data) {
+				angular.copy({}, $scope.notifications);
+				
+				for(var i = 0; i < data.length; i++)
+				{
+					$scope.notifications.push(data[i]);
+				}
+		});
+	}
+	
+	$scope.readNotification = function()
+	{
+		var notificationId = this.notif.notificationId;
+		$http.put('notification/' + notificationId + '/read').
+			success(function(data) {
+				
+			});
+	}
+	
+	$scope.deleteNotification = function()
+	{
+		var notificationId = this.notif.notificationId;
+		$http.delete('notification/' + notificationId).
+			success(function(data) {
+			
+			});
+	}
+	
+	$scope.getNotifications();
+	
+});
+
 app.controller('home', function($scope, $http) {
 	$http.get('wp5-test-app/resource').success(function(data) {
 		$scope.greeting = data;
-	})
+	});
 });
