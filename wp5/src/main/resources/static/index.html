@@ -38,7 +38,9 @@
 		     		<ul class="dropdown-menu">
 				        
 				        <li class="dropdown-inline" ng-repeat="notif in notifications | orderBy:'creationTime' | limitTo:5">
-				        	<a ng-click="readNotification()"><span class="glyphicon glyphicon-check"></span></a>
+				        	<a ng-click="readNotification()">
+				        		<span class="glyphicon" ng-class="{'glyphicon-check': notif.read == true, 'glyphicon-unchecked': notif.read == false}"></span>
+				        	</a>
 				        	<a>{{notif.message}}</a>
 				        	<a ng-click="deleteNotification()"><span class="glyphicon glyphicon-remove"></span></a>
 				        </li>
