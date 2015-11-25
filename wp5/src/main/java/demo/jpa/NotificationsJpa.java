@@ -1,5 +1,6 @@
 package demo.jpa;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,5 +17,7 @@ public interface NotificationsJpa extends JpaRepository<Notification, Long> {
 	Long countByUser(User u);
 	
 	Long countByUserAndRead(User u, boolean b);
+
+	List<Notification> findByReadAndEmailSentAndCreationTimeLessThan(boolean b, boolean c, Date limit);
 	
 }

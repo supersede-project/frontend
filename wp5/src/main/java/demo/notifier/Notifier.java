@@ -44,10 +44,6 @@ public class Notifier {
 	@Autowired
 	private JavaMailSender javaMailSender;
 	
-	private final ArrayList<Notification> notificationsToSendEmail = new ArrayList<Notification>();
-	private final ArrayList<Notification> internalNotificationsToSendEmail = new ArrayList<Notification>();
-	private final ArrayList<Notification> notificationsToRemove = new ArrayList<Notification>();
-	
 	@Value("${notifier.mail.sender.delay}")
 	private int SENDER_DELAY;
 	
@@ -60,11 +56,6 @@ public class Notifier {
 			User u = users.findByEmail(email);
 			Notification n = new Notification(message, u);
 			notifications.save(n);
-			
-			synchronized(notificationsToSendEmail)
-			{
-				notificationsToSendEmail.add(n);
-			}
 		}
 	}
 
@@ -76,11 +67,6 @@ public class Notifier {
 		{
 			Notification n = new Notification(message, u);
 			notifications.save(n);
-			
-			synchronized(notificationsToSendEmail)
-			{
-				notificationsToSendEmail.add(n);
-			}
 		}
 		
 	}
@@ -91,37 +77,20 @@ public class Notifier {
 	{
 		log.debug("check notifications");
 		
-		//import all new notifications
-		synchronized(notificationsToSendEmail)
-		{
-			log.debug("found " + notificationsToSendEmail.size() + " new notifications");
-			internalNotificationsToSendEmail.addAll(notificationsToSendEmail);
-			notificationsToSendEmail.clear();
-		}
-		
 		//now
 		Date now = new Date();
+		Date limit = new Date(now.getTime() - SENDER_DELAY);
 		
-		for(Notification n : internalNotificationsToSendEmail)
+		//get all notifications not read and not sent via email and created before 
+		List<Notification> ns = notifications.findByReadAndEmailSentAndCreationTimeLessThan(false, false, limit);
+		
+		for(Notification n : ns)
 		{
-			//if notification has been created more than 'MAX_TIME' minutes ago, send an email
-			if((now.getTime() - n.getCreationTime().getTime()) >= SENDER_DELAY)
-			{
-				//refresh notification and check if it was read on database
-				Notification nTemp = notifications.findOne(n.getNotificationId());
-				if(nTemp != null && !nTemp.getRead())
-				{
-					log.debug("send email to " + n.getUser().getEmail());
-					sendEmail(n);
-				}
-				
-				//else the notification has been read, so just forget about it
-				notificationsToRemove.add(n);
-			}
+			log.debug("send email to " + n.getUser().getEmail());
+			sendEmail(n);
+			n.setEmailSent(true);
+			notifications.save(n);
 		}
-		
-		internalNotificationsToSendEmail.removeAll(notificationsToRemove);
-		notificationsToRemove.clear();
     }
 	
 	private final String emailTemplate = "Hi %s, \nyou have just received a supersede notification.";
