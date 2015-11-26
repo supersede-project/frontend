@@ -1,10 +1,10 @@
-package demo.multitenant;
+package eu.supersede.fe.multitenant;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-import demo.multitenant.MultiTenancyInterceptor;
+import eu.supersede.fe.multitenant.MultiTenancyInterceptor;
 
 @Configuration
 public class WebMvcConfig extends WebMvcConfigurerAdapter {

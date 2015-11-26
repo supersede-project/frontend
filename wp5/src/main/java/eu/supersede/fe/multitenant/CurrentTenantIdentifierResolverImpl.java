@@ -1,4 +1,4 @@
-package demo.multitenant;
+package eu.supersede.fe.multitenant;
 
 import org.hibernate.context.spi.CurrentTenantIdentifierResolver;
 import org.springframework.stereotype.Component;

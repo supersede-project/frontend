@@ -1,4 +1,4 @@
-package demo.multitenant;
+package eu.supersede.fe.multitenant;
 
 import org.hibernate.engine.jdbc.connections.spi.AbstractDataSourceBasedMultiTenantConnectionProviderImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +20,6 @@ public class DataSourceBasedMultiTenantConnectionProviderImpl extends AbstractDa
 	@Autowired
 	private DataSource dataSource2;
 
-	@Autowired
-	private DataSource dataSource3;
-
 	private Map<String, DataSource> map;
 
 	@PostConstruct
@@ -30,7 +27,6 @@ public class DataSourceBasedMultiTenantConnectionProviderImpl extends AbstractDa
 		map = new HashMap<>();
 		map.put("tenant_1", dataSource1);
 		map.put("tenant_2", dataSource2);
-		map.put("tenant_3", dataSource3);
 	}
 
 	@Override

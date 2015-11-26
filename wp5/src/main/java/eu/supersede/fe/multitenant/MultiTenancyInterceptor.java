@@ -1,4 +1,4 @@
-package demo.multitenant;
+package eu.supersede.fe.multitenant;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
