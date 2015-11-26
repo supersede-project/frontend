@@ -1,6 +1,5 @@
 package eu.supersede.fe.notifier;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -76,6 +75,9 @@ public class Notifier {
     public void checkNotifications()
 	{
 		log.debug("check notifications");
+		
+		//DEBUG
+		log.debug("found total notifications: " + notifications.count());
 		
 		//now
 		Date now = new Date();
