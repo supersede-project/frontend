@@ -41,7 +41,7 @@ public class MultiTenancyJpaConfiguration {
 		hibernateProps.put(Environment.MULTI_TENANT, MultiTenancyStrategy.DATABASE);
 		hibernateProps.put(Environment.MULTI_TENANT_CONNECTION_PROVIDER, multiTenantConnectionProvider);
 		hibernateProps.put(Environment.MULTI_TENANT_IDENTIFIER_RESOLVER, currentTenantIdentifierResolver);
-		hibernateProps.put(Environment.DIALECT, "org.hibernate.dialect.MySQLDialect");
+		hibernateProps.put(Environment.DIALECT, "org.hibernate.dialect.PostgreSQLDialect");
 
 		return builder.dataSource(dataSource)
 				.packages("eu.supersede.fe.model")
