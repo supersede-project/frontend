@@ -24,6 +24,7 @@ import eu.supersede.fe.jpa.UsersJpa;
 import eu.supersede.fe.model.Notification;
 import eu.supersede.fe.model.Profile;
 import eu.supersede.fe.model.User;
+import eu.supersede.fe.multitenant.MultiJpaProvider;
 
 @Component
 @PropertySource("classpath:wp5.properties")
@@ -42,6 +43,9 @@ public class Notifier {
 
 	@Autowired
 	private JavaMailSender javaMailSender;
+	
+	@Autowired
+	private MultiJpaProvider multiJpaProvider;
 	
 	@Value("${notifier.mail.sender.delay}")
 	private int SENDER_DELAY;
@@ -76,22 +80,28 @@ public class Notifier {
 	{
 		log.debug("check notifications");
 		
-		//DEBUG
-		log.debug("found total notifications: " + notifications.count());
-		
 		//now
 		Date now = new Date();
 		Date limit = new Date(now.getTime() - SENDER_DELAY);
 		
-		//get all notifications not read and not sent via email and created before 
-		List<Notification> ns = notifications.findByReadAndEmailSentAndCreationTimeLessThan(false, false, limit);
-		
-		for(Notification n : ns)
+		List<NotificationsJpa> notificationsJpa = multiJpaProvider.getRepositories(NotificationsJpa.class);
+		for(NotificationsJpa nJpa : notificationsJpa)
 		{
-			log.debug("send email to " + n.getUser().getEmail());
-			sendEmail(n);
-			n.setEmailSent(true);
-			notifications.save(n);
+			//DEBUG
+			log.debug("found total notifications: " + nJpa.count());
+			
+			//get all notifications not read and not sent via email and created before 
+			List<Notification> ns = nJpa.findByReadAndEmailSentAndCreationTimeLessThan(false, false, limit);
+			
+			log.debug("found " + ns.size() + " notifications to be notified by email.");
+			
+			for(Notification n : ns)
+			{
+				log.debug("send email to " + n.getUser().getEmail());
+				sendEmail(n);
+				n.setEmailSent(true);
+				nJpa.save(n);
+			}
 		}
     }
 	

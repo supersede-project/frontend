@@ -1,33 +1,37 @@
 package eu.supersede.fe.multitenant;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.annotation.PostConstruct;
+import javax.sql.DataSource;
+
 import org.hibernate.engine.jdbc.connections.spi.AbstractDataSourceBasedMultiTenantConnectionProviderImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
+import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-import javax.sql.DataSource;
-import java.util.HashMap;
-import java.util.Map;
-
 @Component
 @PropertySource("classpath:multitenancy.properties")
+@EnableConfigurationProperties(JpaProperties.class)
 public class DataSourceBasedMultiTenantConnectionProviderImpl extends AbstractDataSourceBasedMultiTenantConnectionProviderImpl
 {
 	@Autowired
 	Environment env;
-	
+		
 	private String[] tenantNames;
 	private String defaultTenant;
 	
-	private Map<String, DataSource> map;
+	private Map<String, DataSource> datasources;
 
 	@PostConstruct
 	public void load() {
-		map = new HashMap<>();
+		datasources = new HashMap<>();
 		
 		tenantNames = env.getRequiredProperty("spring.multitenancy.names").split(",");
 		defaultTenant = env.getRequiredProperty("spring.multitenancy.default");
@@ -42,7 +46,7 @@ public class DataSourceBasedMultiTenantConnectionProviderImpl extends AbstractDa
 					.url(env.getRequiredProperty("spring.multitenancy." + n + ".url"));
 			DataSource tmp = factory.build();
 			
-			map.put(n, tmp);
+			datasources.put(n, tmp);
 		}
 	}
 
@@ -53,11 +57,16 @@ public class DataSourceBasedMultiTenantConnectionProviderImpl extends AbstractDa
 	
 	@Override
 	protected DataSource selectAnyDataSource() {
-		return map.get(defaultTenant);
+		return datasources.get(defaultTenant);
 	}
 
 	@Override
 	protected DataSource selectDataSource(String tenantIdentifier) {
-		return map.get(tenantIdentifier);
+		return datasources.get(tenantIdentifier);
+	}
+	
+	protected Map<String, DataSource> getDataSources()
+	{
+		return datasources;
 	}
 }
