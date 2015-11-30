@@ -23,7 +23,7 @@ public class MultiTenancyJpaConfiguration {
 
 	@Autowired
 	private DataSource dataSource;
-
+	
 	@Autowired
 	private JpaProperties jpaProperties;
 

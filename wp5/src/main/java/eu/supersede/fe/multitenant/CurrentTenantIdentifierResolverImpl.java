@@ -1,15 +1,19 @@
 package eu.supersede.fe.multitenant;
 
 import org.hibernate.context.spi.CurrentTenantIdentifierResolver;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 
 @Component
+@PropertySource("classpath:multitenancy.properties")
 public class CurrentTenantIdentifierResolverImpl implements CurrentTenantIdentifierResolver {
 
-	private static final String DEFAULT_TENANT_ID = "tenant_1";
-
+	@Value("${spring.multitenancy.default}")
+	private String DEFAULT_TENANT_ID;
+	
 	@Override
 	public String resolveCurrentTenantIdentifier()
 	{
