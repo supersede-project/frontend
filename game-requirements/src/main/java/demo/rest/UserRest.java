@@ -1,6 +1,9 @@
 package demo.rest;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -16,9 +19,13 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import demo.exception.NotFoundException;
 import demo.jpa.ProfilesJpa;
+import demo.jpa.UserCriteriaPointsJpa;
 import demo.jpa.UsersJpa;
+import demo.jpa.ValutationCriteriaJpa;
 import demo.model.Profile;
 import demo.model.User;
+import demo.model.UserCriteriaPoint;
+import demo.model.ValutationCriteria;
 
 @RestController
 @RequestMapping("/user")
@@ -31,6 +38,12 @@ public class UserRest {
 	
 	@Autowired
     private ProfilesJpa profiles;
+	
+	@Autowired
+    private ValutationCriteriaJpa valutationCriterias;
+	
+	@Autowired
+    private UserCriteriaPointsJpa userCriteriaPoints;
 	
 	//@PreAuthorize("hasAuthority('ADMIN')")
 	//@Secured({"ROLE_ADMIN"})
@@ -75,6 +88,19 @@ public class UserRest {
 	public List<User> getUsers() 
 	{
 		return users.findAll();
+	}
+	
+	// Get all users that have a specific ValutationCriteria
+	@RequestMapping(value = "/criteria/{criteriaId}", method = RequestMethod.GET)
+	public List<User> getCriteriaUsers(@PathVariable Long criteriaId)
+	{
+		ValutationCriteria v = valutationCriterias.findOne(criteriaId);
+		if(v == null){
+			throw new NotFoundException();
+		}
+		
+		List<User> userList = userCriteriaPoints.findUsersByValutationCriteria(v);		
+		return userList;
 	}
 	
 	//@Secured({"ROLE_ADMIN"})

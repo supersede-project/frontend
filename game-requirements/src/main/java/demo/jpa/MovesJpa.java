@@ -2,8 +2,8 @@ package demo.jpa;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import demo.model.Game;
+import demo.model.Move;
 
-public interface GamesJpa extends JpaRepository<Game, Long> {
+public interface MovesJpa extends JpaRepository<Move, Long> {
 
 }

@@ -1,0 +1,7 @@
+.open> ul>li.dropdown-inline {
+    display: inline-flex !important;
+}
+
+body { 
+    padding-top: 65px; 
+}
