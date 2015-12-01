@@ -37,7 +37,7 @@ app.controller('navigation', function($rootScope, $scope, $http, $location, $rou
 			$rootScope.applications = [];
 			$rootScope.roles = [];
 			$rootScope.tenants = [];
-			$rootScope.selectedTenant = {};
+			$rootScope.selectedTenant = "";
 			
 			var authenticate = function(credentials, callback) {
 
@@ -47,7 +47,7 @@ app.controller('navigation', function($rootScope, $scope, $http, $location, $rou
 									+ credentials.password)
 				} : {};
 
-				headers.TenantId = $rootScope.selectedTenant;
+				headers.TenantId = $scope.selectedTenant;
 				
 				$http.get('user', {
 					headers : headers
