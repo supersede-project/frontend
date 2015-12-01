@@ -26,7 +26,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -86,7 +85,7 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 					log.debug("User has " + authorities.length + " authorities");
 					
 					List<GrantedAuthority> permissions = AuthorityUtils.createAuthorityList(authorities);
-					return new User(user.getEmail(), user.getPassword(), true, true, true, true, permissions);
+					return new DatabaseUser(user.getEmail(), user.getPassword(), true, true, true, true, permissions);
 				}
 				}
 				catch(Exception ex)

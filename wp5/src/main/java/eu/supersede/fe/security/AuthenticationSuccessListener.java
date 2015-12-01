@@ -1,7 +1,6 @@
 package eu.supersede.fe.security;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,12 +18,12 @@ public class AuthenticationSuccessListener implements ApplicationListener<Authen
     public void onApplicationEvent(AuthenticationSuccessEvent event) {
     	
     	ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-        HttpSession session = attr.getRequest().getSession();
+    	DatabaseUser userDetails = (DatabaseUser)event.getAuthentication().getPrincipal();
         
         HttpServletRequest req = attr.getRequest();
         String multiTenantId = req.getHeader("TenantId");
-        session.setAttribute("TenantId", multiTenantId);
+        userDetails.setTenantId(multiTenantId);
         
-        log.debug("Setting tenant in session: " + multiTenantId);
+        log.debug("Setting tenant in userDetails: " + multiTenantId);
     }
 }
