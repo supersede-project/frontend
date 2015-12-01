@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -75,7 +74,6 @@ public class Notifier {
 	}
 
 	@Scheduled(fixedRateString = "${notifier.mail.sender.checkRate}")
-	@Transactional
     public void checkNotifications()
 	{
 		log.debug("check notifications");
