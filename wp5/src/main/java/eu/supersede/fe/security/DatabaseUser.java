@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import org.springframework.security.core.GrantedAuthority;
 
+@SuppressWarnings("serial")
 public class DatabaseUser extends  org.springframework.security.core.userdetails.User {
 
 	private String multiTenantId;

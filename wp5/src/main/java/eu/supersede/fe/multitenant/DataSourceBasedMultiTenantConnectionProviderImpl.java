@@ -16,6 +16,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
+@SuppressWarnings("serial")
 @Component
 @PropertySource("classpath:multitenancy.properties")
 @EnableConfigurationProperties(JpaProperties.class)
