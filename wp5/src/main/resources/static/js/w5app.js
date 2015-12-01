@@ -45,6 +45,8 @@ app.controller('navigation', function($rootScope, $scope, $http, $location, $rou
 									+ credentials.password)
 				} : {};
 
+				headers.TenantId = 'tenant_1';
+				
 				$http.get('user', {
 					headers : headers
 				}).success(function(data) {

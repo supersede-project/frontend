@@ -132,5 +132,4 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		repository.setHeaderName("X-XSRF-TOKEN");
 		return repository;
 	}
-
 }
