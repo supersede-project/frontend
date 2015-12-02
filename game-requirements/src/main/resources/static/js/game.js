@@ -17,7 +17,6 @@ var app = angular.module('gameapp', [ 'ngRoute' ]).config(function($routeProvide
 
 */
 
-//For intergration in the whole app
 var app = angular.module('w5app');
 
 app.controllerProvider.register('list-requirements', function($scope, $http) {
@@ -116,16 +115,16 @@ app.controllerProvider.register('leaderboard', function($scope, $http) {
 
 app.controllerProvider.register('criterias_leaderboard', function($scope, $http) {
 	
-	$scope.valuationCriterias = [];
+	$scope.valutationCriterias = [];
     $scope.criteriaUsers = []; 
     $scope.selectedCriteria = null;
     
     $http.get('game-requirements/criteria')
 	.success(function(data) {
-		$scope.valuationCriterias.length = 0;
+		$scope.valutationCriterias.length = 0;
 		for(var i = 0; i < data.length; i++)
 		{
-			$scope.valuationCriterias.push(data[i]);
+			$scope.valutationCriterias.push(data[i]);
 		}
 	});
     	
@@ -199,6 +198,15 @@ app.controllerProvider.register('move_creation', function($scope, $http) {
 	    }).error(function(err){
 	    	console.log(err);
 	    });
+    	
+    	$http.get('game-requirements/notification/create', {params: 
+		{
+			userId1 : $scope.selectedPlayerOne.userId,
+			userId2 : $scope.selectedPlayerTwo.userId
+		}
+		}).success(function(data) {
+
+		});
     };
     
 });
