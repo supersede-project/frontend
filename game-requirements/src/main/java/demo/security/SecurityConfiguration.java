@@ -36,13 +36,13 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		/*
+		
 		http.httpBasic().disable();
 		http.anonymous().disable();
 	    http.authorizeRequests().anyRequest().authenticated().and().csrf().csrfTokenRepository(csrfTokenRepository()).and()
 				.addFilterAfter(csrfHeaderFilter(), CsrfFilter.class);
-		 */
-	    http.authorizeRequests().anyRequest().permitAll();
+		 
+	    //http.authorizeRequests().anyRequest().permitAll();
 	}
 
 	private Filter csrfHeaderFilter() {

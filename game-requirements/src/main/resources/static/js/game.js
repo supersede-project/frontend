@@ -1,19 +1,11 @@
-//For intergration in the whole app
-//var app = angular.module('w5app');
+// for test CHANGE URL rest service
+// for test use app.controller instead of app.controllerProvider.resgister
 
+// for test use this app instead of above
+/*
 var app = angular.module('gameapp', [ 'ngRoute' ]).config(function($routeProvider, $httpProvider, $controllerProvider, $compileProvider, $filterProvider, $provide) {
 
-	/*
-	 * PROBLEM
-	$routeProvider.when('/', {
-		templateUrl : 'game_overview.html',
-		controller : 'list-requirements'
-	}).when('/:name*', {
-		templateUrl : function(urlattr){
-            return urlattr.name + '.html';
-        }
-	}).otherwise('/');
-	*/
+
 	$httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 	
 	app.controllerProvider = $controllerProvider;
@@ -23,7 +15,12 @@ var app = angular.module('gameapp', [ 'ngRoute' ]).config(function($routeProvide
     app.provide            = $provide;
 });
 
-app.controller('list-requirements', function($scope, $http) {
+*/
+
+//For intergration in the whole app
+var app = angular.module('w5app');
+
+app.controllerProvider.register('list-requirements', function($scope, $http) {
 	
 	$scope.sort = {       
             sortingOrder : 'id',
@@ -79,7 +76,7 @@ app.controller('list-requirements', function($scope, $http) {
     };    
     //####################################
     
-    $http.get('/requirement')
+    $http.get('game-requirements/requirement')
 	.success(function(data) {
 		$scope.requirements.length = 0;
 		for(var i = 0; i < data.length; i++)
@@ -90,7 +87,7 @@ app.controller('list-requirements', function($scope, $http) {
 		$scope.totalPages = Math.max(1, Math.ceil($scope.requirementsLength / $scope.itemsPerPage));
 	});
     
-    $http.get('/criteria')
+    $http.get('game-requirements/criteria')
 	.success(function(data) {
 		$scope.valutationCriterias.length = 0;
 		for(var i = 0; i < data.length; i++)
@@ -100,12 +97,12 @@ app.controller('list-requirements', function($scope, $http) {
 	});
 });
 
-app.controller('leaderboard', function($scope, $http) {
+app.controllerProvider.register('leaderboard', function($scope, $http) {
 	
     $scope.users = [];
     $scope.usersCount = 0;
        
-    $http.get('/user')
+    $http.get('game-requirements/user')
 	.success(function(data) {
 		$scope.users.length = 0;
 		for(var i = 0; i < data.length; i++)
@@ -117,13 +114,13 @@ app.controller('leaderboard', function($scope, $http) {
 });
 
 
-app.controller('criterias_leaderboard', function($scope, $http) {
+app.controllerProvider.register('criterias_leaderboard', function($scope, $http) {
 	
 	$scope.valuationCriterias = [];
     $scope.criteriaUsers = []; 
     $scope.selectedCriteria = null;
     
-    $http.get('/criteria')
+    $http.get('game-requirements/criteria')
 	.success(function(data) {
 		$scope.valuationCriterias.length = 0;
 		for(var i = 0; i < data.length; i++)
@@ -133,7 +130,7 @@ app.controller('criterias_leaderboard', function($scope, $http) {
 	});
     	
     $scope.selectedCriteriaChanged = function(){   	
-    	$http.get('/user/criteria/' + $scope.selectedCriteria.criteriaId)
+    	$http.get('game-requirements/user/criteria/' + $scope.selectedCriteria.criteriaId)
 		.success(function(data) {
 			$scope.criteriaUsers.length = 0;
 			for(var i = 0; i < data.length; i++)
@@ -144,7 +141,7 @@ app.controller('criterias_leaderboard', function($scope, $http) {
     }    
 });
 
-app.controller('game_creation', function($scope, $http) {
+app.controllerProvider.register('move_creation', function($scope, $http) {
 	
 	$scope.valuationCriterias = [];
     $scope.users = []; 
@@ -154,10 +151,10 @@ app.controller('game_creation', function($scope, $http) {
     $scope.selectedPlayerTwo = null;
     $scope.selectedFirstRequirement = null;
     $scope.selectedSecondRequirement = null;
-    $scope.gameName = '';
-    $scope.gameTimer = '';
+    $scope.moveName = '';
+    $scope.moveTimer = 3600;
     
-    $http.get('/criteria')
+    $http.get('game-requirements/criteria')
 	.success(function(data) {
 		$scope.valuationCriterias.length = 0;
 		for(var i = 0; i < data.length; i++)
@@ -166,7 +163,7 @@ app.controller('game_creation', function($scope, $http) {
 		}
 	});
     	
-	$http.get('/user')
+	$http.get('game-requirements/user')
 	.success(function(data) {
 		$scope.users.length = 0;
 		for(var i = 0; i < data.length; i++)
@@ -175,14 +172,57 @@ app.controller('game_creation', function($scope, $http) {
 		}
 	});
 	
-    $http.get('/requirement')
+    $http.get('game-requirements/requirement')
 	.success(function(data) {
 		$scope.requirements.length = 0;
 		for(var i = 0; i < data.length; i++)
 		{
 			$scope.requirements.push(data[i]);
 		}
-	});                
+	});
+    
+    $scope.createMove = function(){
+    	$http({
+			url: "game-requirements/move",
+	        data: {
+	        	name : $scope.moveName,
+	        	timer : $scope.moveTimer,
+	        	firstRequirement : $scope.selectedFirstRequirement,
+        		secondRequirement : $scope.selectedSecondRequirement,
+        		firstPlayer : $scope.selectedPlayerOne,
+        		secondPlayer : $scope.selectedPlayerTwo,
+        		criteria : $scope.selectedCriteria
+	        },
+	        method: 'POST'
+	    }).success(function(data){
+	    	
+	    }).error(function(err){
+	    	console.log(err);
+	    });
+    };
+    
+});
+
+app.controllerProvider.register('user_moves', function($scope, $http) {
+	
+    $scope.moves = [];
+    $scope.movesCount = 0;
+    
+    $http.get('game-requirements/move')
+	.success(function(data) {
+		$scope.moves.length = 0;
+		for(var i = 0; i < data.length; i++)
+		{
+			$scope.moves.push(data[i]);
+		}
+		 $scope.movesCount = data.length;
+	});
+              
+});
+
+app.controllerProvider.register('play_view', function($scope, $http) {
+	
+              
 });
 
 

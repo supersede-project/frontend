@@ -14,7 +14,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-
 @Entity
 @Table(name="moves")
 public class Move {
@@ -29,31 +28,30 @@ public class Move {
     private int timer;
     private boolean finish;
     
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="requirement_id", insertable=false, updatable=false)
+    @ManyToOne(fetch=FetchType.EAGER)
+    @JoinColumn(name="first_requirement_id", nullable = false)
     private Requirement firstRequirement;
     
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="requirement_id", insertable=false, updatable=false)
+    @ManyToOne(fetch=FetchType.EAGER)
+    @JoinColumn(name="second_requirement_id", nullable = false)
     private Requirement secondRequirement;
     
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="user_id", insertable=false, updatable=false)
+    @ManyToOne(fetch=FetchType.EAGER)
+    @JoinColumn(name="first_player_id", nullable = false)
     private User firstPlayer;
     
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="user_id",insertable=false, updatable=false)
+    @ManyToOne(fetch=FetchType.EAGER)
+    @JoinColumn(name="second_player_id", nullable = false)
     private User secondPlayer;
     
-    // TODO, finish to implement and check
-    //private Requirement firstPlayerRequirement;
-    //private Requirement secondPlayerRequirement;
-    
-    
+    @ManyToOne(fetch=FetchType.EAGER)
+    @JoinColumn(name="criteria_id", nullable = false)
+    private ValutationCriteria criteria;
+        
     public Move() {
     }
  
-    public Move(String name, int timer, Requirement firstRequirement, Requirement secondRequirement, User firstPlayer, User secondPlayer) {
+    public Move(String name, int timer, Requirement firstRequirement, Requirement secondRequirement, User firstPlayer, User secondPlayer, ValutationCriteria criteria) {
         this.name = name;
         this.startTime = new Date();
         this.timer = timer;
@@ -62,6 +60,7 @@ public class Move {
         this.secondRequirement = secondRequirement;
         this.firstPlayer = firstPlayer;
         this.secondPlayer = secondPlayer;
+        this.criteria = criteria;
     }
  
     public Long getMoveId() {
@@ -103,7 +102,7 @@ public class Move {
     public void setFinish(boolean finish) {
         this.finish = finish;
     }
-      
+
     public Requirement getFirstRequirement() {
         return firstRequirement;
     }
@@ -111,7 +110,7 @@ public class Move {
     public void setFirstRequirement(Requirement firstRequirement) {
         this.firstRequirement = firstRequirement;
     }
-    
+
     public Requirement getSecondRequirement() {
         return secondRequirement;
     }
@@ -119,7 +118,7 @@ public class Move {
     public void setSecondRequirement(Requirement secondRequirement) {
         this.secondRequirement = secondRequirement;
     } 
-    
+
     public User getFirstPlayer() {
         return firstPlayer;
     }
@@ -134,5 +133,13 @@ public class Move {
  
     public void setSecondPlayer(User secondPlayer) {
         this.secondPlayer = secondPlayer;
+    }
+    
+    public ValutationCriteria getCriteria() {
+        return criteria;
+    }
+ 
+    public void setCriteria(ValutationCriteria criteria) {
+        this.criteria = criteria;
     }
 }

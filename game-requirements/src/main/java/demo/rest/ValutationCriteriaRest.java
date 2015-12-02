@@ -18,6 +18,7 @@ public class ValutationCriteriaRest {
 	@Autowired
     private ValutationCriteriaJpa valutationCriterias;
 		
+	//get a specific ValutationCriteria
 	@RequestMapping("/{criteriaId}")
 	public ValutationCriteria getCriteria(@PathVariable Long criteriaId)
 	{
@@ -30,17 +31,20 @@ public class ValutationCriteriaRest {
 		return c;
 	}
 	
+	// get all the ValutationCriterias
 	@RequestMapping("")
 	public List<ValutationCriteria> getCriterias() 
 	{
 		return valutationCriterias.findAll();
 	}
 	
+	// get number of ValutationCriterias
 	@RequestMapping("/count")
 	public Long count() {
 		return valutationCriterias.count();
 	}
 	
+	// create a ValutationCriteria with a specific content
 	@RequestMapping("/create")
 	public void createCriteria(@RequestParam(required=true) String name)
 	{

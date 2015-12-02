@@ -24,6 +24,12 @@ public class User {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
 	public List<UserCriteriaPoint> userCriteriaPoints;
     
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "firstPlayer")
+	public List<Move> firstPlayerMoves;
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "secondPlayer")
+	public List<Move> secondPlayerMoves;
+	
     public User() {
     }
  
@@ -92,5 +98,23 @@ public class User {
     
     public void setUserCriteriaPoints(List<UserCriteriaPoint> userCriteriaPoints){
     	this.userCriteriaPoints = userCriteriaPoints;
+    }
+
+    @JsonIgnore
+    public List<Move> getFirstPlayerMoves(){
+    	return firstPlayerMoves;
+    }
+    
+    public void setFirstPlayerMoves(List<Move> firstPlayerMoves){
+    	this.firstPlayerMoves = firstPlayerMoves;
+    }
+    
+    @JsonIgnore
+    public List<Move> getSecondPlayerMoves(){
+    	return secondPlayerMoves;
+    }
+    
+    public void setSecondPlayerMoves(List<Move> secondPlayerMoves){
+    	this.secondPlayerMoves = secondPlayerMoves;
     }
 }

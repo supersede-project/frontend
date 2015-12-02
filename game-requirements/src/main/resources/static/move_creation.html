@@ -1,3 +1,4 @@
+<!--  
 <!doctype html>
 <html>
 	<head>
@@ -29,11 +30,14 @@
 	            <li><a href="leaderboard.html">Leaderboard</a></li>
 	            <li><a href="criterias_leaderboard.html">Criterias Leaderboard</a></li>
 	            <li class="active"><a href="move_creation.html">Move Creation</a></li>
+	            <li><a href="user_moves.html">User Moves</a></li>
+   	            <li><a href="play_view.html">Play View</a></li>
 	          </ul>
-	        </div><!--/.nav-collapse -->
+	        </div>
 	      </div>
 	    </nav>
-	    
+	     -->
+       	<script src="game-requirements/js/game.js"></script>      	        
    		<div class="jumbotron">
 	      <div class="container">
 	        <h1>It's time to create a move!</h1>
@@ -41,7 +45,7 @@
 	      </div>
     	</div>
 	    
-	    <div class="container" ng-controller="game_creation">
+	    <div class="container" ng-controller="move_creation">
 	    	<h3>First step</h3>
 	    	<div class="row">
 	    		<div class="col-md-6">	
@@ -49,10 +53,10 @@
 					  <div class="panel-heading">Insert name and timer</div>
 					  <div class="panel-body">
 					    	<label>Move name</label>
-      						<input type="text" class="form-control" ng-model="gameName">
+      						<input type="text" class="form-control" ng-model="moveName">
       						<br>
       						<label>Timer</label>
-      						<input type="number" class="form-control" ng-model="gameTimer">
+      						<input type="number" class="form-control" ng-model="moveTimer">
 					  </div>
 					</div>			
 				</div>	
@@ -122,13 +126,14 @@
 				</div>
 			</div>
 			<div align="right">
-				<button type="button" class="btn btn-lg btn-success">Submit Move</button>
+				<button type="button" class="btn btn-lg btn-success" ng-click="createMove()">Submit Move</button>
 			</div>
 			<br>
 			<br>	
 			<br>	
 			<br>		
 	    </div>
+	    <!-- 
 	    	    	    
    		<script src="js/jquery-2.1.4.min.js" type="text/javascript"></script>
         <script src="js/angular.min.js" type="text/javascript"></script>
@@ -137,4 +142,5 @@
         <script src="js/game.js"></script>	    
 	</body>    
 </html>
+ -->
 	    
