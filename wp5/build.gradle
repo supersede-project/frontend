@@ -28,6 +28,7 @@ targetCompatibility = 1.7
 
 repositories {
     mavenCentral()
+	maven { url 'https://repo.spring.io/libs-snapshot' }
 }
 
 configurations {
@@ -48,8 +49,11 @@ dependencies {
     
     providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
     
-	compile("org.springframework.session:spring-session:1.0.2.RELEASE")
+	//compile("org.springframework.session:spring-session:1.0.2.RELEASE")
+	compile("org.springframework.session:spring-session:1.1.0.BUILD-SNAPSHOT")
 	compile("org.springframework.boot:spring-boot-starter-redis")
+	
+	compile files('../multitenant-utils/build/libs/multitenant-utils-0.0.1-SNAPSHOT.jar')
 }
 
 

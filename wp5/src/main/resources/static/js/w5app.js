@@ -36,6 +36,8 @@ app.controller('navigation', function($rootScope, $scope, $http, $location, $rou
 			$rootScope.profiles = [];
 			$rootScope.applications = [];
 			$rootScope.roles = [];
+			$rootScope.tenants = [];
+			$rootScope.selectedTenant = "";
 			
 			var authenticate = function(credentials, callback) {
 
@@ -45,6 +47,8 @@ app.controller('navigation', function($rootScope, $scope, $http, $location, $rou
 									+ credentials.password)
 				} : {};
 
+				headers.TenantId = $scope.selectedTenant;
+				
 				$http.get('user', {
 					headers : headers
 				}).success(function(data) {
@@ -155,6 +159,16 @@ app.controller('navigation', function($rootScope, $scope, $http, $location, $rou
 					
 					});
 			}
+			
+			var getTenants = function()
+			{
+				$http.get('tenant').success(function(data) {
+					angular.copy(data, $rootScope.tenants);
+					$rootScope.selectedTenant = $rootScope.tenants[0];
+				});
+			}
+			
+			getTenants();
 			
 			var stop;
 			

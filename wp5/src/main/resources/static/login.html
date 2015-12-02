@@ -3,6 +3,11 @@
 </div>
 <form role="form" ng-submit="login()">
 	<div class="form-group">
+		<label for="username">Tenant:</label>
+		<select ng-model="selectedTenant" ng-options="tenant as tenant for tenant in tenants">
+  		</select>
+	</div>
+	<div class="form-group">
 		<label for="username">Username:</label> <input type="text"
 			class="form-control" id="username" name="username" ng-model="credentials.username"/>
 	</div>
