@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 import demo.exception.NotFoundException;
 import demo.jpa.RequirementsJpa;
 import demo.model.Requirement;
-import demo.model.ValutationCriteria;
 import demo.utility.RequirementUtil;
 
 @RestController

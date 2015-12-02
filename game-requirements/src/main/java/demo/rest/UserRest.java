@@ -1,9 +1,6 @@
 package demo.rest;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -24,7 +21,6 @@ import demo.jpa.UsersJpa;
 import demo.jpa.ValutationCriteriaJpa;
 import demo.model.Profile;
 import demo.model.User;
-import demo.model.UserCriteriaPoint;
 import demo.model.ValutationCriteria;
 
 @RestController

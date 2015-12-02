@@ -1,6 +1,5 @@
 package demo.rest;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -9,7 +8,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,10 +17,10 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import demo.exception.NotFoundException;
 import demo.jpa.MovesJpa;
-import demo.jpa.RequirementsJpa;
 import demo.jpa.UsersJpa;
 import demo.model.Move;
 import demo.model.User;
+import eu.supersede.fe.security.DatabaseUser;
 
 @RestController
 @RequestMapping("/move")
@@ -32,29 +30,15 @@ public class MoveRest {
     private MovesJpa moves;
 	
 	@Autowired
-    private RequirementsJpa requirements;
-	
-	@Autowired
     private UsersJpa users;
 	
 	// all the moves for the logged user
 	@RequestMapping(value = "",  method = RequestMethod.GET)
 	public List<Move> getMoves(Authentication authentication) {
 		
-		UserDetails currentUser = (UserDetails) authentication.getPrincipal();
-		User u = users.findByEmail(currentUser.getUsername());
-		
-		List<Move> playerMoves = new ArrayList<Move>();
-		
-		List<Move> listMoves = moves.findAll();
-		
-		for(int i=0;i < listMoves.size();i++)
-		{
-			if(listMoves.get(i).getFirstPlayer().getUserId() == u.getUserId() || listMoves.get(i).getSecondPlayer().getUserId() == u.getUserId())
-			{
-				playerMoves.add(listMoves.get(i));
-			}
-		}
+		DatabaseUser currentUser = (DatabaseUser) authentication.getPrincipal();
+		User user = users.findOne(currentUser.getUserId());
+		List<Move> playerMoves = moves.findByFirstPlayerOrSecondPlayer(user, user);
 			
 		return playerMoves;	
 	}
