@@ -29,7 +29,6 @@ import org.springframework.transaction.interceptor.TransactionInterceptor;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 @Component
-@PropertySource("classpath:wp5.properties")
 public class MultiJpaProvider {
 	
 	@Autowired
