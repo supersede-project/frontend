@@ -10,17 +10,23 @@ import org.hibernate.cfg.Environment;
 import org.hibernate.context.spi.CurrentTenantIdentifierResolver;
 import org.hibernate.engine.jdbc.connections.spi.MultiTenantConnectionProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 
 @Configuration
+@PropertySource("classpath:multitenancy.properties")
 @EnableConfigurationProperties(JpaProperties.class)
 public class MultiTenancyJpaConfiguration {
 
+	@Value("${spring.multitenancy.models.packages}")
+	private String MODELS_PACKAGES;
+	
 	@Autowired
 	private DataSource dataSource;
 	
@@ -44,7 +50,7 @@ public class MultiTenancyJpaConfiguration {
 		hibernateProps.put(Environment.DIALECT, "org.hibernate.dialect.PostgreSQLDialect");
 
 		return builder.dataSource(dataSource)
-				.packages("eu.supersede.fe.model")
+				.packages(MODELS_PACKAGES)
 				.properties(hibernateProps)
 				.jta(false)
 				.build();
