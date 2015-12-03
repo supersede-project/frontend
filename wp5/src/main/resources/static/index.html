@@ -23,9 +23,14 @@
 		        <li><a href="#/">Home</a></li>
 		        
 		        <li ng-repeat="profile in profiles | orderBy:'name'" class="dropdown" ng-show="authenticated">
-			    	<a href="" class="dropdown-toggle" data-toggle="dropdown">{{profile.name}}<b class="caret"></b></a>
-			    	<ul class="dropdown-menu" ng-show="applications[profile.name].length > 0">
-				        <li ng-repeat="appl in applications[profile.name]"><a ng-href="#/{{appl.name}}/{{appl.mainPage}}">{{appl.name}}/{{appl.mainPage}}</a></li>
+			    	<a href="" class="dropdown-toggle" data-toggle="dropdown">{{profile}}<b class="caret"></b></a>
+			    	<ul class="dropdown-menu multi-level" ng-show="applications[profile].length > 0">
+				        <li class="dropdown-submenu" ng-repeat="appl in applications[profile]">
+				        	<a>{{appl.applicationName}}</a>
+				        	<ul class="dropdown-menu">
+			                	<li ng-repeat="page in appl.pages"><a ng-href="#/{{appl.applicationName}}/{{page}}">{{page}}</a></li>
+			                </ul>
+				        </li>
 				   	</ul>
 			    </li>
 			    

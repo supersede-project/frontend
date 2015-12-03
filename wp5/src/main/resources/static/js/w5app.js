@@ -55,7 +55,11 @@ app.controller('navigation', function($rootScope, $scope, $http, $location, $rou
 					if (data.name) {
 						$rootScope.authenticated = true;
 						$rootScope.roles = data.authorities;
-						getProfiles();
+						for(var i = 0; i < data.authorities.length; i++)
+						{
+							$rootScope.profiles.push(data.authorities[i].authority);
+						}
+						getApplications();
 					} else {
 						cleanAuth();
 					}
@@ -66,42 +70,14 @@ app.controller('navigation', function($rootScope, $scope, $http, $location, $rou
 				});
 
 			}
-
-			$scope.hasProfile = function(profile) {
-				for(var i = 0; i < $rootScope.roles.length; i++) {
-				    if ($rootScope.roles[i].authority == profile) {
-				        return true;
-				    }
-				}
-				return false;
-			}
 			
-			var getApplications = function(profile)
+			var getApplications = function()
 			{
-				$http.get('application', {
-					params: { profileId : profile.profileId}
-				}).success(function(data) {
-					$rootScope.applications[profile.name] = data;
-				});
-			}
-			
-			var getProfiles = function()
-			{
-				$http.get('profile')
-				.success(function(data) {
-					//clean
-					$rootScope.profiles.length = 0;
-					angular.copy({}, $rootScope.applications);
-					
-					for(var i = 0; i < data.length; i++)
+				$http.get('application').success(function(data) {
+					for(var i = 0;i < data.length; i++ )
 					{
-						if($scope.hasProfile(data[i].name))
-						{
-							$rootScope.profiles.push(data[i]);
-							getApplications(data[i]);
-						}
+						$rootScope.applications[data[i].profileName] = data[i].applications;
 					}
-					
 				});
 			}
 			
