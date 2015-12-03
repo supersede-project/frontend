@@ -17,8 +17,10 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import demo.exception.NotFoundException;
 import demo.jpa.MovesJpa;
+import demo.jpa.RequirementsJpa;
 import demo.jpa.UsersJpa;
 import demo.model.Move;
+import demo.model.Requirement;
 import demo.model.User;
 import eu.supersede.fe.security.DatabaseUser;
 
@@ -32,13 +34,19 @@ public class MoveRest {
 	@Autowired
     private UsersJpa users;
 	
+	@Autowired
+    private RequirementsJpa requirements;
+	
 	// get all the moves for the logged user
 	@RequestMapping(value = "",  method = RequestMethod.GET)
 	public List<Move> getMoves(Authentication authentication) {
 		
 		DatabaseUser currentUser = (DatabaseUser) authentication.getPrincipal();
 		User user = users.findOne(currentUser.getUserId());
-		List<Move> playerMoves = moves.findByFirstPlayerOrSecondPlayer(user, user);
+		
+		//List<Move> playerMoves = moves.findByFirstPlayerOrSecondPlayer(user, user);
+		
+		List<Move> playerMoves = moves.findSpecial(user);
 			
 		return playerMoves;	
 	}
@@ -76,4 +84,34 @@ public class MoveRest {
 		return new ResponseEntity<>(null, httpHeaders, HttpStatus.CREATED);
 	}
 	
+	// put, for update the requirement value with the player
+	@RequestMapping(method = RequestMethod.PUT, value="/{moveId}/requirement/{requirementId}")
+	public void setRequirement(Authentication authentication, @PathVariable Long moveId, @PathVariable Long requirementId) {
+		
+		DatabaseUser currentUser = (DatabaseUser) authentication.getPrincipal();
+		User user = users.findOne(currentUser.getUserId());
+		
+		Move m = moves.findOne(moveId);
+		Requirement r = requirements.findOne(requirementId);
+		
+		if(m.getFirstPlayer().getUserId() == user.getUserId())
+		{
+			m.setFirstPlayerChooseRequirement(r);
+			if(m.getSecondPlayerChooseRequirement() != null)
+			{
+				m.setFinish(true);
+			}
+		}
+		else
+		{
+			m.setSecondPlayerChooseRequirement(r);
+			if(m.getFirstPlayerChooseRequirement() != null)
+			{
+				m.setFinish(true);
+			}
+		}
+		
+		moves.save(m);
+	}
+		
 }

@@ -47,11 +47,21 @@ public class Move {
     @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="criteria_id", nullable = false)
     private ValutationCriteria criteria;
+    
+    @ManyToOne(fetch=FetchType.EAGER)
+    @JoinColumn(name="first_player_requirement")
+    private Requirement firstPlayerChooseRequirement;
+    
+    @ManyToOne(fetch=FetchType.EAGER)
+    @JoinColumn(name="second_player_requirement")
+    private Requirement secondPlayerChooseRequirement;
+    
+    private boolean notificationSent;
         
     public Move() {
     }
  
-    public Move(String name, int timer, Requirement firstRequirement, Requirement secondRequirement, User firstPlayer, User secondPlayer, ValutationCriteria criteria) {
+    public Move(String name, int timer, Requirement firstRequirement, Requirement secondRequirement, User firstPlayer, User secondPlayer, ValutationCriteria criteria, Requirement firstPlayerChooseRequirement, Requirement secondPlayerChooseRequirement) {
         this.name = name;
         this.startTime = new Date();
         this.timer = timer;
@@ -61,6 +71,8 @@ public class Move {
         this.firstPlayer = firstPlayer;
         this.secondPlayer = secondPlayer;
         this.criteria = criteria;
+        this.firstPlayerChooseRequirement = firstPlayerChooseRequirement;
+        this.secondPlayerChooseRequirement = secondPlayerChooseRequirement;
     }
  
     public Long getMoveId() {
@@ -142,4 +154,30 @@ public class Move {
     public void setCriteria(ValutationCriteria criteria) {
         this.criteria = criteria;
     }
+       
+    public Requirement getFirstPlayerChooseRequirement() {
+        return firstPlayerChooseRequirement;
+    }
+ 
+    public void setFirstPlayerChooseRequirement(Requirement firstPlayerChooseRequirement) {
+        this.firstPlayerChooseRequirement = firstPlayerChooseRequirement;
+    }
+    
+    public Requirement getSecondPlayerChooseRequirement() {
+        return secondPlayerChooseRequirement;
+    }
+ 
+    public void setSecondPlayerChooseRequirement(Requirement secondPlayerChooseRequirement) {
+        this.secondPlayerChooseRequirement = secondPlayerChooseRequirement;
+    }
+
+	public boolean getNotificationSent() {
+		return notificationSent;
+	}
+
+	public void setNotificationSent(boolean notificationSent) {
+		this.notificationSent = notificationSent;
+	}
+    
+    
 }

@@ -232,12 +232,27 @@ app.controllerProvider.register('user_moves', function($scope, $http) {
 		}
 		 $scope.movesCount = data.length;
 	});
-              
+                 
 });
 
-app.controllerProvider.register('play_view', function($scope, $http) {
+app.controllerProvider.register('play_view', function($scope, $http, $location) {
 	
-              
+	$scope.moveId = $location.search()['moveId'];
+	$scope.move = null;
+	
+	 $http.get('game-requirements/move/' + $scope.moveId)
+	.success(function(data) {
+		$scope.move = data;
+	});
+	 
+    $scope.addRequirement = function(selectedRequirementId){
+    	
+    	$http.put('game-requirements/move/' + $scope.moveId + '/requirement/' + selectedRequirementId)
+    	.success(function(data) {
+    		
+    	});
+    };
+	
 });
 
 app.controllerProvider.register('judge_view', function($scope, $http) {

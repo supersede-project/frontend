@@ -38,46 +38,45 @@
 	    </nav>
 	     -->
 	     
-       	<script src="game-requirements/js/game.js"></script>		    
+       	<script src="game-requirements/js/game.js"></script>    	
    		<div class="jumbotron">
 	      <div class="container">
 	        <h1>It's your turn, PLAY!</h1>
-	        <p>This is a template for a simple marketing or informational website. It includes a large callout called a jumbotron and three supporting pieces of content. Use it as a starting point to create something more unique.</p>
+	        <p>Choose the requirement that you consider better compared to the evaluation criteria.</p>
 	      </div>
     	</div>
 	    
 	    <div class="container" ng-controller="play_view">
 	    	<div class="row">
-		    	<div class="col-md-4 col-md-offset-4">
-		    		<div class="panel panel-primary">
-						  <div class="panel-heading">Criteria</div>
-						  <div class="panel-body">
-								<h2>User Interface</h2>
-						  </div>
-					</div>
-		    	</div>	
+	    		<div class="col-md-12">
+	    			<div align="center">
+	    				<h3>Evaluation criteria selected: <b>{{move.criteria.name}}</b></h3>
+	    			</div>
+	    		</div>
 	    	</div>
+	    	<br>
+	    	<br>
 	    	<div class="row">
 	    		<div class="col-md-6">	
 					<div class="panel panel-primary">
 					  <div class="panel-heading">First requirement</div>
 					  <div class="panel-body">
-							<p>Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </p>
+							<p>{{move.firstRequirement.content}}</p>
 					  </div>
 					</div>
 					<div align="center">
-						<button type="button" class="btn btn-lg btn-success">Choose #1</button>
+						<button type="button" class="btn btn-lg btn-success " ng-click="addRequirement(move.firstRequirement.requirementId)">Choose First</button>
 					</div>					
 				</div>	
 		    	<div class="col-md-6">	
 					<div class="panel panel-primary">
 					  <div class="panel-heading">Second requirement</div>
 					  <div class="panel-body">
-							<p>Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </p>   	    	
+							<p>{{move.secondRequirement.content}}</p>   	    	
 					  </div>
 					</div>
 					<div align="center">
-						<button type="button" class="btn btn-lg btn-success">Choose #2</button>
+						<button type="button" class="btn btn-lg btn-success" ng-click="addRequirement(move.secondRequirement.requirementId)">Choose Second</button>
 					</div>				
 				</div>			
 			</div>						
