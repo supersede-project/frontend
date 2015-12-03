@@ -1,9 +1,7 @@
 package eu.supersede.fe.multitenant;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.sql.DataSource;
@@ -72,13 +70,14 @@ public class MultiJpaProvider {
 		}
 	}
 	
-	public <T extends JpaRepository<?, ?>> List<T> getRepositories(Class<T> c)
+	public <T extends JpaRepository<?, ?>> Map<String, T> getRepositories(Class<T> c)
 	{
-		List<T> tmp = new ArrayList<T>();
+		Map<String, T> tmp = new HashMap<String, T>();
 		
-		for(Triple<JpaRepositoryFactory, EntityManagerFactory, EntityManager> factory : repositoriesFactory.values())
+		for(String tenant : repositoriesFactory.keySet())
 		{
-			tmp.add(factory.a.getRepository(c));
+			Triple<JpaRepositoryFactory, EntityManagerFactory, EntityManager> factory = repositoriesFactory.get(tenant);
+			tmp.put(tenant, factory.a.getRepository(c));
 			
 			if(!TransactionSynchronizationManager.hasResource(factory.b))
 			{
