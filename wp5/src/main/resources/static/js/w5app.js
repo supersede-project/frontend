@@ -38,6 +38,7 @@ app.controller('navigation', function($rootScope, $scope, $http, $location, $rou
 			$rootScope.roles = [];
 			$rootScope.tenants = [];
 			$rootScope.selectedTenant = "";
+			$rootScope.name = "";
 			
 			var authenticate = function(credentials, callback) {
 
@@ -55,6 +56,7 @@ app.controller('navigation', function($rootScope, $scope, $http, $location, $rou
 					if (data.name) {
 						$rootScope.authenticated = true;
 						$rootScope.roles = data.authorities;
+						$rootScope.name = data.principal.name;
 						for(var i = 0; i < data.authorities.length; i++)
 						{
 							$rootScope.profiles.push(data.authorities[i].authority);
@@ -86,6 +88,7 @@ app.controller('navigation', function($rootScope, $scope, $http, $location, $rou
 				$rootScope.authenticated = false;
 				$rootScope.profiles = [];
 				$rootScope.applications = [];
+				$rootScope.name = "";
 			}
 			
 			authenticate();

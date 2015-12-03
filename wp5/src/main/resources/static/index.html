@@ -16,11 +16,11 @@
         <nav class="navbar navbar-inverse">
 		  <div ng-controller="navigation" class="container-fluid">
 		    <div class="navbar-header">
-		      <a class="navbar-brand" href="#/">Supersede</a>
+		      <p class="navbar-brand" href="#/">Supersede</p>
 		    </div>
 		    <div class="collapse navbar-collapse" id="myNavbar">
 		      <ul class="nav navbar-nav">
-		        <li><a href="#/">Home</a></li>
+		        <li ng-show="authenticated"><p class="navbar-text">{{selectedTenant}}</p></li>
 		        
 		        <li ng-repeat="profile in profiles | orderBy:'name'" class="dropdown" ng-show="authenticated">
 			    	<a href="" class="dropdown-toggle" data-toggle="dropdown" ng-show="applications[profile].length > 0">{{profile}}<b class="caret"></b></a>
@@ -37,7 +37,7 @@
 		      </ul>
 		      
 		      <ul class="nav navbar-nav navbar-right">
-		     	
+		     	<li ng-show="authenticated"><p class="navbar-text">{{name}}</p></li>
 		     	<li ng-show="authenticated">
 		     		<a href="" class="dropdown-toggle" data-toggle="dropdown">{{notificationsCount}} <span class="glyphicon glyphicon-comment"></span></a>
 		     		<ul class="dropdown-menu">
