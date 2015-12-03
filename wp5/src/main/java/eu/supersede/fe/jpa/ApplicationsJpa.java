@@ -10,4 +10,6 @@ public interface ApplicationsJpa extends JpaRepository<Application, Long> {
 
 	List<Application> findByRequiredProfileId(Long requiredProfileId);
 
+	List<Application> findByRequiredProfileIdIn(List<Long> profIdList);
+
 }
