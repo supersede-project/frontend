@@ -61,7 +61,7 @@
 					</thead>
 			
 					<tbody>
-						<tr	ng-repeat="move in moves | filter:'!move.finish'">
+						<tr	ng-repeat="move in moves | filter:{finish:false}">
 							<td>{{move.moveId}}</td>
 							<td>{{move.name}}</td>
 							<td>{{move.startTime | date:'medium'}}</td>
@@ -101,7 +101,7 @@
 					</thead>
 			
 					<tbody>
-						<tr	ng-repeat="move in moves | filter:'move.finish'">
+						<tr	ng-repeat="move in moves | filter:{finish:true}">
 							<td>{{move.moveId}}</td>
 							<td>{{move.name}}</td>
 							<td>{{move.startTime | date:'medium'}}</td>

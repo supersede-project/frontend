@@ -1,13 +1,19 @@
 package demo.scheduled;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import demo.jpa.MovesJpa;
+import demo.jpa.NotificationsJpa;
+import demo.jpa.ProfilesJpa;
 import demo.model.Move;
+import demo.model.Notification;
+import demo.model.Profile;
+import demo.model.User;
 import eu.supersede.fe.multitenant.MultiJpaProvider;
 
 @Component
@@ -19,14 +25,35 @@ public class RequirementScheduler {
 	@Scheduled(fixedRate = 10000)
 	private void notifyJudges()
 	{
-		List<MovesJpa> moveRepositories = multiJpaProvider.getRepositories(MovesJpa.class);
+		Map<String, MovesJpa> moveRepositories = multiJpaProvider.getRepositories(MovesJpa.class);
 		
-		for(MovesJpa moveRepository : moveRepositories)
+		for(String tenant : moveRepositories.keySet())
 		{
+			MovesJpa moveRepository = moveRepositories.get(tenant);
 			List<Move> moves = moveRepository.findByFinishAndNotificationSent(true, false);
-		}
-		
-		
-		
+			
+			if(moves.size() > 0)
+			{
+				Profile admin = multiJpaProvider.getRepository(ProfilesJpa.class, tenant).findByName("ADMIN");
+				List<User> userAdmins = admin.getUsers();
+				
+				NotificationsJpa notificationRepository = multiJpaProvider.getRepository(NotificationsJpa.class, tenant);
+				
+				for(Move m : moves)
+				{	
+					if(m.getFirstPlayerChooseRequirement() != m.getSecondPlayerChooseRequirement())
+					{
+						for(User u : userAdmins)
+						{
+							Notification n = new Notification("New conflict", u);
+							notificationRepository.save(n);
+						}
+						
+						m.setNotificationSent(true);
+						moveRepository.save(m);
+					}
+				}		
+			}	
+		}		
 	}
 }

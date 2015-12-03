@@ -198,22 +198,6 @@ app.controllerProvider.register('move_creation', function($scope, $http) {
 	    }).error(function(err){
 	    	console.log(err);
 	    });
-    	
-    	$http.get('game-requirements/notification/create', {params: 
-		{
-			userId : $scope.selectedPlayerOne.userId
-		}
-		}).success(function(data) {
-
-		});
-    	
-    	$http.get('game-requirements/notification/create', {params: 
-		{
-			userId : $scope.selectedPlayerTwo.userId
-		}
-		}).success(function(data) {
-
-		});   
     };
     
 });

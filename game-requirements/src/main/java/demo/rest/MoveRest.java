@@ -17,9 +17,11 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import demo.exception.NotFoundException;
 import demo.jpa.MovesJpa;
+import demo.jpa.NotificationsJpa;
 import demo.jpa.RequirementsJpa;
 import demo.jpa.UsersJpa;
 import demo.model.Move;
+import demo.model.Notification;
 import demo.model.Requirement;
 import demo.model.User;
 import eu.supersede.fe.security.DatabaseUser;
@@ -37,6 +39,9 @@ public class MoveRest {
 	@Autowired
     private RequirementsJpa requirements;
 	
+	@Autowired
+    private NotificationsJpa notifications;
+	
 	// get all the moves for the logged user
 	@RequestMapping(value = "",  method = RequestMethod.GET)
 	public List<Move> getMoves(Authentication authentication) {
@@ -44,9 +49,9 @@ public class MoveRest {
 		DatabaseUser currentUser = (DatabaseUser) authentication.getPrincipal();
 		User user = users.findOne(currentUser.getUserId());
 		
-		//List<Move> playerMoves = moves.findByFirstPlayerOrSecondPlayer(user, user);
+		List<Move> playerMoves = moves.findByFirstPlayerOrSecondPlayer(user, user);
 		
-		List<Move> playerMoves = moves.findSpecial(user);
+		//List<Move> playerMoves = moves.findSpecial(user);
 			
 		return playerMoves;	
 	}
@@ -76,6 +81,11 @@ public class MoveRest {
 		
 		move.setStartTime(new Date());
 		move = moves.save(move);
+
+		Notification n1 = new Notification("New move", move.getFirstPlayer());
+		Notification n2 = new Notification("New move", move.getSecondPlayer());
+		notifications.save(n1);
+		notifications.save(n2);
 		
 		HttpHeaders httpHeaders = new HttpHeaders();
 		httpHeaders.setLocation(ServletUriComponentsBuilder

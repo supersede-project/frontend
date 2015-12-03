@@ -11,8 +11,10 @@ import javax.persistence.EntityManagerFactory;
 
 import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.support.JpaRepositoryFactory;
 import org.springframework.data.repository.core.RepositoryInformation;
@@ -26,7 +28,11 @@ import org.springframework.transaction.interceptor.TransactionInterceptor;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 @Component
+@PropertySource("classpath:multitenancy.properties")
 public class MultiJpaProvider {
+
+	@Value("${spring.multitenancy.models.packages}")
+	private String MODELS_PACKAGES;
 	
 	@Autowired
 	private DataSourceBasedMultiTenantConnectionProviderImpl dataSourceBasedMultiTenantConnectionProviderImpl;
@@ -53,7 +59,7 @@ public class MultiJpaProvider {
 			hibernateProps.put(org.hibernate.cfg.Environment.DIALECT, "org.hibernate.dialect.PostgreSQLDialect");
 
 			LocalContainerEntityManagerFactoryBean emfb = builder.dataSource(datasources.get(n))
-					.packages("eu.supersede.fe.model")
+					.packages(MODELS_PACKAGES)
 					.properties(hibernateProps)
 					.jta(false)
 					.build();
