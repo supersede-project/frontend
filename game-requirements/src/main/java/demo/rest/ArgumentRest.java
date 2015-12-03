@@ -16,13 +16,13 @@ public class ArgumentRest {
 	@Autowired
     private ArgumentsJpa arguments;
 	
-	// all the arguments
+	// get all the arguments
 	@RequestMapping("")
 	public List<Argument> getArguments() {
 		return arguments.findAll();
 	}
 	
-	// number of arguments
+	// get number of arguments
 	@RequestMapping("/count")
 	public Long count() {
 		return arguments.count();

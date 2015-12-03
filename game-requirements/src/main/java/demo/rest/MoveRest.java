@@ -32,7 +32,7 @@ public class MoveRest {
 	@Autowired
     private UsersJpa users;
 	
-	// all the moves for the logged user
+	// get all the moves for the logged user
 	@RequestMapping(value = "",  method = RequestMethod.GET)
 	public List<Move> getMoves(Authentication authentication) {
 		
@@ -43,7 +43,7 @@ public class MoveRest {
 		return playerMoves;	
 	}
 	
-	// number of total moves
+	// get number of total moves
 	@RequestMapping("/count")
 	public Long count() {
 		return moves.count();
@@ -62,6 +62,7 @@ public class MoveRest {
 		return c;
 	}
 	
+	// post for the creation of a move
 	@RequestMapping(value = "", method = RequestMethod.POST)
 	public ResponseEntity<?> createMove(@RequestBody Move move) {
 		

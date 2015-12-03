@@ -16,12 +16,13 @@ public class ProfileRest {
 	@Autowired
     private ProfilesJpa profiles;
 	
-	//@Secured({"ROLE_ADMIN"})
+	// get all the profiles
 	@RequestMapping("")
 	public List<Profile> getProfiles() {
 		return profiles.findAll();
 	}
 	
+	// get numer of the profiles
 	@RequestMapping("/count")
 	public Long count() {
 		return profiles.count();

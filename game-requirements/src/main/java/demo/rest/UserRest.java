@@ -41,8 +41,7 @@ public class UserRest {
 	@Autowired
     private UserCriteriaPointsJpa userCriteriaPoints;
 	
-	//@PreAuthorize("hasAuthority('ADMIN')")
-	//@Secured({"ROLE_ADMIN"})
+	// create a new user
 	@RequestMapping(value = "", method = RequestMethod.POST)
 	public ResponseEntity<?> createUser(@RequestBody User user) {
 	
@@ -66,7 +65,7 @@ public class UserRest {
 		return new ResponseEntity<>(null, httpHeaders, HttpStatus.CREATED);
 	}
 	
-	//@Secured({"ROLE_ADMIN"})
+	// get a specific user by the Id
 	@RequestMapping("/{userId}")
 	public User getUser(@PathVariable Long userId)
 	{
@@ -79,7 +78,7 @@ public class UserRest {
 		return u;
 	}
 	
-	//@Secured({"ROLE_ADMIN"})
+	// get all the users
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public List<User> getUsers() 
 	{
@@ -99,7 +98,7 @@ public class UserRest {
 		return userList;
 	}
 	
-	//@Secured({"ROLE_ADMIN"})
+	// get the number of total users
 	@RequestMapping("/count")
 	public Long count() {
 		return users.count();

@@ -40,17 +40,15 @@ public class NotificationRest {
 	}
 	*/
 	
+	// creation of a notification for a specific user
 	@RequestMapping("/create")
-	public void createNotification(@RequestParam(required=true) Long userId1, @RequestParam(required=true) Long userId2) 
+	public void createNotification(@RequestParam(required=true) Long userId) 
 	{
-		User u1 = users.findByUserId(userId1);
-		User u2 = users.findByUserId(userId2);
+		User u = users.findByUserId(userId);
 		
-		Notification n1 = new Notification("A new move!", u1);
-		Notification n2 = new Notification("A new move!", u2);
+		Notification n = new Notification("A new move!", u);
 
-		notifications.save(n1);
-		notifications.save(n2);
+		notifications.save(n);
 	}
 	
 	@RequestMapping("")

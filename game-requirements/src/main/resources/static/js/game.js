@@ -142,7 +142,7 @@ app.controllerProvider.register('criterias_leaderboard', function($scope, $http)
 
 app.controllerProvider.register('move_creation', function($scope, $http) {
 	
-	$scope.valuationCriterias = [];
+	$scope.valutationCriterias = [];
     $scope.users = []; 
     $scope.requirements = []; 
     $scope.selectedCriteria = null;
@@ -155,10 +155,10 @@ app.controllerProvider.register('move_creation', function($scope, $http) {
     
     $http.get('game-requirements/criteria')
 	.success(function(data) {
-		$scope.valuationCriterias.length = 0;
+		$scope.valutationCriterias.length = 0;
 		for(var i = 0; i < data.length; i++)
 		{
-			$scope.valuationCriterias.push(data[i]);
+			$scope.valutationCriterias.push(data[i]);
 		}
 	});
     	
@@ -201,12 +201,19 @@ app.controllerProvider.register('move_creation', function($scope, $http) {
     	
     	$http.get('game-requirements/notification/create', {params: 
 		{
-			userId1 : $scope.selectedPlayerOne.userId,
-			userId2 : $scope.selectedPlayerTwo.userId
+			userId : $scope.selectedPlayerOne.userId
 		}
 		}).success(function(data) {
 
 		});
+    	
+    	$http.get('game-requirements/notification/create', {params: 
+		{
+			userId : $scope.selectedPlayerTwo.userId
+		}
+		}).success(function(data) {
+
+		});   
     };
     
 });
@@ -231,6 +238,11 @@ app.controllerProvider.register('user_moves', function($scope, $http) {
 app.controllerProvider.register('play_view', function($scope, $http) {
 	
               
+});
+
+app.controllerProvider.register('judge_view', function($scope, $http) {
+	
+    
 });
 
 
