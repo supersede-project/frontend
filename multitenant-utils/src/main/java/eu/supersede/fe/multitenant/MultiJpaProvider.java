@@ -15,7 +15,6 @@ import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.support.JpaRepositoryFactory;
 import org.springframework.data.repository.core.RepositoryInformation;
@@ -43,7 +42,7 @@ public class MultiJpaProvider {
 	private Map<String, Triple<JpaRepositoryFactory, EntityManagerFactory, EntityManager>> repositoriesFactory;
 	
 	@PostConstruct
-	public void load()
+	private void load()
 	{
 		Map<String, DataSource> datasources = dataSourceBasedMultiTenantConnectionProviderImpl.getDataSources();
 		
@@ -89,6 +88,24 @@ public class MultiJpaProvider {
 		}
 		
 		return tmp;
+	}
+	
+	public <T extends JpaRepository<?, ?>> T getRepository(Class<T> c, String tenant)
+	{
+		T repo = null;
+		if(repositoriesFactory.containsKey(tenant))
+		{
+			Triple<JpaRepositoryFactory, EntityManagerFactory, EntityManager> factory = repositoriesFactory.get(tenant);
+			repo = factory.a.getRepository(c);
+			
+			if(!TransactionSynchronizationManager.hasResource(factory.b))
+			{
+				EntityManagerHolder emh = new EntityManagerHolder(factory.c);
+				TransactionSynchronizationManager.bindResource(factory.b, emh);
+			}
+		}
+		
+		return repo;
 	}
 	
 	private class MultiJpaRepositoryProxyPostProcessor implements RepositoryProxyPostProcessor

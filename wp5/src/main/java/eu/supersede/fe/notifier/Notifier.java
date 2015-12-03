@@ -2,6 +2,7 @@ package eu.supersede.fe.notifier;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -82,8 +83,8 @@ public class Notifier {
 		Date now = new Date();
 		Date limit = new Date(now.getTime() - SENDER_DELAY);
 		
-		List<NotificationsJpa> notificationsJpa = multiJpaProvider.getRepositories(NotificationsJpa.class);
-		for(NotificationsJpa nJpa : notificationsJpa)
+		Map<String, NotificationsJpa> notificationsJpa = multiJpaProvider.getRepositories(NotificationsJpa.class);
+		for(NotificationsJpa nJpa : notificationsJpa.values())
 		{
 			//DEBUG
 			log.debug("found total notifications: " + nJpa.count());
