@@ -42,7 +42,7 @@ public class MultiJpaProvider {
 	private Map<String, Triple<JpaRepositoryFactory, EntityManagerFactory, EntityManager>> repositoriesFactory;
 	
 	@PostConstruct
-	public void load()
+	private void load()
 	{
 		Map<String, DataSource> datasources = dataSourceBasedMultiTenantConnectionProviderImpl.getDataSources();
 		
@@ -88,6 +88,24 @@ public class MultiJpaProvider {
 		}
 		
 		return tmp;
+	}
+	
+	public <T extends JpaRepository<?, ?>> T getRepository(Class<T> c, String tenant)
+	{
+		T repo = null;
+		if(repositoriesFactory.containsKey(tenant))
+		{
+			Triple<JpaRepositoryFactory, EntityManagerFactory, EntityManager> factory = repositoriesFactory.get(tenant);
+			repo = factory.a.getRepository(c);
+			
+			if(!TransactionSynchronizationManager.hasResource(factory.b))
+			{
+				EntityManagerHolder emh = new EntityManagerHolder(factory.c);
+				TransactionSynchronizationManager.bindResource(factory.b, emh);
+			}
+		}
+		
+		return repo;
 	}
 	
 	private class MultiJpaRepositoryProxyPostProcessor implements RepositoryProxyPostProcessor
