@@ -65,7 +65,7 @@ public class MultiJpaProvider {
 			packages.add("eu.supersede.fe.notification.model");
 			
 			LocalContainerEntityManagerFactoryBean emfb = builder.dataSource(datasources.get(n))
-					.packages((String[])packages.toArray())
+					.packages(packages.toArray(new String[packages.size()]))
 					.properties(hibernateProps)
 					.jta(false)
 					.build();

@@ -56,7 +56,7 @@ public class MultiTenancyJpaConfiguration {
 		packages.add("eu.supersede.fe.notification.model");
 		
 		return builder.dataSource(dataSource)
-				.packages((String[])packages.toArray())
+				.packages(packages.toArray(new String[packages.size()]))
 				.properties(hibernateProps)
 				.jta(false)
 				.build();
