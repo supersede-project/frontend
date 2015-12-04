@@ -32,6 +32,7 @@ public class Notification {
     @Column(columnDefinition= "TIMESTAMP WITH TIME ZONE")
     @Temporal(TemporalType.TIMESTAMP)
     private Date creationTime;
+    private String link;
     
     public Notification()
     {}
@@ -92,4 +93,12 @@ public class Notification {
     public void setCreationTime(Date creationTime) {
         this.creationTime = creationTime;
     }
+
+	public String getLink() {
+		return link;
+	}
+
+	public void setLink(String link) {
+		this.link = link;
+	}
 }

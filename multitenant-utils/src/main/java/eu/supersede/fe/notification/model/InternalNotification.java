@@ -32,12 +32,14 @@ public class InternalNotification {
     @Column(columnDefinition= "TIMESTAMP WITH TIME ZONE")
     @Temporal(TemporalType.TIMESTAMP)
     private Date creationTime;
+    private String link;
     
     public InternalNotification()
     {}
     
-    public InternalNotification(String message, InternalUser user) {
+    public InternalNotification(String message, String link, InternalUser user) {
         this.message = message;
+        this.link = link;
         this.user = user;
         read = false;
         emailSent = false;
@@ -92,4 +94,12 @@ public class InternalNotification {
     public void setCreationTime(Date creationTime) {
         this.creationTime = creationTime;
     }
+
+	public String getLink() {
+		return link;
+	}
+
+	public void setLink(String link) {
+		this.link = link;
+	}
 }
