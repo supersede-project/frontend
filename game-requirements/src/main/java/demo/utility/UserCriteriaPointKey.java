@@ -5,6 +5,7 @@ import java.io.Serializable;
 import demo.model.User;
 import demo.model.ValutationCriteria;
 
+@SuppressWarnings("serial")
 public class UserCriteriaPointKey implements Serializable {
 
 	private User user;	
@@ -40,8 +41,7 @@ public class UserCriteriaPointKey implements Serializable {
 
     public boolean equals(Object obj) {
         if (obj == this) return true;
-        if (!(obj instanceof UserCriteriaPointKey)) return false;
-        if (obj == null) return false;
+        if (!(obj instanceof UserCriteriaPointKey)) return false;     
         UserCriteriaPointKey pk = (UserCriteriaPointKey) obj;
         return pk.user == user && pk.valutationCriteria.equals(valutationCriteria);
     }

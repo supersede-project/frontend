@@ -9,20 +9,19 @@ import org.springframework.stereotype.Component;
 
 import demo.jpa.JudgeMovesJpa;
 import demo.jpa.MovesJpa;
-import demo.jpa.NotificationsJpa;
-import demo.jpa.ProfilesJpa;
 import demo.model.JudgeMove;
 import demo.model.Move;
-import demo.model.Notification;
-import demo.model.Profile;
-import demo.model.User;
 import eu.supersede.fe.multitenant.MultiJpaProvider;
+import eu.supersede.fe.notification.NotificationUtil;
 
 @Component
 public class RequirementScheduler {
 	
 	@Autowired
 	MultiJpaProvider multiJpaProvider;
+	
+	@Autowired
+    private NotificationUtil notificationUtil;
 	
 	@Scheduled(fixedRate = 10000)
 	private void notifyJudges()
@@ -35,22 +34,14 @@ public class RequirementScheduler {
 			List<Move> moves = moveRepository.findByFinishAndNotificationSent(true, false);
 			
 			if(moves.size() > 0)
-			{
-				Profile judge = multiJpaProvider.getRepository(ProfilesJpa.class, tenant).findByName("JUDGE");
-				List<User> userJudges = judge.getUsers();
-				
-				NotificationsJpa notificationRepository = multiJpaProvider.getRepository(NotificationsJpa.class, tenant);
+			{				
 				JudgeMovesJpa judgeMovesRepository = multiJpaProvider.getRepository(JudgeMovesJpa.class, tenant);
 				
 				for(Move m : moves)
 				{	
 					if(m.getFirstPlayerChooseRequirement() != m.getSecondPlayerChooseRequirement())
-					{
-						for(User u : userJudges)
-						{
-							Notification n = new Notification("New conflict in move " + m.getMoveId(), u);
-							notificationRepository.save(n);
-						}
+					{						
+						notificationUtil.createNotificationsForProfile(tenant, "JUDGE", "New conflict in move " + m.getMoveId());				
 						
 						JudgeMove jm = new JudgeMove(m);
 						judgeMovesRepository.save(jm);

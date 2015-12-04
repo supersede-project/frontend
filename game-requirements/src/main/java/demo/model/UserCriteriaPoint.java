@@ -15,6 +15,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import demo.utility.UserCriteriaPointKey;
 
 
+@SuppressWarnings("serial")
 @Entity
 @IdClass(UserCriteriaPointKey.class)
 @Table(name="users_criteria_points")
