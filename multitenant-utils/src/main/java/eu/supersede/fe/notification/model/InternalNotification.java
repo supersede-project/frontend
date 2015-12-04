@@ -16,9 +16,9 @@ import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-@Entity(name="eu.supersede.fe.notification.model.notification")
+@Entity
 @Table(name="notifications")
-public class Notification {
+public class InternalNotification {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -26,17 +26,17 @@ public class Notification {
     private String message;
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="user_id")
-    private User user;
+    private InternalUser user;
     private Boolean read;
     private Boolean emailSent;
     @Column(columnDefinition= "TIMESTAMP WITH TIME ZONE")
     @Temporal(TemporalType.TIMESTAMP)
     private Date creationTime;
     
-    public Notification()
+    public InternalNotification()
     {}
     
-    public Notification(String message, User user) {
+    public InternalNotification(String message, InternalUser user) {
         this.message = message;
         this.user = user;
         read = false;
@@ -61,11 +61,11 @@ public class Notification {
     }
 
     @JsonIgnore
-    public User getUser() {
+    public InternalUser getUser() {
         return user;
     }
  
-    public void setUser(User user) {
+    public void setUser(InternalUser user) {
         this.user = user;
     }
     

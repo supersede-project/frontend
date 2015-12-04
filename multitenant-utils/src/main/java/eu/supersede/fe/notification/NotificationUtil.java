@@ -6,12 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import eu.supersede.fe.multitenant.MultiJpaProvider;
-import eu.supersede.fe.notification.jpa.NotificationsJpa;
-import eu.supersede.fe.notification.jpa.ProfilesJpa;
-import eu.supersede.fe.notification.jpa.UsersJpa;
-import eu.supersede.fe.notification.model.Notification;
-import eu.supersede.fe.notification.model.Profile;
-import eu.supersede.fe.notification.model.User;
+import eu.supersede.fe.notification.jpa.InternalNotificationsJpa;
+import eu.supersede.fe.notification.jpa.InternalProfilesJpa;
+import eu.supersede.fe.notification.jpa.InternalUsersJpa;
+import eu.supersede.fe.notification.model.InternalNotification;
+import eu.supersede.fe.notification.model.InternalProfile;
+import eu.supersede.fe.notification.model.InternalUser;
 
 @Component
 public class NotificationUtil {
@@ -20,81 +20,71 @@ public class NotificationUtil {
 	private MultiJpaProvider multiJpaProvider;
 
 	@Autowired
-	private NotificationsJpa notificationsJpa;
+	private InternalNotificationsJpa internalNotificationsJpa;
 
 	@Autowired
-	private UsersJpa usersJpa;
+	private InternalUsersJpa internalUsersJpa;
 	
 	@Autowired
-	private ProfilesJpa profilesJpa;
+	private InternalProfilesJpa internalProfilesJpa;
 	
 	public void createNotificationForUser(String tenant, Long userId, String message)
 	{
-		User u = multiJpaProvider.getRepository(UsersJpa.class, tenant).getOne(userId);
-		createNotificationForUser(multiJpaProvider.getRepository(NotificationsJpa.class, tenant), u, message);
+		InternalUser u = multiJpaProvider.getRepository(InternalUsersJpa.class, tenant).getOne(userId);
+		createNotificationForUser(multiJpaProvider.getRepository(InternalNotificationsJpa.class, tenant), u, message);
 	}
 	
 	public void createNotificationForUser(Long userId, String message)
 	{
-		createNotificationForUser(notificationsJpa, usersJpa.getOne(userId), message);
+		createNotificationForUser(internalNotificationsJpa, internalUsersJpa.getOne(userId), message);
 	}
 	
 	public void createNotificationForUser(String tenant, String email, String message)
 	{
-		User u = multiJpaProvider.getRepository(UsersJpa.class, tenant).findByEmail(email);
-		createNotificationForUser(multiJpaProvider.getRepository(NotificationsJpa.class, tenant), u, message);
+		InternalUser u = multiJpaProvider.getRepository(InternalUsersJpa.class, tenant).findByEmail(email);
+		createNotificationForUser(multiJpaProvider.getRepository(InternalNotificationsJpa.class, tenant), u, message);
 	}
 	
 	public void createNotificationForUser(String email, String message)
 	{
-		createNotificationForUser(notificationsJpa, usersJpa.findByEmail(email), message);
+		createNotificationForUser(internalNotificationsJpa, internalUsersJpa.findByEmail(email), message);
 	}
 	
-	public void createNotificationForUser(String tenant, User u, String message)
+	private void createNotificationForUser(InternalNotificationsJpa nJpa, InternalUser u, String message)
 	{
-		createNotificationForUser(multiJpaProvider.getRepository(NotificationsJpa.class, tenant), u, message);
-	}
-	
-	public void createNotificationForUser(User u, String message)
-	{
-		createNotificationForUser(notificationsJpa, u, message);
-	}
-	
-	private void createNotificationForUser(NotificationsJpa nJpa, User u, String message)
-	{
-		Notification n = new Notification(message, u);
+		InternalNotification n = new InternalNotification(message, u);
 		nJpa.save(n);
 	}
 	
 	public void createNotificationsForProfile(String tenant, String profile, String message)
 	{
-		createNotificationsForProfile(tenant, multiJpaProvider.getRepository(ProfilesJpa.class, tenant).findByName(profile), message);
+		createNotificationsForProfile(tenant, multiJpaProvider.getRepository(InternalProfilesJpa.class, tenant).findByName(profile), message);
 	}
 	
 	public void createNotificationsForProfile(String profile, String message)
 	{
-		createNotificationsForProfile(profilesJpa.findByName(profile), message);
+		createNotificationsForProfile(internalProfilesJpa.findByName(profile), message);
 	}
 	
-	public void createNotificationsForProfile(Profile p, String message)
+	private void createNotificationsForProfile(InternalProfile p, String message)
 	{
-		p = profilesJpa.getOne(p.getProfileId());
-		List<User> users = p.getUsers();
+		p = internalProfilesJpa.getOne(p.getProfileId());
+		List<InternalUser> users = p.getUsers();
 
-		for(User u : users)
+		for(InternalUser u : users)
 		{
-			createNotificationForUser(notificationsJpa, u, message);
+			createNotificationForUser(internalNotificationsJpa, u, message);
 		}
 	}
 	
-	public void createNotificationsForProfile(String tenant, Profile p, String message)
+	private void createNotificationsForProfile(String tenant, InternalProfile p, String message)
 	{
-		p = multiJpaProvider.getRepository(ProfilesJpa.class, tenant).getOne(p.getProfileId());
-		List<User> users = p.getUsers();
+		p = multiJpaProvider.getRepository(InternalProfilesJpa.class, tenant).getOne(p.getProfileId());
+		List<InternalUser> users = p.getUsers();
 
-		for(User u : users)
+		for(InternalUser u : users)
 		{
-			createNotificationForUser(multiJpaProvider.getRepository(NotificationsJpa.class, tenant), u, message);
+			createNotificationForUser(multiJpaProvider.getRepository(InternalNotificationsJpa.class, tenant), u, message);
 		}
 	}
 }

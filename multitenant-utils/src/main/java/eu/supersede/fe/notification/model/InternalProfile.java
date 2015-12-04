@@ -13,21 +13,21 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-@Entity(name="eu.supersede.fe.notification.model.profile")
+@Entity
 @Table(name="profiles")
-public class Profile {
+public class InternalProfile {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
     private Long profileId;
     private String name;
     @ManyToMany(cascade=CascadeType.ALL, mappedBy="profiles", fetch=FetchType.LAZY)  
-    private List<User> users;
+    private List<InternalUser> users;
     
-    public Profile() {
+    public InternalProfile() {
     }
  
-    public Profile(String name) {
+    public InternalProfile(String name) {
         this.name = name;
     }
  
@@ -48,7 +48,7 @@ public class Profile {
     }
     
     @JsonIgnore
-    public List<User> getUsers()
+    public List<InternalUser> getUsers()
     {
     	return users;
     }

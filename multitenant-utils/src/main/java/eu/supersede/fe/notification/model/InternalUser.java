@@ -6,9 +6,9 @@ import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-@Entity(name="eu.supersede.fe.notification.model.user")
+@Entity
 @Table(name="users")
-public class User {
+public class InternalUser {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -18,12 +18,12 @@ public class User {
     private String password;
     @ManyToMany(cascade=CascadeType.ALL)  
     @JoinTable(name="users_profiles", joinColumns=@JoinColumn(name="user_id"), inverseJoinColumns=@JoinColumn(name="profile_id"))  
-    private List<Profile> profiles;
+    private List<InternalProfile> profiles;
  
-    public User() {
+    public InternalUser() {
     }
  
-    public User(String name, String email, String password, List<Profile> profiles) {
+    public InternalUser(String name, String email, String password, List<InternalProfile> profiles) {
         this.name = name;
         this.email = email;
         this.password = password;
@@ -63,11 +63,11 @@ public class User {
         this.password = password;
     }
  
-    public List<Profile> getProfiles() {
+    public List<InternalProfile> getProfiles() {
         return profiles;
     }
  
-    public void setProfiles(List<Profile> profiles) {
+    public void setProfiles(List<InternalProfile> profiles) {
         this.profiles = profiles;
     }
 }
