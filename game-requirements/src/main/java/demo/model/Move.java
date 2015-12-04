@@ -177,7 +177,5 @@ public class Move {
 
 	public void setNotificationSent(boolean notificationSent) {
 		this.notificationSent = notificationSent;
-	}
-    
-    
+	} 
 }

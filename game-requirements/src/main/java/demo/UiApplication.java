@@ -14,7 +14,7 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
 
 @SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
 @ComponentScan(basePackages = {"demo", "eu.supersede.fe"})
-@EnableGlobalMethodSecurity( securedEnabled = true )
+@EnableGlobalMethodSecurity( securedEnabled = true, prePostEnabled = true )
 @EnableScheduling
 @EnableRedisHttpSession
 public class UiApplication extends SpringBootServletInitializer {

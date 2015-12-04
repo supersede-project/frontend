@@ -7,9 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import demo.jpa.JudgeMovesJpa;
 import demo.jpa.MovesJpa;
 import demo.jpa.NotificationsJpa;
 import demo.jpa.ProfilesJpa;
+import demo.model.JudgeMove;
 import demo.model.Move;
 import demo.model.Notification;
 import demo.model.Profile;
@@ -34,20 +36,24 @@ public class RequirementScheduler {
 			
 			if(moves.size() > 0)
 			{
-				Profile admin = multiJpaProvider.getRepository(ProfilesJpa.class, tenant).findByName("JUDGE");
-				List<User> userAdmins = admin.getUsers();
+				Profile judge = multiJpaProvider.getRepository(ProfilesJpa.class, tenant).findByName("JUDGE");
+				List<User> userJudges = judge.getUsers();
 				
 				NotificationsJpa notificationRepository = multiJpaProvider.getRepository(NotificationsJpa.class, tenant);
+				JudgeMovesJpa judgeMovesRepository = multiJpaProvider.getRepository(JudgeMovesJpa.class, tenant);
 				
 				for(Move m : moves)
 				{	
 					if(m.getFirstPlayerChooseRequirement() != m.getSecondPlayerChooseRequirement())
 					{
-						for(User u : userAdmins)
+						for(User u : userJudges)
 						{
 							Notification n = new Notification("New conflict in move " + m.getMoveId(), u);
 							notificationRepository.save(n);
 						}
+						
+						JudgeMove jm = new JudgeMove(m);
+						judgeMovesRepository.save(jm);
 						
 						m.setNotificationSent(true);
 						moveRepository.save(m);
