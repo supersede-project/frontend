@@ -4,11 +4,12 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import demo.exception.NotFoundException;
 import demo.jpa.JudgeMovesJpa;
 import demo.model.JudgeMove;
 
@@ -22,9 +23,22 @@ public class JudgeMoveRest {
 	// get all the judgeMoves if user is a judge
 	@PreAuthorize("hasRole('JUDGE')")
 	@RequestMapping(value = "",  method = RequestMethod.GET)
-	public List<JudgeMove> getJudgeMoves(Authentication authentication) {
+	public List<JudgeMove> getJudgeMoves() {
 
 		return judgeMoves.findAll();
 	}
-	
+		
+	// get a specific judgeMove if user is a judge
+	@PreAuthorize("hasRole('JUDGE')")
+	@RequestMapping(value = "/{judgeMoveId}",  method = RequestMethod.GET)
+	public JudgeMove getJudgeMove(@PathVariable Long judgeMoveId) {
+
+		JudgeMove jm = judgeMoves.findOne(judgeMoveId);
+		if(jm == null)
+		{
+			throw new NotFoundException();
+		}
+		
+		return jm;
+	}
 }

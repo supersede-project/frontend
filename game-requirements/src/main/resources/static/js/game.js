@@ -1,22 +1,3 @@
-// for test CHANGE URL rest service
-// for test use app.controller instead of app.controllerProvider.resgister
-
-// for test use this app instead of above
-/*
-var app = angular.module('gameapp', [ 'ngRoute' ]).config(function($routeProvider, $httpProvider, $controllerProvider, $compileProvider, $filterProvider, $provide) {
-
-
-	$httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-	
-	app.controllerProvider = $controllerProvider;
-    app.compileProvider    = $compileProvider;
-    app.routeProvider      = $routeProvider;
-    app.filterProvider     = $filterProvider;
-    app.provide            = $provide;
-});
-
-*/
-
 var app = angular.module('w5app');
 
 app.controllerProvider.register('list-requirements', function($scope, $http) {
@@ -224,7 +205,7 @@ app.controllerProvider.register('play_view', function($scope, $http, $location) 
 	$scope.moveId = $location.search()['moveId'];
 	$scope.move = null;
 	
-	 $http.get('game-requirements/move/' + $scope.moveId)
+	$http.get('game-requirements/move/' + $scope.moveId)
 	.success(function(data) {
 		$scope.move = data;
 	});
@@ -239,8 +220,15 @@ app.controllerProvider.register('play_view', function($scope, $http, $location) 
 	
 });
 
-app.controllerProvider.register('judge_view', function($scope, $http) {
+app.controllerProvider.register('judge_view', function($scope, $http, $location) {
 	
+	$scope.judgeMoveId = $location.search()['judgeMoveId'];
+	$scope.judgeMove = null;
+	
+	$http.get('game-requirements/judgemove/' + $scope.judgeMoveId)
+	.success(function(data) {
+		$scope.judgeMove = data;
+	});
     
 });
 
