@@ -1,5 +1,7 @@
 package eu.supersede.fe.multitenant;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
@@ -10,7 +12,6 @@ import org.hibernate.MultiTenancyStrategy;
 import org.hibernate.cfg.Environment;
 import org.hibernate.context.spi.CurrentTenantIdentifierResolver;
 import org.hibernate.engine.jdbc.connections.spi.MultiTenantConnectionProvider;
-import org.mockito.internal.util.collections.Sets;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.orm.jpa.EntityManagerFactoryBuilder;
@@ -51,7 +52,7 @@ public class MultiTenancyJpaConfiguration {
 		hibernateProps.put(Environment.MULTI_TENANT_IDENTIFIER_RESOLVER, currentTenantIdentifierResolver);
 		hibernateProps.put(Environment.DIALECT, "org.hibernate.dialect.PostgreSQLDialect");
 
-		Set<String> packages = Sets.newSet(MODELS_PACKAGES.split(","));
+		Set<String> packages = new HashSet<>(Arrays.asList(MODELS_PACKAGES.split(",")));
 		packages.add("eu.supersede.fe.notification.model");
 		
 		return builder.dataSource(dataSource)

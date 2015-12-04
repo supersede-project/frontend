@@ -1,6 +1,8 @@
 package eu.supersede.fe.multitenant;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
@@ -10,7 +12,6 @@ import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
-import org.mockito.internal.util.collections.Sets;
 import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -60,7 +61,7 @@ public class MultiJpaProvider {
 
 			hibernateProps.put(org.hibernate.cfg.Environment.DIALECT, "org.hibernate.dialect.PostgreSQLDialect");
 
-			Set<String> packages = Sets.newSet(MODELS_PACKAGES.split(","));
+			Set<String> packages = new HashSet<>(Arrays.asList(MODELS_PACKAGES.split(",")));
 			packages.add("eu.supersede.fe.notification.model");
 			
 			LocalContainerEntityManagerFactoryBean emfb = builder.dataSource(datasources.get(n))
