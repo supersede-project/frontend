@@ -1,7 +1,13 @@
 package eu.supersede.fe.rest;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,9 +33,15 @@ public class NotificationRest {
 	@Autowired
     private NotificationsJpa notifications;
 	
+	private final Logger log = LoggerFactory.getLogger(this.getClass());
+	
 	@RequestMapping("")
-	public List<Notification> getByUserId(Authentication authentication, @RequestParam(defaultValue="true") Boolean toRead)
+	public List<Notification> getByUserId(Authentication authentication,
+			HttpServletRequest request, 
+			@RequestParam(defaultValue="true") Boolean toRead)
 	{
+		String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getLocalPort() + "/#/";
+		
 		DatabaseUser currentUser = (DatabaseUser) authentication.getPrincipal();
 		User u = users.getOne(currentUser.getUserId());
 		List<Notification> ns;
@@ -40,6 +52,22 @@ public class NotificationRest {
 		else
 		{
 			ns = notifications.findByUserOrderByCreationTimeDesc(u);
+		}
+		
+		for(Notification n : ns)
+		{
+			if(n.getLink() != null && !n.getLink().equals(""))
+			{
+				try {
+					URI uri = new URI(n.getLink());
+					if(!uri.isAbsolute())
+					{
+						n.setLink(baseUrl + n.getLink());
+					}
+				} catch (URISyntaxException e) {
+					log.debug("Error inside link: " + e.getMessage());
+				}
+			}
 		}
 		
 		return ns;
