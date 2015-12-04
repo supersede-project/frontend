@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import demo.exception.NotFoundException;
 import demo.jpa.JudgeMovesJpa;
 import demo.model.JudgeMove;
+import eu.supersede.fe.exception.NotFoundException;
 
 @RestController
 @RequestMapping("/judgemove")

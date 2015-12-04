@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import demo.exception.NotFoundException;
 import demo.jpa.ProfilesJpa;
 import demo.jpa.UserCriteriaPointsJpa;
 import demo.jpa.UsersJpa;
@@ -22,6 +21,7 @@ import demo.jpa.ValutationCriteriaJpa;
 import demo.model.Profile;
 import demo.model.User;
 import demo.model.ValutationCriteria;
+import eu.supersede.fe.exception.NotFoundException;
 
 @RestController
 @RequestMapping("/user")

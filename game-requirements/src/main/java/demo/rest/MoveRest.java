@@ -15,13 +15,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import demo.exception.NotFoundException;
 import demo.jpa.MovesJpa;
 import demo.jpa.RequirementsJpa;
 import demo.jpa.UsersJpa;
 import demo.model.Move;
 import demo.model.Requirement;
 import demo.model.User;
+import eu.supersede.fe.exception.NotFoundException;
 import eu.supersede.fe.notification.NotificationUtil;
 import eu.supersede.fe.security.DatabaseUser;
 
