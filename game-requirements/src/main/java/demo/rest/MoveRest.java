@@ -82,8 +82,8 @@ public class MoveRest {
 		move.setStartTime(new Date());
 		move = moves.save(move);
 
-		Notification n1 = new Notification("New move", move.getFirstPlayer());
-		Notification n2 = new Notification("New move", move.getSecondPlayer());
+		Notification n1 = new Notification("New move " + move.getMoveId(), move.getFirstPlayer());
+		Notification n2 = new Notification("New move " + move.getMoveId(), move.getSecondPlayer());
 		notifications.save(n1);
 		notifications.save(n2);
 		

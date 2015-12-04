@@ -244,4 +244,9 @@ app.controllerProvider.register('judge_view', function($scope, $http) {
     
 });
 
+app.controllerProvider.register('judge_moves', function($scope, $http) {
+	
+    
+});
+
 

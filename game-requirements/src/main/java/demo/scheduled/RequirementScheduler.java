@@ -34,7 +34,7 @@ public class RequirementScheduler {
 			
 			if(moves.size() > 0)
 			{
-				Profile admin = multiJpaProvider.getRepository(ProfilesJpa.class, tenant).findByName("ADMIN");
+				Profile admin = multiJpaProvider.getRepository(ProfilesJpa.class, tenant).findByName("JUDGE");
 				List<User> userAdmins = admin.getUsers();
 				
 				NotificationsJpa notificationRepository = multiJpaProvider.getRepository(NotificationsJpa.class, tenant);
@@ -45,7 +45,7 @@ public class RequirementScheduler {
 					{
 						for(User u : userAdmins)
 						{
-							Notification n = new Notification("New conflict", u);
+							Notification n = new Notification("New conflict in move " + m.getMoveId(), u);
 							notificationRepository.save(n);
 						}
 						
