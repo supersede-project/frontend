@@ -1,13 +1,10 @@
-package eu.supersede.fe.jpa;
+package eu.supersede.fe.notification.jpa;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import eu.supersede.fe.model.User;
+import eu.supersede.fe.notification.model.User;
 
 public interface UsersJpa extends JpaRepository<User, Long> {
-
-	/*@Query("SELECT u FROM User u WHERE u.alias IS NOT NULL")
-    List<User> findAliased();*/
 	
 	User findByEmail(String email);
 	
