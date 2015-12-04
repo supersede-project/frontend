@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-@Entity
+@Entity(name="eu.supersede.fe.notification.model.user")
 @Table(name="users")
 public class User {
 	

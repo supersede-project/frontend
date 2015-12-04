@@ -16,7 +16,7 @@ import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-@Entity
+@Entity(name="eu.supersede.fe.notification.model.notification")
 @Table(name="notifications")
 public class Notification {
 

@@ -13,7 +13,7 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-@Entity
+@Entity(name="eu.supersede.fe.notification.model.profile")
 @Table(name="profiles")
 public class Profile {
 
