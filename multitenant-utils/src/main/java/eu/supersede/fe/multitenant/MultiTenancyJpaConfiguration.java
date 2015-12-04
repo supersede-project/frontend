@@ -1,7 +1,10 @@
 package eu.supersede.fe.multitenant;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 
 import javax.sql.DataSource;
 
@@ -49,8 +52,11 @@ public class MultiTenancyJpaConfiguration {
 		hibernateProps.put(Environment.MULTI_TENANT_IDENTIFIER_RESOLVER, currentTenantIdentifierResolver);
 		hibernateProps.put(Environment.DIALECT, "org.hibernate.dialect.PostgreSQLDialect");
 
+		Set<String> packages = new HashSet<>(Arrays.asList(MODELS_PACKAGES.split(",")));
+		packages.add("eu.supersede.fe.notification.model");
+		
 		return builder.dataSource(dataSource)
-				.packages(MODELS_PACKAGES)
+				.packages(packages.toArray(new String[packages.size()]))
 				.properties(hibernateProps)
 				.jta(false)
 				.build();

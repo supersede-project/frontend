@@ -1,8 +1,11 @@
 package eu.supersede.fe.multitenant;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 
 import javax.sql.DataSource;
 import javax.annotation.PostConstruct;
@@ -58,8 +61,11 @@ public class MultiJpaProvider {
 
 			hibernateProps.put(org.hibernate.cfg.Environment.DIALECT, "org.hibernate.dialect.PostgreSQLDialect");
 
+			Set<String> packages = new HashSet<>(Arrays.asList(MODELS_PACKAGES.split(",")));
+			packages.add("eu.supersede.fe.notification.model");
+			
 			LocalContainerEntityManagerFactoryBean emfb = builder.dataSource(datasources.get(n))
-					.packages(MODELS_PACKAGES)
+					.packages(packages.toArray(new String[packages.size()]))
 					.properties(hibernateProps)
 					.jta(false)
 					.build();
