@@ -1,80 +1,15 @@
 var app = angular.module('w5app');
 
-app.controllerProvider.register('home', function($scope, $http) {
+app.controllerProvider.register('home', function($scope, $http, $rootScope) {
 	
-	$scope.sort = {       
-            sortingOrder : 'id',
-            reverse : false
-        };
+	$scope.loggedUser = $rootScope.user;
+	$scope.user = null;
 	
-	$scope.totalPages = 1;
-	$scope.requirementsLength = 0;
-    $scope.itemsPerPage = 5;
-    $scope.currentPage = 0;
-    $scope.requirements = [];
-    $scope.valutationCriterias = [];
-    
-    // ####################################
-    // functions for the visualization of the table
-    $scope.range = function () {
-        var ret = [];
-        var showPages = Math.min(5, $scope.totalPages);
-        
-        var start = Math.max(1, $scope.currentPage - Math.floor(showPages / 2));
-        var end = Math.min($scope.totalPages, $scope.currentPage + Math.ceil(showPages / 2))
-        
-        if(start == 1)
-        {
-        	end = start + showPages - 1;
-        }
-        if(end == $scope.totalPages)
-        {
-        	start = end - showPages + 1;
-        }
-        
-        for (var i = start; i < start + showPages; i++) {
-            ret.push(i);
-        }
-        
-        return ret;
-    };
-    
-    $scope.prevPage = function () {
-        if ($scope.currentPage > 0) {
-            $scope.currentPage--;
-        }
-    };
-    
-    $scope.nextPage = function () {
-        if ($scope.currentPage < $scope.totalPages - 1) {
-            $scope.currentPage++;
-        }
-    };
-    
-    $scope.setPage = function () {
-        $scope.currentPage = this.n -1;
-    };    
-    //####################################
-    
-    $http.get('game-requirements/requirement')
+	$http.get('game-requirements/user/' + $scope.loggedUser.userId)
 	.success(function(data) {
-		$scope.requirements.length = 0;
-		for(var i = 0; i < data.length; i++)
-		{
-			$scope.requirements.push(data[i]);
-		}
-		$scope.requirementsLength = data.length;
-		$scope.totalPages = Math.max(1, Math.ceil($scope.requirementsLength / $scope.itemsPerPage));
+		$scope.user = data;
 	});
-    
-    $http.get('game-requirements/criteria')
-	.success(function(data) {
-		$scope.valutationCriterias.length = 0;
-		for(var i = 0; i < data.length; i++)
-		{
-			$scope.valutationCriterias.push(data[i]);
-		}
-	});
+	
 });
 
 app.controllerProvider.register('leaderboard', function($scope, $http) {

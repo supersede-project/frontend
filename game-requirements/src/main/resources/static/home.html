@@ -1,7 +1,7 @@
     <script src="game-requirements/js/game.js"></script>		            
 	<div class="jumbotron">
       <div class="container">
-        <h1>Hello, player!</h1>
+        <h1>Hello!</h1>
         <p>Here you can see your statistics and your profile!</p>
       </div>
    	</div>
@@ -9,64 +9,13 @@
 	<div class="container">			
 		<div class="row" ng-controller="home">
 			<div class="col-md-6">	
-				<h1>Requirements list</h1>			
-				<table class="table table-striped table-condensed table-hover">
-			
-					<thead>
-						<tr>
-							<th class="id">Id&nbsp;</th>
-							<th class="name">Content&nbsp;</th>
-						</tr>
-					</thead>
-			
-					<tbody>
-						<tr	ng-repeat="requirement in requirements | limitTo:5:currentPage*itemsPerPage">
-							<td>{{requirement.requirementId}}</td>
-							<td>{{requirement.content}}</td>
-						</tr>
-					</tbody>
-			
-					<tfoot>
-						<td colspan="4">
-							<div class="paging_simple_numbers">
-								<ul class="pagination">
-									<li class="paginate_button previous" ng-class="{disabled: currentPage == 0}"><a href
-										ng-click="prevPage()">Previous</a></li>
-			
-									<li class="paginate_button" ng-repeat="n in range()" ng-class="{active: n == (currentPage + 1)}" ng-click="setPage()">
-										<a href ng-bind="n">1</a>
-									</li>
-			
-									<li class="paginate_button next" ng-class="{disabled: (currentPage) == totalPages - 1}">
-										<a href ng-click="nextPage()">Next</a>
-									</li>
-								</ul>
-							</div>
-						</td>
-					</tfoot>
-			
-				</table>				
+				<h1>{{user.name}}</h1>			
+				<p>{{user.email}}</p>
+				<p>{{user.name}}</p>
 			</div>
 			
 			<div class="col-md-6">
-				<h1>Valutation criteria list</h1>
-				<table class="table table-striped table-condensed table-hover">
-			
-					<thead>
-						<tr>
-							<th class="idCriteria">Id Criteria&nbsp;</th>
-							<th class="name">Name&nbsp;</th>
-						</tr>
-					</thead>
-			
-					<tbody>
-						<tr	ng-repeat="valutationCriteria in valutationCriterias">
-							<td>{{valutationCriteria.criteriaId}}</td>
-							<td>{{valutationCriteria.name}}</td>
-						</tr>
-					</tbody>
-			
-				</table>
+
 			
 			</div>
 		</div>
