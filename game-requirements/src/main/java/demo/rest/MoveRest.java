@@ -81,8 +81,8 @@ public class MoveRest {
 		move.setStartTime(new Date());
 		move = moves.save(move);
 
-		notificationUtil.createNotificationForUser(move.getFirstPlayer().getUserId(), "New move " + move.getMoveId(), "game-requirements/play_view?moveId=" + move.getMoveId());
-		notificationUtil.createNotificationForUser(move.getSecondPlayer().getUserId(), "New move " + move.getMoveId(), "game-requirements/play_view?moveId=" + move.getMoveId());
+		notificationUtil.createNotificationForUser(move.getFirstPlayer().getUserId(), "New move " + move.getMoveId(), "game-requirements/user_moves");
+		notificationUtil.createNotificationForUser(move.getSecondPlayer().getUserId(), "New move " + move.getMoveId(), "game-requirements/user_moves");
 		
 		HttpHeaders httpHeaders = new HttpHeaders();
 		httpHeaders.setLocation(ServletUriComponentsBuilder

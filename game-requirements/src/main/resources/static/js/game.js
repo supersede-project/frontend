@@ -1,6 +1,6 @@
 var app = angular.module('w5app');
 
-app.controllerProvider.register('list-requirements', function($scope, $http) {
+app.controllerProvider.register('home', function($scope, $http) {
 	
 	$scope.sort = {       
             sortingOrder : 'id',
@@ -253,45 +253,51 @@ app.controllerProvider.register('judge_moves', function($scope, $http) {
     
 });
 
-app.controllerProvider.register('argue_view', function($scope, $http) {
-    
+app.controllerProvider.register('argue_view', function($scope, $http, $location) {
+    	
+	$scope.moveId = $location.search()['moveId'];
 	$scope.argumentChoice = "existing";
 	$scope.argumentContent = "";
 	$scope.selectedArgument = null;
 	$scope.arguments = [];
+	$scope.move = null;	
 	
-	 $http.get('game-requirements/argument')
-		.success(function(data) {
-			$scope.arguments.length = 0;
-			for(var i = 0; i < data.length; i++)
-			{
-				$scope.arguments.push(data[i]);
-			}
-		});
+	$http.get('game-requirements/move/' + $scope.moveId)
+	.success(function(data) {
+		$scope.move = data;
+	});
+	
+	$http.get('game-requirements/argument')
+	.success(function(data) {
+		$scope.arguments.length = 0;
+		for(var i = 0; i < data.length; i++)
+		{
+			$scope.arguments.push(data[i]);
+		}
+	}); 
 	 
-	 
-	 $scope.sendArgument = function(){
+	$scope.sendArgument = function(){
 		 
-		 if($scope.argumentChoice == "insert"){
-	    	$http({
-				url: "game-requirements/argument",
-		        data: {
-		        	content : $scope.argumentContent,
-		        },
-		        method: 'POST'
-		    }).success(function(data){
-		    	// SET THE ARGUMENT IN JUDGE_MOVES
-		    }).error(function(err){
-		    	console.log(err);
-		    });
-		 }
+		if($scope.argumentChoice == "insert"){
+	    $http({
+			url: "game-requirements/argument",
+		       data: {
+		        content : $scope.argumentContent,
+		       },
+		       method: 'POST'
+		   }).success(function(data){
+		    // SET THE ARGUMENT IN JUDGE_MOVES
+		   }).error(function(err){
+		    console.log(err);
+		   });
+		}
 		 
-		 if($scope.argumentChoice == "existing"){
+		if($scope.argumentChoice == "existing"){
 			 
-			 // SET THE ARGUMENT IN JUDGE_MOVES
-		 }
+			// SET THE ARGUMENT IN JUDGE_MOVES
+		}
 		 
-	    };
+	};
 	
 });
 

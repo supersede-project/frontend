@@ -80,6 +80,14 @@ public class JudgeMove {
     	this.move = move;
     }
     
+    public User getJudge(){
+    	return judge;
+    }
+    
+    public void setJudge(User judge){
+    	this.judge = judge;
+    }  
+    
     public boolean getNeedArguments(){
     	return needArguments;
     }

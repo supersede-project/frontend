@@ -45,7 +45,7 @@ public class RequirementScheduler {
 						
 						judgeMovesRepository.save(jm);
 						
-						notificationUtil.createNotificationsForProfile(tenant, "JUDGE", "New conflict in move " + m.getMoveId(), "game-requirements/judge_view?judgeMoveId=" + jm.getJudgeMoveId());				
+						notificationUtil.createNotificationsForProfile(tenant, "JUDGE", "New conflict in move " + m.getMoveId(), "game-requirements/judge_moves");				
 						
 						m.setNotificationSent(true);
 						moveRepository.save(m);
