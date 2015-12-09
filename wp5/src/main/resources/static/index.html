@@ -46,7 +46,10 @@
 				        	<a ng-click="readNotification()">
 				        		<span class="glyphicon" ng-class="{'glyphicon-check': notif.read == true, 'glyphicon-unchecked': notif.read == false}"></span>
 				        	</a>
-				        	<a>{{notif.message}}</a>
+				        	<a ng-show="notif.link" ng-href="{{notif.link}}" style="width: 100%;">
+				        		<span class="glyphicon glyphicon-link"></span>  {{notif.message}}
+				        	</a>
+				        	<a ng-show="!notif.link" style="width: 100%;">{{notif.message}}</a>
 				        	<a ng-click="deleteNotification()"><span class="glyphicon glyphicon-remove"></span></a>
 				        </li>
 				        
