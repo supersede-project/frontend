@@ -40,14 +40,12 @@ public class RequirementScheduler {
 				for(Move m : moves)
 				{	
 					if(m.getFirstPlayerChooseRequirement() != m.getSecondPlayerChooseRequirement())
-					{						
-						
+					{												
 						JudgeMove jm = new JudgeMove(m);
 						
 						judgeMovesRepository.save(jm);
 						
 						notificationUtil.createNotificationsForProfile(tenant, "JUDGE", "New conflict in move " + m.getMoveId(), "game-requirements/judge_view?judgeMoveId=" + jm.getJudgeMoveId());				
-
 						
 						m.setNotificationSent(true);
 						moveRepository.save(m);

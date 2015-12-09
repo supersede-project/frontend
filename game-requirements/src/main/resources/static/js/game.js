@@ -229,6 +229,12 @@ app.controllerProvider.register('judge_view', function($scope, $http, $location)
 	.success(function(data) {
 		$scope.judgeMove = data;
 	});
+	
+	$scope.needArguments = function(){
+		$http.put('game-requirements/judgemove/'+ $scope.judgeMoveId + '/needarguments')
+		.success(function(data) {
+		});
+    };
     
 });
 
@@ -245,6 +251,48 @@ app.controllerProvider.register('judge_moves', function($scope, $http) {
 			}
 		});
     
+});
+
+app.controllerProvider.register('argue_view', function($scope, $http) {
+    
+	$scope.argumentChoice = "existing";
+	$scope.argumentContent = "";
+	$scope.selectedArgument = null;
+	$scope.arguments = [];
+	
+	 $http.get('game-requirements/argument')
+		.success(function(data) {
+			$scope.arguments.length = 0;
+			for(var i = 0; i < data.length; i++)
+			{
+				$scope.arguments.push(data[i]);
+			}
+		});
+	 
+	 
+	 $scope.sendArgument = function(){
+		 
+		 if($scope.argumentChoice == "insert"){
+	    	$http({
+				url: "game-requirements/argument",
+		        data: {
+		        	content : $scope.argumentContent,
+		        },
+		        method: 'POST'
+		    }).success(function(data){
+		    	// SET THE ARGUMENT IN JUDGE_MOVES
+		    }).error(function(err){
+		    	console.log(err);
+		    });
+		 }
+		 
+		 if($scope.argumentChoice == "existing"){
+			 
+			 // SET THE ARGUMENT IN JUDGE_MOVES
+		 }
+		 
+	    };
+	
 });
 
 
