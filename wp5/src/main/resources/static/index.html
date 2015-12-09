@@ -37,7 +37,7 @@
 		      </ul>
 		      
 		      <ul class="nav navbar-nav navbar-right">
-		     	<li ng-show="authenticated"><p class="navbar-text">{{name}}</p></li>
+		     	<li ng-show="authenticated"><p class="navbar-text">{{user.name}}</p></li>
 		     	<li ng-show="authenticated">
 		     		<a href="" class="dropdown-toggle" data-toggle="dropdown">{{notificationsCount}} <span class="glyphicon glyphicon-comment"></span></a>
 		     		<ul class="dropdown-menu">
@@ -46,10 +46,11 @@
 				        	<a ng-click="readNotification()">
 				        		<span class="glyphicon" ng-class="{'glyphicon-check': notif.read == true, 'glyphicon-unchecked': notif.read == false}"></span>
 				        	</a>
-				        	<a ng-show="notif.link" ng-href="{{notif.link}}" style="width: 100%;">
+				        	<a ng-show="notif.link" ng-href="{{notif.link}}"
+				        	>
 				        		<span class="glyphicon glyphicon-link"></span>  {{notif.message}}
 				        	</a>
-				        	<a ng-show="!notif.link" style="width: 100%;">{{notif.message}}</a>
+				        	<a ng-show="!notif.link">{{notif.message}}</a>
 				        	<a ng-click="deleteNotification()"><span class="glyphicon glyphicon-remove"></span></a>
 				        </li>
 				        
