@@ -54,8 +54,6 @@ public class Notifier {
 	{
 		for(String email : usersEmail)
 		{
-			log.debug("Creating notification for " + email);
-			
 			User u = users.findByEmail(email);
 			Notification n = new Notification(message, u);
 			notifications.save(n);
@@ -77,8 +75,6 @@ public class Notifier {
 	@Scheduled(fixedRateString = "${notifier.mail.sender.checkRate}")
     public void checkNotifications()
 	{
-		log.debug("check notifications");
-		
 		//now
 		Date now = new Date();
 		Date limit = new Date(now.getTime() - SENDER_DELAY);
@@ -86,17 +82,11 @@ public class Notifier {
 		Map<String, NotificationsJpa> notificationsJpa = multiJpaProvider.getRepositories(NotificationsJpa.class);
 		for(NotificationsJpa nJpa : notificationsJpa.values())
 		{
-			//DEBUG
-			log.debug("found total notifications: " + nJpa.count());
-			
 			//get all notifications not read and not sent via email and created before 
 			List<Notification> ns = nJpa.findByReadAndEmailSentAndCreationTimeLessThan(false, false, limit);
 			
-			log.debug("found " + ns.size() + " notifications to be notified by email.");
-			
 			for(Notification n : ns)
 			{
-				log.debug("send email to " + n.getUser().getEmail());
 				sendEmail(n);
 				n.setEmailSent(true);
 				nJpa.save(n);
