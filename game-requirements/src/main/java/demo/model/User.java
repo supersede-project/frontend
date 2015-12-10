@@ -40,6 +40,9 @@ public class User {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "secondPlayer")
 	public List<Move> secondPlayerMoves;
 	
+	//@OneToOne(fetch = FetchType.LAZY, mappedBy = "user")
+	//public UserPoint userGlobalPoints;
+	
     public User() {
     }
  
@@ -127,4 +130,14 @@ public class User {
     public void setSecondPlayerMoves(List<Move> secondPlayerMoves){
     	this.secondPlayerMoves = secondPlayerMoves;
     }
+    
+    /*
+    public UserPoint getUserGlobalPoints(){
+    	return userGlobalPoints;
+    }
+    
+    public void setUserGlobalPoints(UserPoint userGlobalPoints){
+    	this.userGlobalPoints = userGlobalPoints;
+    }
+    */
 }

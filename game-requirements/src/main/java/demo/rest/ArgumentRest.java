@@ -44,6 +44,6 @@ public class ArgumentRest {
 		httpHeaders.setLocation(ServletUriComponentsBuilder
 				.fromCurrentRequest().path("/{id}")
 				.buildAndExpand(argument.getArgumentId()).toUri());
-		return new ResponseEntity<>(null, httpHeaders, HttpStatus.CREATED);
+		return new ResponseEntity<>(argument, httpHeaders, HttpStatus.CREATED);
 	}		
 }

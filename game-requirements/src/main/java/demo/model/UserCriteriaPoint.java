@@ -22,11 +22,11 @@ import demo.utility.UserCriteriaPointKey;
 public class UserCriteriaPoint implements Serializable {
 	
 	@Id
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
 	@Id
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "criteria_id", nullable = false)
 	private ValutationCriteria valutationCriteria;
 	

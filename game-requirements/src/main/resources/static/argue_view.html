@@ -6,12 +6,21 @@
       </div>
    	</div>   
     <div class="container" ng-controller="argue_view">
-    	<div class="row">
+    	<div class="row" ng-hide="isFirst">
     		<div class="col-md-12">
     			<div align="center">
-    				<h3>Your selected requirement: <b>REQUIREMENT#1</b></h3>
+    				<h3>Your selected requirement: <b>{{move.secondRequirement.content}}</b></h3>
     				<br>
-    				<p>The other requirement is: <b>REQUIREMENT#2</b></p>
+    				<p>The other requirement is: <b>{{move.firstRequirement.content}}</b></p>
+    			</div>
+    		</div>
+    	</div>
+    	<div class="row" ng-hide="isSecond">
+    		<div class="col-md-12">
+    			<div align="center">
+    				<h3>Your selected requirement: <b>{{move.firstRequirement.content}}</b></h3>
+    				<br>
+    				<p>The other requirement is: <b>{{move.secondRequirement.content}}</b></p>
     			</div>
     		</div>
     	</div>
@@ -30,12 +39,12 @@
 			<div class="col-md-6">
 				<div class="panel panel-primary">
 				  <div class="panel-heading">				  					  
-				  <div class="radio">
-			          <label>
-				      	<input type="radio" name="argumentChoice" value="existing" ng-model="argumentChoice">
-				      	Choose an existing argument
-			          </label>
-			      </div>
+					  <div class="radio">
+				          <label>
+					      	<input type="radio" name="argumentChoice" value="existing" ng-model="argumentChoice">
+					      	Choose an existing argument
+				          </label>
+				      </div>
 				  </div>
 				  <div class="panel-body">
 						<select class="form-control" ng-model="selectedArgument" ng-options="selectedArgument as selectedArgument.content for selectedArgument in arguments" >
@@ -49,12 +58,12 @@
 	    	<div class="col-md-6">	
 				<div class="panel panel-primary">
 				  <div class="panel-heading">			  	
-				  <div class="radio">
-			          <label>
-				      	<input type="radio" name="argumentChoice" value="insert" ng-model="argumentChoice">
-				      	Insert a personal argument
-			          </label>
-			      </div>
+					  <div class="radio">
+				          <label>
+					      	<input type="radio" name="argumentChoice" value="personal" ng-model="argumentChoice">
+					      	Insert a personal argument
+				          </label>
+				      </div>
 				  </div>
 				  <div class="panel-body">
 						<textarea class="form-control" rows="5" ng-model="argumentContent"></textarea>   	    	
@@ -62,10 +71,12 @@
 				</div>					
 			</div>	
 		</div>
+		<br>
 		<div class="row">
 			<div class="col-md-12">
 				<div align="center">
-					<a href="#/game-requirements/user_moves" ng-click="sendArgument()" class="btn btn-lg btn-success" role="button">Send</a>
+					<p>Use <b>{{argumentChoice}}</b> argument</p>
+					<a href="#/game-requirements/user_moves" ng-click="sendArgument()" class="btn btn-lg btn-success" role="button">Send Argument</a>
 				</div>
 			</div>
 		</div>								
