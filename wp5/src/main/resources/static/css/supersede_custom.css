@@ -1,0 +1,135 @@
+#masthead #top-header {
+    background: none
+}
+
+a#eu {
+    background: url(https://www.supersede.eu/wp-content/uploads/2015/07/flag_yellow_low.jpg) 0 0 no-repeat;
+}
+
+.home #ak-blog-post {
+    display: none
+}
+
+.featured-post h2, .event-date {
+    display: none
+}
+
+a.logo-sm {
+    display: inline-block;
+    width: 17%;
+    height: 70px;
+    vertical-align: middle;
+    margin: 0 6rem 4rem 0;
+}
+
+a.logo-sm img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.logo-wrap {
+    margin-bottom: 5rem;
+    border-bottom: 1px solid #ccc
+}
+
+a.atos {
+    margin-top: -4rem
+}
+
+.drei {
+    display: inline-block;
+    width: 33%;
+    min-width: 200px;
+    margin-bottom: 3rem;
+    height: 270px;
+    vertical-align: top;
+}
+
+.g-recaptcha {
+    margin-bottom: 20px
+}
+
+.main-navigation {
+    border-bottom: 3px solid #d44b1b;
+    background: #f15a22;
+}
+
+.searchform .searchsubmit {
+    color: #f15a22;
+}
+
+a {
+    color: #f15a22;
+}
+
+.sidebar h3.widget-title {
+    background: #F1F2F3;
+    border-left: 5px solid #f15a22;
+}
+
+.main-navigation li:hover > a {
+    background: #d44b1b;
+}
+
+.main-navigation ul ul li:hover a,
+.main-navigation ul ul li.current-menu-item a {
+    color: #f15a22;
+}
+.main-navigation li:hover > a {
+    background: #d44b1b;
+}
+.main-navigation ul ul a {
+    color: #666;
+    background: none !important;
+}
+
+.main-navigation .current-menu-parent > a,
+.main-navigation .current-menu-item > a,
+.main-navigation .current_page_item > a,
+.main-navigation .current_page_parent > a {
+    background: #d44b1b;
+}
+
+.main-navigation ul ul {
+    border-bottom: 3px solid #d44b1b;
+    border-top: 3px solid #d44b1b;
+}
+
+.searchform {
+    border: 1px solid #f15a22;
+}
+
+.main-navigation .current-menu-parent > a,
+.main-navigation .current-menu-item > a,
+.main-navigation .current_page_item > a,
+.main-navigation .current_page_parent > a {
+    background: #d44b1b;
+}
+
+.main-navigation ul ul li:hover > a,
+.main-navigation ul ul li.current-menu-item > a {
+    color: #f15a22;
+}
+
+.event-detail h4 a:hover{
+    color: #f15a22
+}
+.bttn:after{
+    content: "";
+    background: #f15a22;}
+.featured-post .featured-overlay{
+    background: #f15a22;
+}
+
+
+@media screen and (max-width: 940px){
+    .main-navigation .menu{
+
+        background: #f15a22;
+    }
+
+    .main-navigation .menu li{
+
+        border-bottom:1px solid #d44b1b;
+    }
+}

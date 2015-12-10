@@ -4,6 +4,7 @@
 <title>Supersede</title>
 <link href="js/bootstrap-3.3.5-dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="css/wp5app.css" rel="stylesheet">
+<link href="css/supersede_style.css" rel="stylesheet">
 <style type="text/css">
 [ng\:cloak], [ng-cloak], .ng-cloak {
   display: none !important;
@@ -13,63 +14,79 @@
 
     <body ng-app="w5app" ng-cloak class="ng-cloak">
         
-        <nav class="navbar navbar-inverse">
-		  <div ng-controller="navigation" class="container-fluid">
-		    <div class="navbar-header">
-		      <p class="navbar-brand" href="#/">Supersede</p>
-		    </div>
-		    <div class="collapse navbar-collapse" id="myNavbar">
-		      <ul class="nav navbar-nav">
-		        <li ng-show="authenticated"><p class="navbar-text">{{user.tenantId}}</p></li>
-		        
-		        <li ng-repeat="profile in profiles | orderBy:'name'" class="dropdown" ng-show="authenticated">
-			    	<a href="" class="dropdown-toggle" data-toggle="dropdown" ng-show="applications[profile].length > 0">{{profile}}<b class="caret"></b></a>
-			    	<ul class="dropdown-menu multi-level" ng-show="applications[profile].length > 0">
-				        <li class="dropdown-submenu" ng-repeat="appl in applications[profile]">
-				        	<a>{{appl.applicationName}}</a>
-				        	<ul class="dropdown-menu">
-			                	<li ng-repeat="page in appl.pages"><a ng-href="#/{{appl.applicationName}}/{{page}}">{{page}}</a></li>
-			                </ul>
-				        </li>
-				   	</ul>
-			    </li>
-			    
-		      </ul>
-		      
-		      <ul class="nav navbar-nav navbar-right">
-		     	<li ng-show="authenticated"><p class="navbar-text">{{user.name}}</p></li>
-		     	<li ng-show="authenticated">
-		     		<a href="" class="dropdown-toggle" data-toggle="dropdown">{{notificationsCount}} <span class="glyphicon glyphicon-comment"></span></a>
-		     		<ul class="dropdown-menu">
-				        
-				        <li class="dropdown-inline" ng-repeat="notif in notifications | orderBy:'creationTime' | limitTo:5">
-				        	<a ng-show="!notif.link" ng-click="readNotification()">
-				        		<span class="glyphicon" ng-class="{'glyphicon-check': notif.read == true, 'glyphicon-unchecked': notif.read == false}"></span>
-				        	</a>
-				        	<a ng-show="!notif.link">{{notif.message}}</a>
-				        	
-				        	<a ng-show="notif.link" ng-click="openNotificationLink()">
-				        		<span class="glyphicon glyphicon-link"></span>
-				        	</a>
-				        	<a ng-show="notif.link" ng-click="openNotificationLink()">
-				        		{{notif.message}}
-				        	</a>
-				        	
-				        	<a ng-click="deleteNotification()"><span class="glyphicon glyphicon-remove"></span></a>
-				        </li>
-				        
-				        <li>
-				        	<a href="#/notifications">Show all</a>
-				        </li>
-				   	</ul>
-		     	</li>
-		        
-		        <li ng-show="!(authenticated)"><a href="#/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-			    <li ng-show="authenticated"><a href="" ng-click="logout()"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
-		      </ul>
-		    </div>
-		  </div>
-		</nav>
+        <div id="page" class="site">
+			<header id="masthead" class="site-header">
+				<div id="top-header">
+					<div class="ak-container">
+						<div class="site-branding">
+							<a href="https://www.supersede.eu/"> <img
+								src="https://www.supersede.eu/wp-content/uploads/2015/07/SupersedeLogo_outline.png">
+							</a>
+						</div>
+					</div>
+				</div>
+	
+			    <nav id="site-navigation" class="main-navigation menu-left">
+					<div ng-controller="navigation" class="container-fluid">
+					    <div class="collapse navbar-collapse" id="myNavbar">
+					    	<ul class="nav navbar-nav">
+					        	<li ng-show="authenticated">
+					        		<p class="navbar-text">{{user.tenantId}}</p>
+					        	</li>
+					        
+					        	<li ng-repeat="profile in profiles | orderBy:'name'" class="dropdown" ng-show="authenticated">
+						    		<a href="" class="dropdown-toggle" data-toggle="dropdown" ng-show="applications[profile].length > 0">{{profile}}<b class="caret"></b></a>
+						    		<ul class="dropdown-menu multi-level" ng-show="applications[profile].length > 0">
+								       	<li class="dropdown-submenu" ng-repeat="appl in applications[profile]">
+								        	<a>{{appl.applicationName}}</a>
+							        		<ul class="dropdown-menu">
+						                		<li ng-repeat="page in appl.pages">
+						                			<a ng-href="#/{{appl.applicationName}}/{{page}}">{{page}}</a>
+						                		</li>
+						                	</ul>
+							        	</li>
+							   		</ul>
+						    	</li>
+						    </ul>
+							<ul class="nav navbar-nav navbar-right">
+					      		<li ng-show="authenticated">
+					      			<p class="navbar-text">{{user.name}}</p>
+					      		</li>
+					     		<li ng-show="authenticated">
+					     			<a href="" class="dropdown-toggle" data-toggle="dropdown">{{notificationsCount}} <span class="glyphicon glyphicon-comment"></span></a>
+					     			<ul class="dropdown-menu">
+							        
+							        	<li class="dropdown-inline" ng-repeat="notif in notifications | orderBy:'creationTime' | limitTo:5">
+							        		<a ng-show="!notif.link" ng-click="readNotification()">
+							        			<span class="glyphicon" ng-class="{'glyphicon-check': notif.read == true, 'glyphicon-unchecked': notif.read == false}"></span>
+							        		</a>
+							        		<a ng-show="!notif.link">{{notif.message}}</a>
+							        	
+							        		<a ng-show="notif.link" ng-click="openNotificationLink()">
+							        			<span class="glyphicon glyphicon-link"></span>
+							        		</a>
+								        	<a ng-show="notif.link" ng-click="openNotificationLink()">
+								        		{{notif.message}}
+								        	</a>
+							        	
+							        		<a ng-click="deleteNotification()"><span class="glyphicon glyphicon-remove"></span></a>
+							        	</li>
+							        
+								        <li>
+								        	<a href="#/notifications">Show all</a>
+								        </li>
+							   		</ul>
+					     		</li>
+					        
+						        <li ng-show="!(authenticated)"><a href="#/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+							    <li ng-show="authenticated"><a href="" ng-click="logout()"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+					      	</ul>
+					    </div>
+					</div>
+				</nav>
+        
+        	</header>
+        </div>
         
         <div ng-view class="container"></div>
         
