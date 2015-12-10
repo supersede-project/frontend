@@ -21,6 +21,10 @@
 	display: inline !important;
 }
 
+.main-navigation li {
+	color: white !important;
+}
+
 .navbar-nav>li>p {
 	margin-top: 0px !important;
 	margin-bottom: 0px !important;

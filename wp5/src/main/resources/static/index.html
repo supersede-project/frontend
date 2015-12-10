@@ -36,7 +36,7 @@
 					        	</li>
 					        
 					        	<li ng-repeat="profile in profiles | orderBy:'name'" class="dropdown" ng-show="authenticated">
-						    		<a href="" class="dropdown-toggle" data-toggle="dropdown" ng-show="applications[profile].length > 0">{{profile}}<b class="caret"></b></a>
+						    		<a class="dropdown-toggle" ng-show="applications[profile].length > 0">{{profile}}<b class="caret"></b></a>
 						    		<ul class="dropdown-menu multi-level" ng-show="applications[profile].length > 0">
 								       	<li class="dropdown-submenu" ng-repeat="appl in applications[profile]">
 								        	<a>{{appl.applicationName}}</a>
@@ -54,7 +54,7 @@
 					      			<p class="navbar-text">{{user.name}}</p>
 					      		</li>
 					     		<li ng-show="authenticated">
-					     			<a href="" class="dropdown-toggle" data-toggle="dropdown">{{notificationsCount}} <span class="glyphicon glyphicon-comment"></span></a>
+					     			<a class="dropdown-toggle">{{notificationsCount}} <span class="glyphicon glyphicon-comment"></span></a>
 					     			<ul class="dropdown-menu">
 							        
 							        	<li class="dropdown-inline" ng-repeat="notif in notifications | orderBy:'creationTime' | limitTo:5">
@@ -87,44 +87,40 @@
 				</nav>
         
         	</header>
-        </div>
         
-        <div ng-view class="container site-content" id="content"></div>
-        
-        <footer id="colophon" class="site-footer" role="contentinfo">
-        	<div id="top-footer">
-        		<div class="ak-container">
-        			<div class="footer1 footer"></div>
-        			<div class="footer2 footer"></div>
-        			<div class="clearfix hide"></div>
-        			<div class="footer3 footer">
-        				<aside id="text-4" class="widget widget_text">
-	        				<div class="textwidget">
-	        					<img src="https://www.supersede.eu/wp-content/uploads/2015/07/flag_yellow_low.jpg" alt="EU-Flag " height="94" width="140">
-	        					<p> This project has received funding from the European Union's ICT 2014 - INFORMATION AND COMMUNICATIONS TECHNOLOGIES PROGRAMME under grant agreement no 644018</p>
-	        				</div>
-        				</aside>
-        			</div>
-        			<div class="footer4 footer">
-        				<aside id="text-5" class="widget widget_text">
-        					<div class="textwidget">
-        					</div>
-        				</aside>
-        			</div>
-        		</div>
-        	</div>
-        	<div id="bottom-footer">
-        		<div class="ak-container">
-        			<h1 class="site-info">
-        				<a href="http://wordpress.org/">Free WordPress Theme</a>
-        				<span class="sep"> | </span>
-        				<a href="https://accesspressthemes.com/" title="AccessPress Themes" target="_blank">AccessPress Lite</a>
-        			</h1>
-	        		<div class="copyright"> Copyright © 2015 <a href="https://www.supersede.eu"> SUPERSEDE				</a>
+	        <div ng-view class="container site-content" id="content"></div>
+	        
+	        <footer id="colophon" class="site-footer" role="contentinfo">
+	        	<div id="top-footer">
+	        		<div class="ak-container">
+	        			<div class="footer1 footer"></div>
+	        			<div class="footer2 footer"></div>
+	        			<div class="clearfix hide"></div>
+	        			<div class="footer3 footer">
+	        				<aside id="text-4" class="widget widget_text">
+		        				<div class="textwidget">
+		        					<img src="https://www.supersede.eu/wp-content/uploads/2015/07/flag_yellow_low.jpg" alt="EU-Flag " height="94" width="140">
+		        					<p> This project has received funding from the European Union's ICT 2014 - INFORMATION AND COMMUNICATIONS TECHNOLOGIES PROGRAMME under grant agreement no 644018</p>
+		        				</div>
+	        				</aside>
+	        			</div>
+	        			<div class="footer4 footer">
+	        				<aside id="text-5" class="widget widget_text">
+	        					<div class="textwidget">
+	        					</div>
+	        				</aside>
+	        			</div>
 	        		</div>
-        		</div>
-        	</div>
-        </footer>
+	        	</div>
+	        	<div id="bottom-footer">
+	        		<div class="ak-container">
+		        		<div class="copyright"> Copyright © 2015 <a href="https://www.supersede.eu"> SUPERSEDE				</a>
+		        		</div>
+	        		</div>
+	        	</div>
+	        </footer>
+        
+        </div>
         
         <script src="js/jquery-2.1.4.min.js" type="text/javascript"></script>
         <script src="js/angular.min.js" type="text/javascript"></script>
