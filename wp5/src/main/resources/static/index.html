@@ -28,7 +28,8 @@
 	
 			    <nav id="site-navigation" class="main-navigation menu-left">
 					<div ng-controller="navigation" class="ak-container">
-					    <div class="collapse navbar-collapse" id="myNavbar">
+						<h1 class="menu-toggle">Menu</h1>
+					    <div class="menu-menu-1-container">
 					    	<ul class="nav navbar-nav">
 					        	<li ng-show="authenticated">
 					        		<p class="navbar-text">{{user.tenantId}}</p>
@@ -88,7 +89,42 @@
         	</header>
         </div>
         
-        <div ng-view class="container"></div>
+        <div ng-view class="container site-content" id="content"></div>
+        
+        <footer id="colophon" class="site-footer" role="contentinfo">
+        	<div id="top-footer">
+        		<div class="ak-container">
+        			<div class="footer1 footer"></div>
+        			<div class="footer2 footer"></div>
+        			<div class="clearfix hide"></div>
+        			<div class="footer3 footer">
+        				<aside id="text-4" class="widget widget_text">
+	        				<div class="textwidget">
+	        					<img src="https://www.supersede.eu/wp-content/uploads/2015/07/flag_yellow_low.jpg" alt="EU-Flag " height="94" width="140">
+	        					<p> This project has received funding from the European Union's ICT 2014 - INFORMATION AND COMMUNICATIONS TECHNOLOGIES PROGRAMME under grant agreement no 644018</p>
+	        				</div>
+        				</aside>
+        			</div>
+        			<div class="footer4 footer">
+        				<aside id="text-5" class="widget widget_text">
+        					<div class="textwidget">
+        					</div>
+        				</aside>
+        			</div>
+        		</div>
+        	</div>
+        	<div id="bottom-footer">
+        		<div class="ak-container">
+        			<h1 class="site-info">
+        				<a href="http://wordpress.org/">Free WordPress Theme</a>
+        				<span class="sep"> | </span>
+        				<a href="https://accesspressthemes.com/" title="AccessPress Themes" target="_blank">AccessPress Lite</a>
+        			</h1>
+	        		<div class="copyright"> Copyright © 2015 <a href="https://www.supersede.eu"> SUPERSEDE				</a>
+	        		</div>
+        		</div>
+        	</div>
+        </footer>
         
         <script src="js/jquery-2.1.4.min.js" type="text/javascript"></script>
         <script src="js/angular.min.js" type="text/javascript"></script>

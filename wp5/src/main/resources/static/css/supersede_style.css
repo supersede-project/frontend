@@ -857,7 +857,7 @@ object {
 Header
 --------------------------------------------------------------*/
 #masthead #top-header{
-    background: url(images/bgheader.jpg) repeat-x scroll left bottom #FFF;
+    /*background: url(images/bgheader.jpg) repeat-x scroll left bottom #FFF;*/
 }
 
 body.boxed-layout{

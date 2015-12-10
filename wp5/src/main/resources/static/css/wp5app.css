@@ -11,6 +11,21 @@
     cursor: pointer;
 }
 
+/* fixing nav bar with supersede css */
+.navbar-nav>li>a {
+	padding: 0px 15px !important;
+	line-height:inherit !important;
+}
+
+.main-navigation ul ul a {
+	display: inline !important;
+}
+
+.navbar-nav>li>p {
+	margin-top: 0px !important;
+	margin-bottom: 0px !important;
+}
+
 /* navigation dropdown submenu */
 .dropdown-submenu {
     position: relative;
