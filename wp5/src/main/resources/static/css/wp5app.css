@@ -4,6 +4,31 @@
     display: inline-flex !important;
 }
 
+/* change pointer on ng-click, etc... */
+[ng-click],
+[data-ng-click],
+[x-ng-click] {
+    cursor: pointer;
+}
+
+/* fixing nav bar with supersede css */
+.navbar-nav>li>a {
+	padding: 0px 15px !important;
+	line-height:inherit !important;
+}
+
+.main-navigation ul ul a {
+	display: inline !important;
+}
+
+.main-navigation li {
+	color: white !important;
+}
+
+.navbar-nav>li>p {
+	margin-top: 0px !important;
+	margin-bottom: 0px !important;
+}
 
 /* navigation dropdown submenu */
 .dropdown-submenu {
