@@ -4,6 +4,12 @@
     display: inline-flex !important;
 }
 
+/* change pointer on ng-click, etc... */
+[ng-click],
+[data-ng-click],
+[x-ng-click] {
+    cursor: pointer;
+}
 
 /* navigation dropdown submenu */
 .dropdown-submenu {

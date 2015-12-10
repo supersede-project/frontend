@@ -19,7 +19,7 @@
 					</a>
 				</td>
 				<td ng-show="!notif.link">{{notif.message}}</td>
-				<td ng-show="notif.link"><a style="color: black;" ng-href="{{notif.link}}">{{notif.message}}<span style="float: right;" class="glyphicon glyphicon-link"></span></a></td>
+				<td ng-show="notif.link"><a style="color: black;" ng-click="openNotificationLink()">{{notif.message}}<span style="float: right;" class="glyphicon glyphicon-link"></span></a></td>
 				<td><a ng-click="deleteNotification()"><span style="float: right;" class="glyphicon glyphicon-remove"></span></a></td>
 			</tr>
 		</tbody>

@@ -121,6 +121,17 @@ app.controller('navigation', function($rootScope, $scope, $http, $location, $rou
 				});
 			}
 			
+			$scope.openNotificationLink = function()
+			{
+				var notificationId = this.notif.notificationId;
+				var link = this.notif.link;
+				$http.put('notification/' + notificationId + '/read').
+					success(function(data) {
+						
+					});
+				window.location.href=link;
+			}
+			
 			$scope.readNotification = function()
 			{
 				var notificationId = this.notif.notificationId;
