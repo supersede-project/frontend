@@ -13,14 +13,23 @@
 
 		<tbody>
 			<tr	ng-repeat="notif in notifications | limitTo:5:currentPage*itemsPerPage">
-				<td>
+				<td ng-show="!notif.link">
 					<a ng-click="readNotification()">
 						<span class="glyphicon" ng-class="{'glyphicon-check': notif.read == true, 'glyphicon-unchecked': notif.read == false}"></span>
 					</a>
 				</td>
 				<td ng-show="!notif.link">{{notif.message}}</td>
-				<td ng-show="notif.link"><a style="color: black;" ng-click="openNotificationLink()">{{notif.message}}<span style="float: right;" class="glyphicon glyphicon-link"></span></a></td>
-				<td><a ng-click="deleteNotification()"><span style="float: right;" class="glyphicon glyphicon-remove"></span></a></td>
+
+				<td ng-show="notif.link">
+					<a ng-click="openNotificationLink()">
+						<span class="glyphicon glyphicon-link"></span>
+					</a>
+				</td>
+				<td ng-show="notif.link">
+					<a style="color: black;" ng-click="openNotificationLink()">{{notif.message}}</a>
+				</td>
+				
+				<td><a ng-click="deleteNotification()"><span class="glyphicon glyphicon-remove"></span></a></td>
 			</tr>
 		</tbody>
 
