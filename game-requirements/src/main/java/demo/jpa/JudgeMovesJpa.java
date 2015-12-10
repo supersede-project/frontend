@@ -1,5 +1,7 @@
 package demo.jpa;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import demo.model.JudgeMove;
@@ -9,4 +11,5 @@ public interface JudgeMovesJpa extends JpaRepository<JudgeMove, Long> {
 
 	JudgeMove findByMove(Move m);
 
+	List<JudgeMove> findByFinishAndNotificationSent(boolean b, boolean c);
 }

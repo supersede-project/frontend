@@ -70,8 +70,15 @@ public class JudgeMoveRest {
 				
 		DatabaseUser currentUser = (DatabaseUser) authentication.getPrincipal();
 		User judge = users.findOne(currentUser.getUserId());
+				
+		JudgeMove jm = judgeMoves.findOne(judgeMoveId);
 		
-		JudgeMove jm = judgeMoves.findOne(judgeMoveId);		
+		Move m = jm.getMove();
+		m.setFinish(false);
+		m.setToArgue(true);
+		m.setToPlay(false);
+		moves.save(m);
+		
 		jm.setNeedArguments(true);
 		jm.setJudge(judge);
 		jm.setFinish(true);
@@ -97,7 +104,9 @@ public class JudgeMoveRest {
 		if(m.getFirstPlayer().getUserId() == user.getUserId())
 		{
 			jm.setFirstArgument(a);
-		}else{
+		}
+		else
+		{
 			jm.setSecondArgument(a);
 		}
 								

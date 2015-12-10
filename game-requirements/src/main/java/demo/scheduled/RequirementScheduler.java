@@ -24,7 +24,7 @@ public class RequirementScheduler {
     private NotificationUtil notificationUtil;
 	
 	@Scheduled(fixedRate = 10000)
-	private void notifyJudges()
+	private void notifyJudgesForConflicts()
 	{
 		Map<String, MovesJpa> moveRepositories = multiJpaProvider.getRepositories(MovesJpa.class);
 		
@@ -54,4 +54,31 @@ public class RequirementScheduler {
 			}	
 		}		
 	}
+	
+	@Scheduled(fixedRate = 10000)
+	private void notifyJudgesForArguments()
+	{
+		Map<String, JudgeMovesJpa> judgeMoveRepositories = multiJpaProvider.getRepositories(JudgeMovesJpa.class);
+		
+		for(String tenant : judgeMoveRepositories.keySet())
+		{
+			JudgeMovesJpa judgeMoveRepository = judgeMoveRepositories.get(tenant);
+			List<JudgeMove> judgeMoves = judgeMoveRepository.findByFinishAndNotificationSent(true, false);
+			
+			if(judgeMoves.size() > 0)
+			{								
+				for(JudgeMove jm : judgeMoves)
+				{						
+					if((jm.getFirstArgument() != null) && (jm.getSecondArgument() != null))
+					{																							
+						notificationUtil.createNotificationsForProfile(tenant, "JUDGE", "There are two arguments in move " + jm.getJudgeMoveId(), "game-requirements/judge_moves");				
+						
+						jm.setNotificationSent(true);
+						jm.setFinish(false);
+						judgeMoveRepository.save(jm);
+					}
+				}		
+			}	
+		}		
+	}	
 }

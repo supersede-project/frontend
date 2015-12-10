@@ -41,6 +41,7 @@ public class JudgeMove {
     private Argument secondArgument;
     
     private boolean finish;
+    private boolean notificationSent;
     
     public JudgeMove(){
     	
@@ -135,4 +136,12 @@ public class JudgeMove {
     public void setFinish(boolean finish){
     	this.finish = finish;
     }
+    
+    public boolean getNotificationSent() {
+		return notificationSent;
+	}
+
+	public void setNotificationSent(boolean notificationSent) {
+		this.notificationSent = notificationSent;
+	} 
 }

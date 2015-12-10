@@ -79,6 +79,7 @@ public class MoveRest {
 	public ResponseEntity<?> createMove(@RequestBody Move move) {
 		
 		move.setStartTime(new Date());
+		move.setToPlay(true);
 		move = moves.save(move);
 
 		notificationUtil.createNotificationForUser(move.getFirstPlayer().getUserId(), "New move " + move.getMoveId(), "game-requirements/user_moves");

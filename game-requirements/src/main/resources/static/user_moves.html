@@ -31,9 +31,14 @@
 							<td>{{move.secondRequirement.content}}</td>
 							<td>{{move.firstPlayer.name}}</td>
 							<td>{{move.secondPlayer.name}}</td>
-							<td>
+							<td ng-show="move.toPlay">
 								<div>
 									<a href="#/game-requirements/play_view?moveId={{move.moveId}}" class="btn btn-lg btn-success" role="button">Play</a>
+								</div>
+							</td>
+							<td ng-show="move.toArgue">
+								<div>
+									<a href="#/game-requirements/argue_view?moveId={{move.moveId}}" class="btn btn-lg btn-success" role="button">Argue</a>
 								</div>
 							</td>
 						</tr>

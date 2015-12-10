@@ -57,8 +57,10 @@ public class Move {
     private Requirement secondPlayerChooseRequirement;
     
     private boolean notificationSent;
+    private boolean toPlay;
+    private boolean toArgue;
         
-    public Move() {
+    public Move() {    	
     }
  
     public Move(String name, int timer, Requirement firstRequirement, Requirement secondRequirement, User firstPlayer, User secondPlayer, ValutationCriteria criteria, Requirement firstPlayerChooseRequirement, Requirement secondPlayerChooseRequirement) {
@@ -177,5 +179,21 @@ public class Move {
 
 	public void setNotificationSent(boolean notificationSent) {
 		this.notificationSent = notificationSent;
+	}
+
+	public boolean getToPlay() {
+		return toPlay;
+	}
+
+	public void setToPlay(boolean toPlay) {
+		this.toPlay = toPlay;
+	}
+
+	public boolean getToArgue() {
+		return toArgue;
+	}
+
+	public void setToArgue(boolean toArgue) {
+		this.toArgue = toArgue;
 	} 
 }
