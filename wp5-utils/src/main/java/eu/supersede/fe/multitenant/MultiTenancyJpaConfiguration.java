@@ -51,6 +51,7 @@ public class MultiTenancyJpaConfiguration {
 		hibernateProps.put(Environment.MULTI_TENANT_CONNECTION_PROVIDER, multiTenantConnectionProvider);
 		hibernateProps.put(Environment.MULTI_TENANT_IDENTIFIER_RESOLVER, currentTenantIdentifierResolver);
 		hibernateProps.put(Environment.DIALECT, "org.hibernate.dialect.PostgreSQLDialect");
+		hibernateProps.put(Environment.USE_QUERY_CACHE, "false");
 
 		Set<String> packages = new HashSet<>(Arrays.asList(MODELS_PACKAGES.split(",")));
 		packages.add("eu.supersede.fe.notification.model");

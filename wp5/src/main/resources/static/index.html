@@ -19,9 +19,10 @@
 				<div id="top-header">
 					<div class="ak-container">
 						<div class="site-branding">
-							<a href="https://www.supersede.eu/"> <img
-								src="https://www.supersede.eu/wp-content/uploads/2015/07/SupersedeLogo_outline.png">
-							</a>
+							<img src="https://www.supersede.eu/wp-content/uploads/2015/07/SupersedeLogo_outline.png"/>
+						</div>
+						<div ng-show="authenticated" class="tenant">
+							<img class="tenant-img" src="img/{{user.tenantId}}.jpg"/>
 						</div>
 					</div>
 				</div>
@@ -31,10 +32,10 @@
 						<h1 class="menu-toggle">Menu</h1>
 					    <div class="menu-menu-1-container">
 					    	<ul class="nav navbar-nav">
-					        	<li ng-show="authenticated">
-					        		<p class="navbar-text">{{user.tenantId}}</p>
+					    		<li ng-show="authenticated">
+					        		<p class="navbar-text">Dashboard</p>
 					        	</li>
-					        
+					        	
 					        	<li ng-repeat="profile in profiles | orderBy:'name'" class="dropdown" ng-show="authenticated">
 						    		<a class="dropdown-toggle" ng-show="applications[profile].length > 0">{{profile}}<b class="caret"></b></a>
 						    		<ul class="dropdown-menu multi-level" ng-show="applications[profile].length > 0">
@@ -51,7 +52,7 @@
 						    </ul>
 							<ul class="nav navbar-nav navbar-right">
 					      		<li ng-show="authenticated">
-					      			<p class="navbar-text">{{user.name}}</p>
+					      			<p class="navbar-text p-welcome">Welcome, {{user.name}}</p>
 					      		</li>
 					     		<li ng-show="authenticated">
 					     			<a class="dropdown-toggle">{{notificationsCount}} <span class="glyphicon glyphicon-comment"></span></a>

@@ -11,6 +11,22 @@
     cursor: pointer;
 }
 
+/* Welcome username */
+.p-welcome {
+	text-transform: none !important;
+}
+
+/* tenant img */
+.tenant {
+	float: right;
+    padding: 15px 0;
+}
+
+.tenant-img {
+	height: 51px !important;
+}
+
+/* notifications preview */
 .a_button {
 	min-width: 10px !important;
 }
