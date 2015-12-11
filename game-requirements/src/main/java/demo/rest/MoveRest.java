@@ -107,6 +107,11 @@ public class MoveRest {
 			m.setFirstPlayerChooseRequirement(r);
 			if(m.getSecondPlayerChooseRequirement() != null)
 			{
+				//set the winner requirement if they are equals
+				if(m.getSecondPlayerChooseRequirement().getRequirementId() == r.getRequirementId())
+				{
+					m.setWinnerRequirement(r);
+				}
 				m.setFinish(true);
 			}
 		}
@@ -115,6 +120,11 @@ public class MoveRest {
 			m.setSecondPlayerChooseRequirement(r);
 			if(m.getFirstPlayerChooseRequirement() != null)
 			{
+				//set the winner requirement if they are equals
+				if(m.getFirstPlayerChooseRequirement().getRequirementId() == r.getRequirementId())
+				{
+					m.setWinnerRequirement(r);
+				}
 				m.setFinish(true);
 			}
 		}

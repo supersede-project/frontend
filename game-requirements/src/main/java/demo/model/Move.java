@@ -59,6 +59,10 @@ public class Move {
     private boolean notificationSent;
     private boolean toPlay;
     private boolean toArgue;
+    
+    @ManyToOne(fetch=FetchType.EAGER)
+    @JoinColumn(name="winner_requirement")
+    private Requirement winnerRequirement;
         
     public Move() {    	
     }
@@ -195,5 +199,13 @@ public class Move {
 
 	public void setToArgue(boolean toArgue) {
 		this.toArgue = toArgue;
-	} 
+	}
+	
+    public Requirement getWinnerRequirement() {
+        return winnerRequirement;
+    }
+ 
+    public void setWinnerRequirement(Requirement winnerRequirement) {
+        this.winnerRequirement = winnerRequirement;
+    }	
 }

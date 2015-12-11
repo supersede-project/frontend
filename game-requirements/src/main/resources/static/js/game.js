@@ -248,7 +248,7 @@ app.controllerProvider.register('argue_view', function($scope, $http, $location,
 	
 });
 
-app.controllerProvider.register('solve_view', function($scope, $http, $location) {
+app.controllerProvider.register('emit_view', function($scope, $http, $location) {
     
 	$scope.judgeMoveId = $location.search()['judgeMoveId'];
 	$scope.judgeMove = null;
