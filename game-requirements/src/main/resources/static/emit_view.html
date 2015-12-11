@@ -9,7 +9,14 @@
     	<div class="row">
     		<div class="col-md-6">	
 				<div class="panel panel-primary">
-				  <div class="panel-heading">First</div>
+				  <div class="panel-heading">
+			  		<div class="radio">
+			          <label>
+				      	<input type="radio" name="judgeEmit" value="first" ng-model="judgeChoice">
+				      	First
+			          </label>
+			  		</div>				  
+				  </div>
 				  <div class="panel-body">
 						<p>Requirement: <b>{{judgeMove.move.firstRequirement.content}}</b></p>
 						<br>
@@ -17,12 +24,19 @@
 				  </div>
 				</div>
 				<div align="center">
-					<a href="#/game-requirements/judge_moves" ng-click="selectWinner()" class="btn btn-lg btn-success" role="button">Choose First</a>
+					<a ng-disable="{{judgeChoice != first}}" href="#/game-requirements/judge_moves" ng-click="selectWinner()" class="btn btn-lg btn-success" role="button">Choose First</a>
 				</div>					
 			</div>	
 	    	<div class="col-md-6">	
 				<div class="panel panel-primary">
-				  <div class="panel-heading">Second</div>
+				  <div class="panel-heading">
+				  	<div class="radio">
+			          <label>
+				      	<input type="radio" name="judgeEmit" value="second" ng-model="judgeChoice">
+				      	Second
+			          </label>
+			  		</div>
+				  </div>
 				  <div class="panel-body">
 						<p>Requirement: <b>{{judgeMove.move.secondRequirement.content}}</b></p>
 						<br>
@@ -30,8 +44,47 @@
 				  </div>
 				</div>
 				<div align="center">
-					<a href="#/game-requirements/judge_moves" ng-click="selectWinner()" class="btn btn-lg btn-success" role="button">Choose Second</a>		
-				</div>				
+					<a ng-disable="{{judgeChoice != second}}" href="#/game-requirements/judge_moves" ng-click="selectWinner()" class="btn btn-lg btn-success" role="button">Choose Second</a>		
+				</div>					
 			</div>			
+		</div>
+		<br>
+		<div class="row">
+			<div class="col-md-6">
+				<div class="panel panel-primary">
+				  <div class="panel-heading">
+			  		<div class="radio">
+			          <label>
+				      	<input type="radio" name="judgeEmit" value="firstPersonal" ng-model="judgeChoice">
+				      	Choose the first requirement but insert personal argument
+			          </label>
+			  		</div>				  
+				  </div>
+				  <div class="panel-body">
+						INSERIRE SPAZIO PER PROPRIO ARGUMENT
+				  </div>
+				</div>
+				<div align="center">
+					<a ng-disable="{{judgeChoice != firstPersonal}}" href="#/game-requirements/judge_moves" ng-click="selectWinner()" class="btn btn-lg btn-success" role="button">Choose First with personal argument</a>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="panel panel-primary">
+				  <div class="panel-heading">
+			  		<div class="radio">
+			          <label>
+				      	<input type="radio" name="judgeEmit" value="secondPersonal" ng-model="judgeChoice">
+				      	Choose the second requirement but insert personal argument
+			          </label>
+			  		</div>				  
+				  </div>
+				  <div class="panel-body">
+						INSERIRE SPAZIO PER PROPRIO ARGUMENT
+				  </div>
+				</div>
+				<div align="center">
+					<a ng-disable="{{judgeChoice != secondPersonal}}" href="#/game-requirements/judge_moves" ng-click="selectWinner()" class="btn btn-lg btn-success" role="button">Choose Second with personal argument</a>
+				</div>			
+			</div>
 		</div>						
     </div>

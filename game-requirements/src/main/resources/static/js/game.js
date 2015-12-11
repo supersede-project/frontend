@@ -252,6 +252,7 @@ app.controllerProvider.register('emit_view', function($scope, $http, $location) 
     
 	$scope.judgeMoveId = $location.search()['judgeMoveId'];
 	$scope.judgeMove = null;
+	$scope.judgeChoice = "";
 	
 	$http.get('game-requirements/judgemove/' + $scope.judgeMoveId)
 	.success(function(data) {
