@@ -12,6 +12,7 @@ import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
+import org.hibernate.cfg.Environment;
 import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -59,7 +60,8 @@ public class MultiJpaProvider {
 			Map<String, Object> hibernateProps = new LinkedHashMap<>();
 			hibernateProps.putAll(jpaProperties.getHibernateProperties(datasources.get(n)));
 
-			hibernateProps.put(org.hibernate.cfg.Environment.DIALECT, "org.hibernate.dialect.PostgreSQLDialect");
+			hibernateProps.put(Environment.DIALECT, "org.hibernate.dialect.PostgreSQLDialect");
+			hibernateProps.put(Environment.USE_QUERY_CACHE, "false");
 
 			Set<String> packages = new HashSet<>(Arrays.asList(MODELS_PACKAGES.split(",")));
 			packages.add("eu.supersede.fe.notification.model");
