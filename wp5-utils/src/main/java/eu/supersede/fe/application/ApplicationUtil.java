@@ -14,16 +14,23 @@ public class ApplicationUtil {
 	@Autowired
 	private StringRedisTemplate template;
 	
+	private static final String APP_KEY = "Application";
+	
 	public void addApplicationPage(String applicationName, String applicationPage, String profileRequired)
 	{
 		Application app = new Application(applicationName, applicationPage, profileRequired);
-		template.opsForHash().put("Application", app.getId(), app);
+		template.opsForHash().put(APP_KEY, app.getId(), app);
+	}
+	
+	public void removeApplicationPage(Application application)
+	{
+		template.opsForHash().delete(APP_KEY, application.getId());
 	}
 	
 	public Set<Application> getAllApplications()
 	{
 		Set<Application> apps = new HashSet<>();
-		Map<Object, Object> applications = template.opsForHash().entries("Application");
+		Map<Object, Object> applications = template.opsForHash().entries("APP_KEY");
 		
 		for(Object o : applications.values())
 		{
