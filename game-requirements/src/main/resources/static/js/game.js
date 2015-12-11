@@ -28,7 +28,6 @@ app.controllerProvider.register('leaderboard', function($scope, $http) {
 	});
 });
 
-
 app.controllerProvider.register('criterias_leaderboard', function($scope, $http) {
 	
 	$scope.valutationCriterias = [];
@@ -230,7 +229,7 @@ app.controllerProvider.register('argue_view', function($scope, $http, $location,
 		       },
 		       method: 'POST'
 		   }).success(function(data){
-			   // SET THE ARGUMENT IN JUDGE_MOVES
+			   // SET ARGUMENT IN JUDGE_MOVES
 			   $http.put('game-requirements/judgemove/'+ $scope.moveId + '/argument/' + data.argumentId)
 				.success(function(data) {
 				}); 
@@ -239,7 +238,7 @@ app.controllerProvider.register('argue_view', function($scope, $http, $location,
 			   console.log(err);
 		   });
 		}else if($scope.argumentChoice == "existing"){
-			// SET THE ARGUMENT IN JUDGE_MOVES
+			// SET ARGUMENT IN JUDGE_MOVES
 			$http.put('game-requirements/judgemove/'+ $scope.moveId + '/argument/' + $scope.selectedArgument.argumentId)
 				.success(function(data) {
 			}); 
@@ -247,6 +246,18 @@ app.controllerProvider.register('argue_view', function($scope, $http, $location,
 		 
 	};
 	
+});
+
+app.controllerProvider.register('solve_view', function($scope, $http, $location) {
+    
+	$scope.judgeMoveId = $location.search()['judgeMoveId'];
+	$scope.judgeMove = null;
+	
+	$http.get('game-requirements/judgemove/' + $scope.judgeMoveId)
+	.success(function(data) {
+		$scope.judgeMove = data;
+	});
+
 });
 
 

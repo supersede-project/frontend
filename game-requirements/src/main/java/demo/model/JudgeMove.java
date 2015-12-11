@@ -42,6 +42,8 @@ public class JudgeMove {
     
     private boolean finish;
     private boolean notificationSent;
+    private boolean toJudge;
+    private boolean toSolve;
     
     public JudgeMove(){
     	
@@ -143,5 +145,21 @@ public class JudgeMove {
 
 	public void setNotificationSent(boolean notificationSent) {
 		this.notificationSent = notificationSent;
+	}
+
+	public boolean getToJudge() {
+		return toJudge;
+	}
+
+	public void setToJudge(boolean toJudge) {
+		this.toJudge = toJudge;
+	}
+
+	public boolean getToSolve() {
+		return toSolve;
+	}
+
+	public void setToSolve(boolean toSolve) {
+		this.toSolve = toSolve;
 	} 
 }

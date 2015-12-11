@@ -104,12 +104,20 @@ public class JudgeMoveRest {
 		if(m.getFirstPlayer().getUserId() == user.getUserId())
 		{
 			jm.setFirstArgument(a);
+			if(jm.getSecondArgument() != null)
+			{
+				m.setFinish(true);
+			}
 		}
 		else
 		{
 			jm.setSecondArgument(a);
+			if(jm.getFirstArgument() != null)
+			{
+				m.setFinish(true);
+			}
 		}
-								
+		moves.save(m);						
 		judgeMoves.save(jm);
 	}	
 }

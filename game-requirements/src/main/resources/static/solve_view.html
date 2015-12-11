@@ -1,0 +1,37 @@
+   	<script src="game-requirements/js/game.js"></script>    	
+	<div class="jumbotron">
+      <div class="container">
+        <h1>Solve the conflict considering the arguments!</h1>
+        <p>Here there are two arguments related to the requirements, choose what is best.</p>
+      </div>
+   	</div>   
+    <div class="container" ng-controller="solve_view">
+    	<div class="row">
+    		<div class="col-md-6">	
+				<div class="panel panel-primary">
+				  <div class="panel-heading">First</div>
+				  <div class="panel-body">
+						<p>Requirement: <b>{{judgeMove.move.firstRequirement.content}}</b></p>
+						<br>
+						<p>Argument for the requirement: <b>{{judgeMove.firstArgument.content}}</b></p>
+				  </div>
+				</div>
+				<div align="center">
+					<a href="#/game-requirements/judge_moves" ng-click="selectWinner()" class="btn btn-lg btn-success" role="button">Choose First</a>
+				</div>					
+			</div>	
+	    	<div class="col-md-6">	
+				<div class="panel panel-primary">
+				  <div class="panel-heading">Second</div>
+				  <div class="panel-body">
+						<p>Requirement: <b>{{judgeMove.move.secondRequirement.content}}</b></p>
+						<br>
+						<p>Argument for the requirement: <b>{{judgeMove.secondArgument.content}}</b></p>   	    	
+				  </div>
+				</div>
+				<div align="center">
+					<a href="#/game-requirements/judge_moves" ng-click="selectWinner()" class="btn btn-lg btn-success" role="button">Choose Second</a>		
+				</div>				
+			</div>			
+		</div>						
+    </div>

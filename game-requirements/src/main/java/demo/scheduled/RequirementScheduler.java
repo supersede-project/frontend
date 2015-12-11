@@ -42,6 +42,7 @@ public class RequirementScheduler {
 					if(m.getFirstPlayerChooseRequirement() != m.getSecondPlayerChooseRequirement())
 					{												
 						JudgeMove jm = new JudgeMove(m);
+						jm.setToJudge(true);
 						
 						judgeMovesRepository.save(jm);
 						
@@ -55,7 +56,7 @@ public class RequirementScheduler {
 		}		
 	}
 	
-	@Scheduled(fixedRate = 10000)
+	@Scheduled(fixedRate = 15000)
 	private void notifyJudgesForArguments()
 	{
 		Map<String, JudgeMovesJpa> judgeMoveRepositories = multiJpaProvider.getRepositories(JudgeMovesJpa.class);
@@ -72,7 +73,8 @@ public class RequirementScheduler {
 					if((jm.getFirstArgument() != null) && (jm.getSecondArgument() != null))
 					{																							
 						notificationUtil.createNotificationsForProfile(tenant, "JUDGE", "There are two arguments in move " + jm.getJudgeMoveId(), "game-requirements/judge_moves");				
-						
+						jm.setToJudge(false);
+						jm.setToSolve(true);
 						jm.setNotificationSent(true);
 						jm.setFinish(false);
 						judgeMoveRepository.save(jm);

@@ -20,9 +20,14 @@
 							<td>{{judgemove.needArguments}}</td>
 							<td>{{judgemove.gaveOpinion}}</td>
 							<td>{{judgemove.finish}}</td>
-							<td>
+							<td ng-show="judgemove.toJudge">
 								<div>
 									<a href="#/game-requirements/judge_view?judgeMoveId={{judgemove.judgeMoveId}}" class="btn btn-lg btn-success" role="button">Judge</a>
+								</div>
+							</td>
+							<td ng-show="judgemove.toSolve">
+								<div>
+									<a href="#/game-requirements/solve_view?judgeMoveId={{judgemove.judgeMoveId}}" class="btn btn-lg btn-success" role="button">Solve</a>
 								</div>
 							</td>
 						</tr>
