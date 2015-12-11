@@ -21,6 +21,7 @@
 	overflow-x: hidden !important;
     white-space: nowrap !important;
     text-overflow: ellipsis !important;
+    vertical-align: bottom !important;
 }
 
 /* footer fixed at page bottom */
