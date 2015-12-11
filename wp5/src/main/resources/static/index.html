@@ -58,19 +58,19 @@
 					     			<ul class="dropdown-menu">
 							        
 							        	<li class="dropdown-inline" ng-repeat="notif in notifications | orderBy:'creationTime' | limitTo:5">
-							        		<a ng-show="!notif.link" ng-click="readNotification()">
+							        		<a ng-show="!notif.link" ng-click="readNotification()" class="a_button">
 							        			<span class="glyphicon" ng-class="{'glyphicon-check': notif.read == true, 'glyphicon-unchecked': notif.read == false}"></span>
 							        		</a>
-							        		<a ng-show="!notif.link">{{notif.message}}</a>
+							        		<a ng-show="!notif.link" class="a_message">{{notif.message}}</a>
 							        	
-							        		<a ng-show="notif.link" ng-click="openNotificationLink()">
+							        		<a ng-show="notif.link" ng-click="openNotificationLink()" class="a_button">
 							        			<span class="glyphicon glyphicon-link"></span>
 							        		</a>
-								        	<a ng-show="notif.link" ng-click="openNotificationLink()">
+								        	<a ng-show="notif.link" ng-click="openNotificationLink()" class="a_message">
 								        		{{notif.message}}
 								        	</a>
 							        	
-							        		<a ng-click="deleteNotification()"><span class="glyphicon glyphicon-remove"></span></a>
+							        		<a ng-click="deleteNotification()" class="a_button"><span class="glyphicon glyphicon-remove"></span></a>
 							        	</li>
 							        
 								        <li>

@@ -11,6 +11,18 @@
     cursor: pointer;
 }
 
+.a_button {
+	min-width: 10px !important;
+}
+
+.a_message {
+	min-width: 350px !important;
+	max-width: 350px !important;
+	overflow-x: hidden !important;
+    white-space: nowrap !important;
+    text-overflow: ellipsis !important;
+}
+
 /* footer fixed at page bottom */
 footer {
 	width: 100% !important;
@@ -24,7 +36,7 @@ footer {
 }
 
 .main-navigation ul ul a {
-	display: inline !important;
+	display: inline-block !important;
 }
 
 .main-navigation li {
