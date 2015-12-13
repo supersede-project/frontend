@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -12,17 +13,17 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import eu.supersede.fe.jpa.ApplicationsJpa;
+import eu.supersede.fe.application.Application;
+import eu.supersede.fe.application.ApplicationUtil;
 import eu.supersede.fe.jpa.ProfilesJpa;
-import eu.supersede.fe.model.Application;
 import eu.supersede.fe.model.Profile;
 
 @RestController
 @RequestMapping("/application")
 public class ApplicationRest {
-
+	
 	@Autowired
-    private ApplicationsJpa applications;
+	private ApplicationUtil applicationUtil;
 	
 	@Autowired
     private ProfilesJpa profiles;
@@ -47,15 +48,15 @@ public class ApplicationRest {
 			pa.setProfileName(p.getName());
 			
 			Map<String, List<String>> tmp = new HashMap<>(); 
-			List<Application> apps = applications.findByRequiredProfileId(p.getProfileId());
 			
+			Set<Application> apps = applicationUtil.getByProfileName(p.getName());
 			for(Application app : apps)
 			{
-				if(!tmp.containsKey(app.getName()))
+				if(!tmp.containsKey(app.getApplicationName()))
 				{
-					tmp.put(app.getName(), new ArrayList<String>());
+					tmp.put(app.getApplicationName(), new ArrayList<String>());
 				}
-				tmp.get(app.getName()).add(app.getMainPage());
+				tmp.get(app.getApplicationName()).add(app.getApplicationPage());
 			}
 			
 			for(String app : tmp.keySet())
