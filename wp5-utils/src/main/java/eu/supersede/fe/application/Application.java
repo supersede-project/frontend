@@ -1,10 +1,16 @@
 package eu.supersede.fe.application;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Application {
 
 	private String applicationName;
 	private String applicationPage;
 	private String profileRequired;
+	
+	public Application()
+	{}
 	
 	public Application(String applicationName, String applicationPage, String profileRequired) {
 		this.applicationName = applicationName;

@@ -18,8 +18,8 @@ public class ApplicationConfigLoader {
 	private Environment env;
 	
 	@PostConstruct
-	public void load() {
-		
+	public void load()
+	{
 		String applicationName = env.getProperty("application.name");
 		
 		if(applicationName != null)

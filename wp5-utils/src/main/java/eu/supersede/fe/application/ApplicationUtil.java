@@ -2,7 +2,7 @@ package eu.supersede.fe.application;
 
 import java.io.IOException;
 import java.util.HashSet;
-import java.util.Map;
+import java.util.List;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -49,9 +49,9 @@ public class ApplicationUtil {
 	public Set<Application> getAllApplications()
 	{
 		Set<Application> apps = new HashSet<>();
-		Map<Object, Object> applications = template.opsForHash().entries("APP_KEY");
+		List<Object> applications = template.opsForHash().values(APP_KEY);
 		
-		for(Object o : applications.values())
+		for(Object o : applications)
 		{
 			apps.add(getApplicationFromString((String)o));
 		}
@@ -62,9 +62,9 @@ public class ApplicationUtil {
 	public Set<Application> getByProfileName(String profile)
 	{
 		Set<Application> apps = new HashSet<>();
-		Map<Object, Object> applications = template.opsForHash().entries("APP_KEY");
+		List<Object> applications = template.opsForHash().values(APP_KEY);
 		
-		for(Object o : applications.values())
+		for(Object o : applications)
 		{
 			Application a = getApplicationFromString((String)o);
 			if(a.getProfileRequired().equals(profile))
