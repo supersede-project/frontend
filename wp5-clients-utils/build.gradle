@@ -30,7 +30,7 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-jdbc:1.2.7.RELEASE")
 	compile("org.springframework.boot:spring-boot-starter-data-jpa:1.2.7.RELEASE")
 	
-	runtime files('../wp5-utils/build/libs/wp5-utils-0.0.1-SNAPSHOT.jar')
+	compile files('../wp5-utils/build/libs/wp5-utils-0.0.1-SNAPSHOT.jar')
 }
 
 
