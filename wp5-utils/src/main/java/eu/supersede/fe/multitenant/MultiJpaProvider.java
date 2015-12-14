@@ -61,7 +61,6 @@ public class MultiJpaProvider {
 			hibernateProps.putAll(jpaProperties.getHibernateProperties(datasources.get(n)));
 
 			hibernateProps.put(Environment.DIALECT, "org.hibernate.dialect.PostgreSQLDialect");
-			hibernateProps.put(Environment.USE_QUERY_CACHE, "false");
 
 			Set<String> packages = new HashSet<>(Arrays.asList(MODELS_PACKAGES.split(",")));
 			packages.add("eu.supersede.fe.notification.model");
@@ -119,6 +118,36 @@ public class MultiJpaProvider {
 		}
 		
 		return repo;
+	}
+	
+	public void flushTenants()
+	{
+		for(String tenant : repositoriesFactory.keySet())
+		{
+			Triple<JpaRepositoryFactory, EntityManagerFactory, EntityManager> factory = repositoriesFactory.get(tenant);
+			factory.c.flush();
+		}
+	}
+	
+	public void flushTenant(String tenant)
+	{
+		Triple<JpaRepositoryFactory, EntityManagerFactory, EntityManager> factory = repositoriesFactory.get(tenant);
+		factory.c.flush();
+	}
+	
+	public void clearTenants()
+	{
+		for(String tenant : repositoriesFactory.keySet())
+		{
+			Triple<JpaRepositoryFactory, EntityManagerFactory, EntityManager> factory = repositoriesFactory.get(tenant);
+			factory.c.clear();
+		}
+	}
+	
+	public void clearTenant(String tenant)
+	{
+		Triple<JpaRepositoryFactory, EntityManagerFactory, EntityManager> factory = repositoriesFactory.get(tenant);
+		factory.c.clear();
 	}
 	
 	private class MultiJpaRepositoryProxyPostProcessor implements RepositoryProxyPostProcessor
