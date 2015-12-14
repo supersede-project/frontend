@@ -120,21 +120,6 @@ public class MultiJpaProvider {
 		return repo;
 	}
 	
-	public void flushTenants()
-	{
-		for(String tenant : repositoriesFactory.keySet())
-		{
-			Triple<JpaRepositoryFactory, EntityManagerFactory, EntityManager> factory = repositoriesFactory.get(tenant);
-			factory.c.flush();
-		}
-	}
-	
-	public void flushTenant(String tenant)
-	{
-		Triple<JpaRepositoryFactory, EntityManagerFactory, EntityManager> factory = repositoriesFactory.get(tenant);
-		factory.c.flush();
-	}
-	
 	public void clearTenants()
 	{
 		for(String tenant : repositoriesFactory.keySet())

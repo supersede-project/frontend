@@ -21,6 +21,7 @@ public class ApplicationConfigLoader {
 	public void load()
 	{
 		String applicationName = env.getProperty("application.name");
+		String applicationLabel = env.getProperty("application.label");
 		
 		if(applicationName != null)
 		{
@@ -31,10 +32,11 @@ public class ApplicationConfigLoader {
 				pageName = pageName.trim();
 				
 				String[] pageRoles = env.getRequiredProperty("application.page." + pageName + ".profiles").split(",");
+				String pageLabel = env.getRequiredProperty("application.page." + pageName + ".label");
 				for(String pageRole : pageRoles)
 				{
 					pageRole = pageRole.trim();
-					applicationUtil.addApplicationPage(applicationName, pageName, pageRole);
+					applicationUtil.addApplicationPage(applicationName, applicationLabel, pageName, pageLabel, pageRole);
 				}
 			}
 		}

@@ -32,6 +32,8 @@ public class ApplicationRest {
 	public List<ProfileApplications> getUserAuthenticatedApplications(Authentication auth) 
 	{
 		List<ProfileApplications>  r = new ArrayList<>();
+		Map<String, List<Page>> pages = new HashMap<>();
+		Map<String, String> labels = new HashMap<>();
 		List<String> authNames = new ArrayList<>();
 		Collection<? extends GrantedAuthority> authorities = auth.getAuthorities();
 		for(GrantedAuthority ga : authorities)
@@ -44,27 +46,28 @@ public class ApplicationRest {
 		//make data nicer for frontend
 		for(Profile p : profList)
 		{
+			
 			ProfileApplications pa = new ProfileApplications();
 			pa.setProfileName(p.getName());
-			
-			Map<String, List<String>> tmp = new HashMap<>(); 
 			
 			Set<Application> apps = applicationUtil.getByProfileName(p.getName());
 			for(Application app : apps)
 			{
-				if(!tmp.containsKey(app.getApplicationName()))
+				if(!pages.containsKey(app.getApplicationName()))
 				{
-					tmp.put(app.getApplicationName(), new ArrayList<String>());
+					pages.put(app.getApplicationName(), new ArrayList<Page>());
+					labels.put(app.getApplicationName(), app.getApplicationLabel());
 				}
-				tmp.get(app.getApplicationName()).add(app.getApplicationPage());
+				pages.get(app.getApplicationName()).add(new Page(app.getApplicationPage(), app.getApplicationPageLabel()));
 			}
 			
-			for(String app : tmp.keySet())
+			for(String app : pages.keySet())
 			{
 				ApplicationGrouped ag = new ApplicationGrouped();
 				ag.setApplicationName(app);
+				ag.setApplicationLabel(labels.get(app));
 				
-				for(String pag : tmp.get(app))
+				for(Page pag : pages.get(app))
 				{
 					ag.getPages().add(pag);
 				}
@@ -73,6 +76,8 @@ public class ApplicationRest {
 			}
 			
 			r.add(pa);
+			pages.clear();
+			labels.clear();
 		}
 		
 		return r;
@@ -107,7 +112,8 @@ public class ApplicationRest {
 	static class ApplicationGrouped
 	{
 		private String applicationName;
-		private List<String> pages;
+		private String applicationLabel;
+		private List<Page> pages;
 		
 		public ApplicationGrouped() {
 			pages = new ArrayList<>();
@@ -120,14 +126,49 @@ public class ApplicationRest {
 		public void setApplicationName(String applicationName) {
 			this.applicationName = applicationName;
 		}
+
+		public String getApplicationLabel() {
+			return applicationLabel;
+		}
+
+		public void setApplicationLabel(String applicationLabel) {
+			this.applicationLabel = applicationLabel;
+		}
 		
-		public List<String> getPages() {
+		public List<Page> getPages() {
 			return pages;
 		}
 		
-		public void setPages(List<String> pages) {
+		public void setPages(List<Page> pages) {
 			this.pages = pages;
 		}
 	}
 	
+	static class Page
+	{
+		private String name;
+		private String label;
+		
+		Page(String name, String label)
+		{
+			this.setName(name);
+			this.setLabel(label);
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public void setName(String name) {
+			this.name = name;
+		}
+
+		public String getLabel() {
+			return label;
+		}
+
+		public void setLabel(String label) {
+			this.label = label;
+		}
+	}
 }

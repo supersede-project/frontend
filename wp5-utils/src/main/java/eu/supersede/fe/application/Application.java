@@ -6,15 +6,23 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class Application {
 
 	private String applicationName;
+	private String applicationLabel;
 	private String applicationPage;
+	private String applicationPageLabel;
 	private String profileRequired;
 	
 	public Application()
 	{}
 	
-	public Application(String applicationName, String applicationPage, String profileRequired) {
+	public Application(String applicationName, 
+			String applicationLabel, 
+			String applicationPage,
+			String applicationPageLabel, 
+			String profileRequired) {
 		this.applicationName = applicationName;
+		this.setApplicationLabel(applicationLabel);
 		this.applicationPage = applicationPage;
+		this.applicationPageLabel = applicationPageLabel;
 		this.profileRequired = profileRequired;
 	}
 
@@ -30,6 +38,14 @@ public class Application {
 	public void setApplicationName(String applicationName) {
 		this.applicationName = applicationName;
 	}
+
+	public String getApplicationLabel() {
+		return applicationLabel;
+	}
+
+	public void setApplicationLabel(String applicationLabel) {
+		this.applicationLabel = applicationLabel;
+	}
 	
 	public String getApplicationPage() {
 		return applicationPage;
@@ -37,6 +53,14 @@ public class Application {
 	
 	public void setApplicationPage(String applicationPage) {
 		this.applicationPage = applicationPage;
+	}
+
+	public String getApplicationPageLabel() {
+		return applicationPageLabel;
+	}
+
+	public void setApplicationPageLabel(String applicationPageLabel) {
+		this.applicationPageLabel = applicationPageLabel;
 	}
 	
 	public String getProfileRequired() {
