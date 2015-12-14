@@ -40,10 +40,10 @@
 						    		<a class="dropdown-toggle" ng-show="applications[profile].length > 0">{{profile}}<b class="caret"></b></a>
 						    		<ul class="dropdown-menu multi-level" ng-show="applications[profile].length > 0">
 								       	<li class="dropdown-submenu" ng-repeat="appl in applications[profile]">
-								        	<a>{{appl.applicationName}}</a>
+								        	<a>{{appl.applicationLabel?appl.applicationLabel:appl.applicationName}}</a>
 							        		<ul class="dropdown-menu">
 						                		<li ng-repeat="page in appl.pages">
-						                			<a ng-href="#/{{appl.applicationName}}/{{page}}">{{page}}</a>
+						                			<a ng-href="#/{{appl.applicationName}}/{{page.name}}">{{page.label?page.label:page.name}}</a>
 						                		</li>
 						                	</ul>
 							        	</li>

@@ -27,9 +27,9 @@ public class ApplicationUtil {
 	
 	private static final String APP_KEY = "Application";
 	
-	public void addApplicationPage(String applicationName, String applicationPage, String profileRequired)
+	public void addApplicationPage(String applicationName, String applicationLabel, String applicationPage, String applicationPageLabel, String profileRequired)
 	{
-		Application app = new Application(applicationName, applicationPage, profileRequired);
+		Application app = new Application(applicationName, applicationLabel, applicationPage, applicationPageLabel, profileRequired);
 		try 
 		{
 			template.opsForHash().put(APP_KEY, app.getId(), mapper.writeValueAsString(app));
