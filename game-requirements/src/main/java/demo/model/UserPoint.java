@@ -1,9 +1,22 @@
 package demo.model;
 
-public class UserPoint{
-	/*
+import java.io.Serializable;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+@SuppressWarnings("serial")
+@Entity
+@Table(name="users_points")
+public class UserPoint implements Serializable{
+	
 	@Id
-	@OneToOne(fetch = FetchType.EAGER)
+	@OneToOne
 	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
 	
@@ -21,7 +34,7 @@ public class UserPoint{
     	this.userPoints = userPoints;
     }
     
-    //@JsonIgnore
+    @JsonIgnore
     public User getUser(){
     	return user;
     }
@@ -29,5 +42,5 @@ public class UserPoint{
     public void setUser(User user){
     	this.user = user;
     }
-    */
+    
 }

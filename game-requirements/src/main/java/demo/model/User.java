@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -35,13 +36,13 @@ public class User {
 	public List<UserCriteriaPoint> userCriteriaPoints;
     
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "firstPlayer")
-	public List<Move> firstPlayerMoves;
+	private List<Move> firstPlayerMoves;
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "secondPlayer")
-	public List<Move> secondPlayerMoves;
+	private List<Move> secondPlayerMoves;
 	
-	//@OneToOne(fetch = FetchType.LAZY, mappedBy = "user")
-	//public UserPoint userGlobalPoints;
+	@OneToOne(mappedBy = "user")
+	private UserPoint userGlobalPoints;
 	
     public User() {
     }
@@ -93,7 +94,7 @@ public class User {
     	for(int i=0;i<userCriteriaPoints.size();i++){
     		tmpPoints += userCriteriaPoints.get(i).getPoints();
     	}
-    	
+    	tmpPoints+= userGlobalPoints.getUserPoints();
         return tmpPoints;
     }
  
@@ -131,7 +132,7 @@ public class User {
     	this.secondPlayerMoves = secondPlayerMoves;
     }
     
-    /*
+    
     public UserPoint getUserGlobalPoints(){
     	return userGlobalPoints;
     }
@@ -139,5 +140,5 @@ public class User {
     public void setUserGlobalPoints(UserPoint userGlobalPoints){
     	this.userGlobalPoints = userGlobalPoints;
     }
-    */
+    
 }

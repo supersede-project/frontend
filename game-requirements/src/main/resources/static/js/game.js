@@ -52,7 +52,7 @@ app.controllerProvider.register('criterias_leaderboard', function($scope, $http)
 				$scope.criteriaUsers.push(data[i]);
 			}
 		});
-    }    
+    }
 });
 
 app.controllerProvider.register('move_creation', function($scope, $http) {
