@@ -4,36 +4,52 @@ import java.io.Serializable;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import demo.utility.UserCriteriaPointKey;
-
 
 @SuppressWarnings("serial")
 @Entity
-@IdClass(UserCriteriaPointKey.class)
+//@IdClass(UserCriteriaPointKey.class)
 @Table(name="users_criteria_points")
 public class UserCriteriaPoint implements Serializable {
 	
-	@Id
+	//@Id
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
-	@Id
+	//@Id
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "criteria_id", nullable = false)
 	private ValutationCriteria valutationCriteria;
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long userCriteriaPointsId;	
     private Long points;
     
-    public UserCriteriaPoint() {
-    	this.points = (long) 0;
+    public UserCriteriaPoint(){
+    	
+    }
+    
+    public UserCriteriaPoint(Long points, ValutationCriteria valutationCriteria, User user){
+    	this.points = points;
+    	this.valutationCriteria = valutationCriteria;
+    	this.user = user;
+    }
+    
+    public Long getUserCriteriaPointsId(){
+    	return userCriteriaPointsId;
+    }
+    
+    public void setUserCriteriaPointsId(Long userCriteriaPointsId){
+    	this.userCriteriaPointsId = userCriteriaPointsId;
     }
     
     public Long getPoints(){

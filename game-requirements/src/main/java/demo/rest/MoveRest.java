@@ -3,6 +3,8 @@ package demo.rest;
 import java.util.Date;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -35,6 +37,9 @@ import eu.supersede.fe.security.DatabaseUser;
 @RestController
 @RequestMapping("/move")
 public class MoveRest {
+	
+	private final Logger log = LoggerFactory.getLogger(this.getClass());
+
 	
 	@Autowired
     private MovesJpa moves;
@@ -137,8 +142,8 @@ public class MoveRest {
 				if(m.getSecondPlayerChooseRequirement().getRequirementId() == r.getRequirementId())
 				{
 					// set the 'both players agree' points
-					globalPoints = up.getUserPoints();
-					up.setUserPoints(globalPoints + points.getOne((long) -2).getGlobalPoints());
+					Long otherGlobalPoints = up.getUserPoints();
+					up.setUserPoints(otherGlobalPoints + points.getOne((long) -2).getGlobalPoints());
 					userPoints.save(up);
 									
 					// set the criteria points
@@ -156,19 +161,44 @@ public class MoveRest {
 					}
 					
 					if(find == false){
-						UserCriteriaPoint ucp = new UserCriteriaPoint();
-						ucp.setValutationCriteria(m.getCriteria());
-						ucp.setUser(user);
-						ucp.setPoints(points.getOne((long) -2).getCriteriaPoints());
+						UserCriteriaPoint ucp = new UserCriteriaPoint(points.getOne((long) -2).getCriteriaPoints(), m.getCriteria(), user);
 						userCriteriaPoints.save(ucp);
 					}
+					
+					//#####################################################################################################################
+					// SET TO THE OTHER PLAYER
+					User otherPlayer = m.getSecondPlayer();
+					UserPoint upSecond = otherPlayer.getUserGlobalPoints();
+					Long otherPlayerGlobalPoints = upSecond.getUserPoints();
+					upSecond.setUserPoints(otherPlayerGlobalPoints + points.getOne((long) -2).getGlobalPoints());
+					
+					find = false;
+					List<UserCriteriaPoint> otherlucp = otherPlayer.getUserCriteriaPoints();
+					for(int i=0; i< otherlucp.size(); i++)
+					{
+						if(otherlucp.get(i).getValutationCriteria().getCriteriaId() == m.getCriteria().getCriteriaId())
+						{
+							Long secondPlayerCriteriaPoints = otherlucp.get(i).getPoints();
+							otherlucp.get(i).setPoints(secondPlayerCriteriaPoints + points.getOne((long) -2).getCriteriaPoints());
+							find = true;
+							userCriteriaPoints.save(otherlucp.get(i));
+						}
+					}
+					
+					if(find == false){
+						UserCriteriaPoint ucp = new UserCriteriaPoint(points.getOne((long) -2).getCriteriaPoints(), m.getCriteria(), otherPlayer);
+						userCriteriaPoints.save(ucp);
+						find = true;
+					}
+					
+					//#####################################################################################################################
+					
 					
 					// set the winner requirement
 					m.setWinnerRequirement(r);
 				}
 				m.setFinish(true);
 			}
-			userPoints.save(up);
 		}
 		else
 		{
@@ -186,11 +216,57 @@ public class MoveRest {
 				if(m.getFirstPlayerChooseRequirement().getRequirementId() == r.getRequirementId())
 				{
 					// set the 'both players agree' points
-					globalPoints = up.getUserPoints();
-					up.setUserPoints(globalPoints + points.getOne((long) -2).getGlobalPoints());
+					Long otherGlobalPoints = up.getUserPoints();
+					up.setUserPoints(otherGlobalPoints + points.getOne((long) -2).getGlobalPoints());
 					userPoints.save(up);
 					
 					// set the criteria points
+					boolean find = false;
+					// set criteria points for the SELECTED USER
+					List<UserCriteriaPoint> lucp = user.getUserCriteriaPoints();
+					for(int i=0; i< lucp.size(); i++)
+					{
+						if(lucp.get(i).getValutationCriteria().getCriteriaId() == m.getCriteria().getCriteriaId())
+						{
+							Long criteriaPoints = lucp.get(i).getPoints();
+							lucp.get(i).setPoints(criteriaPoints + points.getOne((long) -2).getCriteriaPoints());
+							find = true;
+							userCriteriaPoints.save(lucp.get(i));
+						}
+					}
+					
+					if(find == false){
+						UserCriteriaPoint ucp = new UserCriteriaPoint(points.getOne((long) -2).getCriteriaPoints(), m.getCriteria(), user);
+						userCriteriaPoints.save(ucp);
+					}
+					
+					//#####################################################################################################################
+					// SET TO THE OTHER PLAYER
+					User otherPlayer = m.getFirstPlayer();
+					UserPoint upFirst = otherPlayer.getUserGlobalPoints();
+					Long otherPlayerGlobalPoints = upFirst.getUserPoints();
+					upFirst.setUserPoints(otherPlayerGlobalPoints + points.getOne((long) -2).getGlobalPoints());
+					
+					find = false;
+					List<UserCriteriaPoint> otherlucp = otherPlayer.getUserCriteriaPoints();
+					for(int i=0; i< otherlucp.size(); i++)
+					{
+						if(otherlucp.get(i).getValutationCriteria().getCriteriaId() == m.getCriteria().getCriteriaId())
+						{
+							Long firstPlayerCriteriaPoints = otherlucp.get(i).getPoints();
+							otherlucp.get(i).setPoints(firstPlayerCriteriaPoints + points.getOne((long) -2).getCriteriaPoints());
+							find = true;
+							userCriteriaPoints.save(otherlucp.get(i));
+						}
+					}
+					
+					if(find == false){
+						UserCriteriaPoint ucp = new UserCriteriaPoint(points.getOne((long) -2).getCriteriaPoints(), m.getCriteria(), otherPlayer);
+						userCriteriaPoints.save(ucp);
+						find = true;
+					}
+					
+					//#####################################################################################################################
 					
 					// set the winner requirement
 					m.setWinnerRequirement(r);
@@ -213,6 +289,30 @@ public class MoveRest {
 		
 		Move m = jm.getMove();
 		
+		// TODO CHECK ###################################################
+		// set the points for the judge
+		UserPoint upJudge = judge.getUserGlobalPoints();
+		log.debug("JUDGE: " + judge.getName() + "############################################################################");
+
+		Long judgeGlobalPoints = upJudge.getUserPoints();
+		upJudge.setUserPoints(judgeGlobalPoints + points.getOne((long) -3).getGlobalPoints());
+		userPoints.save(upJudge);
+		
+		// find the player that choose the winning requirement for set points
+		if(m.getFirstPlayerChooseRequirement().getRequirementId() == requirementId){
+			UserPoint upPlayer = m.getFirstPlayer().getUserGlobalPoints();
+			Long playerGlobalPoints = upPlayer.getUserPoints();
+			upPlayer.setUserPoints(playerGlobalPoints + points.getOne((long) -3).getGlobalPoints());
+			userPoints.save(upPlayer);
+		}else{
+			UserPoint upPlayer = m.getSecondPlayer().getUserGlobalPoints();
+			Long playerGlobalPoints = upPlayer.getUserPoints();
+			upPlayer.setUserPoints(playerGlobalPoints + points.getOne((long) -3).getGlobalPoints());
+			userPoints.save(upPlayer);
+		}
+		
+		// ##############################################################
+		
 		jm.setOpinionRequirement(r);
 		jm.setGaveOpinion(true);
 		jm.setJudge(judge);
@@ -228,14 +328,12 @@ public class MoveRest {
 	// put, set the winner requirement from emit_view
 	@RequestMapping(method = RequestMethod.PUT, value="/{moveJudgeId}/judgerequirement/{requirementId}")
 	public void setJudgeWinnerRequirement(@PathVariable Long moveJudgeId, @PathVariable Long requirementId) {
-				
-		JudgeMove jm = judgeMoves.findOne(moveJudgeId);
-		Requirement r = requirements.findOne(requirementId);
 		
+		JudgeMove jm = judgeMoves.findOne(moveJudgeId);
+		Requirement r = requirements.findOne(requirementId);		
 		Move m = jm.getMove();
 		
-		m.setWinnerRequirement(r);
-		
+		m.setWinnerRequirement(r);		
 		jm.setFinish(true);
 		m.setFinish(true);
 		
