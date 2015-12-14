@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import demo.jpa.JudgeMovesJpa;
 import demo.jpa.MovesJpa;
 import demo.jpa.RequirementsJpa;
 import demo.jpa.UsersJpa;
+import demo.model.JudgeMove;
 import demo.model.Move;
 import demo.model.Requirement;
 import demo.model.User;
@@ -40,6 +42,9 @@ public class MoveRest {
 	
 	@Autowired
     private NotificationUtil notificationUtil;
+	
+	@Autowired
+	private JudgeMovesJpa judgeMoves;
 	
 	// get all the moves for the logged user
 	@RequestMapping(value = "",  method = RequestMethod.GET)
@@ -92,7 +97,7 @@ public class MoveRest {
 		return new ResponseEntity<>(null, httpHeaders, HttpStatus.CREATED);
 	}
 	
-	// put, for update the requirement value with the player
+	// put, for update the requirement value with the player and set the winner
 	@RequestMapping(method = RequestMethod.PUT, value="/{moveId}/requirement/{requirementId}")
 	public void setRequirement(Authentication authentication, @PathVariable Long moveId, @PathVariable Long requirementId) {
 		
@@ -131,5 +136,22 @@ public class MoveRest {
 		
 		moves.save(m);
 	}
+	
+	// put, set the winner requirement from judge_view
+	@RequestMapping(method = RequestMethod.PUT, value="/{moveJudgeId}/judgerequirement/{requirementId}")
+	public void setJudgeWinnerRequirement(@PathVariable Long moveJudgeId, @PathVariable Long requirementId) {
+				
+		JudgeMove jm = judgeMoves.findOne(moveJudgeId);
+		Requirement r = requirements.findOne(requirementId);
 		
+		Move m = jm.getMove();
+		
+		m.setWinnerRequirement(r);
+		
+		jm.setFinish(true);
+		m.setFinish(true);
+		
+		moves.save(m);
+		judgeMoves.save(jm);
+	}		
 }

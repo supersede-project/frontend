@@ -42,6 +42,17 @@ app.controllerProvider.register('criterias_leaderboard', function($scope, $http)
 			$scope.valutationCriterias.push(data[i]);
 		}
 	});
+    
+    $scope.filterCriteria = function(expected)
+    {
+    	alert(this.criteriaPoints);
+    	alert(expected);
+    	if(this.criteriaPoints.valutationCriteria.name == expected)
+		{
+    		return true;
+		}
+    	return false;
+    }
     	
     $scope.selectedCriteriaChanged = function(){   	
     	$http.get('game-requirements/user/criteria/' + $scope.selectedCriteria.criteriaId)
@@ -65,7 +76,7 @@ app.controllerProvider.register('move_creation', function($scope, $http) {
     $scope.selectedPlayerTwo = null;
     $scope.selectedFirstRequirement = null;
     $scope.selectedSecondRequirement = null;
-    $scope.moveName = '';
+    $scope.moveName = 'test';
     $scope.moveTimer = 3600;
     
     $http.get('game-requirements/criteria')
@@ -170,6 +181,14 @@ app.controllerProvider.register('judge_view', function($scope, $http, $location)
 		});
     };
     
+    $scope.addRequirement = function(selectedRequirementId){
+    	
+    	$http.put('game-requirements/move/' + $scope.judgeMoveId + '/judgerequirement/' + selectedRequirementId)
+    	.success(function(data) {
+    		
+    	});
+    };
+    
 });
 
 app.controllerProvider.register('judge_moves', function($scope, $http) {
@@ -252,13 +271,65 @@ app.controllerProvider.register('emit_view', function($scope, $http, $location) 
     
 	$scope.judgeMoveId = $location.search()['judgeMoveId'];
 	$scope.judgeMove = null;
-	$scope.judgeChoice = "";
+	$scope.judgeChoice = "first";
+	$scope.judgeFirstArgument = "";
+	$scope.judgeSecondArgument = "";
 	
 	$http.get('game-requirements/judgemove/' + $scope.judgeMoveId)
 	.success(function(data) {
 		$scope.judgeMove = data;
 	});
+	
+	$scope.selectWinner = function(judgeChoice){
+		
+		if(judgeChoice == "first"){
+	    	alert("first");
+	    	$http.put('game-requirements/move/' + $scope.judgeMoveId + '/judgerequirement/' + $scope.judgeMove.move.firstRequirement)
+	    	.success(function(data) {
+	    		
+	    	});
+		}
+		
+		if(judgeChoice == "second"){
+	    	alert("second");
+			$http.put('game-requirements/move/' + $scope.judgeMoveId + '/judgerequirement/' + $scope.judgeMove.move.secondRequirement)
+	    	.success(function(data) {
+	    		
+	    	});
+		}
+		
+		if(judgeChoice == "firstPersonal"){
+	    	alert($scope.judgeFirstArgument);
 
+			 $http({
+			    	url: "game-requirements/argument/judge",
+			    	data: {
+			        content : $scope.judgeFirstArgument,
+			       },
+			       method: 'POST'
+			   }).success(function(data){
+					// TODO
+			   }).error(function(err){
+				   console.log(err);
+			   });
+		}
+		
+		if(judgeChoice == "secondPersonal"){
+	    	alert($scope.judgeSecondArgument);
+
+			$http({
+		    	url: "game-requirements/argument/judge",
+		    	data: {
+		        content : $scope.judgeSecondArgument,
+		       },
+		       method: 'POST'
+		   }).success(function(data){
+				//TODO
+		   }).error(function(err){
+			   console.log(err);
+		   });
+		}
+    };
 });
 
 

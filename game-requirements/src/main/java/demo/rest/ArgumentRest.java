@@ -45,5 +45,18 @@ public class ArgumentRest {
 				.fromCurrentRequest().path("/{id}")
 				.buildAndExpand(argument.getArgumentId()).toUri());
 		return new ResponseEntity<>(argument, httpHeaders, HttpStatus.CREATED);
-	}		
+	}
+	
+	// post for the creation of a argument
+	@RequestMapping(value = "/judge", method = RequestMethod.POST)
+	public ResponseEntity<?> createJudgeArgument(@RequestBody Argument argument) {
+		
+		argument = arguments.save(argument);
+		
+		HttpHeaders httpHeaders = new HttpHeaders();
+		httpHeaders.setLocation(ServletUriComponentsBuilder
+				.fromCurrentRequest().path("/{id}")
+				.buildAndExpand(argument.getArgumentId()).toUri());
+		return new ResponseEntity<>(null, httpHeaders, HttpStatus.CREATED);
+	}	
 }
