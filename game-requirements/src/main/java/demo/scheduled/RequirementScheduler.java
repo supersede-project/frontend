@@ -33,6 +33,7 @@ public class RequirementScheduler {
 	@Transactional
 	private void notifyJudgesForArguments()
 	{
+		multiJpaProvider.clearTenants();
 		log.debug("partito notifyJudgesForArguments");
 
 		Map<String, JudgeMovesJpa> judgeMoveRepositories = multiJpaProvider.getRepositories(JudgeMovesJpa.class);
@@ -66,6 +67,7 @@ public class RequirementScheduler {
 	@Scheduled(fixedRate = 10000)
 	private void notifyJudgesForConflicts()
 	{
+		multiJpaProvider.clearTenants();
 		log.debug("partito notifyJudgesForConflicts");
 
 		Map<String, MovesJpa> moveRepositories = multiJpaProvider.getRepositories(MovesJpa.class);

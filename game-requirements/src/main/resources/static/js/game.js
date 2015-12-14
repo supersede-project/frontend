@@ -183,7 +183,7 @@ app.controllerProvider.register('judge_view', function($scope, $http, $location)
     
     $scope.addRequirement = function(selectedRequirementId){
     	
-    	$http.put('game-requirements/move/' + $scope.judgeMoveId + '/judgerequirement/' + selectedRequirementId)
+    	$http.put('game-requirements/move/' + $scope.judgeMoveId + '/judgechooserequirement/' + selectedRequirementId)
     	.success(function(data) {
     		
     	});
