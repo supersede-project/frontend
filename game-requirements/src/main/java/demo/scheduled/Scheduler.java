@@ -27,7 +27,6 @@ public class Scheduler {
     private NotificationUtil notificationUtil;
 	
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
-
 	
 	@Scheduled(fixedRate = 10000)
 	@Transactional
@@ -42,15 +41,9 @@ public class Scheduler {
 		{
 			JudgeMovesJpa judgeMoveRepository = judgeMoveRepositories.get(tenant);
 			List<JudgeMove> judgeMoves = judgeMoveRepository.findByFinishAndNotificationSent(true, false);
-			//List<JudgeMove> judgeMoves = judgeMoveRepository.findByFinishAndNotificationSentAndFirstArgumentNotNullAndSecondArgumentNotNull(true, false);
-			log.debug("SIZE: " + judgeMoves.size());
 								
 			for(JudgeMove jm : judgeMoves)
 			{			
-				log.debug("MOVE ID: " + jm.getJudgeMoveId());
-				log.debug("FIRST ARG: " + jm.getFirstArgument());
-				log.debug("SECOND ARG: " + jm.getSecondArgument());
-
 				if((jm.getFirstArgument() != null) && (jm.getSecondArgument() != null))
 				{		
 					notificationUtil.createNotificationsForProfile(tenant, "JUDGE", "There are two arguments in move " + jm.getJudgeMoveId(), "game-requirements/judge_moves");				

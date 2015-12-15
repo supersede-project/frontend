@@ -330,6 +330,7 @@ app.controllerProvider.register('emit_view', function($scope, $http, $location) 
 		   });
 		}
     };
+    
 });
 
 
