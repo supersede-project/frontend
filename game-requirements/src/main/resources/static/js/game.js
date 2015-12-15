@@ -283,24 +283,20 @@ app.controllerProvider.register('emit_view', function($scope, $http, $location) 
 	$scope.selectWinner = function(judgeChoice){
 		
 		if(judgeChoice == "first"){
-	    	alert("first");
-	    	$http.put('game-requirements/move/' + $scope.judgeMoveId + '/judgerequirement/' + $scope.judgeMove.move.firstRequirement)
+	    	$http.put('game-requirements/move/' + $scope.judgeMoveId + '/judgerequirement/' + $scope.judgeMove.move.firstRequirement.requirementId)
 	    	.success(function(data) {
 	    		
 	    	});
 		}
 		
 		if(judgeChoice == "second"){
-	    	alert("second");
-			$http.put('game-requirements/move/' + $scope.judgeMoveId + '/judgerequirement/' + $scope.judgeMove.move.secondRequirement)
+			$http.put('game-requirements/move/' + $scope.judgeMoveId + '/judgerequirement/' + $scope.judgeMove.move.secondRequirement.requirementId)
 	    	.success(function(data) {
 	    		
 	    	});
 		}
 		
 		if(judgeChoice == "firstPersonal"){
-	    	alert($scope.judgeFirstArgument);
-
 			 $http({
 			    	url: "game-requirements/argument/judge",
 			    	data: {
@@ -308,15 +304,16 @@ app.controllerProvider.register('emit_view', function($scope, $http, $location) 
 			       },
 			       method: 'POST'
 			   }).success(function(data){
-					// TODO
+				   $http.put('game-requirements/move/' + $scope.judgeMoveId + '/judgerequirement/' + $scope.judgeMove.move.firstRequirement.requirementId)
+			    	.success(function(data) {
+			    		
+			    	});
 			   }).error(function(err){
 				   console.log(err);
 			   });
 		}
 		
 		if(judgeChoice == "secondPersonal"){
-	    	alert($scope.judgeSecondArgument);
-
 			$http({
 		    	url: "game-requirements/argument/judge",
 		    	data: {
@@ -324,7 +321,10 @@ app.controllerProvider.register('emit_view', function($scope, $http, $location) 
 		       },
 		       method: 'POST'
 		   }).success(function(data){
-				//TODO
+			   $http.put('game-requirements/move/' + $scope.judgeMoveId + '/judgerequirement/' + $scope.judgeMove.move.secondRequirement.requirementId)
+		    	.success(function(data) {
+		    		
+		    	});
 		   }).error(function(err){
 			   console.log(err);
 		   });

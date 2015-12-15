@@ -39,7 +39,6 @@ import eu.supersede.fe.security.DatabaseUser;
 public class MoveRest {
 	
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
-
 	
 	@Autowired
     private MovesJpa moves;
@@ -289,10 +288,8 @@ public class MoveRest {
 		
 		Move m = jm.getMove();
 		
-		// TODO CHECK ###################################################
 		// set the points for the judge
 		UserPoint upJudge = judge.getUserGlobalPoints();
-		log.debug("JUDGE: " + judge.getName() + "############################################################################");
 
 		Long judgeGlobalPoints = upJudge.getUserPoints();
 		upJudge.setUserPoints(judgeGlobalPoints + points.getOne((long) -3).getGlobalPoints());
@@ -310,9 +307,7 @@ public class MoveRest {
 			upPlayer.setUserPoints(playerGlobalPoints + points.getOne((long) -3).getGlobalPoints());
 			userPoints.save(upPlayer);
 		}
-		
-		// ##############################################################
-		
+				
 		jm.setOpinionRequirement(r);
 		jm.setGaveOpinion(true);
 		jm.setJudge(judge);
@@ -332,6 +327,102 @@ public class MoveRest {
 		JudgeMove jm = judgeMoves.findOne(moveJudgeId);
 		Requirement r = requirements.findOne(requirementId);		
 		Move m = jm.getMove();
+		
+		
+		// find the player that choose the winning requirement for set points 'winner argument' and 'loser argument'
+		if(m.getFirstPlayerChooseRequirement().getRequirementId() == requirementId){
+			UserPoint upPlayer = m.getFirstPlayer().getUserGlobalPoints();
+			Long playerGlobalPoints = upPlayer.getUserPoints();
+			upPlayer.setUserPoints(playerGlobalPoints + points.getOne((long) -4).getGlobalPoints());
+			userPoints.save(upPlayer);
+			
+			boolean find = false;
+			List<UserCriteriaPoint> firstlucp = m.getFirstPlayer().getUserCriteriaPoints();
+			for(int i=0; i< firstlucp.size(); i++)
+			{
+				if(firstlucp.get(i).getValutationCriteria().getCriteriaId() == m.getCriteria().getCriteriaId())
+				{
+					Long firstPlayerCriteriaPoints = firstlucp.get(i).getPoints();
+					firstlucp.get(i).setPoints(firstPlayerCriteriaPoints + points.getOne((long) -4).getCriteriaPoints());
+					find = true;
+					userCriteriaPoints.save(firstlucp.get(i));
+				}
+			}
+			
+			if(find == false){
+				UserCriteriaPoint ucp = new UserCriteriaPoint(points.getOne((long) -4).getCriteriaPoints(), m.getCriteria(), m.getFirstPlayer());
+				userCriteriaPoints.save(ucp);
+				find = true;
+			}
+			
+			
+			// loser get some criteria points
+			find = false;
+			List<UserCriteriaPoint> secondlucp = m.getSecondPlayer().getUserCriteriaPoints();
+			for(int i=0; i< secondlucp.size(); i++)
+			{
+				if(secondlucp.get(i).getValutationCriteria().getCriteriaId() == m.getCriteria().getCriteriaId())
+				{
+					Long secondPlayerCriteriaPoints = secondlucp.get(i).getPoints();
+					secondlucp.get(i).setPoints(secondPlayerCriteriaPoints + points.getOne((long) -6).getCriteriaPoints());
+					find = true;
+					userCriteriaPoints.save(secondlucp.get(i));
+				}
+			}
+			
+			if(find == false){
+				UserCriteriaPoint ucp = new UserCriteriaPoint(points.getOne((long) -6).getCriteriaPoints(), m.getCriteria(), m.getSecondPlayer());
+				userCriteriaPoints.save(ucp);
+				find = true;
+			}
+			// end loser player
+		}else{
+			UserPoint upPlayer = m.getSecondPlayer().getUserGlobalPoints();
+			Long playerGlobalPoints = upPlayer.getUserPoints();
+			upPlayer.setUserPoints(playerGlobalPoints + points.getOne((long) -4).getGlobalPoints());
+			userPoints.save(upPlayer);
+			
+			boolean find = false;
+			List<UserCriteriaPoint> secondlucp = m.getSecondPlayer().getUserCriteriaPoints();
+			for(int i=0; i< secondlucp.size(); i++)
+			{
+				if(secondlucp.get(i).getValutationCriteria().getCriteriaId() == m.getCriteria().getCriteriaId())
+				{
+					Long secondPlayerCriteriaPoints = secondlucp.get(i).getPoints();
+					secondlucp.get(i).setPoints(secondPlayerCriteriaPoints + points.getOne((long) -4).getCriteriaPoints());
+					find = true;
+					userCriteriaPoints.save(secondlucp.get(i));
+				}
+			}
+			
+			if(find == false){
+				UserCriteriaPoint ucp = new UserCriteriaPoint(points.getOne((long) -4).getCriteriaPoints(), m.getCriteria(), m.getSecondPlayer());
+				userCriteriaPoints.save(ucp);
+				find = true;
+			}
+			
+			
+			// loser get some criteria points
+			find = false;
+			List<UserCriteriaPoint> firstlucp = m.getFirstPlayer().getUserCriteriaPoints();
+			for(int i=0; i< firstlucp.size(); i++)
+			{
+				if(firstlucp.get(i).getValutationCriteria().getCriteriaId() == m.getCriteria().getCriteriaId())
+				{
+					Long secondPlayerCriteriaPoints = firstlucp.get(i).getPoints();
+					firstlucp.get(i).setPoints(secondPlayerCriteriaPoints + points.getOne((long) -6).getCriteriaPoints());
+					find = true;
+					userCriteriaPoints.save(firstlucp.get(i));
+				}
+			}
+			
+			if(find == false){
+				UserCriteriaPoint ucp = new UserCriteriaPoint(points.getOne((long) -6).getCriteriaPoints(), m.getCriteria(), m.getFirstPlayer());
+				userCriteriaPoints.save(ucp);
+				find = true;
+			}
+			// end loser player			
+		}
 		
 		m.setWinnerRequirement(r);		
 		jm.setFinish(true);
