@@ -1,7 +1,5 @@
 package demo.model;
 
-import java.io.Serializable;
-
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -13,18 +11,14 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-
-@SuppressWarnings("serial")
 @Entity
-//@IdClass(UserCriteriaPointKey.class)
 @Table(name="users_criteria_points")
-public class UserCriteriaPoint implements Serializable {
+public class UserCriteriaPoint{
 	
-	//@Id
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
-	//@Id
+
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "criteria_id", nullable = false)
 	private ValutationCriteria valutationCriteria;
@@ -34,8 +28,7 @@ public class UserCriteriaPoint implements Serializable {
 	private Long userCriteriaPointsId;	
     private Long points;
     
-    public UserCriteriaPoint(){
-    	
+    public UserCriteriaPoint(){	
     }
     
     public UserCriteriaPoint(Long points, ValutationCriteria valutationCriteria, User user){

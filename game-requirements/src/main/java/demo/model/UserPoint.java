@@ -1,7 +1,5 @@
 package demo.model;
 
-import java.io.Serializable;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,10 +10,9 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-@SuppressWarnings("serial")
 @Entity
 @Table(name="users_points")
-public class UserPoint implements Serializable{
+public class UserPoint{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
