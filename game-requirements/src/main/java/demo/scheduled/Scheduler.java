@@ -18,7 +18,7 @@ import eu.supersede.fe.multitenant.MultiJpaProvider;
 import eu.supersede.fe.notification.NotificationUtil;
 
 @Component
-public class RequirementScheduler {
+public class Scheduler {
 	
 	@Autowired
 	MultiJpaProvider multiJpaProvider;

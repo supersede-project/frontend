@@ -89,7 +89,6 @@ public class JudgeMoveRest {
 		judgeMoves.save(jm);
 	}
 	
-	
 	// put, for insert the selected argument of a player in the judgeMove
 	@RequestMapping(method = RequestMethod.PUT, value="/{moveId}/argument/{argumentId}")
 	public void setArgumentForPlayer(Authentication authentication, @PathVariable Long moveId, @PathVariable Long argumentId) {
