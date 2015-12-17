@@ -42,17 +42,6 @@ app.controllerProvider.register('criterias_leaderboard', function($scope, $http)
 			$scope.valutationCriterias.push(data[i]);
 		}
 	});
-    
-    $scope.filterCriteria = function(expected)
-    {
-    	alert(this.criteriaPoints);
-    	alert(expected);
-    	if(this.criteriaPoints.valutationCriteria.name == expected)
-		{
-    		return true;
-		}
-    	return false;
-    }
     	
     $scope.selectedCriteriaChanged = function(){   	
     	$http.get('game-requirements/user/criteria/' + $scope.selectedCriteria.criteriaId)

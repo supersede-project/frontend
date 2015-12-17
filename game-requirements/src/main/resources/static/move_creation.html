@@ -45,18 +45,18 @@
 					  <div class="panel-body">
 					    <div class="row">
 					    	<div class="col-md-12">
-						    	<select class="form-control" ng-model="selectedFirstRequirement" ng-options="selectedFirstRequirement as selectedFirstRequirement.content for selectedFirstRequirement in requirements">
+						    	<select class="form-control" ng-model="selectedFirstRequirement" ng-options="selectedFirstRequirement as selectedFirstRequirement.name for selectedFirstRequirement in requirements">
 					    	   	 	<option style="display:none" value="">Select the first requirement</option>
 				 	   	    	</select>
-				 	   	    	<h3>Selected requirement #1: <font color="green">{{selectedFirstRequirement.content}}</font></h3>
+				 	   	    	<h3>Selected requirement #1: <font color="green">{{selectedFirstRequirement.name}}</font></h3>
 			 	   	    	</div>
 					    </div>
 					    <div class="row">
 					    	<div class="col-md-12">
-						    	<select class="form-control" ng-model="selectedSecondRequirement" ng-options="selectedSecondRequirement as selectedSecondRequirement.content for selectedSecondRequirement in requirements">
+						    	<select class="form-control" ng-model="selectedSecondRequirement" ng-options="selectedSecondRequirement as selectedSecondRequirement.name for selectedSecondRequirement in requirements">
 					    	   	 	<option style="display:none" value="">Select the second requirement</option>
 				 	   	    	</select>
-				 	   	    	<h3>Selected requirement #2: <font color="green">{{selectedSecondRequirement.content}}</font></h3>
+				 	   	    	<h3>Selected requirement #2: <font color="green">{{selectedSecondRequirement.name}}</font></h3>
 					    	</div>
 					    </div>
 					  </div>

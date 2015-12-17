@@ -17,30 +17,23 @@
 				</thead>
 		
 				<tbody>
-					<tr	ng-repeat="user in criteriaUsers">
+					<tr	ng-repeat="user in criteriaUsers | orderBy:'userCriteriaPoints.points'">
 						<td>{{user.userId}}</td>
 						<td>{{user.name}}</td>
 						<td>{{user.email}}</td>
 						<td>
 							<div ng-repeat="criteriaPoints in user.userCriteriaPoints">
-								<b>{{criteriaPoints.points}}</b> - {{criteriaPoints.valutationCriteria.name}}
+								<div ng-show="{{criteriaPoints.valutationCriteria.criteriaId == selectedCriteria.criteriaId}}">
+									<b>{{criteriaPoints.points}}</b> - {{criteriaPoints.valutationCriteria.name}}
+								</div>
 							</div>
 						</td>
-						<!--  
-						<td>
-							<div ng-repeat="criteriaPoints in user.userCriteriaPoints | filter:selectedCriteria.name:filterCriteria">
-								{{criteriaPoints.points}}
-							</div>
-						</td>
-						-->
-						<!--  
-						<td ng-repeat="criteriaPoints in user.userCriteriaPoints | filter:{valutationCriteria : selectedCriteria}">{{user.criteriaPoints.points}}</td>
-						-->
 					</tr>
 				</tbody>		
 			</table>
 		</div>
-		<div ng-hide="criteriaUsers.length">	
+		<div align="center" ng-hide="criteriaUsers.length">
+			<br>	
 			<p class="lead">There are no users in this field!</p>
 		</div>			 		
 	</div>
