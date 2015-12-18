@@ -2,7 +2,7 @@
 
 $CATALINA_HOME/bin/shutdown.sh ;
 
-rm -rf services/apache-tomcat-8.0.28/webapps/* ;
+rm -rf $CATALINA_HOME/webapps/* ;
 
 cp wp5/build/libs/wp5-0.0.1-SNAPSHOT.war $CATALINA_HOME/webapps/ROOT.war ;
 
