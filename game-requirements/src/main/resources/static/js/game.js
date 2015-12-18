@@ -260,7 +260,6 @@ app.controllerProvider.register('emit_view', function($scope, $http, $location) 
     
 	$scope.judgeMoveId = $location.search()['judgeMoveId'];
 	$scope.judgeMove = null;
-	$scope.judgeChoice = "first";
 	$scope.judgeFirstArgument = "";
 	$scope.judgeSecondArgument = "";
 	

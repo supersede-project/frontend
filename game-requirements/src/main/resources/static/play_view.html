@@ -4,8 +4,7 @@
         <h1>It's your turn, PLAY!</h1>
         <p>Choose the requirement that you consider better compared to the evaluation criteria.</p>
       </div>
-   	</div>
-    
+   	</div> 
     <div class="container" ng-controller="play_view">
     	<div class="row">
     		<div class="col-md-12">
@@ -26,7 +25,7 @@
 				  </div>
 				</div>
 				<div align="center">
-					<a href="#/game-requirements/user_moves" ng-click="addRequirement(move.firstRequirement.requirementId)" class="btn btn-lg btn-success" role="button">Choose First</a>
+					<a href="#/game-requirements/user_moves" ng-click="addRequirement(move.firstRequirement.requirementId)" class="btn btn-lg btn-success">Choose First</a>
 				</div>					
 			</div>	
 	    	<div class="col-md-6">	
@@ -34,11 +33,11 @@
 				  <div class="panel-heading">Second requirement</div>
 				  <div class="panel-body">
 						<p><b>Requirement name:</b> {{move.secondRequirement.name}}</p>
-						<p><b>Requirement description:</b> {{move.firstRequirement.description}}</p>   	    	
+						<p><b>Requirement description:</b> {{move.secondRequirement.description}}</p>   	    	
 				  </div>
 				</div>
 				<div align="center">
-					<a href="#/game-requirements/user_moves" ng-click="addRequirement(move.secondRequirement.requirementId)" class="btn btn-lg btn-success" role="button">Choose Second</a>		
+					<a href="#/game-requirements/user_moves" ng-click="addRequirement(move.secondRequirement.requirementId)" class="btn btn-lg btn-success">Choose Second</a>		
 				</div>				
 			</div>			
 		</div>						
