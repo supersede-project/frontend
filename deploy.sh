@@ -1,13 +1,15 @@
 #!/bin/sh
 
-$TOMCAT/bin/shutdown.sh ;
+$TOMCAT/bin/shutdown.sh
 
-rm -rf $TOMCAT/webapps/* ;
+sleep 3
 
-cp wp5/build/libs/wp5-0.0.1-SNAPSHOT.war $TOMCAT/webapps/ROOT.war ;
+rm -rf $TOMCAT/webapps/*
 
-cp admin-user-manager-app/build/libs/admin-user-manager-app-0.0.1-SNAPSHOT.war $TOMCAT/webapps/admin-user-manager-app.war ;
+cp wp5/build/libs/wp5-0.0.1-SNAPSHOT.war $TOMCAT/webapps/ROOT.war
 
-$TOMCAT/bin/startup.sh ;
+cp admin-user-manager-app/build/libs/admin-user-manager-app-0.0.1-SNAPSHOT.war $TOMCAT/webapps/admin-user-manager-app.war
+
+$TOMCAT/bin/startup.sh &
 
 echo $TOMCAT
