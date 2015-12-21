@@ -7,7 +7,6 @@ group = 'eu.supersede'
 
 jar {
     baseName = 'wp5-utils'
-    version = '0.0.1-SNAPSHOT'
 }
 
 sourceCompatibility = 1.7
