@@ -18,9 +18,11 @@ apply plugin: 'spring-boot'
 apply plugin: 'io.spring.dependency-management' 
 apply plugin: 'war'
 
+version = '0.0.1-SNAPSHOT'
+group = 'eu.supersede'
+
 war {
     baseName = 'wp5'
-    version = '0.0.1-SNAPSHOT'
 }
 
 sourceCompatibility = 1.7
