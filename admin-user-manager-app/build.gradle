@@ -17,6 +17,7 @@ apply plugin: 'idea'
 apply plugin: 'spring-boot' 
 apply plugin: 'io.spring.dependency-management' 
 apply plugin: 'war'
+apply plugin: 'maven'
 
 version = '0.0.1-SNAPSHOT'
 group = 'eu.supersede'
