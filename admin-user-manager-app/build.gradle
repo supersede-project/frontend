@@ -17,6 +17,7 @@ apply plugin: 'idea'
 apply plugin: 'spring-boot' 
 apply plugin: 'io.spring.dependency-management' 
 apply plugin: 'war'
+apply plugin: 'maven'
 
 version = '0.0.1-SNAPSHOT'
 group = 'eu.supersede'
@@ -31,7 +32,7 @@ targetCompatibility = 1.7
 repositories {
     mavenCentral()
 	maven { url 'http://repo.spring.io/milestone' }
-	maven {url 'http://172.28.16.212:8082/artifactory/libs-snapshot-local/'}
+	maven {url 'http://172.28.16.213:8082/artifactory/libs-snapshot-local/'}
 }
 
 configurations {
