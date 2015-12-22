@@ -55,7 +55,7 @@ dependencies {
 	compile("org.springframework.session:spring-session:1.1.0.M1")
 	compile("org.springframework.boot:spring-boot-starter-redis")
 	
-	compile("eu.supersede:wp5-utils:0.0.1-20151221.144004-1")
+	compile("eu.supersede:wp5-utils:0.0.1-20151222.102611-1")
 }
 
 
