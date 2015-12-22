@@ -321,4 +321,7 @@ app.controllerProvider.register('emit_view', function($scope, $http, $location) 
     
 });
 
-
+app.controllerProvider.register('game_creation', function($scope, $http) {
+    
+    
+});
