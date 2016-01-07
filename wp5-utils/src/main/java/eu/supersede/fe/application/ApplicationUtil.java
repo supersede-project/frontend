@@ -3,6 +3,7 @@ package eu.supersede.fe.application;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -27,9 +28,9 @@ public class ApplicationUtil {
 	
 	private static final String APP_KEY = "Application";
 	
-	public void addApplicationPage(String applicationName, String applicationLabel, String applicationPage, String applicationPageLabel, String profileRequired)
+	public void addApplicationPage(String applicationName, Map<String, String> applicationLabels, String applicationPage, Map<String, String> applicationPageLabels, List<String> profilesRequired)
 	{
-		Application app = new Application(applicationName, applicationLabel, applicationPage, applicationPageLabel, profileRequired);
+		Application app = new Application(applicationName, applicationLabels, applicationPage, applicationPageLabels, profilesRequired);
 		try 
 		{
 			template.opsForHash().put(APP_KEY, app.getId(), mapper.writeValueAsString(app));
@@ -67,7 +68,7 @@ public class ApplicationUtil {
 		for(Object o : applications)
 		{
 			Application a = getApplicationFromString((String)o);
-			if(a.getProfileRequired().equals(profile))
+			if(a.getProfilesRequired().contains(profile))
 			{
 				apps.add(a);
 			}

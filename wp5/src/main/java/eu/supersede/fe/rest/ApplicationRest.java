@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -22,6 +25,8 @@ import eu.supersede.fe.model.Profile;
 @RequestMapping("/application")
 public class ApplicationRest {
 	
+	private final Logger log = LoggerFactory.getLogger(this.getClass());
+	
 	@Autowired
 	private ApplicationUtil applicationUtil;
 	
@@ -29,8 +34,12 @@ public class ApplicationRest {
     private ProfilesJpa profiles;
 	
 	@RequestMapping("")
-	public List<ProfileApplications> getUserAuthenticatedApplications(Authentication auth) 
+	public List<ProfileApplications> getUserAuthenticatedApplications(Authentication auth, Locale locale) 
 	{
+		log.debug("Welcome home! The client locale is " + locale.toString());
+		
+		String lang= locale.getLanguage();
+		
 		List<ProfileApplications>  r = new ArrayList<>();
 		Map<String, List<Page>> pages = new HashMap<>();
 		Map<String, String> labels = new HashMap<>();
@@ -56,9 +65,9 @@ public class ApplicationRest {
 				if(!pages.containsKey(app.getApplicationName()))
 				{
 					pages.put(app.getApplicationName(), new ArrayList<Page>());
-					labels.put(app.getApplicationName(), app.getApplicationLabel());
+					labels.put(app.getApplicationName(), app.getLocalizedApplicationLabel(lang));
 				}
-				pages.get(app.getApplicationName()).add(new Page(app.getApplicationPage(), app.getApplicationPageLabel()));
+				pages.get(app.getApplicationName()).add(new Page(app.getApplicationPage(), app.getLocalizedApplicationPageLabel(lang)));
 			}
 			
 			for(String app : pages.keySet())
