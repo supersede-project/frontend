@@ -35,7 +35,7 @@ dependencies {
 	compile("org.springframework.boot:spring-boot-starter-data-jpa:1.3.1.RELEASE")
 	
 	//compile files('../wp5-utils/build/libs/wp5-utils-0.0.1-SNAPSHOT.jar')
-	compile("eu.supersede:wp5-utils:0.0.1-20151222.102611-1")
+	compile("eu.supersede:wp5-utils:0.0.1-20160107.153207-2")
 }
 
 
