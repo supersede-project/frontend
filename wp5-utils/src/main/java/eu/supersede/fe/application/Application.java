@@ -1,34 +1,37 @@
 package eu.supersede.fe.application;
 
+import java.util.List;
+import java.util.Map;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Application {
 
 	private String applicationName;
-	private String applicationLabel;
+	private Map<String, String> applicationLabels;
 	private String applicationPage;
-	private String applicationPageLabel;
-	private String profileRequired;
+	private Map<String, String> applicationPageLabels;
+	private List<String> profilesRequired;
 	
 	public Application()
 	{}
 	
 	public Application(String applicationName, 
-			String applicationLabel, 
+			Map<String, String> applicationLabels, 
 			String applicationPage,
-			String applicationPageLabel, 
-			String profileRequired) {
+			Map<String, String> applicationPageLabels, 
+			List<String> profilesRequired) {
 		this.applicationName = applicationName;
-		this.setApplicationLabel(applicationLabel);
+		this.applicationLabels = applicationLabels;
 		this.applicationPage = applicationPage;
-		this.applicationPageLabel = applicationPageLabel;
-		this.profileRequired = profileRequired;
+		this.setApplicationPageLabels(applicationPageLabels);
+		this.setProfilesRequired(profilesRequired);
 	}
 
 	public String getId()
 	{
-		return applicationName + applicationPage + profileRequired;
+		return applicationName + applicationPage;
 	}
 	
 	public String getApplicationName() {
@@ -39,12 +42,22 @@ public class Application {
 		this.applicationName = applicationName;
 	}
 
-	public String getApplicationLabel() {
-		return applicationLabel;
+	public String getLocalizedApplicationLabel(String lang)
+	{
+		if(applicationLabels.containsKey(lang))
+		{
+			return applicationLabels.get(lang);
+		}
+		
+		return applicationLabels.get("");
+	}
+	
+	public Map<String, String> getApplicationLabels() {
+		return applicationLabels;
 	}
 
-	public void setApplicationLabel(String applicationLabel) {
-		this.applicationLabel = applicationLabel;
+	public void setApplicationLabels(Map<String, String> applicationLabels) {
+		this.applicationLabels = applicationLabels;
 	}
 	
 	public String getApplicationPage() {
@@ -55,26 +68,35 @@ public class Application {
 		this.applicationPage = applicationPage;
 	}
 
-	public String getApplicationPageLabel() {
-		return applicationPageLabel;
+	public String getLocalizedApplicationPageLabel(String lang) {
+		if(applicationPageLabels.containsKey(lang))
+		{
+			return applicationPageLabels.get(lang);
+		}
+		
+		return applicationPageLabels.get("");
+	}
+	
+	public Map<String, String> getApplicationPageLabels() {
+		return applicationPageLabels;
 	}
 
-	public void setApplicationPageLabel(String applicationPageLabel) {
-		this.applicationPageLabel = applicationPageLabel;
+	public void setApplicationPageLabels(Map<String, String> applicationPageLabels) {
+		this.applicationPageLabels = applicationPageLabels;
 	}
-	
-	public String getProfileRequired() {
-		return profileRequired;
+
+	public List<String> getProfilesRequired() {
+		return profilesRequired;
 	}
-	
-	public void setProfileRequired(String profileRequired) {
-		this.profileRequired = profileRequired;
+
+	public void setProfilesRequired(List<String> profilesRequired) {
+		this.profilesRequired = profilesRequired;
 	}
-	
+
 	@Override
 	public int hashCode()
 	{
-		return applicationName.hashCode() + applicationPage .hashCode() + profileRequired.hashCode();
+		return applicationName.hashCode() + applicationPage .hashCode();
 	}
 	
 	@Override
@@ -94,7 +116,6 @@ public class Application {
 		}
 		Application other = (Application)obj;
 		return this.applicationName.equals(other.applicationName) && 
-				this.applicationPage.equals(other.applicationPage) && 
-				this.profileRequired.equals(other.profileRequired);
+				this.applicationPage.equals(other.applicationPage);
 	}
 }
