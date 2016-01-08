@@ -10,13 +10,15 @@ public class DatabaseUser extends  org.springframework.security.core.userdetails
 	private Long userId;
 	private String name;
 	private String multiTenantId;
+	private String locale;
 
 	public DatabaseUser(Long userId, String name, String username, String password, boolean enabled, boolean accountNonExpired,
 			boolean credentialsNonExpired, boolean accountNonLocked,
-			Collection<? extends GrantedAuthority> authorities) {
+			Collection<? extends GrantedAuthority> authorities, String locale) {
 		super(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
 		this.userId = userId;
 		this.name = name;
+		this.locale = locale;
 	}
 
 	public Long getUserId() {
@@ -42,5 +44,15 @@ public class DatabaseUser extends  org.springframework.security.core.userdetails
 	public String getTenantId()
 	{
 		return this.multiTenantId;
+	}
+	
+	public void setLocale(String locale)
+	{
+		this.locale = locale;
+	}
+	
+	public String getLocale()
+	{
+		return this.locale;
 	}
 }
