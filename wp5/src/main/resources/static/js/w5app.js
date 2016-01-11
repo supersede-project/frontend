@@ -89,15 +89,15 @@ app.controller('navigation', function($rootScope, $scope, $http, $location, $rou
 				$http.get('locale').success(function(data) {
 					for(var i = 0;i < data.length; i++ )
 					{
-						$rootScope.langs[i] = data[i].lang;
+						$rootScope.langs[i] = data[i];
 					}
 				});
 			}
 			
 			$scope.setCurrentLang = function()
 			{
-				var l = this.l;
-				$http.put('locale/current', {}, {params:{lang : l}}).success(function(data) {
+				var lang = this.l.lang;
+				$http.put('locale/current', {}, {params:{lang : lang}}).success(function(data) {
 					window.location.reload();
 				});
 			}

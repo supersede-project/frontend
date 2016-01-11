@@ -30,11 +30,11 @@ public class LocaleRest {
 	@SuppressWarnings("serial")
 	private static final List<Locale> locales = new ArrayList<Locale>() 
 	{{
-		add(new Locale(new java.util.Locale("any")));
-		add(new Locale(java.util.Locale.ENGLISH));
-		add(new Locale(java.util.Locale.GERMAN));
-		add(new Locale(new java.util.Locale("es")));
-		add(new Locale(java.util.Locale.ITALIAN));
+		add(new Locale(new java.util.Locale("any"), "Browser default"));
+		add(new Locale(java.util.Locale.ENGLISH, "English"));
+		add(new Locale(java.util.Locale.GERMAN, "Deutsch"));
+		add(new Locale(new java.util.Locale("es"), "Español"));
+		add(new Locale(java.util.Locale.ITALIAN, "Italiano"));
 	}};
 	
 	@RequestMapping("")
@@ -58,7 +58,7 @@ public class LocaleRest {
 			}
 		}
 		
-		return new Locale(l);
+		return new Locale(l, "");
 	}
 	
 	@RequestMapping(method = RequestMethod.PUT, value="/current")
