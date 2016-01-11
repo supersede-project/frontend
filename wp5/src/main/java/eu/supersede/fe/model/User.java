@@ -19,6 +19,7 @@ public class User {
     @ManyToMany(cascade=CascadeType.ALL)  
     @JoinTable(name="users_profiles", joinColumns=@JoinColumn(name="user_id"), inverseJoinColumns=@JoinColumn(name="profile_id"))  
     private List<Profile> profiles;
+    private String locale;
  
     public User() {
     }
@@ -70,4 +71,12 @@ public class User {
     public void setProfiles(List<Profile> profiles) {
         this.profiles = profiles;
     }
+
+	public String getLocale() {
+		return locale;
+	}
+
+	public void setLocale(String locale) {
+		this.locale = locale;
+	}
 }

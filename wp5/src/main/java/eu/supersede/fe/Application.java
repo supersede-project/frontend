@@ -9,8 +9,6 @@ import org.springframework.context.annotation.*;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
-import org.springframework.web.servlet.LocaleResolver;
-import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver;
 
 @SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
 @ComponentScan
@@ -18,12 +16,6 @@ import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver;
 @EnableScheduling
 @EnableRedisHttpSession
 public class Application extends SpringBootServletInitializer {
-	
-	@Bean
-	public LocaleResolver localeResolver() {
-		AcceptHeaderLocaleResolver  slr = new AcceptHeaderLocaleResolver ();
-	    return slr;
-	}
 	
 	@Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
