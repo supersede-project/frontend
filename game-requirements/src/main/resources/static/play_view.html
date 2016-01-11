@@ -39,6 +39,14 @@
 				<div align="center">
 					<a href="#/game-requirements/user_moves" ng-click="addRequirement(move.secondRequirement.requirementId)" class="btn btn-lg btn-success">Choose Second</a>		
 				</div>				
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+				    <label class="radio" ng-repeat="requirementsChoice in requirementsChoices">
+				      <input type="radio" ng-model="selectedRequirementsChoice" ng-value="{{requirementsChoice.requirementsChoiceId}}" name="radioRequirementsChoices">{{requirementsChoice.description}}
+				    </label>
+				    {{selectedRequirementsChoice}}
+				</div>	
 			</div>			
-		</div>						
+		</div>								
     </div>

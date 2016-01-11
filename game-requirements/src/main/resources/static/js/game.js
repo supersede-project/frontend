@@ -138,6 +138,8 @@ app.controllerProvider.register('play_view', function($scope, $http, $location) 
 	
 	$scope.moveId = $location.search()['moveId'];
 	$scope.move = null;
+	$scope.requirementsChoices = [];
+	$scope.selectedRequirementsChoice = -1;
 	
 	$http.get('game-requirements/move/' + $scope.moveId)
 	.success(function(data) {
@@ -152,6 +154,14 @@ app.controllerProvider.register('play_view', function($scope, $http, $location) 
     	});
     };
 	
+	 $http.get('game-requirements/requirementchoice')
+		.success(function(data) {
+			$scope.requirementsChoices.length = 0;
+			for(var i = 0; i < data.length; i++)
+			{
+				$scope.requirementsChoices.push(data[i]);
+			}
+		});
 });
 
 app.controllerProvider.register('judge_view', function($scope, $http, $location) {
