@@ -39,6 +39,8 @@ app.controller('navigation', function($rootScope, $scope, $http, $location, $rou
 			$rootScope.tenants = [];
 			$rootScope.selectedTenant = "";
 			$rootScope.user = {};
+			$rootScope.currentLang = "any";
+			$rootScope.langs = [];
 			
 			var authenticate = function(credentials, callback) {
 
@@ -61,6 +63,8 @@ app.controller('navigation', function($rootScope, $scope, $http, $location, $rou
 						{
 							$rootScope.profiles.push(data.authorities[i].authority);
 						}
+						getCurrentLang();
+						getAllLangs();
 						getApplications();
 					} else {
 						cleanAuth();
@@ -71,6 +75,31 @@ app.controller('navigation', function($rootScope, $scope, $http, $location, $rou
 					callback && callback(false);
 				});
 
+			}
+			
+			var getCurrentLang = function()
+			{
+				$http.get('locale/current').success(function(data) {
+					$rootScope.currentLang = data.lang;
+				});
+			}
+			
+			var getAllLangs = function()
+			{
+				$http.get('locale').success(function(data) {
+					for(var i = 0;i < data.length; i++ )
+					{
+						$rootScope.langs[i] = data[i].lang;
+					}
+				});
+			}
+			
+			$scope.setCurrentLang = function()
+			{
+				var l = this.l;
+				$http.put('locale/current', {}, {params:{lang : l}}).success(function(data) {
+					window.location.reload();
+				});
 			}
 			
 			var getApplications = function()
