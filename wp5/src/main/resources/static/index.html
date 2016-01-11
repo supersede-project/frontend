@@ -54,6 +54,16 @@
 					      		<li ng-show="authenticated">
 					      			<p class="navbar-text p-welcome">Welcome, {{user.name}}</p>
 					      		</li>
+					      		
+					      		<li ng-show="authenticated">
+					      			<a class="dropdown-toggle"><img src="img/flags/{{currentLang}}.png" height="32" width="32"></img></a>
+					      			<ul class="dropdown-menu">
+					      				<li class="dropdown-inline" ng-repeat="l in langs">
+					      					<a ng-click="setCurrentLang()" class="a_button"><img src="img/flags/{{l.lang}}.png" height="32" width="32"> {{l.language}}</img></a>
+					      				</li>
+					      			</ul>
+					      		</li>
+					      		
 					     		<li ng-show="authenticated">
 					     			<a class="dropdown-toggle">{{notificationsCount}} <span class="glyphicon glyphicon-comment"></span></a>
 					     			<ul class="dropdown-menu">

@@ -8,8 +8,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -24,9 +22,7 @@ import eu.supersede.fe.model.Profile;
 @RestController
 @RequestMapping("/application")
 public class ApplicationRest {
-	
-	private final Logger log = LoggerFactory.getLogger(this.getClass());
-	
+		
 	@Autowired
 	private ApplicationUtil applicationUtil;
 	
@@ -36,8 +32,6 @@ public class ApplicationRest {
 	@RequestMapping("")
 	public List<ProfileApplications> getUserAuthenticatedApplications(Authentication auth, Locale locale) 
 	{
-		log.debug("Welcome home! The client locale is " + locale.toString());
-		
 		String lang= locale.getLanguage();
 		
 		List<ProfileApplications>  r = new ArrayList<>();
