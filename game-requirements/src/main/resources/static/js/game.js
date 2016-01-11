@@ -139,7 +139,7 @@ app.controllerProvider.register('play_view', function($scope, $http, $location) 
 	$scope.moveId = $location.search()['moveId'];
 	$scope.move = null;
 	$scope.requirementsChoices = [];
-	$scope.selectedRequirementsChoice = -1;
+	$scope.selectedRequirementsChoice = {selected:0};
 	
 	$http.get('game-requirements/move/' + $scope.moveId)
 	.success(function(data) {
