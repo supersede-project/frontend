@@ -79,7 +79,7 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 					String[] authorities = new String[profiles.size()];
 					for(int i = 0; i < profiles.size(); i++)
 					{
-						authorities[i] = profiles.get(i).getName();
+						authorities[i] = "ROLE_" + profiles.get(i).getName();
 					}
 					
 					log.debug("User has " + authorities.length + " authorities");

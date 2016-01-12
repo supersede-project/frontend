@@ -41,7 +41,7 @@ public class ApplicationRest {
 		Collection<? extends GrantedAuthority> authorities = auth.getAuthorities();
 		for(GrantedAuthority ga : authorities)
 		{
-			authNames.add(ga.getAuthority());
+			authNames.add(ga.getAuthority().substring(5));
 		}
 		
 		List<Profile> profList = profiles.findByNameIn(authNames);

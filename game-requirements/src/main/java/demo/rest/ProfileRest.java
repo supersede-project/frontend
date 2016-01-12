@@ -22,7 +22,7 @@ public class ProfileRest {
 		return profiles.findAll();
 	}
 	
-	// get numer of the profiles
+	// get number of the profiles
 	@RequestMapping("/count")
 	public Long count() {
 		return profiles.count();
