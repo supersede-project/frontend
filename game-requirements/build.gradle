@@ -55,7 +55,11 @@ dependencies {
 	compile("org.springframework.session:spring-session:1.1.0.M1")
 	compile("org.springframework.boot:spring-boot-starter-redis")
 	
+	compile files('../libs/ahpanalyser-0.0.1-SNAPSHOT.jar')
+	compile('org.python:jython-standalone:2.7.0')
+	
 	compile files('../wp5-clients-utils/build/libs/wp5-clients-utils-0.0.1-SNAPSHOT.jar')
+	
 	//compile("eu.supersede:wp5-clients-utils:0.0.1-20160107.153418-2")
 }
 

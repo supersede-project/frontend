@@ -22,5 +22,11 @@
 				</ul>
 				<p ng-show="!user.userCriteriaPoints.length">User doesn't have points per criterias.</p>							
 			</div>
+			<div>
+				<button type="button" ng-click="computeAHP()" class="btn btn-lg btn-primary">Compute</button>
+				<div ng-repeat="(key, data) in ahpResult">
+					{{key}} - {{data}}
+				</div>
+			</div>		
 		</div>
 	</div>
