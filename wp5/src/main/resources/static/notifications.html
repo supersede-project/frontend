@@ -34,22 +34,24 @@
 		</tbody>
 
 		<tfoot>
-			<td colspan="3">
-				<div class="paging_simple_numbers">
-					<ul class="pagination">
-						<li class="paginate_button previous" ng-class="{disabled: currentPage == 0}"><a href
-							ng-click="prevPage()">Previous</a></li>
-
-						<li class="paginate_button" ng-repeat="n in range()" ng-class="{active: n == (currentPage + 1)}" ng-click="setPage()">
-							<a href ng-bind="n">1</a>
-						</li>
-
-						<li class="paginate_button next" ng-class="{disabled: (currentPage) == totalPages - 1}">
-							<a href ng-click="nextPage()">Next</a>
-						</li>
-					</ul>
-				</div>
-			</td>
+			<tr>
+				<th align="center" colspan="5">
+					<div class="paging_simple_numbers">
+						<ul class="pagination">
+							<li class="paginate_button previous" ng-class="{disabled: currentPage == 0}">
+								<a ng-click="prevPage()">Previous</a>
+							</li>
+							<li class="paginate_button" ng-repeat="n in range()" ng-class="{active: n == (currentPage + 1)}" ng-click="setPage()">
+								<a ng-bind="n">1</a>
+							</li>
+	
+							<li class="paginate_button next" ng-class="{disabled: (currentPage) == totalPages - 1}">
+								<a ng-click="nextPage()">Next</a>
+							</li>
+						</ul>
+					</div>
+				</th>
+			<tr>
 		</tfoot>
 
 	</table>
