@@ -18,7 +18,7 @@
 			<div class="col-md-6">
 				<h1>Criterias points</h1>
 				<ul class="list-group" ng-show="user.userCriteriaPoints.length">
-				  <li class="list-group-item" ng-repeat="userCriteriaPoint in user.userCriteriaPoints">Points for {{userCriteriaPoint.valutationCriteria.name}}: <b>{{userCriteriaPoint.points}}</b></li>
+				  <li class="list-group-item" ng-repeat="userCriteriaPoint in user.userCriteriaPoints | orderBy: '-points'">Points for {{userCriteriaPoint.valutationCriteria.name}}: <b>{{userCriteriaPoint.points}}</b></li>
 				</ul>
 				<p ng-show="!user.userCriteriaPoints.length">User doesn't have points per criterias.</p>							
 			</div>

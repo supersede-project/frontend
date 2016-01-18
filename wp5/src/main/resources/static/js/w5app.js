@@ -61,7 +61,7 @@ app.controller('navigation', function($rootScope, $scope, $http, $location, $rou
 						$rootScope.user = data.principal;
 						for(var i = 0; i < data.authorities.length; i++)
 						{
-							$rootScope.profiles.push(data.authorities[i].authority);
+							$rootScope.profiles.push(data.authorities[i].authority.substring(5));
 						}
 						getCurrentLang();
 						getAllLangs();

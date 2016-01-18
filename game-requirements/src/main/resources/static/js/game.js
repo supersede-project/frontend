@@ -42,17 +42,6 @@ app.controllerProvider.register('criterias_leaderboard', function($scope, $http)
 			$scope.valutationCriterias.push(data[i]);
 		}
 	});
-    
-    $scope.filterCriteria = function(expected)
-    {
-    	alert(this.criteriaPoints);
-    	alert(expected);
-    	if(this.criteriaPoints.valutationCriteria.name == expected)
-		{
-    		return true;
-		}
-    	return false;
-    }
     	
     $scope.selectedCriteriaChanged = function(){   	
     	$http.get('game-requirements/user/criteria/' + $scope.selectedCriteria.criteriaId)
@@ -149,6 +138,8 @@ app.controllerProvider.register('play_view', function($scope, $http, $location) 
 	
 	$scope.moveId = $location.search()['moveId'];
 	$scope.move = null;
+	$scope.requirementsChoices = [];
+	$scope.selectedRequirementsChoice = {selected:0};
 	
 	$http.get('game-requirements/move/' + $scope.moveId)
 	.success(function(data) {
@@ -163,6 +154,14 @@ app.controllerProvider.register('play_view', function($scope, $http, $location) 
     	});
     };
 	
+	 $http.get('game-requirements/requirementchoice')
+		.success(function(data) {
+			$scope.requirementsChoices.length = 0;
+			for(var i = 0; i < data.length; i++)
+			{
+				$scope.requirementsChoices.push(data[i]);
+			}
+		});
 });
 
 app.controllerProvider.register('judge_view', function($scope, $http, $location) {
@@ -271,7 +270,6 @@ app.controllerProvider.register('emit_view', function($scope, $http, $location) 
     
 	$scope.judgeMoveId = $location.search()['judgeMoveId'];
 	$scope.judgeMove = null;
-	$scope.judgeChoice = "first";
 	$scope.judgeFirstArgument = "";
 	$scope.judgeSecondArgument = "";
 	
@@ -333,4 +331,7 @@ app.controllerProvider.register('emit_view', function($scope, $http, $location) 
     
 });
 
-
+app.controllerProvider.register('game_creation', function($scope, $http) {
+    
+    
+});

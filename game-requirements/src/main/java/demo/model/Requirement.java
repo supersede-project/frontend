@@ -13,13 +13,15 @@ public class Requirement {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
     private Long requirementId;
-    private String content;
+    private String name;
+    private String description;
     
     public Requirement() {
     }
  
-    public Requirement(String content) {
-        this.content = content;
+    public Requirement(String name, String description) {
+        this.name = name;
+        this.setDescription(description);
     }
  
     public Long getRequirementId() {
@@ -30,11 +32,19 @@ public class Requirement {
         this.requirementId = requirementId;
     }
  
-    public String getContent() {
-        return content;
+    public String getName() {
+        return name;
     }
  
-    public void setContent(String content) {
-        this.content = content;
+    public void setName(String name) {
+        this.name = name;
     }
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
 }
