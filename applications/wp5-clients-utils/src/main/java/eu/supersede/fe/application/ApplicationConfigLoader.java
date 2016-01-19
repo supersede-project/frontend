@@ -13,7 +13,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 @Component
-@PropertySource("classpath:applications.properties")
+@PropertySource("classpath:wp5_application.properties")
 public class ApplicationConfigLoader {
 
 	private static final String[] langs = {"en", "de", "es", "it"};
