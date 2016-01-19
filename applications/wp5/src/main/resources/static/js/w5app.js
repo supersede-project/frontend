@@ -104,7 +104,7 @@ app.controller('navigation', function($rootScope, $scope, $http, $location, $rou
 			
 			var getApplications = function()
 			{
-				$http.get('application').success(function(data) {
+				$http.get('application/page').success(function(data) {
 					for(var i = 0;i < data.length; i++ )
 					{
 						$rootScope.applications[data[i].profileName] = data[i].applications;

@@ -2,6 +2,7 @@ package eu.supersede.fe.rest;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -14,7 +15,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import eu.supersede.fe.application.Application;
+import eu.supersede.fe.application.ApplicationGadget;
+import eu.supersede.fe.application.ApplicationGadgetComparator;
+import eu.supersede.fe.application.ApplicationPage;
 import eu.supersede.fe.application.ApplicationUtil;
 import eu.supersede.fe.jpa.ProfilesJpa;
 import eu.supersede.fe.model.Profile;
@@ -28,9 +31,28 @@ public class ApplicationRest {
 	
 	@Autowired
     private ProfilesJpa profiles;
+
+	private final static ApplicationGadgetComparator comparator = new ApplicationGadgetComparator();
 	
-	@RequestMapping("")
-	public List<ProfileApplications> getUserAuthenticatedApplications(Authentication auth, Locale locale) 
+	@RequestMapping("/gadget")
+	public List<ApplicationGadget> getUserAuthenticatedApplicationsGadgets(Authentication auth)
+	{
+		List<String> authNames = new ArrayList<>();
+		Collection<? extends GrantedAuthority> authorities = auth.getAuthorities();
+		for(GrantedAuthority ga : authorities)
+		{
+			authNames.add(ga.getAuthority().substring(5));
+		}
+		
+		List<ApplicationGadget> gadgets = new ArrayList<>(applicationUtil.getApplicationsGadgetsByProfilesNames(authNames));
+	
+		Collections.sort(gadgets, comparator);
+		
+		return gadgets;
+	}
+	
+	@RequestMapping("/page")
+	public List<ProfileApplications> getUserAuthenticatedApplicationsPage(Authentication auth, Locale locale) 
 	{
 		String lang= locale.getLanguage();
 		
@@ -53,8 +75,8 @@ public class ApplicationRest {
 			ProfileApplications pa = new ProfileApplications();
 			pa.setProfileName(p.getName());
 			
-			Set<Application> apps = applicationUtil.getByProfileName(p.getName());
-			for(Application app : apps)
+			Set<ApplicationPage> apps = applicationUtil.getApplicationsPagesByProfileName(p.getName());
+			for(ApplicationPage app : apps)
 			{
 				if(!pages.containsKey(app.getApplicationName()))
 				{
