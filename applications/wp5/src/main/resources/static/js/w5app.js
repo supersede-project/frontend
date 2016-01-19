@@ -1,8 +1,8 @@
 var app = angular.module('w5app', [ 'ngRoute' ]).config(function($routeProvider, $httpProvider, $controllerProvider, $compileProvider, $filterProvider, $provide) {
 
 	$routeProvider.when('/', {
-		templateUrl : 'home.html',
-		controller : 'home'
+		templateUrl : 'dashboard.html',
+		controller : 'dashboard'
 	}).when('/login', {
 		templateUrl : 'login.html',
 		controller : 'navigation'
@@ -339,8 +339,6 @@ app.controller('notifications', function($scope, $http) {
 	
 });
 
-app.controller('home', function($scope, $http) {
-	$http.get('wp5-test-app/resource').success(function(data) {
-		$scope.greeting = data;
-	});
+app.controller('dashboard', function($scope, $http) {
+	
 });
