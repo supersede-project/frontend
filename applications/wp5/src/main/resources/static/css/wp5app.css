@@ -119,14 +119,10 @@ footer {
 	width:100%;
 }
 
-.gadget-left {
+.gadget {
+    margin: 5px;
+    padding: 5px;
 	float:left;
-	width:48%;
-	max-width: 48%;
-}
-
-.gadget-right {
-	float:right;
 	width:48%;
 	max-width: 48%;
 }
