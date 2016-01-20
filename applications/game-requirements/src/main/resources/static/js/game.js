@@ -146,8 +146,6 @@ app.controllerProvider.register('play_view', function($scope, $http, $location) 
 	
 	$scope.moveId = $location.search()['moveId'];
 	$scope.move = null;
-	$scope.requirementsChoices = [];
-	$scope.selectedRequirementsChoice = {selected:0};
 	
 	$http.get('game-requirements/move/' + $scope.moveId)
 	.success(function(data) {
@@ -161,15 +159,7 @@ app.controllerProvider.register('play_view', function($scope, $http, $location) 
     		
     	});
     };
-	
-	 $http.get('game-requirements/requirementchoice')
-		.success(function(data) {
-			$scope.requirementsChoices.length = 0;
-			for(var i = 0; i < data.length; i++)
-			{
-				$scope.requirementsChoices.push(data[i]);
-			}
-		});
+
 });
 
 app.controllerProvider.register('judge_view', function($scope, $http, $location) {
@@ -339,7 +329,38 @@ app.controllerProvider.register('emit_view', function($scope, $http, $location) 
     
 });
 
-app.controllerProvider.register('game_creation', function($scope, $http) {
+app.controllerProvider.register('player_moves', function($scope, $http) {
     
+    $scope.playerMoves = [];
     
+    $http.get('game-requirements/playermove')
+	.success(function(data) {
+		for(var i = 0; i < data.length; i++)
+		{
+			$scope.playerMoves.push(data[i]);
+		}
+	});
+	
+});
+
+app.controllerProvider.register('vote_view', function($scope, $http, $location) {
+    
+	$scope.playerMoveId = $location.search()['playerMoveId'];
+    $scope.playerMove = null;
+	$scope.requirementsChoices = [];
+	$scope.selectedRequirementsChoice = {selected:4};
+	
+	$http.get('game-requirements/playermove/' + $scope.playerMoveId)
+	.success(function(data) {
+		$scope.playerMove = data;
+	});
+    
+	 $http.get('game-requirements/requirementchoice')
+		.success(function(data) {
+			$scope.requirementsChoices.length = 0;
+			for(var i = 0; i < data.length; i++)
+			{
+				$scope.requirementsChoices.push(data[i]);
+			}
+		});	
 });

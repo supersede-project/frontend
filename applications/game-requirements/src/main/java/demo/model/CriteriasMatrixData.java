@@ -18,7 +18,7 @@ public class CriteriasMatrixData {
     private Long criteriasMatrixDataId;
 
 	@ManyToOne(fetch=FetchType.EAGER)
-    @JoinColumn(name="criterias_matrices_id", nullable = false)
+    @JoinColumn(name="criterias_matrix_id", nullable = false)
 	private CriteriasMatrix criteriasMatrix;
 	
 	@ManyToOne(fetch=FetchType.EAGER)
