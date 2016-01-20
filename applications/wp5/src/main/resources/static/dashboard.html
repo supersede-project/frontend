@@ -1,4 +1,4 @@
-<div id="dashboard">
+<div id="dashboard" ng-show="authenticated">
 	<div class="dashboard-header">
 		<nav id="dashboard" class="main-navigation menu-left">
 			<div class="ak-container">
@@ -55,4 +55,7 @@
 			</div>
 		</div>
 	</div>
+</div>
+<div ng-show="!authenticated">
+	Login first
 </div>
