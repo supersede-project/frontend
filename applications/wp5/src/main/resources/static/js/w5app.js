@@ -3,6 +3,9 @@ var app = angular.module('w5app', [ 'ngRoute' ]).config(function($routeProvider,
 	$routeProvider.when('/', {
 		templateUrl : 'dashboard.html',
 		controller : 'dashboard'
+	}).when('/dashboard', {
+		templateUrl : 'dashboard.html',
+		controller : 'dashboard'
 	}).when('/login', {
 		templateUrl : 'login.html',
 		controller : 'navigation'
@@ -340,5 +343,91 @@ app.controller('notifications', function($scope, $http) {
 });
 
 app.controller('dashboard', function($scope, $http) {
+
+	$scope.gadgets = [];
+	$scope.availableGadgets = [];
+	$scope.selectedAvailableGadgets = [];
 	
+	$http.get('application/availableGadget').success(function(data)
+	{
+		$scope.availableGadgets.length = 0;
+		for(var i = 0; i < data.length; i++)
+		{
+			$scope.availableGadgets.push(data[i]);
+		}
+	});
+	
+	$http.get('application/userGadget').success(function(data)
+	{
+		$scope.gadgets.length = 0;
+		for(var i = 0; i < data.length; i++)
+		{
+			var g = {'applicationName' : data[i].applicationName, 'gadgetName' : data[i].gadgetName}
+			$scope.gadgets.push(g);
+		}
+	});
+	
+	$scope.toggleSelection = function(gadget)
+	{
+	    var idx = $scope.selectedAvailableGadgets.indexOf(gadget);
+
+	    // is currently selected
+	    if (idx > -1) {
+	      $scope.selectedAvailableGadgets.splice(idx, 1);
+	    }
+
+	    // is newly selected
+	    else {
+	      $scope.selectedAvailableGadgets.push(gadget);
+	    }
+	};
+	
+	$scope.addGadgets = function()
+	{
+		$('#modalGadgets').modal('hide');
+		for(var i = 0; i < $scope.selectedAvailableGadgets.length; i++)
+		{
+			var sg = $scope.selectedAvailableGadgets[i];
+			var g = {'applicationName' : sg.applicationName, 'gadgetName' : sg.applicationGadget}
+			
+			var contains = false;
+			for(var j = 0; j < $scope.gadgets.length && !contains; j++)
+			{
+				if($scope.gadgets[j].applicationName == g.applicationName && $scope.gadgets[j].gadgetName == g.gadgetName)
+				{
+					contains = true;
+				}
+			}
+
+			if(!contains)
+			{
+				$scope.gadgets.push(g);
+			}
+		}
+		$scope.selectedAvailableGadgets.length = 0;
+	}
+	
+	$scope.cancelAddGadgets = function()
+	{
+		$('#modalGadgets').modal('hide');
+		$scope.selectedAvailableGadgets.length = 0;
+	}
+	
+	$scope.saveSelectedGadgets = function() 
+	{
+		$http({
+			url: "application/userGadget",
+	        data: $scope.gadgets,
+	        method: 'POST'
+	    }).success(function(data){
+	    	$scope.gadgets.length = 0;
+			for(var i = 0; i < data.length; i++)
+			{
+				var g = {'applicationName' : data[i].applicationName, 'gadgetName' : data[i].gadgetName}
+				$scope.gadgets.push(g);
+			}
+	    }).error(function(err){
+	    	console.log(err);
+	    });
+	}
 });

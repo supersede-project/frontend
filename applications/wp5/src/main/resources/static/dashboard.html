@@ -1,7 +1,60 @@
-<div>
-	<div>Dashboard</div>
-	<div>
-		<a>Add gadget</a>
-		<a>Save</a>
+<div id="dashboard">
+	<div class="dashboard-header">
+		<nav id="dashboard" class="main-navigation menu-left">
+			<div class="ak-container">
+				<div class="menu-menu-1-container">
+			    	<ul class="nav navbar-nav">
+			    		<li ng-show="authenticated">
+			        		<p class="navbar-text">Dashboard</p>
+			        	</li>
+					</ul>
+					<ul class="nav navbar-nav navbar-right">
+			      		<li ng-show="authenticated">
+			      			<a href="" data-toggle="modal" data-target="#modalGadgets"><span class="glyphicon glyphicon-plus"></span> Add gadget</a>
+			      		</li>
+			      		<li ng-show="authenticated">
+			      			<a ng-click="saveSelectedGadgets()"><span class="glyphicon glyphicon-floppy-save"></span> Save</a>
+			      		</li>
+			      	</ul>	
+				</div>        	
+			</div>
+		</nav>
+	</div>
+	<div class="dashboard-content">
+		<div ng-repeat="gadget in gadgets">
+			<div ng-class="$odd?'gadget-right':'gadget-left'">
+				<div ng-include="'/' + gadget.applicationName + '/' + gadget.gadgetName + '.html'"></div>
+			</div>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+	
+	<!-- Modal -->
+	<div id="modalGadgets" class="modal fade" role="dialog">
+  		<div class="modal-dialog">
+
+    		<!-- Modal content-->
+    		<div class="modal-content">
+      			<div class="modal-header">
+        			<button type="button" class="close" ng-click="cancelAddGadgets()">&times;</button>
+        			<h4 class="modal-title">Available gadgets</h4>
+      			</div>
+      			<div class="modal-body">
+        			<label ng-repeat="gadget in availableGadgets" style="display: block;">
+						<input
+						    type="checkbox"
+						    name="selectedAvailableGadgets"
+						    value="{{gadget}}"
+						    ng-checked="selectedAvailableGadgets.indexOf(gadget) > -1"
+						    ng-click="toggleSelection(gadget)"
+					  	> {{gadget.applicationName + '/' + gadget.applicationGadget}}
+					</label>
+      			</div>
+			    <div class="modal-footer">
+			    	<button type="button" class="btn btn-default" ng-click="addGadgets()">Add</button>
+			    	<button type="button" class="btn btn-default" ng-click="cancelAddGadgets()">Cancel</button>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>

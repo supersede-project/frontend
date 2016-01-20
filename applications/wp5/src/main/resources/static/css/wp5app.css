@@ -113,3 +113,20 @@ footer {
     -moz-border-radius: 6px 0 6px 6px;
     border-radius: 6px 0 6px 6px;
 }
+
+/* dashboard */
+.dashboard-content {
+	width:100%;
+}
+
+.gadget-left {
+	float:left;
+	width:48%;
+	max-width: 48%;
+}
+
+.gadget-right {
+	float:right;
+	width:48%;
+	max-width: 48%;
+}
