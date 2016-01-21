@@ -413,6 +413,11 @@ app.controller('dashboard', function($scope, $http) {
 		$scope.selectedAvailableGadgets.length = 0;
 	}
 	
+	$scope.removeGadget = function(index)
+	{
+		$scope.gadgets.splice(index, 1);
+	}
+	
 	$scope.saveSelectedGadgets = function() 
 	{
 		$http({
@@ -429,5 +434,19 @@ app.controller('dashboard', function($scope, $http) {
 	    }).error(function(err){
 	    	console.log(err);
 	    });
+	}
+	
+	$scope.allowDropGadget = function(ev, index) {
+	    ev.preventDefault();
+	}
+
+	$scope.dragGadget = function(ev, index) {
+	    $scope.dragFrom = parseInt(index.replace("gadget", ""));
+	}
+
+	$scope.dropGadget = function(ev, index) {
+	    ev.preventDefault();
+	    var dragTo = parseInt(index.replace("gadget", ""));
+	    $scope.gadgets.splice(dragTo, 0, $scope.gadgets.splice($scope.dragFrom, 1)[0]);
 	}
 });

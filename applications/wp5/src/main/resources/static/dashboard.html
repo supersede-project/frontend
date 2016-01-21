@@ -22,7 +22,17 @@
 	</div>
 	<div class="dashboard-content">
 		<div ng-repeat="gadget in gadgets" class="gadget">
-			<div ng-include="'/' + gadget.applicationName + '/' + gadget.gadgetName + '.html'"></div>
+			<div id="gadget{{$index}}" draggable="true" 
+				ondragstart="angular.element(document.getElementById('dashboard')).scope().dragGadget(event, this.id)" 
+				ondragover="angular.element(document.getElementById('dashboard')).scope().allowDropGadget(event, this.id)" 
+				ondrop="angular.element(document.getElementById('dashboard')).scope().dropGadget(event, this.id)">
+				<div class="gadget-title">
+					<div class="gadget-button-bar">
+						<a ng-click="removeGadget($index)"><span class="glyphicon glyphicon-remove gadget-button"></span></a>
+					</div>
+				</div>
+				<div ng-include="'/' + gadget.applicationName + '/' + gadget.gadgetName + '.html'"></div>
+			</div>
 		</div>
 		<div style="clear:both;"></div>
 	</div>

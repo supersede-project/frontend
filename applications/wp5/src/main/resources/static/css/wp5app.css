@@ -126,3 +126,20 @@ footer {
 	width:48%;
 	max-width: 48%;
 }
+
+.gadget-title {
+	cursor: move;
+	background-color: #F15A22;
+	width: 100%;
+	max-width: 100%;
+	height: 25px;"
+}
+
+.gadget-button-bar {
+	float: right;
+}
+
+.gadget-button {
+	color: white;
+	margin-right: 3px;
+}
