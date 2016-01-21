@@ -362,7 +362,7 @@ app.controller('dashboard', function($scope, $http) {
 		$scope.gadgets.length = 0;
 		for(var i = 0; i < data.length; i++)
 		{
-			var g = {'applicationName' : data[i].applicationName, 'gadgetName' : data[i].gadgetName}
+			var g = {'applicationName' : data[i].applicationName, 'gadgetName' : data[i].gadgetName, 'size' : data[i].size}
 			$scope.gadgets.push(g);
 		}
 	});
@@ -388,7 +388,7 @@ app.controller('dashboard', function($scope, $http) {
 		for(var i = 0; i < $scope.selectedAvailableGadgets.length; i++)
 		{
 			var sg = $scope.selectedAvailableGadgets[i];
-			var g = {'applicationName' : sg.applicationName, 'gadgetName' : sg.applicationGadget}
+			var g = {'applicationName' : sg.applicationName, 'gadgetName' : sg.applicationGadget, 'size' : 'small'}
 			
 			var contains = false;
 			for(var j = 0; j < $scope.gadgets.length && !contains; j++)
@@ -428,7 +428,7 @@ app.controller('dashboard', function($scope, $http) {
 	    	$scope.gadgets.length = 0;
 			for(var i = 0; i < data.length; i++)
 			{
-				var g = {'applicationName' : data[i].applicationName, 'gadgetName' : data[i].gadgetName}
+				var g = {'applicationName' : data[i].applicationName, 'gadgetName' : data[i].gadgetName, 'size' : data[i].size}
 				$scope.gadgets.push(g);
 			}
 	    }).error(function(err){
@@ -457,5 +457,15 @@ app.controller('dashboard', function($scope, $http) {
 	    $scope.gadgets[dragTo] = b;
 	    
 	    $scope.$apply();
+	}
+
+	$scope.shrinkGadget = function(index)
+	{
+		$scope.gadgets[index].size="small";
+	}
+	
+	$scope.enlargeGadget = function(index)
+	{
+		$scope.gadgets[index].size="large";
 	}
 });

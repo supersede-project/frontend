@@ -117,20 +117,20 @@ footer {
 /* dashboard */
 .dashboard-content {
 	width:100%;
-	-moz-column-count:2;
-    -webkit-column-count:2;
-    column-count:2;
 }
 
 .gadget {
-	/* -webkit-column-span: all;
-  	-moz-column-span: all;
-  	column-span: all;*/
     margin: 5px;
     padding: 5px;
-    width: 100%;
-    min-width: 100%;
+    width: 49%;
+    min-width: 49%;
     display: inline-block;
+    float: left;
+}
+
+.gadget-full {
+	width: 100%;
+	min-width: 100%;
 }
 
 .gadget-title {

@@ -13,18 +13,11 @@ public class UserGadget {
 	private Long gadgetId;
 	private String applicationName;
 	private String gadgetName;
+	private String size;
 	
 	public UserGadget() 
 	{
 
-	}
-	
-	public UserGadget(Long userId, Long gadgetId, String applicationName, String gadgetName)
-	{
-		this.userId = userId;
-		this.gadgetId = gadgetId;
-		this.applicationName = applicationName;
-		this.gadgetName = gadgetName;
 	}
 	
 	public Long getUserId() {
@@ -57,6 +50,14 @@ public class UserGadget {
 
 	public void setGadgetName(String gadgetName) {
 		this.gadgetName = gadgetName;
+	}
+
+	public String getSize() {
+		return size;
+	}
+
+	public void setSize(String size) {
+		this.size = size;
 	}
 	
 }
