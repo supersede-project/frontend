@@ -362,5 +362,12 @@ app.controllerProvider.register('vote_view', function($scope, $http, $location) 
 			{
 				$scope.requirementsChoices.push(data[i]);
 			}
-		});	
+		});
+	 
+	 $scope.insertPlayerVote = function(playerVote){
+		 $http.put('game-requirements/playermove/' + $scope.playerMoveId + '/vote/' +playerVote)
+	    	.success(function(data) {
+	    		
+    	});
+	 };
 });

@@ -49,4 +49,14 @@ public class PlayerMoveRest {
 		
 		return playerMove;
 	}
+	
+	// set the vote for of a player in his/her PlayerMove
+	@RequestMapping(method = RequestMethod.PUT, value="/{playerMoveId}/vote/{vote}")
+	public void setPlayerMoveVote(Authentication authentication, @PathVariable Long playerMoveId, @PathVariable Long vote){	
+		
+		PlayerMove playerMove = playerMoves.findOne(playerMoveId);
+		playerMove.setValue(vote);
+		playerMove.setPlayed(true);
+		playerMoves.save(playerMove);
+	}
 }
