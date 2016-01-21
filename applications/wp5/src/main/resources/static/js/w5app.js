@@ -448,5 +448,6 @@ app.controller('dashboard', function($scope, $http) {
 	    ev.preventDefault();
 	    var dragTo = parseInt(index.replace("gadget", ""));
 	    $scope.gadgets.splice(dragTo, 0, $scope.gadgets.splice($scope.dragFrom, 1)[0]);
+	    $scope.$apply();
 	}
 });
