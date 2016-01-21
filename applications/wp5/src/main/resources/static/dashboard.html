@@ -20,7 +20,7 @@
 			</div>
 		</nav>
 	</div>
-	<div class="dashboard-content">
+	<div class="dashboard-content" style="display: block;">
 		<div ng-repeat="gadget in gadgets" class="gadget">
 			<div id="gadget{{$index}}" draggable="true" 
 				ondragstart="angular.element(document.getElementById('dashboard')).scope().dragGadget(event, this.id)" 
