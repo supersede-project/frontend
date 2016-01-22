@@ -1,6 +1,5 @@
 package eu.supersede.fe.multitenant;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -23,11 +22,11 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 
 @Configuration
-@PropertySource("classpath:multitenancy.properties")
+@PropertySource("classpath:wp5_application.properties")
 @EnableConfigurationProperties(JpaProperties.class)
 public class MultiTenancyJpaConfiguration {
 
-	@Value("${spring.multitenancy.models.packages}")
+	@Value("${application.multitenancy.models.packages}")
 	private String MODELS_PACKAGES;
 	
 	@Autowired
@@ -52,7 +51,12 @@ public class MultiTenancyJpaConfiguration {
 		hibernateProps.put(Environment.MULTI_TENANT_IDENTIFIER_RESOLVER, currentTenantIdentifierResolver);
 		hibernateProps.put(Environment.DIALECT, "org.hibernate.dialect.PostgreSQLDialect");
 
-		Set<String> packages = new HashSet<>(Arrays.asList(MODELS_PACKAGES.split(",")));
+		Set<String> packages = new HashSet<>();
+		String[] tmp = MODELS_PACKAGES.split(",");
+		for(String t : tmp)
+		{
+			packages.add(t.trim());
+		}
 		packages.add("eu.supersede.fe.notification.model");
 		
 		return builder.dataSource(dataSource)

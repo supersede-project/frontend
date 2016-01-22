@@ -8,6 +8,7 @@ import javax.sql.DataSource;
 
 import org.hibernate.engine.jdbc.connections.spi.AbstractDataSourceBasedMultiTenantConnectionProviderImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -18,7 +19,7 @@ import org.springframework.stereotype.Component;
 
 @SuppressWarnings("serial")
 @Component
-@PropertySource("classpath:multitenancy.properties")
+@PropertySource("file:../conf/multitenancy.properties")
 @EnableConfigurationProperties(JpaProperties.class)
 public class DataSourceBasedMultiTenantConnectionProviderImpl extends AbstractDataSourceBasedMultiTenantConnectionProviderImpl
 {
@@ -26,6 +27,7 @@ public class DataSourceBasedMultiTenantConnectionProviderImpl extends AbstractDa
 	Environment env;
 		
 	private String[] tenantNames;
+	@Value("${application.multitenancy.default}")
 	private String defaultTenant;
 	
 	private Map<String, DataSource> datasources;
@@ -34,18 +36,21 @@ public class DataSourceBasedMultiTenantConnectionProviderImpl extends AbstractDa
 	public void load() {
 		datasources = new HashMap<>();
 		
-		tenantNames = env.getRequiredProperty("spring.multitenancy.names").split(",");
-		defaultTenant = env.getRequiredProperty("spring.multitenancy.default");
+		tenantNames = env.getRequiredProperty("application.multitenancy.names").split(",");
+		for(int i = 0; i < tenantNames.length; i++)
+		{
+			tenantNames[i] = tenantNames[i].trim();
+		}
 		
 		for(String n : tenantNames)
 		{
 			n = n.trim();
 			DataSourceBuilder factory = DataSourceBuilder
 					.create(env.getClass().getClassLoader())
-					.driverClassName(env.getRequiredProperty("spring.multitenancy." + n + ".driverClassName"))
-					.username(env.getRequiredProperty("spring.multitenancy." + n + ".username"))
-					.password(env.getRequiredProperty("spring.multitenancy." + n + ".password"))
-					.url(env.getRequiredProperty("spring.multitenancy." + n + ".url"));
+					.driverClassName(env.getRequiredProperty("application.multitenancy." + n + ".driverClassName"))
+					.username(env.getRequiredProperty("application.multitenancy." + n + ".username"))
+					.password(env.getRequiredProperty("application.multitenancy." + n + ".password"))
+					.url(env.getRequiredProperty("application.multitenancy." + n + ".url"));
 			DataSource tmp = factory.build();
 			
 			datasources.put(n, tmp);
