@@ -32,7 +32,7 @@
 								</div>
 							</td>
 							<td>
-								<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#{{playerMove.playerMoveId}}">
+								<button type="button" class="btn btn-warning btn-lg" data-toggle="modal" data-target="#{{playerMove.playerMoveId}}">
 								  Info
 								</button>								
 							</td>						
@@ -68,22 +68,22 @@
 					</tbody>		
 				</table>	
 			</div>
-	    <!-- START Modal -->
-		<div ng-repeat="playerMove in playerMoves" class="modal fade" id="{{playerMove.playerMoveId}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-		  <div class="modal-dialog" role="document">
-		    <div class="modal-content">
-		      <div class="modal-header">
-		        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-		        <h4 class="modal-title" id="myModalLabel">Info about the move</h4>
-		      </div>
-		      <div class="modal-body">
-		        ID:{{playerMove.playerMoveId}}
-		      </div>
-		      <div class="modal-footer">
-		        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-		      </div>
-		    </div>
-		  </div>
-		</div>
-		<!-- END Modal -->  				  	
-	    </div>  
+		    <!-- START Modal -->
+			<div ng-repeat="playerMove in playerMoves" class="modal fade" id="{{playerMove.playerMoveId}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+			  <div class="modal-dialog" role="document">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			        <h4 class="modal-title" id="myModalLabel">Info about the move</h4>
+			      </div>
+			      <div class="modal-body">
+			        ID:{{playerMove.playerMoveId}}
+			      </div>
+			      <div class="modal-footer">
+			        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			      </div>
+			    </div>
+			  </div>
+			</div>
+			<!-- END Modal -->  				  	
+		    </div>  
