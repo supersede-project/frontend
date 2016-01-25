@@ -1,5 +1,6 @@
 package demo.rest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +11,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import demo.jpa.PlayerMovesJpa;
+import demo.jpa.RequirementsMatricesDataJpa;
 import demo.jpa.UsersJpa;
 import demo.model.PlayerMove;
+import demo.model.RequirementsMatrixData;
 import demo.model.User;
 import eu.supersede.fe.exception.NotFoundException;
 import eu.supersede.fe.security.DatabaseUser;
@@ -25,6 +28,9 @@ public class PlayerMoveRest {
 	
 	@Autowired
     private PlayerMovesJpa playerMoves;
+	
+	@Autowired
+    private RequirementsMatricesDataJpa requirementsMatricesData;
 	
 	// get all the playerMoves of the logged user
 	@RequestMapping(value = "", method = RequestMethod.GET)
@@ -58,5 +64,20 @@ public class PlayerMoveRest {
 		playerMove.setValue(vote);
 		playerMove.setPlayed(true);
 		playerMoves.save(playerMove);
+	}
+	
+	// get a specific playerMove 
+	@RequestMapping("/players/{requirementsMatrixDataId}")
+	public List<User> getPlayerMovePlayers(@PathVariable Long requirementsMatrixDataId){	
+		
+		RequirementsMatrixData requirementMatrixData = requirementsMatricesData.getOne(requirementsMatrixDataId);
+		
+		List<PlayerMove> listPlayerMoves = playerMoves.findByRequirementsMatrixData(requirementMatrixData);
+		List<User> movePlayers = new ArrayList<>();
+		for(int i=0; i< listPlayerMoves.size();i++){
+			movePlayers.add(i,  listPlayerMoves.get(i).getPlayer());
+		}
+		
+		return movePlayers;
 	}
 }
