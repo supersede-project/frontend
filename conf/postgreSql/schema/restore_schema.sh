@@ -1,10 +1,11 @@
 #!/bin/bash
 user="$1"
 shift
-PGPASSWORD="$1"
+export PGPASSWORD="$1"
 shift
 
 while [ "$1" != "" ]; do
-	psql -U $user $1 < schema.sql
+	echo "restore $1"
+	psql -U "$user" -f "schema.sql" "$1"
     shift
 done
