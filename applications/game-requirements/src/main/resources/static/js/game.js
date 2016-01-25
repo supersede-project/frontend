@@ -392,13 +392,11 @@ app.controllerProvider.register('create_game', function($scope, $http) {
     $scope.requirements = [];
     $scope.criterias = [];
 
-    $scope.selectedPlayers = [];
-    $scope.selectedRequirements = [];
-    $scope.selectedCriterias = [];
-
     $scope.currentPlayer = undefined;
     $scope.currentRequirement= undefined;
     $scope.currentCriteria = undefined;
+    
+    $scope.game = {players : [], requirements: [], criterias: []};
     
     $http.get('game-requirements/user?profile=PLAYER')
 	.success(function(data) {
@@ -434,4 +432,17 @@ app.controllerProvider.register('create_game', function($scope, $http) {
 	    	array.push(item);
 	    }
 	};
+	
+	$scope.createGame = function()
+	{
+		$http({
+			url: "game-requirements/game",
+	        data: $scope.game,
+	        method: 'POST'
+	    }).success(function(data){
+	    	$scope.game = {players : [], requirements: [], criterias: []};
+	    }).error(function(err){
+	    	console.log(err);
+	    });
+	}
 });

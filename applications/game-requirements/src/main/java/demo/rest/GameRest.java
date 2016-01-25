@@ -1,5 +1,6 @@
 package demo.rest;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +52,7 @@ public class GameRest {
 	@RequestMapping(value = "", method = RequestMethod.POST)
 	public ResponseEntity<?> createGame(@RequestBody Game game)
 	{
+		game.setStartTime(new Date());
 		//re-attach detached requirements
 		List<Requirement> rs = game.getRequirements();
 		for(int i = 0; i < rs.size(); i++)

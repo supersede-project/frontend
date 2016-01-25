@@ -13,8 +13,8 @@
 			    type="checkbox"
 			    name="selectedRequirements"
 			    value="{{requirement}}"
-			    ng-checked="selectedRequirements.indexOf(requirement) > -1"
-			    ng-click="toggleSelection(selectedRequirements, requirement)"
+			    ng-checked="game.requirements.indexOf(requirement) > -1"
+			    ng-click="toggleSelection(game.requirements, requirement)"
 		  	/> {{requirement.name}}
 		</label>
 	</div>
@@ -33,8 +33,8 @@
 			    type="checkbox"
 			    name="selectedCriterias"
 			    value="{{criteria}}"
-			    ng-checked="selectedCriterias.indexOf(criteria) > -1"
-			    ng-click="toggleSelection(selectedCriterias, criteria)"
+			    ng-checked="game.criterias.indexOf(criteria) > -1"
+			    ng-click="toggleSelection(game.criterias, criteria)"
 		  	/> {{criteria.name}}
 		</label>
 	</div>
@@ -54,8 +54,8 @@
 			    type="checkbox"
 			    name="selectedPlayers"
 			    value="{{player}}"
-			    ng-checked="selectedPlayers.indexOf(player) > -1"
-			    ng-click="toggleSelection(selectedPlayers, player)"
+			    ng-checked="game.players.indexOf(player) > -1"
+			    ng-click="toggleSelection(game.players, player)"
 		  	/> {{player.name}}
 		</label>
 	</div>
@@ -66,4 +66,9 @@
 		<!-- <pre>{{currentPlayer || JSON}}</pre> -->
 	</div>
 	<div class="clear-div"></div>
+	
+	<div style="width: 100%; text-align: center;" ng-click="createGame()">
+		<button>Create</button>
+	</div>
+	<pre>{{game || JSON}}</pre>
 </div>
