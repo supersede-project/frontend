@@ -1,8 +1,9 @@
+#!/bin/bash
+
 tomcat="apache-tomcat-8.0.30"
 file="dist/$tomcat.zip"
 version="0.0.1-SNAPSHOT"
 adminapp="admin-user-manager-app"
-gameapp="game-requirements"
 DATE=$(date +%Y%m%d_%H%M%S)
 if ! [ -f "$file" ]
 then
@@ -19,6 +20,8 @@ cd wp5-utils && gradle build && cd .. &&
 cd wp5-clients-utils && gradle build && cd .. &&
 cd wp5 && gradle build && cp build/libs/wp5-$version.war.original ../../dist/$tomcat/webapps/ROOT.war && cd .. &&
 cd $adminapp && gradle build && cp build/libs/$adminapp-$version.war.original ../../dist/$tomcat/webapps/$adminapp.war && cd .. &&
-cd $gameapp && gradle build && cp build/libs/$gameapp-$version.war.original ../../dist/$tomcat/webapps/$gameapp.war && cd .. &&
 cd ../dist &&
-zip -r supersede-bin-$DATE $tomcat
+mkdir -p db && rm -rf db/* &&
+cp ../conf/postgreSql/restore_schema.sh ./db/restore_schema.sh && 
+cp ../conf/postgreSql/schema.sql ./db/schema.sql && 
+zip -r supersede-bin-$DATE $tomcat db
