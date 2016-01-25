@@ -385,3 +385,53 @@ app.controllerProvider.register('judge', function($scope, $http) {
 	});
 	
 });
+
+app.controllerProvider.register('create_game', function($scope, $http) {
+
+    $scope.players = [];
+    $scope.requirements = [];
+    $scope.criterias = [];
+
+    $scope.selectedPlayers = [];
+    $scope.selectedRequirements = [];
+    $scope.selectedCriterias = [];
+
+    $scope.currentPlayer = undefined;
+    $scope.currentRequirement= undefined;
+    $scope.currentCriteria = undefined;
+    
+    $http.get('game-requirements/user?profile=PLAYER')
+	.success(function(data) {
+		for(var i = 0; i < data.length; i++)
+		{
+			$scope.players.push(data[i]);
+		}
+	});
+    
+    $http.get('game-requirements/requirement')
+	.success(function(data) {
+		for(var i = 0; i < data.length; i++)
+		{
+			$scope.requirements.push(data[i]);
+		}
+	});
+    
+    $http.get('game-requirements/criteria')
+	.success(function(data) {
+		for(var i = 0; i < data.length; i++)
+		{
+			$scope.criterias.push(data[i]);
+		}
+	});
+	
+    $scope.toggleSelection = function(array, item)
+	{
+	    var idx = array.indexOf(item);
+	    if (idx > -1) {
+	    	array.splice(idx, 1);
+	    }
+	    else {
+	    	array.push(item);
+	    }
+	};
+});

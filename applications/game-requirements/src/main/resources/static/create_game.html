@@ -1,0 +1,69 @@
+<script src="game-requirements/js/game.js"></script>
+<link href="game-requirements/css/game.css" rel="stylesheet">
+
+<div ng-controller="create_game">
+	<h1>Game Creation</h1>
+	
+	<p>Select the requirements to prioritize:</p>
+	<div class="selection">
+		<label ng-repeat="requirement in requirements" class="selection-choice" 
+			ng-mouseenter="$parent.currentRequirement = requirement"
+			ng-mouseleave="$parent.currentRequirement = undefined">
+			<input
+			    type="checkbox"
+			    name="selectedRequirements"
+			    value="{{requirement}}"
+			    ng-checked="selectedRequirements.indexOf(requirement) > -1"
+			    ng-click="toggleSelection(selectedRequirements, requirement)"
+		  	/> {{requirement.name}}
+		</label>
+	</div>
+	<div ng-show="currentRequirement" class="selection-summary">
+		<div class="summary-row">{{currentRequirement.name}}</div>
+		<div class="summary-row">{{currentRequirement.description}}</div>
+	</div>
+	<div class="clear-div"></div>
+	
+	<p>Select the criterias to prioritize:</p>
+	<div class="selection">
+		<label ng-repeat="criteria in criterias"  class="selection-choice" 
+			ng-mouseenter="$parent.currentCriteria = criteria"
+			ng-mouseleave="$parent.currentCriteria = undefined">
+			<input
+			    type="checkbox"
+			    name="selectedCriterias"
+			    value="{{criteria}}"
+			    ng-checked="selectedCriterias.indexOf(criteria) > -1"
+			    ng-click="toggleSelection(selectedCriterias, criteria)"
+		  	/> {{criteria.name}}
+		</label>
+	</div>
+	<div ng-show="currentCriteria" class="selection-summary">
+		<div class="summary-row">{{currentCriteria.name}}</div>
+		<div class="summary-row">{{currentCriteria.description}}</div>
+	</div>
+	<div class="clear-div"></div>
+	
+	
+	<p>Select the players to prioritize:</p>
+	<div class="selection">
+		<label ng-repeat="player in players"  class="selection-choice" 
+			ng-mouseenter="$parent.currentPlayer = player"
+			ng-mouseleave="$parent.currentPlayer = undefined">
+			<input
+			    type="checkbox"
+			    name="selectedPlayers"
+			    value="{{player}}"
+			    ng-checked="selectedPlayers.indexOf(player) > -1"
+			    ng-click="toggleSelection(selectedPlayers, player)"
+		  	/> {{player.name}}
+		</label>
+	</div>
+	<div ng-show="currentPlayer"  class="selection-summary">		
+		<div class="summary-row">{{currentPlayer.name}}</div>
+		<div class="summary-row">Score: {{currentPlayer.points}}</div>
+		
+		<!-- <pre>{{currentPlayer || JSON}}</pre> -->
+	</div>
+	<div class="clear-div"></div>
+</div>
