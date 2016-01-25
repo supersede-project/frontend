@@ -71,6 +71,25 @@ public class ApplicationConfigLoader {
 				
 				applicationUtil.addApplicationPage(applicationName, applicationLabels, pageName, pageLabels, trimmedPageRoles);
 			}
+			
+			String[] gadgets = env.getProperty("application.gadgets").split(",");
+			if(gadgets != null)
+			{
+				for(String gadget : gadgets)
+				{
+					List<String> trimmedGadgetRoles = new ArrayList<>();
+					gadget = gadget.trim();
+				
+					String[] gadgetRoles = env.getRequiredProperty("application.gadgets." + gadget + ".profiles").split(",");
+					
+					for(String gadgetRole : gadgetRoles)
+					{
+						trimmedGadgetRoles.add(gadgetRole.trim());
+					}
+					
+					applicationUtil.addApplicationGadget(applicationName, gadget, trimmedGadgetRoles);
+				}
+			}
 		}
 	}
 	

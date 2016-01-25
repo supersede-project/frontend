@@ -1,6 +1,5 @@
 package eu.supersede.fe.multitenant;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -32,10 +31,10 @@ import org.springframework.transaction.interceptor.TransactionInterceptor;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 @Component
-@PropertySource("classpath:multitenancy.properties")
+@PropertySource("classpath:wp5_application.properties")
 public class MultiJpaProvider {
 
-	@Value("${spring.multitenancy.models.packages}")
+	@Value("${application.multitenancy.models.packages}")
 	private String MODELS_PACKAGES;
 	
 	@Autowired
@@ -62,7 +61,12 @@ public class MultiJpaProvider {
 
 			hibernateProps.put(Environment.DIALECT, "org.hibernate.dialect.PostgreSQLDialect");
 
-			Set<String> packages = new HashSet<>(Arrays.asList(MODELS_PACKAGES.split(",")));
+			Set<String> packages = new HashSet<>();
+			String[] tmp = MODELS_PACKAGES.split(",");
+			for(String t : tmp)
+			{
+				packages.add(t.trim());
+			}
 			packages.add("eu.supersede.fe.notification.model");
 			
 			LocalContainerEntityManagerFactoryBean emfb = builder.dataSource(datasources.get(n))

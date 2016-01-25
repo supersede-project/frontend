@@ -1,6 +1,8 @@
 package eu.supersede.fe.application;
 
 import java.io.IOException;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -25,15 +27,18 @@ public class ApplicationUtil {
 	
 	@Autowired
 	private StringRedisTemplate template;
+
+	private static final String PAGE_KEY = "ApplicationPage";
+	private static final String GADGET_KEY = "ApplicationGadget";
 	
-	private static final String APP_KEY = "Application";
+	//Application Page
 	
 	public void addApplicationPage(String applicationName, Map<String, String> applicationLabels, String applicationPage, Map<String, String> applicationPageLabels, List<String> profilesRequired)
 	{
-		Application app = new Application(applicationName, applicationLabels, applicationPage, applicationPageLabels, profilesRequired);
+		ApplicationPage app = new ApplicationPage(applicationName, applicationLabels, applicationPage, applicationPageLabels, profilesRequired);
 		try 
 		{
-			template.opsForHash().put(APP_KEY, app.getId(), mapper.writeValueAsString(app));
+			template.opsForHash().put(PAGE_KEY, app.getId(), mapper.writeValueAsString(app));
 		} 
 		catch (JsonProcessingException e) 
 		{
@@ -42,32 +47,32 @@ public class ApplicationUtil {
 		}
 	}
 	
-	public void removeApplicationPage(Application application)
+	public void removeApplicationPage(ApplicationPage page)
 	{
-		template.opsForHash().delete(APP_KEY, application.getId());
+		template.opsForHash().delete(PAGE_KEY, page.getId());
 	}
 	
-	public Set<Application> getAllApplications()
+	public Set<ApplicationPage> getAllApplicationsPages()
 	{
-		Set<Application> apps = new HashSet<>();
-		List<Object> applications = template.opsForHash().values(APP_KEY);
+		Set<ApplicationPage> apps = new HashSet<>();
+		List<Object> applications = template.opsForHash().values(PAGE_KEY);
 		
 		for(Object o : applications)
 		{
-			apps.add(getApplicationFromString((String)o));
+			apps.add(getApplicationPageFromString((String)o));
 		}
 		
 		return apps;
 	}
 	
-	public Set<Application> getByProfileName(String profile)
+	public Set<ApplicationPage> getApplicationsPagesByProfileName(String profile)
 	{
-		Set<Application> apps = new HashSet<>();
-		List<Object> applications = template.opsForHash().values(APP_KEY);
+		Set<ApplicationPage> apps = new HashSet<>();
+		List<Object> applications = template.opsForHash().values(PAGE_KEY);
 		
 		for(Object o : applications)
 		{
-			Application a = getApplicationFromString((String)o);
+			ApplicationPage a = getApplicationPageFromString((String)o);
 			if(a.getProfilesRequired().contains(profile))
 			{
 				apps.add(a);
@@ -77,11 +82,11 @@ public class ApplicationUtil {
 		return apps;
 	}
 	
-	private Application getApplicationFromString(String s)
+	private ApplicationPage getApplicationPageFromString(String s)
 	{
 		try 
 		{
-			return mapper.readValue(s, Application.class);
+			return mapper.readValue(s, ApplicationPage.class);
 		} 
 		catch (JsonParseException e) 
 		{
@@ -101,4 +106,98 @@ public class ApplicationUtil {
 		
 		return null;
 	}
+
+	//Application Gadget
+	
+	public void addApplicationGadget(String applicationName, String applicationGadget, List<String> profilesRequired)
+	{
+		ApplicationGadget gadget = new ApplicationGadget(applicationName, applicationGadget, profilesRequired);
+		try 
+		{
+			template.opsForHash().put(GADGET_KEY, gadget.getId(), mapper.writeValueAsString(gadget));
+		} 
+		catch (JsonProcessingException e) 
+		{
+			log.debug(e.getMessage());
+			e.printStackTrace();
+		}
+	}
+	
+	public void removeApplicationGadget(ApplicationGadget gadget)
+	{
+		template.opsForHash().delete(GADGET_KEY, gadget.getId());
+	}
+
+	public Set<ApplicationGadget> getAllApplicationsGadget()
+	{
+		Set<ApplicationGadget> gadgs = new HashSet<>();
+		List<Object> gadgets = template.opsForHash().values(GADGET_KEY);
+		
+		for(Object o : gadgets)
+		{
+			gadgs.add(getApplicationGadgetFromString((String)o));
+		}
+		
+		return gadgs;
+	}
+	
+	public Set<ApplicationGadget> getApplicationsGadgetsByProfileName(String profile)
+	{
+		Set<ApplicationGadget> gadgs = new HashSet<>();
+		List<Object> gadgets = template.opsForHash().values(GADGET_KEY);
+		
+		for(Object o : gadgets)
+		{
+			ApplicationGadget g = getApplicationGadgetFromString((String)o);
+			if(g.getProfilesRequired().contains(profile))
+			{
+				gadgs.add(g);
+			}
+		}
+		
+		return gadgs;
+	}
+	
+	public Set<ApplicationGadget> getApplicationsGadgetsByProfilesNames(Collection<String> profiles)
+	{
+		Set<ApplicationGadget> gadgs = new HashSet<>();
+		List<Object> gadgets = template.opsForHash().values(GADGET_KEY);
+		
+		for(Object o : gadgets)
+		{
+			ApplicationGadget g = getApplicationGadgetFromString((String)o);
+			if(!Collections.disjoint(g.getProfilesRequired(), profiles))
+			{
+				gadgs.add(g);
+			}
+		}
+		
+		return gadgs;
+	}
+	
+	private ApplicationGadget getApplicationGadgetFromString(String s)
+	{
+		try 
+		{
+			return mapper.readValue(s, ApplicationGadget.class);
+		} 
+		catch (JsonParseException e) 
+		{
+			log.debug(e.getMessage());
+			e.printStackTrace();
+		}
+		catch (JsonMappingException e)
+		{
+			log.debug(e.getMessage());
+			e.printStackTrace();
+		}
+		catch (IOException e) 
+		{
+			log.debug(e.getMessage());
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
+
 }

@@ -6,7 +6,7 @@ import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Application {
+public class ApplicationPage {
 
 	private String applicationName;
 	private Map<String, String> applicationLabels;
@@ -14,10 +14,10 @@ public class Application {
 	private Map<String, String> applicationPageLabels;
 	private List<String> profilesRequired;
 	
-	public Application()
+	public ApplicationPage()
 	{}
 	
-	public Application(String applicationName, 
+	public ApplicationPage(String applicationName, 
 			Map<String, String> applicationLabels, 
 			String applicationPage,
 			Map<String, String> applicationPageLabels, 
@@ -110,11 +110,11 @@ public class Application {
 		{
 			return false;
 		}
-		if (Application.class != obj.getClass())
+		if (ApplicationPage.class != obj.getClass())
 		{
 			return false;
 		}
-		Application other = (Application)obj;
+		ApplicationPage other = (ApplicationPage)obj;
 		return this.applicationName.equals(other.applicationName) && 
 				this.applicationPage.equals(other.applicationPage);
 	}
