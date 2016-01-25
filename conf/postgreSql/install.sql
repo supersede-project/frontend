@@ -11,21 +11,17 @@ SET client_min_messages = warning;
 
 SET search_path = public, pg_catalog;
 
-ALTER TABLE ONLY public.users_gadgets DROP CONSTRAINT users_gadgets_users_fk;
 ALTER TABLE ONLY public.users_profiles DROP CONSTRAINT users_foreign_key;
 ALTER TABLE ONLY public.notifications DROP CONSTRAINT users_foreign_key;
 ALTER TABLE ONLY public.users_profiles DROP CONSTRAINT profiles_foreign_key;
-DROP INDEX public.fki_users_gadgets_users_fk;
 DROP INDEX public.fki_users_foreign_key;
 ALTER TABLE ONLY public.users_profiles DROP CONSTRAINT users_profiles_primary_key;
 ALTER TABLE ONLY public.users DROP CONSTRAINT users_primary_key;
-ALTER TABLE ONLY public.users_gadgets DROP CONSTRAINT users_gadgets_primary_key;
 ALTER TABLE ONLY public.profiles DROP CONSTRAINT unique_name;
 ALTER TABLE ONLY public.users DROP CONSTRAINT unique_email;
 ALTER TABLE ONLY public.profiles DROP CONSTRAINT profiles_primary_key;
 ALTER TABLE ONLY public.notifications DROP CONSTRAINT notifications_primary_key;
 DROP TABLE public.users_profiles;
-DROP TABLE public.users_gadgets;
 DROP TABLE public.users;
 DROP TABLE public.profiles;
 DROP TABLE public.notifications;
@@ -127,21 +123,6 @@ CREATE TABLE users (
 ALTER TABLE users OWNER TO "testDB";
 
 --
--- Name: users_gadgets; Type: TABLE; Schema: public; Owner: testDB; Tablespace: 
---
-
-CREATE TABLE users_gadgets (
-    gadget_id bigint NOT NULL,
-    user_id bigint NOT NULL,
-    application_name text NOT NULL,
-    gadget_name text NOT NULL,
-    size text
-);
-
-
-ALTER TABLE users_gadgets OWNER TO "testDB";
-
---
 -- Name: users_profiles; Type: TABLE; Schema: public; Owner: testDB; Tablespace: 
 --
 
@@ -201,14 +182,6 @@ COPY users (user_id, name, email, password, locale) FROM stdin;
 
 
 --
--- Data for Name: users_gadgets; Type: TABLE DATA; Schema: public; Owner: testDB
---
-
-COPY users_gadgets (gadget_id, user_id, application_name, gadget_name, size) FROM stdin;
-\.
-
-
---
 -- Data for Name: users_profiles; Type: TABLE DATA; Schema: public; Owner: testDB
 --
 
@@ -258,14 +231,6 @@ ALTER TABLE ONLY profiles
 
 
 --
--- Name: users_gadgets_primary_key; Type: CONSTRAINT; Schema: public; Owner: testDB; Tablespace: 
---
-
-ALTER TABLE ONLY users_gadgets
-    ADD CONSTRAINT users_gadgets_primary_key PRIMARY KEY (gadget_id, user_id);
-
-
---
 -- Name: users_primary_key; Type: CONSTRAINT; Schema: public; Owner: testDB; Tablespace: 
 --
 
@@ -286,13 +251,6 @@ ALTER TABLE ONLY users_profiles
 --
 
 CREATE INDEX fki_users_foreign_key ON notifications USING btree (user_id);
-
-
---
--- Name: fki_users_gadgets_users_fk; Type: INDEX; Schema: public; Owner: testDB; Tablespace: 
---
-
-CREATE INDEX fki_users_gadgets_users_fk ON users_gadgets USING btree (user_id);
 
 
 --
@@ -317,14 +275,6 @@ ALTER TABLE ONLY notifications
 
 ALTER TABLE ONLY users_profiles
     ADD CONSTRAINT users_foreign_key FOREIGN KEY (user_id) REFERENCES users(user_id);
-
-
---
--- Name: users_gadgets_users_fk; Type: FK CONSTRAINT; Schema: public; Owner: testDB
---
-
-ALTER TABLE ONLY users_gadgets
-    ADD CONSTRAINT users_gadgets_users_fk FOREIGN KEY (user_id) REFERENCES users(user_id);
 
 
 --
