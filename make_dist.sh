@@ -22,6 +22,5 @@ cd wp5 && gradle build && cp build/libs/wp5-$version.war.original ../../dist/$to
 cd $adminapp && gradle build && cp build/libs/$adminapp-$version.war.original ../../dist/$tomcat/webapps/$adminapp.war && cd .. &&
 cd ../dist &&
 mkdir -p db && rm -rf db/* &&
-cp ../conf/postgreSql/restore_schema.sh ./db/restore_schema.sh && 
-cp ../conf/postgreSql/schema.sql ./db/schema.sql && 
+cp ../conf/postgreSql/schema/* ./db/ &&
 zip -r supersede-bin-$DATE $tomcat db
