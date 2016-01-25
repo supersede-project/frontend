@@ -1,12 +1,18 @@
 package demo.model;
 
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -21,7 +27,19 @@ public class Game {
     @Column(columnDefinition= "TIMESTAMP WITH TIME ZONE")
     @Temporal(TemporalType.TIMESTAMP)
     private Date startTime;
-	 
+	
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name="game_requirements", joinColumns=@JoinColumn(name="game_id"), inverseJoinColumns=@JoinColumn(name="requirement_id"))  
+    private List<Requirement> requirements;
+    
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name="game_players", joinColumns=@JoinColumn(name="game_id"), inverseJoinColumns=@JoinColumn(name="player_id"))  
+    private List<User> players;
+    
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name="game_criterias", joinColumns=@JoinColumn(name="game_id"), inverseJoinColumns=@JoinColumn(name="criteria_id"))  
+    private List<ValutationCriteria> criterias;
+    
 	public Game() {    	
 	}
 	
@@ -40,4 +58,28 @@ public class Game {
     public void setStartTime(Date startTime) {
         this.startTime = startTime;
     }	
+    
+    public List<Requirement> getRequirements() {
+		return requirements;
+	}
+
+	public void setRequirements(List<Requirement> requirements) {
+		this.requirements = requirements;
+	}
+
+	public List<User> getPlayers() {
+		return players;
+	}
+
+	public void setPlayers(List<User> players) {
+		this.players = players;
+	}
+
+	public List<ValutationCriteria> getCriterias() {
+		return criterias;
+	}
+
+	public void setCriterias(List<ValutationCriteria> criterias) {
+		this.criterias = criterias;
+	}
 }
