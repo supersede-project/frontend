@@ -66,7 +66,7 @@ public class PlayerMoveRest {
 		playerMoves.save(playerMove);
 	}
 	
-	// get a specific playerMove 
+	// TODO!!!! FINISH ||| get all the players of a specifi requirmentsMatrixData
 	@RequestMapping("/players/{requirementsMatrixDataId}")
 	public List<User> getPlayerMovePlayers(@PathVariable Long requirementsMatrixDataId){	
 		

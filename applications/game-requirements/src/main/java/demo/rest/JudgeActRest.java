@@ -11,9 +11,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import demo.jpa.JudgeActsJpa;
+import demo.jpa.PlayerMovesJpa;
 import demo.jpa.RequirementsMatricesDataJpa;
 import demo.jpa.UsersJpa;
 import demo.model.JudgeAct;
+import demo.model.PlayerMove;
 import demo.model.RequirementsMatrixData;
 import demo.model.User;
 import eu.supersede.fe.exception.NotFoundException;
@@ -31,6 +33,9 @@ public class JudgeActRest {
 
 	@Autowired
     private RequirementsMatricesDataJpa requirementsMatricesData;
+	
+	@Autowired
+    private PlayerMovesJpa playerMoves;
 	
 	// get all the judgeActs if user is a judge
 	@PreAuthorize("hasRole('JUDGE')")
@@ -72,5 +77,13 @@ public class JudgeActRest {
 		RequirementsMatrixData requirementsMatrixData = judgeAct.getRequirementsMatrixData();		
 		requirementsMatrixData.setValue(vote);
 		requirementsMatricesData.save(requirementsMatrixData);
+		
+		// set played true to all player_moves connected with the requirementsMatrixDataId
+		
+		List<PlayerMove> playerMovesList = playerMoves.findByRequirementsMatrixData(requirementsMatrixData);
+		for(int i=0; i< playerMovesList.size();i++){
+			playerMovesList.get(i).setPlayed(true);
+			playerMoves.save(playerMovesList.get(i));
+		}
 	}
 }
