@@ -21,7 +21,7 @@
 						<tr	ng-repeat="playerMove in playerMoves | filter:{played:false}">
 							<td>{{playerMove.playerMoveId}}</td>
 							<td>{{playerMove.requirementsMatrixData.requirementsMatrixDataId}}</td>
-							<td>{{playerMove.requirementsMatrixData.requirementsMatrix.criteria.name}}</td>								
+							<td>{{playerMove.requirementsMatrixData.criteria.name}}</td>								
 							<td>{{playerMove.requirementsMatrixData.rowRequirement.requirementId}} - {{playerMove.requirementsMatrixData.rowRequirement.name}}</td>
 							<td>{{playerMove.requirementsMatrixData.columnRequirement.requirementId}} - {{playerMove.requirementsMatrixData.columnRequirement.name}}</td>
 							<td>{{playerMove.value}}</td>
@@ -59,7 +59,7 @@
 						<tr	ng-repeat="playerMove in playerMoves | filter:{played:true}">
 							<td>{{playerMove.playerMoveId}}</td>
 							<td>{{playerMove.requirementsMatrixData.requirementsMatrixDataId}}</td>
-							<td>{{playerMove.requirementsMatrixData.requirementsMatrix.criteria.name}}</td>								
+							<td>{{playerMove.requirementsMatrixData.criteria.name}}</td>								
 							<td>{{playerMove.requirementsMatrixData.rowRequirement.requirementId}} - {{playerMove.requirementsMatrixData.rowRequirement.name}}</td>
 							<td>{{playerMove.requirementsMatrixData.columnRequirement.requirementId}} - {{playerMove.requirementsMatrixData.columnRequirement.name}}</td>
 							<td>{{playerMove.value}}</td>
