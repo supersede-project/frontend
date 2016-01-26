@@ -11,12 +11,21 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import demo.jpa.*;
 import demo.model.*;
 import eu.supersede.fe.exception.NotFoundException;
+
+import java.io.IOException;
+import java.util.*;
 
 @RestController
 @RequestMapping("/game")
@@ -30,6 +39,14 @@ public class GameRest {
     private UsersJpa users;
 	@Autowired
     private ValutationCriteriaJpa criterias;
+	@Autowired
+    private CriteriasMatricesDataJpa criteriasMatricesData;
+	@Autowired
+    private RequirementsMatricesDataJpa requirementsMatricesData;
+	@Autowired
+    private PlayerMovesJpa playerMoves;
+	@Autowired
+    private JudgeActsJpa judgeActs;
 	
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public List<Game> getGames(){
@@ -50,8 +67,12 @@ public class GameRest {
 	}
 	
 	@RequestMapping(value = "", method = RequestMethod.POST)
-	public ResponseEntity<?> createGame(@RequestBody Game game)
+	public ResponseEntity<?> createGame(@RequestBody Game game,
+			@RequestParam(required = true) String criteriaValues) throws JsonParseException, JsonMappingException, IOException
 	{
+		TypeReference<HashMap<String,Object>> typeRef = new TypeReference<HashMap<String,Object>>() {};
+		ObjectMapper mapper = new ObjectMapper();
+		Map<String, Map<String, Integer>> cvs = mapper.readValue(criteriaValues, typeRef);
 		game.setStartTime(new Date());
 		//re-attach detached requirements
 		List<Requirement> rs = game.getRequirements();
@@ -73,6 +94,59 @@ public class GameRest {
 		}
 	
 		game = games.save(game);
+		
+		for(int i = 0; i < cs.size() - 1; i++)
+		{
+			for(int j = i + 1; j < cs.size(); j++)
+			{
+				CriteriasMatrixData cmd = new CriteriasMatrixData();
+				cmd.setGame(game);
+				cmd.setRowCriteria(cs.get(j));
+				cmd.setColumnCriteria(cs.get(i));
+				String c1Id = cs.get(j).getCriteriaId().toString();
+				String c2Id = cs.get(i).getCriteriaId().toString();
+				
+				if(cvs.containsKey(c1Id) && cvs.get(c1Id).containsKey(c2Id))
+				{
+					cmd.setValue(new Long(cvs.get(c1Id).get(c2Id)));
+				}
+				else
+				{
+					cmd.setValue(new Long(cvs.get(c2Id).get(c1Id)));
+				}
+				
+				criteriasMatricesData.save(cmd);
+			}
+		}
+		
+		for(int c = 0; c < cs.size(); c++)
+		{
+			for(int i = 0; i < rs.size() - 1; i++)
+			{
+				for(int j = 1; j < rs.size(); j++)
+				{
+					RequirementsMatrixData rmd = new RequirementsMatrixData();
+					rmd.setGame(game);
+					rmd.setRowRequirement(rs.get(j));
+					rmd.setColumnRequirement(rs.get(i));
+					rmd.setCriteria(cs.get(c));
+					rmd.setValue(-1l);
+					requirementsMatricesData.save(rmd);
+					
+					for(int p = 0; p < us.size(); p++)
+					{
+						PlayerMove pm = new PlayerMove();
+						pm.setPlayer(us.get(p));
+						pm.setRequirementsMatrixData(rmd);
+						playerMoves.save(pm);
+					}
+					
+					JudgeAct ja = new JudgeAct();
+					ja.setRequirementsMatrixData(rmd);
+					judgeActs.save(ja);
+				}
+			}
+		}
 		
 		HttpHeaders httpHeaders = new HttpHeaders();
 		httpHeaders.setLocation(ServletUriComponentsBuilder

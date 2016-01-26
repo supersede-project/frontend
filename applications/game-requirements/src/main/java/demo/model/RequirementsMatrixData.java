@@ -1,5 +1,6 @@
 package demo.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -33,6 +34,7 @@ public class RequirementsMatrixData {
     @JoinColumn(name="requirement_column_id", nullable = false)
 	private Requirement columnRequirement;
 	
+	@Column(nullable = false)
 	private Long value;
 	 
 	public RequirementsMatrixData() {    	

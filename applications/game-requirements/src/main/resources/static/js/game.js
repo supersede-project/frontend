@@ -398,6 +398,12 @@ app.controllerProvider.register('create_game', function($scope, $http) {
     
     $scope.game = {players : [], requirements: [], criterias: []};
     
+    $scope.currentPage = 'page1';
+    
+    $scope.requirementsChoices = [];
+    
+    $scope.choices = {};
+    
     $http.get('game-requirements/user?profile=PLAYER')
 	.success(function(data) {
 		for(var i = 0; i < data.length; i++)
@@ -421,7 +427,16 @@ app.controllerProvider.register('create_game', function($scope, $http) {
 			$scope.criterias.push(data[i]);
 		}
 	});
-	
+
+    $http.get('game-requirements/requirementchoice')
+	.success(function(data) {
+		$scope.requirementsChoices.length = 0;
+		for(var i = 0; i < data.length; i++)
+		{
+			$scope.requirementsChoices.push(data[i]);
+		}
+	});
+    
     $scope.toggleSelection = function(array, item)
 	{
 	    var idx = array.indexOf(item);
@@ -438,13 +453,16 @@ app.controllerProvider.register('create_game', function($scope, $http) {
 		$http({
 			url: "game-requirements/game",
 	        data: $scope.game,
-	        method: 'POST'
+	        method: 'POST',
+	        params: {criteriaValues : $scope.choices}
 	    }).success(function(data){
 	    	$scope.game = {players : [], requirements: [], criterias: []};
+	    	$scope.choices = {};
+	    	$scope.currentPage = 'page1';
 	    }).error(function(err){
 	    	console.log(err);
 	    });
-	}
+	};
 });
 
 app.controllerProvider.register('judge_act', function($scope, $http, $location) {
