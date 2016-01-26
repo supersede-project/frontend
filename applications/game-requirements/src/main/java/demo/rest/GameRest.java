@@ -123,7 +123,7 @@ public class GameRest {
 		{
 			for(int i = 0; i < rs.size() - 1; i++)
 			{
-				for(int j = 1; j < rs.size(); j++)
+				for(int j = i + 1; j < rs.size(); j++)
 				{
 					RequirementsMatrixData rmd = new RequirementsMatrixData();
 					rmd.setGame(game);

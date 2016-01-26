@@ -75,12 +75,15 @@
 	<div id="page2" ng-show="currentPage == 'page2'">
 		<div ng-repeat="criteria in game.criterias" ng-if="$index < (game.criterias.length - 1)">
 			<div ng-repeat="other_criteria in game.criterias" ng-if="$index > $parent.$index">
-				<div align="center">
-				    {{criteria.name}}
-				    <label ng-init="choices[criteria.criteriaId][other_criteria.criteriaId]=4" class="radio-inline" ng-repeat="requirementsChoice in requirementsChoices">
-				      <input type="radio" ng-model="choices[criteria.criteriaId][other_criteria.criteriaId]" ng-value="{{requirementsChoice.value}}" name="radioRequirementsChoices{{criteria.criteriaId}}{{other_criteria.criteriaId}}">{{requirementsChoice.value}}
-				    </label>
-				    {{other_criteria.name}}
+				<div>
+					<div style="float: left; width: 15%">{{criteria.name}}</div>
+					<div style="float: left; width: 70%; text-align: center;">
+					    <label ng-init="choices[criteria.criteriaId][other_criteria.criteriaId]=4" class="radio-inline" ng-repeat="requirementsChoice in requirementsChoices">
+					    	<input type="radio" ng-model="choices[criteria.criteriaId][other_criteria.criteriaId]" ng-value="{{requirementsChoice.value}}" name="radioRequirementsChoices{{criteria.criteriaId}}{{other_criteria.criteriaId}}">{{requirementsChoice.value}}
+					    </label>
+					</div>
+				    <div style="float: right; width: 15%; text-align: right;">{{other_criteria.name}}</div>
+				    <div style="clear: both;"></div>
 			    </div>
 			</div>
 		</div>
