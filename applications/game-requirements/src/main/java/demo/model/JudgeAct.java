@@ -22,7 +22,7 @@ public class JudgeAct {
 	private RequirementsMatrixData requirementsMatrixData;
 	
 	@ManyToOne(fetch=FetchType.EAGER)
-    @JoinColumn(name="judge_id", nullable = false)
+    @JoinColumn(name="judge_id")
 	private User judge;
 	
 	private boolean voted;
