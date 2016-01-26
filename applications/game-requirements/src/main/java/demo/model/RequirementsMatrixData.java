@@ -18,15 +18,19 @@ public class RequirementsMatrixData {
     private Long requirementsMatrixDataId;
 
 	@ManyToOne(fetch=FetchType.EAGER)
-    @JoinColumn(name="requirements_matrix_id", nullable = false)
-	private RequirementsMatrix requirementsMatrix;
+    @JoinColumn(name="game_id", nullable = false)
+	private Game game;
 	
 	@ManyToOne(fetch=FetchType.EAGER)
-    @JoinColumn(name="row", nullable = false)
+    @JoinColumn(name="criteria_id", nullable = false)
+	private ValutationCriteria criteria;
+	
+	@ManyToOne(fetch=FetchType.EAGER)
+    @JoinColumn(name="requirement_row_id", nullable = false)
 	private Requirement rowRequirement;
 	
 	@ManyToOne(fetch=FetchType.EAGER)
-    @JoinColumn(name="column", nullable = false)
+    @JoinColumn(name="requirement_column_id", nullable = false)
 	private Requirement columnRequirement;
 	
 	private Long value;
@@ -42,12 +46,20 @@ public class RequirementsMatrixData {
         this.requirementsMatrixDataId = requirementsMatrixDataId;
     }
     
-    public RequirementsMatrix getRequirementsMatrix() {
-        return requirementsMatrix;
+    public Game getGame() {
+        return game;
     }
  
-    public void setRequirementsMatrix(RequirementsMatrix requirementsMatrix) {
-        this.requirementsMatrix = requirementsMatrix;
+    public void setGame(Game game) {
+        this.game = game;
+    }
+    
+    public ValutationCriteria getCriteria() {
+        return criteria;
+    }
+ 
+    public void setCriteria(ValutationCriteria criteria) {
+        this.criteria = criteria;
     }
     
     public Requirement getRowRequirement() {

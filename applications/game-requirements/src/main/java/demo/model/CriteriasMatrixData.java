@@ -18,15 +18,15 @@ public class CriteriasMatrixData {
     private Long criteriasMatrixDataId;
 
 	@ManyToOne(fetch=FetchType.EAGER)
-    @JoinColumn(name="criterias_matrix_id", nullable = false)
-	private CriteriasMatrix criteriasMatrix;
+    @JoinColumn(name="game_id", nullable = false)
+	private Game game;
 	
 	@ManyToOne(fetch=FetchType.EAGER)
-    @JoinColumn(name="row", nullable = false)
+    @JoinColumn(name="criteria_row_id", nullable = false)
 	private ValutationCriteria rowCriteria;
 	
 	@ManyToOne(fetch=FetchType.EAGER)
-    @JoinColumn(name="column", nullable = false)
+    @JoinColumn(name="criteria_column_id", nullable = false)
 	private ValutationCriteria columnCriteria;
 	
 	private Long value;
@@ -42,12 +42,12 @@ public class CriteriasMatrixData {
         this.criteriasMatrixDataId = criteriasMatrixDataId;
     }
     
-    public CriteriasMatrix getCriteriasMatrix() {
-        return criteriasMatrix;
+    public Game getGame() {
+        return game;
     }
  
-    public void setCriteriasMatrix(CriteriasMatrix criteriasMatrix) {
-        this.criteriasMatrix = criteriasMatrix;
+    public void setGame(Game game) {
+        this.game = game;
     }
     
     public ValutationCriteria getRowCriteria() {
