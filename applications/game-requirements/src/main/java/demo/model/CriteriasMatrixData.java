@@ -1,5 +1,6 @@
 package demo.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -28,7 +29,8 @@ public class CriteriasMatrixData {
 	@ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="criteria_column_id", nullable = false)
 	private ValutationCriteria columnCriteria;
-	
+
+	@Column(nullable = false)
 	private Long value;
 	 
 	public CriteriasMatrixData() {    	
