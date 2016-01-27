@@ -18,6 +18,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Entity
 @Table(name="games")
 public class Game {
@@ -47,6 +49,8 @@ public class Game {
     @ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "creator_id", nullable = false)
     private User creator;
+
+    private boolean finished;
     
 	public Game() {    	
 	}
@@ -59,6 +63,7 @@ public class Game {
         this.gameId = gameId;
     }
     
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd-MM-yyyy HH:mm:ss")
     public Date getStartTime() {
         return startTime;
     }
@@ -113,5 +118,13 @@ public class Game {
 
 	public void setCreator(User creator) {
 		this.creator = creator;
+	}
+
+	public boolean isFinished() {
+		return finished;
+	}
+
+	public void setFinished(boolean finish) {
+		this.finished = finished;
 	}
 }
