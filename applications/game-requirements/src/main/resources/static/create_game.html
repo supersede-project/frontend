@@ -5,6 +5,21 @@
 	<h1>Game Creation</h1>
 	
 	<div id="page1" ng-show="currentPage == 'page1'">
+		<div align="center">
+			<div style="width: 400px;display:block;">
+				<input type="text" ng-model="game.title" placeholder="Title" style="width: 100%;"/>
+			</div>
+			<div style="width: 400px;display:block;">
+				<textarea rows="6" ng-model="game.description" placeholder="Description"
+				style="width:100%; display:block; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box;"></textarea>
+			</div>
+			<div style="width: 100%; text-align: center;">
+				<button ng-click="toPage(2)">Continue</button>
+			</div>
+		</div>
+	</div>
+	
+	<div id="page2" ng-show="currentPage == 'page2'">
 		<p>Select the requirements to prioritize:</p>
 		<div class="selection">
 			<label ng-repeat="requirement in requirements" class="selection-choice" 
@@ -69,10 +84,10 @@
 		<div class="clear-div"></div>
 		
 		<div style="width: 100%; text-align: center;">
-			<button ng-click="nextPage()">Continue</button>
+			<button ng-click="toPage(3)">Continue</button>
 		</div>
 	</div>
-	<div id="page2" ng-show="currentPage == 'page2'">
+	<div id="page3" ng-show="currentPage == 'page3'">
 		<div ng-repeat="criteria in game.criterias" ng-if="$index < (game.criterias.length - 1)">
 			<div ng-repeat="other_criteria in game.criterias" ng-if="$index > $parent.$index">
 				<div>
@@ -91,4 +106,6 @@
 			<button ng-click="createGame()">Create</button>
 		</div>
 	</div>
+	
+	{{game || JSON}}
 </div>

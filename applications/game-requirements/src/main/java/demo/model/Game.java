@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -39,6 +40,13 @@ public class Game {
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name="game_criterias", joinColumns=@JoinColumn(name="game_id"), inverseJoinColumns=@JoinColumn(name="criteria_id"))  
     private List<ValutationCriteria> criterias;
+    
+    private String title;
+    private String description;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "creator_id", nullable = false)
+    private User creator;
     
 	public Game() {    	
 	}
@@ -81,5 +89,29 @@ public class Game {
 
 	public void setCriterias(List<ValutationCriteria> criterias) {
 		this.criterias = criterias;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public User getCreator() {
+		return creator;
+	}
+
+	public void setCreator(User creator) {
+		this.creator = creator;
 	}
 }

@@ -27,10 +27,10 @@
 
 		<tfoot>
 			<td colspan="4">
-				<div class="paging_simple_numbers">
+				<div class="paging_simple_numbers" align="center">
 					<ul class="pagination">
 						<li class="paginate_button previous" ng-class="{disabled: currentPage == 0}"><a href
-							ng-click="prevPage()">Previous</a></li>
+							ng-click="prevPage()">Prev</a></li>
 
 						<li class="paginate_button" ng-repeat="n in range()" ng-class="{active: n == (currentPage + 1)}" ng-click="setPage()">
 							<a href ng-bind="n">1</a>
