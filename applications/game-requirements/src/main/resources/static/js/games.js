@@ -19,7 +19,7 @@ app.controllerProvider.register('games', function($scope, $http, $location) {
 	.success(function(data) {
 		for(var i = 0; i < data.length; i++)
 		{
-			if(data[i].closed)
+			if(data[i].finished)
 			{
 				$scope.closed_games.push(data[i]);
 			}
