@@ -50,7 +50,7 @@ public class Game {
 	@JoinColumn(name = "creator_id", nullable = false)
     private User creator;
 
-    private boolean finished;
+    private Boolean finished;
     
 	public Game() {    	
 	}
@@ -120,11 +120,11 @@ public class Game {
 		this.creator = creator;
 	}
 
-	public boolean isFinished() {
+	public Boolean getFinished() {
 		return finished;
 	}
 
-	public void setFinished(boolean finish) {
+	public void setFinished(Boolean finished) {
 		this.finished = finished;
 	}
 }

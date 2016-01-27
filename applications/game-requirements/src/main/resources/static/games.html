@@ -24,7 +24,7 @@
 					<td class="creator">{{game.creator.name}}</td>
 					<td class="date">{{game.startTime}}</td>
 					<td class="details">
-						<button type="button" class="btn btn-warning btn-lg" ng-click="go('/game-requirements/game?gameId={{game.gameId}}')">
+						<button type="button" class="btn btn-warning btn-lg" ng-click="goGame(game.gameId)">
 							Details
 						</button>
 					</td>
@@ -74,7 +74,7 @@
 					<td class="creator">{{game.creator.name}}</td>
 					<td class="date">{{game.startTime}}</td>
 					<td class="details">
-						<button type="button" class="btn btn-warning btn-lg" ng-click="go('/game-requirements/game?gameId={{game.gameId}}')">
+						<button type="button" class="btn btn-warning btn-lg" ng-click="goGame(game.gameId)">
 							Details
 						</button>
 					</td>

@@ -1,6 +1,6 @@
 var app = angular.module('w5app');
 
-app.controllerProvider.register('games', function($scope, $http) {
+app.controllerProvider.register('games', function($scope, $http, $location) {
 	$scope.open_games = [];
 	$scope.closed_games = [];
 
@@ -75,4 +75,8 @@ app.controllerProvider.register('games', function($scope, $http) {
     $scope.setPage = function (oc) {
     	oc.currentPage = this.n -1;
     };
+    
+    $scope.goGame = function (gameId) {
+    	$location.path('/game-requirements/game').search('gameId', gameId);
+	};
 });
