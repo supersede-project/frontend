@@ -42,7 +42,7 @@ public class JudgeMoveRest {
     private ArgumentsJpa arguments;
 	
 	// get all the judgeMoves if user is a judge
-	@PreAuthorize("hasRole('JUDGE')")
+	@PreAuthorize("hasRole('OPINION_NEGOTIATOR')")
 	@RequestMapping(value = "",  method = RequestMethod.GET)
 	public List<JudgeMove> getJudgeMoves() {
 
@@ -50,7 +50,7 @@ public class JudgeMoveRest {
 	}
 		
 	// get a specific judgeMove if user is a judge
-	@PreAuthorize("hasRole('JUDGE')")
+	@PreAuthorize("hasRole('OPINION_NEGOTIATOR')")
 	@RequestMapping(value = "/{judgeMoveId}",  method = RequestMethod.GET)
 	public JudgeMove getJudgeMove(@PathVariable Long judgeMoveId) {
 
@@ -64,7 +64,7 @@ public class JudgeMoveRest {
 	}
 	
 	// put, for send notification to the player that the judge wants arguments from them if user is a judge
-	@PreAuthorize("hasRole('JUDGE')")
+	@PreAuthorize("hasRole('OPINION_NEGOTIATOR')")
 	@RequestMapping(method = RequestMethod.PUT, value="/{judgeMoveId}/needarguments")
 	public void needArguments(Authentication authentication, @PathVariable Long judgeMoveId) {
 				

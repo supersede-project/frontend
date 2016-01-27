@@ -38,7 +38,7 @@ public class JudgeActRest {
     private PlayerMovesJpa playerMoves;
 	
 	// get all the judgeActs if user is a judge
-	@PreAuthorize("hasRole('JUDGE')")
+	@PreAuthorize("hasRole('OPINION_NEGOTIATOR')")
 	@RequestMapping(value = "",  method = RequestMethod.GET)
 	public List<JudgeAct> getJudgeActs() {
 
@@ -46,7 +46,7 @@ public class JudgeActRest {
 	}
 	
 	// get a specific judgeAct 
-	@PreAuthorize("hasRole('JUDGE')")
+	@PreAuthorize("hasRole('OPINION_NEGOTIATOR')")
 	@RequestMapping(value = "/{judgeActId}", method = RequestMethod.GET)
 	public JudgeAct getJudgeAct(@PathVariable Long judgeActId){	
 				
@@ -61,7 +61,7 @@ public class JudgeActRest {
 	}
 	
 	// set the vote for of a judge in his/her judgeAct
-	@PreAuthorize("hasRole('JUDGE')")
+	@PreAuthorize("hasRole('OPINION_NEGOTIATOR')")
 	@RequestMapping(method = RequestMethod.PUT, value="/{judgeActId}/vote/{vote}")
 	public void setjudgeActVote(Authentication authentication, @PathVariable Long judgeActId, @PathVariable Long vote){	
 		
