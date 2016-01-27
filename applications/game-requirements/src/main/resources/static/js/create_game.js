@@ -2,6 +2,11 @@ var app = angular.module('w5app');
 
 app.controllerProvider.register('create_game', function($scope, $http) {
 
+	$scope.now = function()
+	{
+		return new Date().toJSON().slice(0,19).replace("T", " ");
+	}
+	
     $scope.players = [];
     $scope.requirements = [];
     $scope.criterias = [];
@@ -10,7 +15,7 @@ app.controllerProvider.register('create_game', function($scope, $http) {
     $scope.currentRequirement= undefined;
     $scope.currentCriteria = undefined;
     
-    $scope.game = {players : [], requirements: [], criterias: []};
+    $scope.game = {players : [], requirements: [], criterias: [], title: "Game " + $scope.now()};
     
     $scope.currentPage = 'page1';
     
@@ -87,7 +92,7 @@ app.controllerProvider.register('create_game', function($scope, $http) {
 	        method: 'POST',
 	        params: {criteriaValues : $scope.choices}
 	    }).success(function(data){
-	    	$scope.game = {players : [], requirements: [], criterias: []};
+	        $scope.game = {players : [], requirements: [], criterias: [], title: "Game " + $scope.now()};
 	    	$scope.choices = {};
 	    	$scope.currentPage = 'page1';
 	    }).error(function(err){
