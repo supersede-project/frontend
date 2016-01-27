@@ -41,7 +41,7 @@ public class User {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "secondPlayer")
 	private List<Move> secondPlayerMoves;
 	
-	@OneToOne(mappedBy = "user")
+	@OneToOne(mappedBy = "user", optional = true)
 	private UserPoint userGlobalPoints;
 	
     public User() {
@@ -94,8 +94,11 @@ public class User {
     	for(int i=0;i<userCriteriaPoints.size();i++){
     		tmpPoints += userCriteriaPoints.get(i).getPoints();
     	}
-    	tmpPoints+= userGlobalPoints.getUserPoints();
-        return tmpPoints;
+    	if(userGlobalPoints != null)
+    	{
+    		tmpPoints+= userGlobalPoints.getUserPoints();
+    	}
+    	return tmpPoints;
     }
  
     public List<Profile> getProfiles() {
