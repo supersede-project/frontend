@@ -18,7 +18,7 @@ app.controllerProvider.register('create_game', function($scope, $http) {
     
     $scope.choices = {};
     
-    $http.get('game-requirements/user?profile=PLAYER')
+    $http.get('game-requirements/user?profile=OPINION_PROVIDER')
 	.success(function(data) {
 		for(var i = 0; i < data.length; i++)
 		{
