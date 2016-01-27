@@ -77,6 +77,6 @@ app.controllerProvider.register('games', function($scope, $http, $location) {
     };
     
     $scope.goGame = function (gameId) {
-    	$location.path('/game-requirements/game').search('gameId', gameId);
+    	$location.path('/game-requirements/game_page').search('gameId', gameId);
 	};
 });
