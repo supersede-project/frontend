@@ -14,11 +14,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name="games")
@@ -51,6 +53,9 @@ public class Game {
     private User creator;
 
     private Boolean finished;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "game")
+	private List<RequirementsMatrixData> requirementsMatrixData;
     
 	public Game() {    	
 	}
@@ -127,4 +132,40 @@ public class Game {
 	public void setFinished(Boolean finished) {
 		this.finished = finished;
 	}
+	
+	@JsonIgnore
+	public List<RequirementsMatrixData> getRequirementsMatrixData() {
+		return requirementsMatrixData;
+	}
+
+	@JsonIgnore
+	public void setRequirementsMatrixData(List<RequirementsMatrixData> requirementsMatrixData) {
+		this.requirementsMatrixData = requirementsMatrixData;
+	}
+	
+	public Float getProgress()
+	{
+		Float total = 0f;
+		Float voted = 0f;
+		
+		if(getRequirementsMatrixData() != null)
+		{
+			for(RequirementsMatrixData data : getRequirementsMatrixData())
+			{
+				if(data != null && data.getPlayerMoves() != null)
+				{
+					for(PlayerMove pm : data.getPlayerMoves())
+					{
+						total++;
+						if(pm.getValue() != null && pm.getValue() > 0l)
+						{
+							voted++;
+						}
+					}
+				}
+			}
+		}
+		return total == 0f ? 0f : (voted / total);
+	}
+
 }

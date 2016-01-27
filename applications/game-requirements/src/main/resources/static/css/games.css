@@ -1,5 +1,5 @@
 .id {
-	width: 10%;
+	width: 5%;
 }
 
 .title {
@@ -14,6 +14,10 @@
 	width: 15%;
 }
 
+.progress {
+	width: 8%;
+}
+
 .details {
-	width: 15%;
+	width: 12%;
 }

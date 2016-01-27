@@ -1,5 +1,7 @@
 package demo.model;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -8,7 +10,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name="requirements_matrices_data")
@@ -36,7 +41,10 @@ public class RequirementsMatrixData {
 	
 	@Column(nullable = false)
 	private Long value;
-	 
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "requirementsMatrixData")
+	private List<PlayerMove> playerMoves;
+	
 	public RequirementsMatrixData() {    	
 	}
 	
@@ -87,4 +95,14 @@ public class RequirementsMatrixData {
     public void setValue(Long value) {
         this.value = value;
     }
+
+    @JsonIgnore
+	public List<PlayerMove> getPlayerMoves() {
+		return playerMoves;
+	}
+
+    @JsonIgnore
+	public void setPlayerMoves(List<PlayerMove> playerMoves) {
+		this.playerMoves = playerMoves;
+	}
 }

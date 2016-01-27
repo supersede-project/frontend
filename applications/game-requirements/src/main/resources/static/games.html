@@ -13,6 +13,7 @@
 					<th class="title">Title&nbsp;</th>
 					<th class="creator">Created by&nbsp;</th>
 					<th class="date">Creation Date&nbsp;</th>
+					<th class="progr">Progress&nbsp;</th>
 					<th class="details"></th>
 				</tr>
 			</thead>
@@ -23,6 +24,7 @@
 					<td class="title">{{game.title}}</td>
 					<td class="creator">{{game.creator.name}}</td>
 					<td class="date">{{game.startTime}}</td>
+					<td class="progr">{{game.progress}}%</td>
 					<td class="details">
 						<button type="button" class="btn btn-warning btn-lg" ng-click="goGame(game.gameId)">
 							Details
@@ -32,7 +34,7 @@
 			</tbody>
 	
 			<tfoot>
-				<td colspan="5">
+				<td colspan="6">
 					<div class="paging_simple_numbers" align="center">
 						<ul class="pagination">
 							<li class="paginate_button previous" ng-class="{disabled: pagination.open.currentPage == 0}"><a href
@@ -63,6 +65,7 @@
 					<th class="title">Title&nbsp;</th>
 					<th class="creator">Created by&nbsp;</th>
 					<th class="date">Creation Date&nbsp;</th>
+					<th class="progr">Progress&nbsp;</th>
 					<th class="details"></th>
 				</tr>
 			</thead>
@@ -73,6 +76,7 @@
 					<td class="title">{{game.title}}</td>
 					<td class="creator">{{game.creator.name}}</td>
 					<td class="date">{{game.startTime}}</td>
+					<td class="progr">{{game.progress}}%</td>
 					<td class="details">
 						<button type="button" class="btn btn-warning btn-lg" ng-click="goGame(game.gameId)">
 							Details
@@ -82,7 +86,7 @@
 			</tbody>
 	
 			<tfoot>
-				<td colspan="5">
+				<td colspan="6">
 					<div class="paging_simple_numbers" align="center">
 						<ul class="pagination">
 							<li class="paginate_button previous" ng-class="{disabled: pagination.closed.currentPage == 0}"><a href

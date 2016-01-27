@@ -33,7 +33,7 @@ public class User {
     private List<Profile> profiles;
     
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-	public List<UserCriteriaPoint> userCriteriaPoints;
+	private List<UserCriteriaPoint> userCriteriaPoints;
     
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "firstPlayer")
 	private List<Move> firstPlayerMoves;

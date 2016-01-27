@@ -117,7 +117,7 @@ public class GameRest {
 			User u = users.getOne(dbUser.getUserId());
 			game.setCreator(u);
 		}
-		
+		game.setFinished(false);
 		game = games.save(game);
 		
 		for(int i = 0; i < cs.size() - 1; i++)
