@@ -1,12 +1,16 @@
 package demo.rest;
 
+import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,12 +24,24 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import demo.jpa.*;
-import demo.model.*;
+import demo.jpa.CriteriasMatricesDataJpa;
+import demo.jpa.GamesJpa;
+import demo.jpa.JudgeActsJpa;
+import demo.jpa.PlayerMovesJpa;
+import demo.jpa.RequirementsJpa;
+import demo.jpa.RequirementsMatricesDataJpa;
+import demo.jpa.UsersJpa;
+import demo.jpa.ValutationCriteriaJpa;
+import demo.model.CriteriasMatrixData;
+import demo.model.Game;
+import demo.model.JudgeAct;
+import demo.model.PlayerMove;
+import demo.model.Requirement;
+import demo.model.RequirementsMatrixData;
+import demo.model.User;
+import demo.model.ValutationCriteria;
 import eu.supersede.fe.exception.NotFoundException;
-
-import java.io.IOException;
-import java.util.*;
+import eu.supersede.fe.security.DatabaseUser;
 
 @RestController
 @RequestMapping("/game")
@@ -67,7 +83,7 @@ public class GameRest {
 	}
 	
 	@RequestMapping(value = "", method = RequestMethod.POST)
-	public ResponseEntity<?> createGame(@RequestBody Game game,
+	public ResponseEntity<?> createGame(Authentication auth, @RequestBody Game game,
 			@RequestParam(required = true) String criteriaValues) throws JsonParseException, JsonMappingException, IOException
 	{
 		TypeReference<HashMap<String,Object>> typeRef = new TypeReference<HashMap<String,Object>>() {};
@@ -93,6 +109,15 @@ public class GameRest {
 			cs.set(i, criterias.findOne(cs.get(i).getCriteriaId()));
 		}
 	
+		Object user = auth.getPrincipal();
+		
+		if(user instanceof DatabaseUser)
+		{
+			DatabaseUser dbUser = (DatabaseUser)user;
+			User u = users.getOne(dbUser.getUserId());
+			game.setCreator(u);
+		}
+		
 		game = games.save(game);
 		
 		for(int i = 0; i < cs.size() - 1; i++)

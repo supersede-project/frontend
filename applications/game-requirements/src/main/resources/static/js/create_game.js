@@ -62,13 +62,20 @@ app.controllerProvider.register('create_game', function($scope, $http) {
 	    }
 	};
 	
-	$scope.nextPage = function()
+	$scope.toPage = function(p)
 	{
-		if($scope.game.players.length > 0 &&
-				$scope.game.requirements.length > 1 &&
-				$scope.game.criterias.length > 1)
+		if(p == 2)
 		{
 			$scope.currentPage = 'page2';
+		}
+		else if(p == 3)
+		{
+			if($scope.game.players.length > 0 &&
+					$scope.game.requirements.length > 1 &&
+					$scope.game.criterias.length > 1)
+			{
+				$scope.currentPage = 'page3';
+			}
 		}
 	}
 	
