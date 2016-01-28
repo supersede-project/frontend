@@ -4,6 +4,7 @@
 			<div class="col-md-6">
 				<h1>Game details</h1>
 				<p>ID: <b>{{game.gameId}}</b></p>
+				<p>Progress: <b>{{game.progress}}%</b></p>
 				<p>Title: <b>{{game.title}}</b></p>	
 				<p>Description: <b>{{game.description}}</b></p>				
 				<p>Criterias: <b ng-repeat="criteria in game.criterias">{{criteria.name}}, </b></p>
@@ -20,10 +21,10 @@
 					</div>
 				</div>								
 			</div>
-			<div class="col-md-12">
+			<div class="col-md-12" ng-hide="game.finished">
 				<div align="center">
 					<p>Click the button for end the game.</p>
-					<button type="button" class="btn btn-lg btn-danger">End Game</button>
+					<a href="#/game-requirements/games" ng-click="gameEnd(game.gameId)" class="btn btn-lg btn-danger">END GAME</a>
 				</div>	
 			</div>		
 		</div>

@@ -71,7 +71,7 @@ public class GameRest {
 	}
 	
 	@RequestMapping("/{gameId}")
-	public Game getUser(@PathVariable Long gameId)
+	public Game getGame(@PathVariable Long gameId)
 	{
 		Game g = games.findOne(gameId);
 		if(g == null)
@@ -80,6 +80,36 @@ public class GameRest {
 		}
 		
 		return g;
+	}
+	
+	@RequestMapping(value = "/end/{gameId}", method = RequestMethod.PUT)
+	public void setGameFinished(@PathVariable Long gameId)
+	{
+		Game g = games.findOne(gameId);
+		g.setFinished(true);
+		games.save(g);
+		
+		// set all judgeActs voted and playerMoves played
+		List<RequirementsMatrixData> rmdList =  requirementsMatricesData.findByGame(g);
+		for(int i = 0; i < rmdList.size(); i++)
+		{
+			RequirementsMatrixData rmd = rmdList.get(i);
+			List<JudgeAct> jaList = judgeActs.findByRequirementsMatrixData(rmd);
+			List<PlayerMove> pmList = playerMoves.findByRequirementsMatrixData(rmd);
+			
+			for(int j = 0; j < jaList.size(); j++)
+			{
+				jaList.get(j).setVoted(true);
+				judgeActs.save(jaList.get(j));
+			}
+			
+			for(int k = 0; k < pmList.size(); k++)
+			{
+				pmList.get(k).setPlayed(true);
+				playerMoves.save(pmList.get(k));
+			}
+			
+		}
 	}
 	
 	@RequestMapping(value = "", method = RequestMethod.POST)
