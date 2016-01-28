@@ -2,7 +2,7 @@ var app = angular.module('w5app', [ 'ngRoute' ]).config(function($routeProvider,
 
 	$routeProvider.when('/', {
 		templateUrl : 'home.html',
-		controller : 'home'
+		controller : 'main_home'
 	}).when('/dashboard', {
 		templateUrl : 'dashboard.html',
 		controller : 'dashboard'
@@ -472,5 +472,10 @@ app.controller('dashboard', function($scope, $http) {
 });
 
 
-app.controller('home', function($scope, $http) {
+app.controller('main_home', function($scope, $http, $location) {
+	
+	$scope.goHome = function(appName, homePage) {
+		$location.path('/' + appName + '/' + homePage);
+	};
+	
 });

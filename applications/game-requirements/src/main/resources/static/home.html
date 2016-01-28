@@ -1,4 +1,4 @@
-    <script src="game-requirements/js/home.js"></script>		            
+    <script src="game-requirements/js/home.js"></script>
 	<div class="jumbotron">
       <div class="container">
         <h1>Hello!</h1>
@@ -6,21 +6,21 @@
       </div>
    	</div>
     
-	<div class="container">			
+	<div class="container">
 		<div class="row" ng-controller="home">
 			<div class="col-md-6">
 				<h1>Profile details</h1>
-				<p>Name: <b>{{user.name}}</b></p>			
+				<p>Name: <b>{{user.name}}</b></p>
 				<p>Email: <b>{{user.email}}</b></p>
 				<p>Global points: <b>{{user.userGlobalPoints.userPoints}}</b></p>
 				<p>Total points: <b>{{user.points}}</b></p>
-			</div>			
+			</div>
 			<div class="col-md-6">
 				<h1>Criterias points</h1>
 				<ul class="list-group" ng-show="user.userCriteriaPoints.length">
 				  <li class="list-group-item" ng-repeat="userCriteriaPoint in user.userCriteriaPoints | orderBy: '-points'">Points for {{userCriteriaPoint.valutationCriteria.name}}: <b>{{userCriteriaPoint.points}}</b></li>
 				</ul>
-				<p ng-show="!user.userCriteriaPoints.length">User doesn't have points per criterias.</p>							
+				<p ng-show="!user.userCriteriaPoints.length">User doesn't have points per criterias.</p>
 			</div>	
 		</div>
 	</div>

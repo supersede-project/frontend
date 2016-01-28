@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import eu.supersede.fe.application.Application;
 import eu.supersede.fe.application.ApplicationGadget;
 import eu.supersede.fe.application.ApplicationGadgetComparator;
 import eu.supersede.fe.application.ApplicationPage;
@@ -117,8 +118,10 @@ public class ApplicationRest {
 				ApplicationGrouped ag;
 				if(!appsMap.containsKey(app.getApplicationName()))
 				{
-					String appLabel = applicationUtil.getApplication(app.getApplicationName()).getLocalizedApplicationLabel(lang);
+					Application a = applicationUtil.getApplication(app.getApplicationName());
+					String appLabel = a.getLocalizedApplicationLabel(lang);
 					ag = new ApplicationGrouped(app.getApplicationName(), appLabel);
+					ag.setHomePage(a.getHomePage());
 					applications.add(ag);
 					appsMap.put(app.getApplicationName(), ag);
 					appsPagesMap.put(app.getApplicationName(), new HashMap<String, Page>());
@@ -145,6 +148,7 @@ public class ApplicationRest {
 	{
 		private String applicationName;
 		private String applicationLabel;
+		private String homePage;
 		private List<Page> pages;
 		
 		public ApplicationGrouped(String applicationName, String applicationLabel) {
@@ -175,6 +179,14 @@ public class ApplicationRest {
 		
 		public void setPages(List<Page> pages) {
 			this.pages = pages;
+		}
+
+		public String getHomePage() {
+			return homePage;
+		}
+
+		public void setHomePage(String homePage) {
+			this.homePage = homePage;
 		}
 	}
 	
