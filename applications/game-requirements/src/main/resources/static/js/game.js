@@ -10,12 +10,18 @@ app.controllerProvider.register('game', function($scope, $http, $location) {
 	.success(function(data) {
 		$scope.game = data;
 	});
+
+	 $scope.computeAHP = function(gameId){
+		 $http.get('game-requirements/ahp/' + gameId)
+	    	.success(function(data) {
+	    		$scope.ahpResult = data;
+    	});
+	 };
 	
-	$scope.computeAHP = function(gameId){
-		$http.get('game-requirements/ahp/' + gameId)
-		.success(function(data) {
-			$scope.ahpResult = data;
-		});
-	}
-	
+	$scope.gameEnd = function(gameId){
+		 $http.put('game-requirements/game/end/' + gameId)
+	    	.success(function(data) {
+	    		
+	    	});
+	 };	
 });
