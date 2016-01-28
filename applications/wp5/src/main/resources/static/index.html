@@ -19,7 +19,7 @@
 				<div id="top-header">
 					<div class="ak-container">
 						<div class="site-branding">
-							<img src="img/SupersedeLogo_outline.png"/>
+							<a href="#/"><img src="img/SupersedeLogo_outline.png"/></a>
 						</div>
 						<div ng-show="authenticated" class="tenant">
 							<img class="tenant-img" src="img/{{user.tenantId}}.jpg"/>
@@ -35,20 +35,14 @@
 					    		<li ng-show="authenticated">
 					        		<a href="#/dashboard">Dashboard</a>
 					        	</li>
-					        	
-					        	<li ng-repeat="profile in applications | orderBy:'profile.profileName'" class="dropdown" ng-show="authenticated">
-						    		<a class="dropdown-toggle" ng-show="profile.applications.length > 0">{{profile.profileName}}<b class="caret"></b></a>
-						    		<ul class="dropdown-menu multi-level" ng-show="profile.applications.length > 0">
-								       	<li class="dropdown-submenu" ng-repeat="appl in profile.applications">
-								        	<a>{{appl.applicationLabel?appl.applicationLabel:appl.applicationName}}</a>
-							        		<ul class="dropdown-menu">
-						                		<li ng-repeat="page in appl.pages">
-						                			<a ng-href="#/{{appl.applicationName}}/{{page.name}}">{{page.label?page.label:page.name}}</a>
-						                		</li>
-						                	</ul>
-							        	</li>
-							   		</ul>
-						    	</li>
+					        	<li>
+					     			<a class="dropdown-toggle">{{currentApplication.applicationLabel?currentApplication.applicationLabel:currentApplication.applicationName}}</a>
+					        		<ul class="dropdown-menu">
+				                		<li ng-repeat="page in currentApplication.pages">
+				                			<a ng-href="#/{{currentApplication.applicationName}}/{{page.name}}">{{page.label?page.label:page.name}}</a>
+				                		</li>
+				                	</ul>
+					        	</li>
 						    </ul>
 							<ul class="nav navbar-nav navbar-right">
 					      		<li ng-show="authenticated">

@@ -25,15 +25,12 @@ import eu.supersede.fe.application.ApplicationUtil;
 import eu.supersede.fe.jpa.ProfilesJpa;
 import eu.supersede.fe.jpa.UserGadgetsJpa;
 import eu.supersede.fe.model.Profile;
-import eu.supersede.fe.model.ProfileLabel;
 import eu.supersede.fe.model.UserGadget;
 import eu.supersede.fe.security.DatabaseUser;
 
 @RestController
 @RequestMapping("/application")
 public class ApplicationRest {
-	
-	private final static String DEF_LANG = "en";
 	
 	@Autowired
 	private ApplicationUtil applicationUtil;
@@ -94,13 +91,14 @@ public class ApplicationRest {
 	}
 	
 	@RequestMapping("/page")
-	public List<ProfileApplications> getUserAuthenticatedApplicationsPage(Authentication auth, Locale locale) 
+	public List<ApplicationGrouped> getUserAuthenticatedApplicationsPage(Authentication auth, Locale locale) 
 	{
 		String lang= locale.getLanguage();
 		
-		List<ProfileApplications>  r = new ArrayList<>();
-		Map<String, List<Page>> pages = new HashMap<>();
-		Map<String, String> labels = new HashMap<>();
+		Map<String, ApplicationGrouped> appsMap = new HashMap<>();
+		Map<String, Map<String, Page>> appsPagesMap = new HashMap<>();
+		List<ApplicationGrouped> applications = new ArrayList<>();
+		
 		List<String> authNames = new ArrayList<>();
 		Collection<? extends GrantedAuthority> authorities = auth.getAuthorities();
 		for(GrantedAuthority ga : authorities)
@@ -112,91 +110,35 @@ public class ApplicationRest {
 		
 		//make data nicer for frontend
 		for(Profile p : profList)
-		{
-			
-			ProfileApplications pa = new ProfileApplications();
-			
-			String profileLabel = getLabel(p, lang);
-			pa.setProfileName(profileLabel);
-			
+		{	
 			Set<ApplicationPage> apps = applicationUtil.getApplicationsPagesByProfileName(p.getName());
 			for(ApplicationPage app : apps)
 			{
-				if(!pages.containsKey(app.getApplicationName()))
+				ApplicationGrouped ag;
+				if(!appsMap.containsKey(app.getApplicationName()))
 				{
-					pages.put(app.getApplicationName(), new ArrayList<Page>());
-					labels.put(app.getApplicationName(), app.getLocalizedApplicationLabel(lang));
+					String appLabel = applicationUtil.getApplication(app.getApplicationName()).getLocalizedApplicationLabel(lang);
+					ag = new ApplicationGrouped(app.getApplicationName(), appLabel);
+					applications.add(ag);
+					appsMap.put(app.getApplicationName(), ag);
+					appsPagesMap.put(app.getApplicationName(), new HashMap<String, Page>());
 				}
-				pages.get(app.getApplicationName()).add(new Page(app.getApplicationPage(), app.getLocalizedApplicationPageLabel(lang)));
-			}
-			
-			for(String app : pages.keySet())
-			{
-				ApplicationGrouped ag = new ApplicationGrouped();
-				ag.setApplicationName(app);
-				ag.setApplicationLabel(labels.get(app));
-				
-				for(Page pag : pages.get(app))
+				else
 				{
-					ag.getPages().add(pag);
+					ag = appsMap.get(app.getApplicationName());
 				}
 				
-				pa.getApplications().add(ag);
-			}
-			
-			r.add(pa);
-			pages.clear();
-			labels.clear();
-		}
-		
-		return r;
-	}
-	
-	private String getLabel(Profile p, String lang) {
-		String found = null;
-		String def = null;
-		
-		for(ProfileLabel pl : p.getLabels())
-		{
-			if(pl.getLang().equals(lang))
-			{
-				found = pl.getLabel();
-				//found
-				break;
-			}
-			else if(pl.getLang().equals(DEF_LANG))
-			{
-				def = pl.getLabel();
+				Page page;
+				if(!appsPagesMap.get(app.getApplicationName()).containsKey(app.getApplicationPage()))
+				{
+					page = new Page(app.getApplicationPage(), app.getLocalizedApplicationPageLabel(lang));
+					ag.getPages().add(page);
+					appsPagesMap.get(app.getApplicationName()).put(app.getApplicationPage(), page);
+				}
+				
 			}
 		}
-		
-		return found != null ? found : def != null ? def : p.getName();
-	}
-
-	static class ProfileApplications
-	{
-		private String profileName;
-		private List<ApplicationGrouped> applications;
-		
-		public ProfileApplications() {
-			applications = new ArrayList<>();
-		}
-		
-		public String getProfileName() {
-			return profileName;
-		}
-		
-		public void setProfileName(String profileName) {
-			this.profileName = profileName;
-		}
-		
-		public List<ApplicationGrouped> getApplications() {
-			return applications;
-		}
-		
-		public void setApplications(List<ApplicationGrouped> applications) {
-			this.applications = applications;
-		}
+		return applications;
 	}
 	
 	static class ApplicationGrouped
@@ -205,7 +147,9 @@ public class ApplicationRest {
 		private String applicationLabel;
 		private List<Page> pages;
 		
-		public ApplicationGrouped() {
+		public ApplicationGrouped(String applicationName, String applicationLabel) {
+			this.applicationName = applicationName;
+			this.applicationLabel = applicationLabel;			
 			pages = new ArrayList<>();
 		}
 		

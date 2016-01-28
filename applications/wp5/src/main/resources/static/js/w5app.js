@@ -1,8 +1,8 @@
 var app = angular.module('w5app', [ 'ngRoute' ]).config(function($routeProvider, $httpProvider, $controllerProvider, $compileProvider, $filterProvider, $provide) {
 
 	$routeProvider.when('/', {
-		templateUrl : 'dashboard.html',
-		controller : 'dashboard'
+		templateUrl : 'home.html',
+		controller : 'home'
 	}).when('/dashboard', {
 		templateUrl : 'dashboard.html',
 		controller : 'dashboard'
@@ -37,6 +37,7 @@ app.controller('navigation', function($rootScope, $scope, $http, $location, $rou
 			$rootScope.notificationsCount = 0;
 			$rootScope.notifications = [];
 			$rootScope.profiles = [];
+			$rootScope.currentApplication = {};
 			$rootScope.applications = [];
 			$rootScope.roles = [];
 			$rootScope.tenants = [];
@@ -468,4 +469,8 @@ app.controller('dashboard', function($scope, $http) {
 	{
 		$scope.gadgets[index].size="large";
 	}
+});
+
+
+app.controller('home', function($scope, $http) {
 });

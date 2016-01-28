@@ -43,6 +43,9 @@ public class ApplicationConfigLoader {
 				}
 			}
 			
+			String home = env.getRequiredProperty("application.home");
+			applicationUtil.addApplication(applicationName, applicationLabels, home);
+			
 			String[] pageNames = env.getRequiredProperty("application.pages").split(",");
 			
 			for(String pageName : pageNames)
@@ -69,7 +72,7 @@ public class ApplicationConfigLoader {
 					trimmedPageRoles.add(pageRole.trim());
 				}
 				
-				applicationUtil.addApplicationPage(applicationName, applicationLabels, pageName, pageLabels, trimmedPageRoles);
+				applicationUtil.addApplicationPage(applicationName, pageName, pageLabels, trimmedPageRoles);
 			}
 			
 			String[] gadgets = env.getProperty("application.gadgets").split(",");

@@ -9,7 +9,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class ApplicationPage {
 
 	private String applicationName;
-	private Map<String, String> applicationLabels;
 	private String applicationPage;
 	private Map<String, String> applicationPageLabels;
 	private List<String> profilesRequired;
@@ -18,12 +17,10 @@ public class ApplicationPage {
 	{}
 	
 	public ApplicationPage(String applicationName, 
-			Map<String, String> applicationLabels, 
 			String applicationPage,
 			Map<String, String> applicationPageLabels, 
 			List<String> profilesRequired) {
 		this.applicationName = applicationName;
-		this.applicationLabels = applicationLabels;
 		this.applicationPage = applicationPage;
 		this.setApplicationPageLabels(applicationPageLabels);
 		this.setProfilesRequired(profilesRequired);
@@ -42,24 +39,6 @@ public class ApplicationPage {
 		this.applicationName = applicationName;
 	}
 
-	public String getLocalizedApplicationLabel(String lang)
-	{
-		if(applicationLabels.containsKey(lang))
-		{
-			return applicationLabels.get(lang);
-		}
-		
-		return applicationLabels.get("");
-	}
-	
-	public Map<String, String> getApplicationLabels() {
-		return applicationLabels;
-	}
-
-	public void setApplicationLabels(Map<String, String> applicationLabels) {
-		this.applicationLabels = applicationLabels;
-	}
-	
 	public String getApplicationPage() {
 		return applicationPage;
 	}
