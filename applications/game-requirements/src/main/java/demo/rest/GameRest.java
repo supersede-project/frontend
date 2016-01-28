@@ -193,10 +193,12 @@ public class GameRest {
 						PlayerMove pm = new PlayerMove();
 						pm.setPlayer(us.get(p));
 						pm.setRequirementsMatrixData(rmd);
+						pm.setPlayed(false);
 						playerMoves.save(pm);
 					}
 					
 					JudgeAct ja = new JudgeAct();
+					ja.setVoted(false);
 					ja.setRequirementsMatrixData(rmd);
 					judgeActs.save(ja);
 				}

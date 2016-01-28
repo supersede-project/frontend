@@ -86,10 +86,12 @@ public class AHPRest {
 		*/
 		List<RequirementsMatrixData> requirementsMatrixDataList = requirementsMatricesData.findByGame(g);
 		for(int i=0; i<requirementsMatrixDataList.size();i++){
-			input.setOptionPreference(requirementsMatrixDataList.get(i).getRowRequirement().getRequirementId().toString(), 
-					requirementsMatrixDataList.get(i).getColumnRequirement().getRequirementId().toString(), 
-					requirementsMatrixDataList.get(i).getCriteria().getCriteriaId().toString(),
-					(int) (long) requirementsMatrixDataList.get(i).getValue());
+			if((int) (long) requirementsMatrixDataList.get(i).getValue() != -1){
+				input.setOptionPreference(requirementsMatrixDataList.get(i).getRowRequirement().getRequirementId().toString(), 
+						requirementsMatrixDataList.get(i).getColumnRequirement().getRequirementId().toString(), 
+						requirementsMatrixDataList.get(i).getCriteria().getCriteriaId().toString(),
+						(int) (long) requirementsMatrixDataList.get(i).getValue());
+			}
 		}		
 		//##################################################################
 

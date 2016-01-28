@@ -4,7 +4,7 @@
 			<div class="col-md-6">
 				<h1>Game details</h1>
 				<p>ID: <b>{{game.gameId}}</b></p>
-				<p>Progress: <b>{{game.progress}}%</b></p>
+				<p>Progress: <b>{{game.progress}} %</b></p>
 				<p>Title: <b>{{game.title}}</b></p>	
 				<p>Description: <b>{{game.description}}</b></p>				
 				<p>Criterias: <b ng-repeat="criteria in game.criterias">{{criteria.name}}, </b></p>
@@ -16,8 +16,11 @@
 				<p>Click the button for calculate the ranks of the requirements of this game.</p>
 				<div align="center">
 					<button type="button" ng-click="computeAHP(game.gameId)" class="btn btn-lg btn-success">Compute AHP</button>
-					<div ng-repeat="(key, data) in ahpResult">
-						{{key}} - {{data}}
+					<br>
+					<div class="col-md-12">
+						<div ng-repeat="(key, data) in ahpResult">
+							{{key}} - {{data}}
+						</div>
 					</div>
 				</div>								
 			</div>
