@@ -1,9 +1,6 @@
 <div id="home" ng-show="authenticated">
 	<div ng-repeat="application in applications">
-		<button ng-click="$parent.currentApplication.pages = application.pages;
-		 $parent.currentApplication.applicationName = application.applicationName; 
-		 $parent.currentApplication.applicationLabel = application.applicationLabel;
-		 goHome(application.applicationName, application.homePage);">{{application.applicationLabel}}</button>
+		<button ng-click="goHome(application.applicationName, application.homePage);">{{application.applicationLabel}}</button>
 	</div>
 	
 </div>

@@ -35,11 +35,11 @@
 					    		<li ng-show="authenticated">
 					        		<a href="#/dashboard">Dashboard</a>
 					        	</li>
-					        	<li>
-					     			<a class="dropdown-toggle">{{currentApplication.applicationLabel?currentApplication.applicationLabel:currentApplication.applicationName}}</a>
+					        	<li ng-show="authenticated" ng-repeat="application in applications" ng-if="checkApplicationUrl(application)">
+					     			<a class="dropdown-toggle">{{application.applicationLabel?application.applicationLabel:application.applicationName}}</a>
 					        		<ul class="dropdown-menu">
-				                		<li ng-repeat="page in currentApplication.pages">
-				                			<a ng-href="#/{{currentApplication.applicationName}}/{{page.name}}">{{page.label?page.label:page.name}}</a>
+				                		<li ng-repeat="page in application.pages">
+				                			<a ng-href="#/{{application.applicationName}}/{{page.name}}">{{page.label?page.label:page.name}}</a>
 				                		</li>
 				                	</ul>
 					        	</li>

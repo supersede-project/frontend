@@ -37,7 +37,6 @@ app.controller('navigation', function($rootScope, $scope, $http, $location, $rou
 			$rootScope.notificationsCount = 0;
 			$rootScope.notifications = [];
 			$rootScope.profiles = [];
-			$rootScope.currentApplication = {};
 			$rootScope.applications = [];
 			$rootScope.roles = [];
 			$rootScope.tenants = [];
@@ -181,6 +180,12 @@ app.controller('navigation', function($rootScope, $scope, $http, $location, $rou
 					success(function(data) {
 					
 					});
+			}
+			
+			$scope.checkApplicationUrl = function(application)
+			{
+				var test = '/' + application.applicationName + '/';
+				return $location.url().slice(0, test.length) == test;
 			}
 			
 			var getTenants = function()
