@@ -25,8 +25,8 @@ public class Move {
     @Column(columnDefinition= "TIMESTAMP WITH TIME ZONE")
     @Temporal(TemporalType.TIMESTAMP)
     private Date startTime;
-    private int timer;
-    private boolean finish;
+    private Integer timer;
+    private Boolean finish;
     
     @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="first_requirement_id", nullable = false)
@@ -56,9 +56,9 @@ public class Move {
     @JoinColumn(name="second_player_requirement")
     private Requirement secondPlayerChooseRequirement;
     
-    private boolean notificationSent;
-    private boolean toPlay;
-    private boolean toArgue;
+    private Boolean notificationSent;
+    private Boolean toPlay;
+    private Boolean toArgue;
     
     @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="winner_requirement")
@@ -105,19 +105,19 @@ public class Move {
         this.startTime = startTime;
     }
     
-    public int getTimer() {
+    public Integer getTimer() {
         return timer;
     }
  
-    public void setTimer(int timer) {
+    public void setTimer(Integer timer) {
         this.timer = timer;
     }
     
-    public boolean getFinish() {
+    public Boolean getFinish() {
         return finish;
     }
  
-    public void setFinish(boolean finish) {
+    public void setFinish(Boolean finish) {
         this.finish = finish;
     }
 
@@ -177,27 +177,27 @@ public class Move {
         this.secondPlayerChooseRequirement = secondPlayerChooseRequirement;
     }
 
-	public boolean getNotificationSent() {
+	public Boolean getNotificationSent() {
 		return notificationSent;
 	}
 
-	public void setNotificationSent(boolean notificationSent) {
+	public void setNotificationSent(Boolean notificationSent) {
 		this.notificationSent = notificationSent;
 	}
 
-	public boolean getToPlay() {
+	public Boolean getToPlay() {
 		return toPlay;
 	}
 
-	public void setToPlay(boolean toPlay) {
+	public void setToPlay(Boolean toPlay) {
 		this.toPlay = toPlay;
 	}
 
-	public boolean getToArgue() {
+	public Boolean getToArgue() {
 		return toArgue;
 	}
 
-	public void setToArgue(boolean toArgue) {
+	public void setToArgue(Boolean toArgue) {
 		this.toArgue = toArgue;
 	}
 	

@@ -110,7 +110,7 @@ app.controller('navigation', function($rootScope, $scope, $http, $location, $rou
 				$http.get('application/page').success(function(data) {
 					for(var i = 0;i < data.length; i++ )
 					{
-						$rootScope.applications[data[i].profileName] = data[i].applications;
+						$rootScope.applications.push(data[i]);
 					}
 				});
 			}

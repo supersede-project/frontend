@@ -36,10 +36,10 @@
 					        		<a href="#/dashboard">Dashboard</a>
 					        	</li>
 					        	
-					        	<li ng-repeat="profile in profiles | orderBy:'name'" class="dropdown" ng-show="authenticated">
-						    		<a class="dropdown-toggle" ng-show="applications[profile].length > 0">{{profile}}<b class="caret"></b></a>
-						    		<ul class="dropdown-menu multi-level" ng-show="applications[profile].length > 0">
-								       	<li class="dropdown-submenu" ng-repeat="appl in applications[profile]">
+					        	<li ng-repeat="profile in applications | orderBy:'profile.profileName'" class="dropdown" ng-show="authenticated">
+						    		<a class="dropdown-toggle" ng-show="profile.applications.length > 0">{{profile.profileName}}<b class="caret"></b></a>
+						    		<ul class="dropdown-menu multi-level" ng-show="profile.applications.length > 0">
+								       	<li class="dropdown-submenu" ng-repeat="appl in profile.applications">
 								        	<a>{{appl.applicationLabel?appl.applicationLabel:appl.applicationName}}</a>
 							        		<ul class="dropdown-menu">
 						                		<li ng-repeat="page in appl.pages">

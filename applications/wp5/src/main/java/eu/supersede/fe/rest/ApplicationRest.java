@@ -25,13 +25,16 @@ import eu.supersede.fe.application.ApplicationUtil;
 import eu.supersede.fe.jpa.ProfilesJpa;
 import eu.supersede.fe.jpa.UserGadgetsJpa;
 import eu.supersede.fe.model.Profile;
+import eu.supersede.fe.model.ProfileLabel;
 import eu.supersede.fe.model.UserGadget;
 import eu.supersede.fe.security.DatabaseUser;
 
 @RestController
 @RequestMapping("/application")
 public class ApplicationRest {
-		
+	
+	private final static String DEF_LANG = "en";
+	
 	@Autowired
 	private ApplicationUtil applicationUtil;
 
@@ -112,7 +115,9 @@ public class ApplicationRest {
 		{
 			
 			ProfileApplications pa = new ProfileApplications();
-			pa.setProfileName(p.getName());
+			
+			String profileLabel = getLabel(p, lang);
+			pa.setProfileName(profileLabel);
 			
 			Set<ApplicationPage> apps = applicationUtil.getApplicationsPagesByProfileName(p.getName());
 			for(ApplicationPage app : apps)
@@ -147,6 +152,27 @@ public class ApplicationRest {
 		return r;
 	}
 	
+	private String getLabel(Profile p, String lang) {
+		String found = null;
+		String def = null;
+		
+		for(ProfileLabel pl : p.getLabels())
+		{
+			if(pl.getLang().equals(lang))
+			{
+				found = pl.getLabel();
+				//found
+				break;
+			}
+			else if(pl.getLang().equals(DEF_LANG))
+			{
+				def = pl.getLabel();
+			}
+		}
+		
+		return found != null ? found : def != null ? def : p.getName();
+	}
+
 	static class ProfileApplications
 	{
 		private String profileName;

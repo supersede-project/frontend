@@ -26,7 +26,7 @@ public class PlayerMove {
 	private User player;
 	
 	private Long value;
-	private boolean played;
+	private Boolean played;
 	 
 	public PlayerMove() {    	
 	}
@@ -63,11 +63,11 @@ public class PlayerMove {
 		this.value = value;
 	}
 
-	public boolean getPlayed() {
+	public Boolean getPlayed() {
 		return played;
 	}
 
-	public void setPlayed(boolean played) {
+	public void setPlayed(Boolean played) {
 		this.played = played;
 	}
 }

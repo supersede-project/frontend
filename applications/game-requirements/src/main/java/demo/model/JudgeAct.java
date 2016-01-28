@@ -25,7 +25,7 @@ public class JudgeAct {
     @JoinColumn(name="judge_id")
 	private User judge;
 	
-	private boolean voted;
+	private Boolean voted;
 	
 	public JudgeAct(){
 		
@@ -55,11 +55,11 @@ public class JudgeAct {
         this.judge = judge;
     }
 	
-	public boolean getVoted() {
+	public Boolean getVoted() {
 		return voted;
 	}
 
-	public void setVoted(boolean voted) {
+	public void setVoted(Boolean voted) {
 		this.voted = voted;
 	}
 }
