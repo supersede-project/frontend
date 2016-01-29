@@ -5,34 +5,44 @@
 				<table class="table table-striped table-condensed table-hover">
 					<thead>
 						<tr>
+							<!--  
 							<th class="id">ID&nbsp;</th>
 							<th class="name">Requirements Matrix Data ID&nbsp;</th>
+							-->
 							<th class="name">Comparison Criteria&nbsp;</th>
 							<th class="name">Row Requirement&nbsp;</th>
 							<th class="name">Column Requirement&nbsp;</th>
+							<!--
 							<th class="name">Voted&nbsp;</th>
-							<th class="name">Vote Force&nbsp;</th>
+							-->
+							<th class="name">Judge Vote&nbsp;</th>
 							<th class="name">Info&nbsp;</th>																												
 						</tr>
 					</thead>
 			
 					<tbody>
 						<tr	ng-repeat="judgeAct in judgeActs | filter:{voted:false}">
+							<!--  
 							<td>{{judgeAct.judgeActId}}</td>
 							<td>{{judgeAct.requirementsMatrixData.requirementsMatrixDataId}}</td>
+							-->
 							<td>{{judgeAct.requirementsMatrixData.criteria.name}}</td>								
-							<td>{{judgeAct.requirementsMatrixData.rowRequirement.requirementId}} - {{judgeAct.requirementsMatrixData.rowRequirement.name}}</td>
-							<td>{{judgeAct.requirementsMatrixData.columnRequirement.requirementId}} - {{judgeAct.requirementsMatrixData.columnRequirement.name}}</td>
+							<td>{{judgeAct.requirementsMatrixData.rowRequirement.name}}</td>
+							<td>{{judgeAct.requirementsMatrixData.columnRequirement.name}}</td>
+							<!--
 							<td>{{judgeAct.voted}}</td>
+							-->
 							<td>
-								<div>
+								<div align="center">
 									<a href="#/game-requirements/judge_act?judgeActId={{judgeAct.judgeActId}}" class="btn btn-lg btn-success" role="button">Vote</a>
 								</div>
 							</td>
 							<td>
-								<button type="button" class="btn btn-warning btn-lg" data-toggle="modal" data-target="#{{judgeAct.judgeActId}}">
-								  Info
-								</button>								
+								<div align="center">
+									<button  type="button" class="btn btn-warning btn-lg" data-toggle="modal" data-target="#{{judgeAct.judgeActId}}">
+									  Info
+									</button>
+								</div>								
 							</td>				
 						</tr>
 					</tbody>		
@@ -43,23 +53,31 @@
 				<table class="table table-striped table-condensed table-hover">
 					<thead>
 						<tr>
+							<!--
 							<th class="id">ID&nbsp;</th>
 							<th class="name">Requirements Matrix Data ID&nbsp;</th>
+							-->
 							<th class="name">Comparison Criteria&nbsp;</th>
 							<th class="name">Row Requirement&nbsp;</th>
 							<th class="name">Column Requirement&nbsp;</th>
+							<!--
 							<th class="name">Voted&nbsp;</th>
+							-->
 						</tr>
 					</thead>
 			
 					<tbody>
 						<tr	ng-repeat="judgeAct in judgeActs | filter:{voted:true}">
+							<!--
 							<td>{{judgeAct.judgeActId}}</td>
 							<td>{{judgeAct.requirementsMatrixData.requirementsMatrixDataId}}</td>
+							-->
 							<td>{{judgeAct.requirementsMatrixData.criteria.name}}</td>								
-							<td>{{judgeAct.requirementsMatrixData.rowRequirement.requirementId}} - {{judgeAct.requirementsMatrixData.rowRequirement.name}}</td>
-							<td>{{judgeAct.requirementsMatrixData.columnRequirement.requirementId}} - {{judgeAct.requirementsMatrixData.columnRequirement.name}}</td>
+							<td>{{judgeAct.requirementsMatrixData.rowRequirement.name}}</td>
+							<td>{{judgeAct.requirementsMatrixData.columnRequirement.name}}</td>
+							<!--
 							<td>{{judgeAct.voted}}</td>
+							-->
 						</tr>
 					</tbody>		
 				</table>	

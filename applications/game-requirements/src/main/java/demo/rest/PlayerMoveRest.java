@@ -56,6 +56,17 @@ public class PlayerMoveRest {
 		return playerMove;
 	}
 	
+	// get all the playersMove of a specific requirementMatrixData 
+	@RequestMapping("/requirementsmatrixdata/{requirementsMatrixDataId}")
+	public List<PlayerMove> getRequirementsMatrixDataPlayerMove(@PathVariable Long requirementsMatrixDataId){	
+		
+		RequirementsMatrixData rmd = requirementsMatricesData.findOne(requirementsMatrixDataId);
+		
+		List<PlayerMove> listPlayerMoves = playerMoves.findByRequirementsMatrixData(rmd);
+		
+		return listPlayerMoves;
+	}
+	
 	// set the vote for of a player in his/her PlayerMove
 	@RequestMapping(method = RequestMethod.PUT, value="/{playerMoveId}/vote/{vote}")
 	public void setPlayerMoveVote(Authentication authentication, @PathVariable Long playerMoveId, @PathVariable Long vote){	
