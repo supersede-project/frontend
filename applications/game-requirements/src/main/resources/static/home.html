@@ -7,7 +7,7 @@
 				<p>Email: <b>{{user.email}}</b></p>
 				<p>Global points: <b>{{user.userGlobalPoints.userPoints}}</b></p>
 				<p>Total points: <b>{{user.points}}</b></p>
-				<div class="row">
+				<div ng-show="hasRole('DECISION_SCOPE_PROVIDER')" class="row">
 					<div class="col-md-6">
 						<p>Go to Decision making processes:</p>
 					</div>
