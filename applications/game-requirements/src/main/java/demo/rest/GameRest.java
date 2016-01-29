@@ -209,6 +209,6 @@ public class GameRest {
 		httpHeaders.setLocation(ServletUriComponentsBuilder
 				.fromCurrentRequest().path("/{id}")
 				.buildAndExpand(game.getGameId()).toUri());
-		return new ResponseEntity<>(null, httpHeaders, HttpStatus.CREATED);
+		return new ResponseEntity<>(game.getGameId(), httpHeaders, HttpStatus.CREATED);
 	}
 }

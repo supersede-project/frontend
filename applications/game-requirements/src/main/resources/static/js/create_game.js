@@ -1,6 +1,6 @@
 var app = angular.module('w5app');
 
-app.controllerProvider.register('create_game', function($scope, $http) {
+app.controllerProvider.register('create_game', function($scope, $http, $location) {
 
 	$scope.now = function()
 	{
@@ -69,11 +69,7 @@ app.controllerProvider.register('create_game', function($scope, $http) {
 	
 	$scope.toPage = function(p)
 	{
-		if(p == 2)
-		{
-			$scope.currentPage = 'page2';
-		}
-		else if(p == 3)
+		if(p == 3)
 		{
 			if($scope.game.players.length > 0 &&
 					$scope.game.requirements.length > 1 &&
@@ -81,6 +77,10 @@ app.controllerProvider.register('create_game', function($scope, $http) {
 			{
 				$scope.currentPage = 'page3';
 			}
+		}
+		else
+		{
+			$scope.currentPage = 'page' + p;
 		}
 	}
 	
@@ -95,6 +95,7 @@ app.controllerProvider.register('create_game', function($scope, $http) {
 	        $scope.game = {players : [], requirements: [], criterias: [], title: "Game " + $scope.now()};
 	    	$scope.choices = {};
 	    	$scope.currentPage = 'page1';
+	    	$location.url('game-requirements/game_page').search('gameId', data);
 	    }).error(function(err){
 	    	console.log(err);
 	    });
