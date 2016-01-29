@@ -152,20 +152,14 @@ public class Game {
 		{
 			for(RequirementsMatrixData data : getRequirementsMatrixData())
 			{
-				if(data != null && data.getPlayerMoves() != null)
+				total++;
+				if(data != null && data.getValue() != null && !data.getValue().equals(-1l))
 				{
-					for(PlayerMove pm : data.getPlayerMoves())
-					{
-						total++;
-						if(pm.getValue() != null && pm.getValue() > 0l)
-						{
-							voted++;
-						}
-					}
+					voted++;
 				}
 			}
 		}
-		return total == 0f ? 0f : (voted / total);
+		return total.equals(0f) ? 0f : (voted / total);
 	}
 
 }
