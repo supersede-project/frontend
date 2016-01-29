@@ -33,7 +33,7 @@ app.controllerProvider.register('judge_act', function($scope, $http, $location) 
 	 $scope.insertjudgeVote = function(judgeVote){
 		 $http.put('game-requirements/judgeact/' + $scope.judgeActId + '/vote/' + judgeVote)
 	    	.success(function(data) {
-	    		
+	    		$location.url('/game-requirements/judge');
     	});
 	 };	
 });

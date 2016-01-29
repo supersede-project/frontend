@@ -159,7 +159,7 @@ public class Game {
 				}
 			}
 		}
-		return total.equals(0f) ? 0f : (voted / total);
+		return total.equals(0f) ? 0f : ((voted / total) * 100);
 	}
 
 }
