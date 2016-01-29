@@ -75,8 +75,13 @@ app.controllerProvider.register('games', function($scope, $http, $location) {
     $scope.setPage = function (oc) {
     	oc.currentPage = this.n -1;
     };
-    
+
     $scope.goGame = function (gameId) {
     	$location.path('/game-requirements/game_page').search('gameId', gameId);
+	};
+	
+
+    $scope.goCreateGame = function (gameId) {
+    	$location.path('/game-requirements/create_game');
 	};
 });

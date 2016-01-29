@@ -15,7 +15,7 @@ app.controllerProvider.register('create_game', function($scope, $http, $location
     $scope.currentRequirement= undefined;
     $scope.currentCriteria = undefined;
     
-    $scope.game = {players : [], requirements: [], criterias: [], title: "Game " + $scope.now()};
+    $scope.game = {players : [], requirements: [], criterias: [], title: "Decision Making Process " + $scope.now()};
     
     $scope.currentPage = 'page1';
     
@@ -92,7 +92,7 @@ app.controllerProvider.register('create_game', function($scope, $http, $location
 	        method: 'POST',
 	        params: {criteriaValues : $scope.choices}
 	    }).success(function(data){
-	        $scope.game = {players : [], requirements: [], criterias: [], title: "Game " + $scope.now()};
+	        $scope.game = {players : [], requirements: [], criterias: [], title: "Decision Making Process " + $scope.now()};
 	    	$scope.choices = {};
 	    	$scope.currentPage = 'page1';
 	    	$location.url('game-requirements/game_page').search('gameId', data);
