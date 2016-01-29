@@ -13,8 +13,9 @@
 				<textarea rows="6" ng-model="game.description" placeholder="Description"
 				style="width:100%; display:block; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box;"></textarea>
 			</div>
+			<br>
 			<div style="width: 100%; text-align: center;">
-				<button ng-click="toPage(2)">Continue</button>
+				<button class="btn btn-lg btn-success" ng-click="toPage(2)">Continue</button>
 			</div>
 		</div>
 	</div>
@@ -84,9 +85,10 @@
 		<div class="clear-div"></div>
 		
 		<div style="width: 100%; text-align: center;">
-			<button ng-click="toPage(3)">Continue</button>
+			<button class="btn btn-lg btn-success" ng-click="toPage(3)">Continue</button>
 		</div>
 	</div>
+	<br>
 	<div id="page3" ng-show="currentPage == 'page3'">
 		<div ng-repeat="criteria in game.criterias" ng-if="$index < (game.criterias.length - 1)">
 			<div ng-repeat="other_criteria in game.criterias" ng-if="$index > $parent.$index">
@@ -102,8 +104,10 @@
 			    </div>
 			</div>
 		</div>
+		<br>
+		<br>
 		<div style="width: 100%; text-align: center;">
-			<button ng-click="createGame()">Create</button>
+			<button class="btn btn-lg btn-success" ng-click="createGame()">Create</button>
 		</div>
 	</div>
 </div>

@@ -10,7 +10,6 @@
     		</div>
     	</div>
     	<br>
-    	<br>
     	<div class="row">
     		<div class="col-md-6">	
 				<div class="panel panel-primary">
@@ -34,6 +33,7 @@
 				<div class="col-md-12">
 					<br>
 					<div align="center">
+						<p>Select a grade of preference between <b>{{playerMove.requirementsMatrixData.rowRequirement.name}}</b> and <b>{{playerMove.requirementsMatrixData.columnRequirement.name}}</b>.</p>
 					    <label class="radio-inline" ng-repeat="requirementsChoice in requirementsChoices">
 					      <input type="radio" ng-model="selectedRequirementsChoice.selected" ng-value="{{requirementsChoice.value}}" name="radioRequirementsChoices">{{requirementsChoice.value}}
 					    </label>
