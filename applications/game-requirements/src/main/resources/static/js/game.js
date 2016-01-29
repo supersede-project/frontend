@@ -23,5 +23,18 @@ app.controllerProvider.register('game', function($scope, $http, $location) {
 	    	.success(function(data) {
 	    		
 	    	});
-	 };	
+	 };
+	 
+	 $scope.requirementName = function(id)
+	 {
+		 for(var i = 0; i < $scope.game.requirements.length; i++)
+		 {
+			 if($scope.game.requirements[i].requirementId == id)
+			 {
+				 return $scope.game.requirements[i].name;
+			 }
+		 }
+		 
+		 return "";
+	 }
 });
