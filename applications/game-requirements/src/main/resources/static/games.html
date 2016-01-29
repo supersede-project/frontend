@@ -16,7 +16,9 @@
 	
 			<thead>
 				<tr>
+					<!--  
 					<th class="id">Id&nbsp;</th>
+					-->
 					<th class="title">Title&nbsp;</th>
 					<th class="creator">Created by&nbsp;</th>
 					<th class="date">Creation Date&nbsp;</th>
@@ -27,7 +29,9 @@
 	
 			<tbody>
 				<tr	ng-repeat="game in open_games | limitTo:5:pagination.open.currentPage*pagination.open.itemsPerPage">
+					<!-- 
 					<td class="id">{{game.gameId}}</td>
+					-->
 					<td class="title">{{game.title}}</td>
 					<td class="creator">{{game.creator.name}}</td>
 					<td class="date">{{game.startTime}}</td>
@@ -68,7 +72,9 @@
 	
 			<thead>
 				<tr>
+					<!--  
 					<th class="id">Id&nbsp;</th>
+					-->
 					<th class="title">Title&nbsp;</th>
 					<th class="creator">Created by&nbsp;</th>
 					<th class="date">Creation Date&nbsp;</th>
@@ -79,7 +85,9 @@
 	
 			<tbody>
 				<tr	ng-repeat="game in closed_games | limitTo:5:pagination.closed.currentPage*pagination.closed.itemsPerPage">
+					<!--  
 					<td class="id">{{game.gameId}}</td>
+					-->
 					<td class="title">{{game.title}}</td>
 					<td class="creator">{{game.creator.name}}</td>
 					<td class="date">{{game.startTime}}</td>
@@ -113,5 +121,4 @@
 	
 		</table>
 	</div>
-
 </div>
