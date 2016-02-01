@@ -5,7 +5,8 @@
 				<h1>Profile details</h1>
 				<p>Name: <b>{{user.name}}</b></p>
 				<p>Email: <b>{{user.email}}</b></p>
-				<p>Global points: <b>{{user.userGlobalPoints.userPoints}}</b></p>
+				<p>Global points: <b ng-if="user.userGlobalPoints.userPoints != null">{{user.userGlobalPoints.userPoints}}</b>
+									<b ng-if="user.userGlobalPoints.userPoints == null">0</b></p>
 				<p>Total points: <b>{{user.points}}</b></p>
 				<div ng-show="hasRole('DECISION_SCOPE_PROVIDER')" class="row">
 					<div class="col-md-6">
