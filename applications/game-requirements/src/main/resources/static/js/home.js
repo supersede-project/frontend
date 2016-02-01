@@ -11,11 +11,14 @@ app.controllerProvider.register('home', function($scope, $http, $rootScope) {
 	});
 	
 	$scope.hasRole = function(role){
-		for(var i = 0; i < $scope.user.profiles.length; i++)
+		if($scope.user)
 		{
-			if($scope.user.profiles[i].name == role)
+			for(var i = 0; i < $scope.user.profiles.length; i++)
 			{
-				return true;
+				if($scope.user.profiles[i].name == role)
+				{
+					return true;
+				}
 			}
 		}
 		
