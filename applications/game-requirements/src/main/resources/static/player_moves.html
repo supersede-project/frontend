@@ -40,22 +40,24 @@
 			</tbody>
 			
 			<tfoot>
-				<td colspan="6">
-					<div class="paging_simple_numbers" align="center">
-						<ul class="pagination">
-							<li class="paginate_button previous" ng-class="{disabled: pagination.open.currentPage == 0}"><a href
-								ng-click="prevPage(pagination.open)">Prev</a></li>
-			
-							<li class="paginate_button" ng-repeat="n in range(pagination.open)" ng-class="{active: n == (pagination.open.currentPage + 1)}" ng-click="setPage(pagination.open)">
-								<a href ng-bind="n">1</a>
-							</li>
-			
-							<li class="paginate_button next" ng-class="{disabled: (pagination.open.currentPage) == pagination.open.totalPages - 1}">
-								<a href ng-click="nextPage(pagination.open)">Next</a>
-							</li>
-						</ul>
-					</div>
-				</td>
+				<tr>
+					<td colspan="6">
+						<div class="paging_simple_numbers" align="center">
+							<ul class="pagination">
+								<li class="paginate_button previous" ng-class="{disabled: pagination.open.currentPage == 0}"><a href
+									ng-click="prevPage(pagination.open)">Prev</a></li>
+				
+								<li class="paginate_button" ng-repeat="n in range(pagination.open)" ng-class="{active: n == (pagination.open.currentPage + 1)}" ng-click="setPage(pagination.open)">
+									<a href ng-bind="n">1</a>
+								</li>
+				
+								<li class="paginate_button next" ng-class="{disabled: (pagination.open.currentPage) == pagination.open.totalPages - 1}">
+									<a href ng-click="nextPage(pagination.open)">Next</a>
+								</li>
+							</ul>
+						</div>
+					</td>
+				</tr>
 			</tfoot>		
 		</table>	
 	</div>
@@ -79,22 +81,24 @@
 			</tbody>
 			
 			<tfoot>
-				<td colspan="3">
-					<div class="paging_simple_numbers" align="center">
-						<ul class="pagination">
-							<li class="paginate_button previous" ng-class="{disabled: pagination.closed.currentPage == 0}"><a href
-								ng-click="prevPage(pagination.closed)">Prev</a></li>
-	
-							<li class="paginate_button" ng-repeat="n in range(pagination.closed)" ng-class="{active: n == (pagination.closed.currentPage + 1)}" ng-click="setPage(pagination.closed)">
-								<a href ng-bind="n">1</a>
-							</li>
-	
-							<li class="paginate_button next" ng-class="{disabled: (pagination.closed.currentPage) == pagination.closed.totalPages - 1}">
-								<a href ng-click="nextPage(pagination.closed)">Next</a>
-							</li>
-						</ul>
-					</div>
-				</td>
+				<tr>
+					<td colspan="3">
+						<div class="paging_simple_numbers" align="center">
+							<ul class="pagination">
+								<li class="paginate_button previous" ng-class="{disabled: pagination.closed.currentPage == 0}">
+								<a href	ng-click="prevPage(pagination.closed)">Prev</a></li>
+		
+								<li class="paginate_button" ng-repeat="n in range(pagination.closed)" ng-class="{active: n == (pagination.closed.currentPage + 1)}" ng-click="setPage(pagination.closed)">
+									<a href ng-bind="n">1</a>
+								</li>
+		
+								<li class="paginate_button next" ng-class="{disabled: (pagination.closed.currentPage) == pagination.closed.totalPages - 1}">
+									<a href ng-click="nextPage(pagination.closed)">Next</a>
+								</li>
+							</ul>
+						</div>
+					</td>
+				</tr>
 			</tfoot>
 			
 		</table>	
