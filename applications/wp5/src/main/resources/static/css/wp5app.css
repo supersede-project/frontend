@@ -113,3 +113,45 @@ footer {
     -moz-border-radius: 6px 0 6px 6px;
     border-radius: 6px 0 6px 6px;
 }
+
+/* dashboard */
+.dashboard-content {
+	width:100%;
+}
+
+.gadget {
+    margin: 5px;
+    padding: 5px;
+    width: 49%;
+    min-width: 49%;
+    display: inline-block;
+    float: left;
+}
+
+.gadget-full {
+	width: 100%;
+	min-width: 100%;
+}
+
+.gadget-title {
+	cursor: move;
+	background-color: #F15A22;
+	width: 100%;
+	max-width: 100%;
+	height: 25px;"
+}
+
+.gadget-button-bar {
+	float: right;
+}
+
+.gadget-button {
+	color: white;
+	margin-right: 3px;
+}
+
+.home_side {
+	width: 50%;
+	height: 100px;
+	float: left;
+}

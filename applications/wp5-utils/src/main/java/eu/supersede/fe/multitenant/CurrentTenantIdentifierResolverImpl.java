@@ -8,10 +8,10 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 
 @Component
-@PropertySource("classpath:multitenancy.properties")
+@PropertySource("file:../conf/multitenancy.properties")
 public class CurrentTenantIdentifierResolverImpl implements CurrentTenantIdentifierResolver {
 
-	@Value("${spring.multitenancy.default}")
+	@Value("${application.multitenancy.default}")
 	private String DEFAULT_TENANT_ID;
 	
 	@Override

@@ -19,7 +19,7 @@
 				<div id="top-header">
 					<div class="ak-container">
 						<div class="site-branding">
-							<img src="img/SupersedeLogo_outline.png"/>
+							<a href="#/"><img src="img/SupersedeLogo_outline.png"/></a>
 						</div>
 						<div ng-show="authenticated" class="tenant">
 							<img class="tenant-img" src="img/{{user.tenantId}}.jpg"/>
@@ -33,22 +33,16 @@
 					    <div class="menu-menu-1-container">
 					    	<ul class="nav navbar-nav">
 					    		<li ng-show="authenticated">
-					        		<p class="navbar-text">Dashboard</p>
+					        		<a href="#/dashboard">Dashboard</a>
 					        	</li>
-					        	
-					        	<li ng-repeat="profile in profiles | orderBy:'name'" class="dropdown" ng-show="authenticated">
-						    		<a class="dropdown-toggle" ng-show="applications[profile].length > 0">{{profile}}<b class="caret"></b></a>
-						    		<ul class="dropdown-menu multi-level" ng-show="applications[profile].length > 0">
-								       	<li class="dropdown-submenu" ng-repeat="appl in applications[profile]">
-								        	<a>{{appl.applicationLabel?appl.applicationLabel:appl.applicationName}}</a>
-							        		<ul class="dropdown-menu">
-						                		<li ng-repeat="page in appl.pages">
-						                			<a ng-href="#/{{appl.applicationName}}/{{page.name}}">{{page.label?page.label:page.name}}</a>
-						                		</li>
-						                	</ul>
-							        	</li>
-							   		</ul>
-						    	</li>
+					        	<li ng-show="authenticated" ng-repeat="application in applications" ng-if="checkApplicationUrl(application)">
+					     			<a class="dropdown-toggle">{{application.applicationLabel?application.applicationLabel:application.applicationName}}</a>
+					        		<ul class="dropdown-menu">
+				                		<li ng-repeat="page in application.pages">
+				                			<a ng-href="#/{{application.applicationName}}/{{page.name}}">{{page.label?page.label:page.name}}</a>
+				                		</li>
+				                	</ul>
+					        	</li>
 						    </ul>
 							<ul class="nav navbar-nav navbar-right">
 					      		<li ng-show="authenticated">

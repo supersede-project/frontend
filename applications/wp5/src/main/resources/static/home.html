@@ -1,8 +1,8 @@
-<h1>Greeting</h1>
-<div ng-show="authenticated">
-	<p>The ID is {{greeting.id}}</p>
-	<p>The content is {{greeting.content}}</p>
-</div>
-<div  ng-show="!authenticated">
-	<p>Login to see your greeting</p>
+<div id="home" ng-show="authenticated">
+	<div ng-repeat="application in applications" 
+		class="home_side">
+		<button ng-click="goHome(application.applicationName, application.homePage);" style="width: 97%; height: 97%; margin: 20px;">{{application.applicationLabel}}</button>
+	</div>
+	<div style="clear: both;"></div>
+	
 </div>

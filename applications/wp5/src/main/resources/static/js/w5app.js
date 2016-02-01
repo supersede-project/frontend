@@ -2,7 +2,10 @@ var app = angular.module('w5app', [ 'ngRoute' ]).config(function($routeProvider,
 
 	$routeProvider.when('/', {
 		templateUrl : 'home.html',
-		controller : 'home'
+		controller : 'main_home'
+	}).when('/dashboard', {
+		templateUrl : 'dashboard.html',
+		controller : 'dashboard'
 	}).when('/login', {
 		templateUrl : 'login.html',
 		controller : 'navigation'
@@ -104,10 +107,10 @@ app.controller('navigation', function($rootScope, $scope, $http, $location, $rou
 			
 			var getApplications = function()
 			{
-				$http.get('application').success(function(data) {
+				$http.get('application/page').success(function(data) {
 					for(var i = 0;i < data.length; i++ )
 					{
-						$rootScope.applications[data[i].profileName] = data[i].applications;
+						$rootScope.applications.push(data[i]);
 					}
 				});
 			}
@@ -177,6 +180,12 @@ app.controller('navigation', function($rootScope, $scope, $http, $location, $rou
 					success(function(data) {
 					
 					});
+			}
+			
+			$scope.checkApplicationUrl = function(application)
+			{
+				var test = '/' + application.applicationName + '/';
+				return $location.url().slice(0, test.length) == test;
 			}
 			
 			var getTenants = function()
@@ -339,8 +348,139 @@ app.controller('notifications', function($scope, $http) {
 	
 });
 
-app.controller('home', function($scope, $http) {
-	$http.get('wp5-test-app/resource').success(function(data) {
-		$scope.greeting = data;
+app.controller('dashboard', function($scope, $http) {
+
+	$scope.gadgets = [];
+	$scope.availableGadgets = [];
+	$scope.selectedAvailableGadgets = [];
+	
+	$http.get('application/availableGadget').success(function(data)
+	{
+		$scope.availableGadgets.length = 0;
+		for(var i = 0; i < data.length; i++)
+		{
+			$scope.availableGadgets.push(data[i]);
+		}
 	});
+	
+	$http.get('application/userGadget').success(function(data)
+	{
+		$scope.gadgets.length = 0;
+		for(var i = 0; i < data.length; i++)
+		{
+			var g = {'applicationName' : data[i].applicationName, 'gadgetName' : data[i].gadgetName, 'size' : data[i].size}
+			$scope.gadgets.push(g);
+		}
+	});
+	
+	$scope.toggleSelection = function(gadget)
+	{
+	    var idx = $scope.selectedAvailableGadgets.indexOf(gadget);
+
+	    // is currently selected
+	    if (idx > -1) {
+	      $scope.selectedAvailableGadgets.splice(idx, 1);
+	    }
+
+	    // is newly selected
+	    else {
+	      $scope.selectedAvailableGadgets.push(gadget);
+	    }
+	};
+	
+	$scope.addGadgets = function()
+	{
+		$('#modalGadgets').modal('hide');
+		for(var i = 0; i < $scope.selectedAvailableGadgets.length; i++)
+		{
+			var sg = $scope.selectedAvailableGadgets[i];
+			var g = {'applicationName' : sg.applicationName, 'gadgetName' : sg.applicationGadget, 'size' : 'small'}
+			
+			var contains = false;
+			for(var j = 0; j < $scope.gadgets.length && !contains; j++)
+			{
+				if($scope.gadgets[j].applicationName == g.applicationName && $scope.gadgets[j].gadgetName == g.gadgetName)
+				{
+					contains = true;
+				}
+			}
+
+			if(!contains)
+			{
+				$scope.gadgets.push(g);
+			}
+		}
+		$scope.selectedAvailableGadgets.length = 0;
+	}
+	
+	$scope.cancelAddGadgets = function()
+	{
+		$('#modalGadgets').modal('hide');
+		$scope.selectedAvailableGadgets.length = 0;
+	}
+	
+	$scope.removeGadget = function(index)
+	{
+		$scope.gadgets.splice(index, 1);
+	}
+	
+	$scope.saveSelectedGadgets = function() 
+	{
+		$http({
+			url: "application/userGadget",
+	        data: $scope.gadgets,
+	        method: 'POST'
+	    }).success(function(data){
+	    	$scope.gadgets.length = 0;
+			for(var i = 0; i < data.length; i++)
+			{
+				var g = {'applicationName' : data[i].applicationName, 'gadgetName' : data[i].gadgetName, 'size' : data[i].size}
+				$scope.gadgets.push(g);
+			}
+	    }).error(function(err){
+	    	console.log(err);
+	    });
+	}
+	
+	$scope.allowDropGadget = function(ev, index) {
+	    ev.preventDefault();
+	}
+
+	$scope.dragGadget = function(ev, index) {
+	    $scope.dragFrom = parseInt(index.replace("gadget", ""));
+	}
+
+	$scope.dropGadget = function(ev, index) {
+	    ev.preventDefault();
+	    var dragTo = parseInt(index.replace("gadget", ""));
+	    
+	    //move from to
+	    //$scope.gadgets.splice(dragTo, 0, $scope.gadgets.splice($scope.dragFrom, 1)[0]);
+	    
+	    //switch from to
+	    var b = $scope.gadgets[$scope.dragFrom];
+	    $scope.gadgets[$scope.dragFrom] = $scope.gadgets[dragTo];
+	    $scope.gadgets[dragTo] = b;
+	    
+	    $scope.$apply();
+	}
+
+	$scope.shrinkGadget = function(index)
+	{
+		$scope.gadgets[index].size="small";
+	}
+	
+	$scope.enlargeGadget = function(index)
+	{
+		$scope.gadgets[index].size="large";
+	}
+});
+
+
+app.controller('main_home', function($scope, $http, $location) {
+	
+	$scope.goHome = function(appName, homePage) {
+		$location.path('/' + appName + '/' + homePage);
+	};
+	
 });

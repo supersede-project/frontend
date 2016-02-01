@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -21,8 +22,12 @@ public class Profile {
 	@GeneratedValue(strategy = GenerationType.AUTO)
     private Long profileId;
     private String name;
+    
     @ManyToMany(cascade=CascadeType.ALL, mappedBy="profiles", fetch=FetchType.LAZY)  
     private List<User> users;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "profile")
+	private List<ProfileLabel> labels;
     
     public Profile() {
     }
@@ -52,4 +57,12 @@ public class Profile {
     {
     	return users;
     }
+
+	public List<ProfileLabel> getLabels() {
+		return labels;
+	}
+
+	public void setLabels(List<ProfileLabel> labels) {
+		this.labels = labels;
+	}
 }

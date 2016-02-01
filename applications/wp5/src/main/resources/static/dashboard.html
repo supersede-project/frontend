@@ -1,0 +1,73 @@
+<div id="dashboard" ng-show="authenticated">
+	<div class="dashboard-header">
+		<nav id="dashboard" class="main-navigation menu-left">
+			<div class="ak-container">
+				<div class="menu-menu-1-container">
+			    	<ul class="nav navbar-nav">
+			    		<li ng-show="authenticated">
+			        		<p class="navbar-text">Dashboard</p>
+			        	</li>
+					</ul>
+					<ul class="nav navbar-nav navbar-right">
+			      		<li ng-show="authenticated">
+			      			<a href="" data-toggle="modal" data-target="#modalGadgets"><span class="glyphicon glyphicon-plus"></span> Add gadget</a>
+			      		</li>
+			      		<li ng-show="authenticated">
+			      			<a ng-click="saveSelectedGadgets()"><span class="glyphicon glyphicon-floppy-save"></span> Save</a>
+			      		</li>
+			      	</ul>	
+				</div>        	
+			</div>
+		</nav>
+	</div>
+	<div class="dashboard-content" style="display: block;">
+		<div ng-repeat="gadget in gadgets" class="gadget" ng-class="gadget.size=='large'?'gadget-full':''">
+			<div id="gadget{{$index}}" draggable="true" 
+				ondragstart="angular.element(document.getElementById('dashboard')).scope().dragGadget(event, this.id)" 
+				ondragover="angular.element(document.getElementById('dashboard')).scope().allowDropGadget(event, this.id)" 
+				ondrop="angular.element(document.getElementById('dashboard')).scope().dropGadget(event, this.id)">
+				<div class="gadget-title">
+					<div class="gadget-button-bar">
+						<a ng-show="gadget.size == 'large'" ng-click="shrinkGadget($index)"><span class="glyphicon glyphicon-resize-small gadget-button"></span></a>
+						<a ng-show="gadget.size == 'small'" ng-click="enlargeGadget($index)"><span class="glyphicon glyphicon-resize-full gadget-button"></span></a>
+						<a ng-click="removeGadget($index)"><span class="glyphicon glyphicon-remove gadget-button"></span></a>
+					</div>
+				</div>
+				<div ng-include="'/' + gadget.applicationName + '/' + gadget.gadgetName + '.html'"></div>
+			</div>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+	
+	<!-- Modal -->
+	<div id="modalGadgets" class="modal fade" role="dialog">
+  		<div class="modal-dialog">
+
+    		<!-- Modal content-->
+    		<div class="modal-content">
+      			<div class="modal-header">
+        			<button type="button" class="close" ng-click="cancelAddGadgets()">&times;</button>
+        			<h4 class="modal-title">Available gadgets</h4>
+      			</div>
+      			<div class="modal-body">
+        			<label ng-repeat="gadget in availableGadgets" style="display: block;">
+						<input
+						    type="checkbox"
+						    name="selectedAvailableGadgets"
+						    value="{{gadget}}"
+						    ng-checked="selectedAvailableGadgets.indexOf(gadget) > -1"
+						    ng-click="toggleSelection(gadget)"
+					  	> {{gadget.applicationName + '/' + gadget.applicationGadget}}
+					</label>
+      			</div>
+			    <div class="modal-footer">
+			    	<button type="button" class="btn btn-default" ng-click="addGadgets()">Add</button>
+			    	<button type="button" class="btn btn-default" ng-click="cancelAddGadgets()">Cancel</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div ng-show="!authenticated">
+	Login first
+</div>
