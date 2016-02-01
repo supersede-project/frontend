@@ -149,3 +149,9 @@ footer {
 	color: white;
 	margin-right: 3px;
 }
+
+.home_side {
+	width: 50%;
+	height: 100px;
+	float: left;
+}
