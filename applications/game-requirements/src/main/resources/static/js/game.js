@@ -2,6 +2,8 @@ var app = angular.module('w5app');
 
 app.controllerProvider.register('game', function($scope, $http, $location) {
 	
+	$scope.Math = window.Math;
+	
 	$scope.gameId = $location.search()['gameId'];
 	$scope.game = null;
 	$scope.ahpResult = null;

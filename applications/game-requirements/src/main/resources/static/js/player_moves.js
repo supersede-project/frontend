@@ -95,6 +95,8 @@ app.controllerProvider.register('player_moves', function($scope, $http) {
 					if($scope.open_moves[i].playerMoveId == playerMoveId)
 					{
 						$scope.open_moves[i].played = true;
+						$scope.open_moves[i].value = playerVote;
+						
 						$scope.closed_moves.push($scope.open_moves[i]);
 						$scope.open_moves.splice(i, 1);
 						

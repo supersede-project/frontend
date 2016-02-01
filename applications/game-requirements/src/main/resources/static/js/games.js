@@ -1,6 +1,9 @@
 var app = angular.module('w5app');
 
 app.controllerProvider.register('games', function($scope, $http, $location) {
+	
+	$scope.Math = window.Math;
+	
 	$scope.open_games = [];
 	$scope.closed_games = [];
 

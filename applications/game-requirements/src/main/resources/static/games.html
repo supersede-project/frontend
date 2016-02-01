@@ -35,7 +35,7 @@
 					<td class="title">{{game.title}}</td>
 					<td class="creator">{{game.creator.name}}</td>
 					<td class="date">{{game.startTime}}</td>
-					<td class="progr">{{game.progress}}%</td>
+					<td class="progr">{{(Math.round(game.progress * 100) / 100)}}%</td>
 					<td class="details">
 						<button type="button" class="btn btn-warning btn-lg" ng-click="goGame(game.gameId)">
 							Details
@@ -93,7 +93,7 @@
 					<td class="title">{{game.title}}</td>
 					<td class="creator">{{game.creator.name}}</td>
 					<td class="date">{{game.startTime}}</td>
-					<td class="progr">{{game.progress}}%</td>
+					<td class="progr">{{(Math.round(game.progress * 100) / 100)}}%</td>
 					<td class="details">
 						<button type="button" class="btn btn-warning btn-lg" ng-click="goGame(game.gameId)">
 							Details
