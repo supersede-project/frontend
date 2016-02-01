@@ -57,7 +57,7 @@ dependencies {
 	compile("org.springframework.boot:spring-boot-starter-redis")
 	
 	compile files('../wp5-utils/build/libs/wp5-utils-0.0.1-SNAPSHOT.jar')
-	//compile("eu.supersede:wp5-utils:0.0.1-20160107.153207-2")
+	//compile("eu.supersede:wp5-utils:0.0.1-SNAPSHOT")
 }
 
 

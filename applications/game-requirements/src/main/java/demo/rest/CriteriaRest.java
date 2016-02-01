@@ -13,7 +13,7 @@ import eu.supersede.fe.exception.NotFoundException;
 
 @RestController
 @RequestMapping("/criteria")
-public class ValutationCriteriaRest {
+public class CriteriaRest {
 	
 	@Autowired
     private ValutationCriteriaJpa valutationCriterias;

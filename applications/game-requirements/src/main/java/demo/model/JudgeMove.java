@@ -25,8 +25,8 @@ public class JudgeMove {
     @JoinColumn(name="judge_id")
     private User judge;
     
-    private boolean needArguments;
-    private boolean gaveOpinion;
+    private Boolean needArguments;
+    private Boolean gaveOpinion;
     
     @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="opinion")
@@ -40,10 +40,10 @@ public class JudgeMove {
     @JoinColumn(name="second_argument_id")
     private Argument secondArgument;
     
-    private boolean finish;
-    private boolean notificationSent;
-    private boolean toJudge;
-    private boolean toSolve;
+    private Boolean finish;
+    private Boolean notificationSent;
+    private Boolean toJudge;
+    private Boolean toSolve;
     
     public JudgeMove(){
     	
@@ -91,19 +91,19 @@ public class JudgeMove {
     	this.judge = judge;
     }  
     
-    public boolean getNeedArguments(){
+    public Boolean getNeedArguments(){
     	return needArguments;
     }
     
-    public void setNeedArguments(boolean needArguments){
+    public void setNeedArguments(Boolean needArguments){
     	this.needArguments = needArguments;
     }
     
-    public boolean getGaveOpinion(){
+    public Boolean getGaveOpinion(){
     	return gaveOpinion;
     }
     
-    public void setGaveOpinion(boolean gaveOpinion){
+    public void setGaveOpinion(Boolean gaveOpinion){
     	this.gaveOpinion = gaveOpinion;
     }
        
@@ -131,35 +131,35 @@ public class JudgeMove {
     	this.secondArgument = secondArgument;
     }
     
-    public boolean getFinish(){
+    public Boolean getFinish(){
     	return finish;
     }
     
-    public void setFinish(boolean finish){
+    public void setFinish(Boolean finish){
     	this.finish = finish;
     }
     
-    public boolean getNotificationSent() {
+    public Boolean getNotificationSent() {
 		return notificationSent;
 	}
 
-	public void setNotificationSent(boolean notificationSent) {
+	public void setNotificationSent(Boolean notificationSent) {
 		this.notificationSent = notificationSent;
 	}
 
-	public boolean getToJudge() {
+	public Boolean getToJudge() {
 		return toJudge;
 	}
 
-	public void setToJudge(boolean toJudge) {
+	public void setToJudge(Boolean toJudge) {
 		this.toJudge = toJudge;
 	}
 
-	public boolean getToSolve() {
+	public Boolean getToSolve() {
 		return toSolve;
 	}
 
-	public void setToSolve(boolean toSolve) {
+	public void setToSolve(Boolean toSolve) {
 		this.toSolve = toSolve;
 	} 
 }

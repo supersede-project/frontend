@@ -3,8 +3,6 @@ package demo.scheduled;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -25,15 +23,12 @@ public class Scheduler {
 	
 	@Autowired
     private NotificationUtil notificationUtil;
-	
-	private final Logger log = LoggerFactory.getLogger(this.getClass());
-	
+		
 	@Scheduled(fixedRate = 10000)
 	@Transactional
 	private void notifyJudgesForArguments()
 	{
 		multiJpaProvider.clearTenants();
-		log.debug("partito notifyJudgesForArguments");
 
 		Map<String, JudgeMovesJpa> judgeMoveRepositories = multiJpaProvider.getRepositories(JudgeMovesJpa.class);
 		
@@ -61,7 +56,6 @@ public class Scheduler {
 	private void notifyJudgesForConflicts()
 	{
 		multiJpaProvider.clearTenants();
-		log.debug("partito notifyJudgesForConflicts");
 
 		Map<String, MovesJpa> moveRepositories = multiJpaProvider.getRepositories(MovesJpa.class);
 		

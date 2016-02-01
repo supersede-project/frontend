@@ -22,7 +22,7 @@ public class ValutationCriteria {
     private String name;
     
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "valutationCriteria")
-	public List<UserCriteriaPoint> userCriteriaPoints;
+	private List<UserCriteriaPoint> userCriteriaPoints;
 
     public ValutationCriteria() {
     }
