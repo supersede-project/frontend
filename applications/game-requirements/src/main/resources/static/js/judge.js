@@ -4,6 +4,7 @@ app.controllerProvider.register('judge', function($scope, $http) {
     
     $scope.judgeActs = [];
 	$scope.requirementsChoices = [];
+	$scope.votedMoves = 0;
     
     $http.get('game-requirements/judgeact')
 	.success(function(data) {
@@ -34,5 +35,15 @@ app.controllerProvider.register('judge', function($scope, $http) {
 				}
     	});
 	 };
+	 
+	 $http.get('game-requirements/playermove/requirementsmatrixdata/' + $scope.judgeAct.requirementsMatrixData.requirementsMatrixDataId)
+		.success(function(data) {
+			for(var i = 0; i < data.length; i++)
+			{
+				if(data[i].value != null){
+					$scope.votedMoves = $scope.votedMoves + 1;
+				}			
+			}
+		});
 
 });

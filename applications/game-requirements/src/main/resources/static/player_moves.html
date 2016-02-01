@@ -10,9 +10,9 @@
 							<th class="name">Requirements Matrix Data ID&nbsp;</th>
 							-->
 							<th class="name">Criteria&nbsp;</th>							
-							<th class="name">Row Requirement&nbsp;</th>
+							<th class="name">First Requirement&nbsp;</th>
 							<th class="name">Select your vote&nbsp;</th>
-							<th class="name">Column Requirement&nbsp;</th>
+							<th class="name">Second Requirement&nbsp;</th>
 							<!--  
 							<th class="name">Value&nbsp;</th>
 							<th class="name">Played&nbsp;</th>
@@ -31,9 +31,11 @@
 							<td>{{playerMove.requirementsMatrixData.criteria.name}}</td>								
 							<td>{{playerMove.requirementsMatrixData.rowRequirement.name}}</td>
 							<td>
-								<label class="radio-inline" ng-repeat="requirementsChoice in requirementsChoices">
-							      <input type="radio" ng-click="setVote(requirementsChoice.value, playerMove.playerMoveId)" ng-value="{{requirementsChoice.value}}" name="{{playerMove.playerMoveId}}">{{requirementsChoice.value}}
-							    </label>
+								<div align="center">
+									<label class="radio-inline" ng-repeat="requirementsChoice in requirementsChoices">
+								      <input title="{{requirementsChoice.description}}" type="radio" ng-click="setVote(requirementsChoice.value, playerMove.playerMoveId)" ng-value="{{requirementsChoice.value}}" name="{{playerMove.playerMoveId}}">{{requirementsChoice.value}}
+								    </label>
+							    </div>
 							</td>
 							<td>{{playerMove.requirementsMatrixData.columnRequirement.name}}</td>
 							<!--
@@ -66,10 +68,10 @@
 							<th class="name">Requirements Matrix Data ID&nbsp;</th>
 							-->
 							<th class="name">Criteria&nbsp;</th>							
-							<th class="name">Row Requirement&nbsp;</th>
-							<th class="name">Column Requirement&nbsp;</th>
+							<th class="name">First Requirement&nbsp;</th>
+							<th class="name">Second Requirement&nbsp;</th>
+							<th class="name">Vote&nbsp;</th>
 							<!-- 
-							<th class="name">Value&nbsp;</th>
 							<th class="name">Played&nbsp;</th>	
 							-->												
 						</tr>
@@ -83,9 +85,10 @@
 							-->
 							<td>{{playerMove.requirementsMatrixData.criteria.name}}</td>								
 							<td>{{playerMove.requirementsMatrixData.rowRequirement.name}}</td>
-							<td>{{playerMove.requirementsMatrixData.columnRequirement.name}}</td>
-							<!--  
-							<td>{{playerMove.value}}</td>
+							<td>{{playerMove.requirementsMatrixData.columnRequirement.name}}</td>					
+							<td ng-if="playerMove.value != null">{{playerMove.value}}</td>
+							<td ng-if="playerMove.value == null">not voted</td>
+							<!-- 
 							<td>{{playerMove.played}}</td>
 							-->
 						</tr>

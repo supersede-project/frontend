@@ -15,9 +15,10 @@
 				<div align="center">
 					<button type="button" ng-click="computeAHP(game.gameId)" class="btn btn-lg btn-success">Compute rank</button>
 				</div>
+				<br>
 				<div class="col-md-12">
-					<div ng-repeat="(key, data) in ahpResult">
-						{{requirementName(key)}} = {{data}}
+					<div ng-repeat="(key, data) in ahpResult" align="center">
+						<b>{{requirementName(key)}}</b> = {{data}}
 					</div>
 				</div>							
 			</div>
