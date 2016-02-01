@@ -1,11 +1,11 @@
 var app = angular.module('w5app');
 
-app.controllerProvider.register('player_moves', function($scope, $http) {
+app.controllerProvider.register('judge_acts', function($scope, $http) {
     
 	$scope.requirementsChoices = [];
-	
-	$scope.open_moves = [];
-	$scope.closed_moves = [];
+    
+	$scope.open_acts = [];
+	$scope.closed_acts = [];
 
 	$scope.pagination = { 'open' : {}, 'closed' : {}};
 	$scope.pagination.open.totalPages = 1;
@@ -18,27 +18,28 @@ app.controllerProvider.register('player_moves', function($scope, $http) {
     $scope.pagination.closed.itemsPerPage = 5;
     $scope.pagination.closed.currentPage = 0;
     
-    $http.get('game-requirements/playermove')
+    $http.get('game-requirements/judgeact')
 	.success(function(data) {
 		for(var i = 0; i < data.length; i++)
 		{
-			if(data[i].played)
+			if(data[i].voted)
 			{
-				$scope.closed_moves.push(data[i]);
+				$scope.closed_acts.push(data[i]);
 			}
 			else
 			{
-				$scope.open_moves.push(data[i]);
+				$scope.open_acts.push(data[i]);
 			}
 		}
 		
-		$scope.pagination.open.length = $scope.open_moves.length;
+		$scope.pagination.open.length = $scope.open_acts.length;
 		$scope.pagination.open.totalPages = Math.max(1, Math.ceil($scope.pagination.open.length / $scope.pagination.open.itemsPerPage));
 		
-		$scope.pagination.closed.length = $scope.closed_moves.length;
-		$scope.pagination.closed.totalPages = Math.max(1, Math.ceil($scope.pagination.closed.length / $scope.pagination.closed.itemsPerPage));
-	});
+		$scope.pagination.closed.length = $scope.closed_acts.length;
+		$scope.pagination.closed.totalPages = Math.max(1, Math.ceil($scope.pagination.closed.length / $scope.pagination.closed.itemsPerPage));	
 	
+	});
+    
     $scope.range = function (oc) {
         var ret = [];
         var showPages = Math.min(5, oc.totalPages);
@@ -86,19 +87,19 @@ app.controllerProvider.register('player_moves', function($scope, $http) {
 				$scope.requirementsChoices.push(data[i]);
 			}
 		});
-	 
-	$scope.setVote = function(playerVote, playerMoveId){
-		$http.put('game-requirements/playermove/' + playerMoveId + '/vote/' + playerVote)
-			.success(function(data) {
-				for(var i = 0; i < $scope.open_moves.length; i++)
+    
+	$scope.setVote = function(judgeVote, judgeActId){
+		$http.put('game-requirements/judgeact/' + judgeActId + '/vote/' + judgeVote)
+	    	.success(function(data) {
+	    		for(var i = 0; i < $scope.open_acts.length; i++)
 				{
-					if($scope.open_moves[i].playerMoveId == playerMoveId)
+					if($scope.open_acts[i].judgeActId == judgeActId)
 					{
-						$scope.open_moves[i].played = true;
-						$scope.closed_moves.push($scope.open_moves[i]);
-						$scope.open_moves.splice(i, 1);
+						$scope.open_acts[i].voted = true;
+						$scope.closed_acts.push($scope.open_acts[i]);
+						$scope.open_acts.splice(i, 1);
 						
-						$scope.pagination.open.length = $scope.open_moves.length;
+						$scope.pagination.open.length = $scope.open_acts.length;
 						$scope.pagination.open.totalPages = Math.max(1, Math.ceil($scope.pagination.open.length / $scope.pagination.open.itemsPerPage));
 						
 						if($scope.pagination.open.currentPage >= $scope.pagination.open.totalPages)
@@ -106,7 +107,7 @@ app.controllerProvider.register('player_moves', function($scope, $http) {
 							$scope.pagination.open.currentPage = Math.max(1, $scope.pagination.open.totalPages -1);
 						}
 						
-						$scope.pagination.closed.length = $scope.closed_moves.length;
+						$scope.pagination.closed.length = $scope.closed_acts.length;
 						$scope.pagination.closed.totalPages = Math.max(1, Math.ceil($scope.pagination.closed.length / $scope.pagination.closed.itemsPerPage));	
 					
 						break;
@@ -114,5 +115,5 @@ app.controllerProvider.register('player_moves', function($scope, $http) {
 				}
     	});
 	 };
-    
+
 });
