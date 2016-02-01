@@ -6,9 +6,9 @@
 			<thead>
 				<tr>
 					<th class="name">Comparison Criteria&nbsp;</th>
-					<th class="name">Row Requirement&nbsp;</th>
+					<th class="name">First Requirement&nbsp;</th>
 					<th class="name">Select your vote&nbsp;</th>
-					<th class="name">Column Requirement&nbsp;</th>
+					<th class="name">Second Requirement&nbsp;</th>
 					<th class="name">Vote&nbsp;</th>
 					<th class="name">Info&nbsp;</th>																												
 				</tr>
@@ -19,9 +19,11 @@
 					<td>{{judgeAct.requirementsMatrixData.criteria.name}}</td>								
 					<td>{{judgeAct.requirementsMatrixData.rowRequirement.name}}</td>
 					<td>
-						<label class="radio-inline" ng-repeat="requirementsChoice in requirementsChoices">
-					      <input type="radio" ng-click="setVote(requirementsChoice.value, judgeAct.judgeActId)" ng-value="{{requirementsChoice.value}}" name="{{judgeAct.judgeActId}}">{{requirementsChoice.value}}
-					    </label>
+						<div align="center">
+							<label class="radio-inline" ng-repeat="requirementsChoice in requirementsChoices">
+						      <input title="{{requirementsChoice.description}}" type="radio" ng-click="setVote(requirementsChoice.value, judgeAct.judgeActId)" ng-value="{{requirementsChoice.value}}" name="{{judgeAct.judgeActId}}">{{requirementsChoice.value}}
+						    </label>
+					    </div>
 					</td>
 					<td>{{judgeAct.requirementsMatrixData.columnRequirement.name}}</td>
 					<td>
@@ -67,8 +69,8 @@
 			<thead>
 				<tr>
 					<th class="name">Comparison Criteria&nbsp;</th>
-					<th class="name">Row Requirement&nbsp;</th>
-					<th class="name">Column Requirement&nbsp;</th>
+					<th class="name">First Requirement&nbsp;</th>
+					<th class="name">Second Requirement&nbsp;</th>
 				</tr>
 			</thead>
 	
