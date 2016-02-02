@@ -52,31 +52,56 @@ public class JudgeActRest {
 	@PreAuthorize("hasRole('OPINION_NEGOTIATOR')")
 	@RequestMapping(value = "",  method = RequestMethod.GET)
 	public List<JudgeAct> getJudgeActs(@RequestParam(required=false) Long gameId,
-			@RequestParam(required=false) Long criteriaId) {
+			@RequestParam(required=false) Long criteriaId,
+			@RequestParam(defaultValue="false") Boolean gameNotFinished) {
 
 		List<JudgeAct> acts;
-		
-		if(gameId != null && criteriaId != null)
+		if(gameNotFinished)
 		{
-			Game game = games.getOne(gameId);
-			ValutationCriteria criteria = criterias.getOne(criteriaId);
-			acts = judgeActs.findByGameAndCriteria(game, criteria);
-		}
-		else if(gameId != null)
-		{
-			Game game = games.getOne(gameId);
-			acts = judgeActs.findByGame(game);
-		}
-		else if(criteriaId != null)
-		{
-			ValutationCriteria criteria = criterias.getOne(criteriaId);
-			acts = judgeActs.findByCriteria(criteria);
+			if(gameId != null && criteriaId != null)
+			{
+				Game game = games.getOne(gameId);
+				ValutationCriteria criteria = criterias.getOne(criteriaId);
+				acts = judgeActs.findByGameAndCriteriaAndGameNotFinished(game, criteria);
+			}
+			else if(gameId != null)
+			{
+				Game game = games.getOne(gameId);
+				acts = judgeActs.findByGameAndGameNotFinished(game);
+			}
+			else if(criteriaId != null)
+			{
+				ValutationCriteria criteria = criterias.getOne(criteriaId);
+				acts = judgeActs.findByCriteriaAndGameNotFinished(criteria);
+			}
+			else
+			{
+				acts = judgeActs.findAllAndGameNotFinished();
+			}
 		}
 		else
 		{
-			acts = judgeActs.findAll();
+			if(gameId != null && criteriaId != null)
+			{
+				Game game = games.getOne(gameId);
+				ValutationCriteria criteria = criterias.getOne(criteriaId);
+				acts = judgeActs.findByGameAndCriteria(game, criteria);
+			}
+			else if(gameId != null)
+			{
+				Game game = games.getOne(gameId);
+				acts = judgeActs.findByGame(game);
+			}
+			else if(criteriaId != null)
+			{
+				ValutationCriteria criteria = criterias.getOne(criteriaId);
+				acts = judgeActs.findByCriteria(criteria);
+			}
+			else
+			{
+				acts = judgeActs.findAll();
+			}
 		}
-		
 		return acts;
 	}
 	

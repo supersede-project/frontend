@@ -29,6 +29,22 @@ public interface PlayerMovesJpa extends JpaRepository<PlayerMove, Long> {
 	@Transactional
 	List<PlayerMove> findByPlayerAndCriteria(User player, ValutationCriteria criteria);
 
+	@Query("SELECT pm FROM PlayerMove pm WHERE pm.player = ?1 AND pm.requirementsMatrixData.game.finished = FALSE")
+	@Transactional
+	List<PlayerMove> findByPlayerAndGameNotFinished(User player);
+	
+	@Query("SELECT pm FROM PlayerMove pm WHERE pm.player = ?1 AND pm.requirementsMatrixData.game = ?2 AND pm.requirementsMatrixData.criteria = ?3 AND pm.requirementsMatrixData.game.finished = FALSE")
+	@Transactional
+	List<PlayerMove> findByPlayerAndGameAndCriteriaAndGameNotFinished(User player, Game game, ValutationCriteria criteria);
+	
+	@Query("SELECT pm FROM PlayerMove pm WHERE pm.player = ?1 AND pm.requirementsMatrixData.game = ?2 AND pm.requirementsMatrixData.game.finished = FALSE")
+	@Transactional
+	List<PlayerMove> findByPlayerAndGameAndGameNotFinished(User player, Game game);
+	
+	@Query("SELECT pm FROM PlayerMove pm WHERE pm.player = ?1 AND pm.requirementsMatrixData.criteria = ?2 AND pm.requirementsMatrixData.game.finished = FALSE")
+	@Transactional
+	List<PlayerMove> findByPlayerAndCriteriaAndGameNotFinished(User player, ValutationCriteria criteria);
+	
 	List<PlayerMove> findByRequirementsMatrixData(RequirementsMatrixData requirementMatrixData);
 
 }

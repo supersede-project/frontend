@@ -49,34 +49,59 @@ public class PlayerMoveRest {
 	@Transactional
 	public List<PlayerMove> getPlayerMoves(Authentication authentication,
 			@RequestParam(required=false) Long gameId,
-			@RequestParam(required=false) Long criteriaId){	
+			@RequestParam(required=false) Long criteriaId,
+			@RequestParam(defaultValue="false") Boolean gameNotFinished){	
 		
 		List<PlayerMove> moves;
 		
 		DatabaseUser currentUser = (DatabaseUser) authentication.getPrincipal();
 		User player = users.findOne(currentUser.getUserId());
-		
-		if(gameId != null && criteriaId != null)
+		if(gameNotFinished)
 		{
-			Game game = games.getOne(gameId);
-			ValutationCriteria criteria = criterias.getOne(criteriaId);
-			moves = playerMoves.findByPlayerAndGameAndCriteria(player, game, criteria);
-		}
-		else if(gameId != null)
-		{
-			Game game = games.getOne(gameId);
-			moves = playerMoves.findByPlayerAndGame(player, game);
-		}
-		else if(criteriaId != null)
-		{
-			ValutationCriteria criteria = criterias.getOne(criteriaId);
-			moves = playerMoves.findByPlayerAndCriteria(player, criteria);
+			if(gameId != null && criteriaId != null)
+			{
+				Game game = games.getOne(gameId);
+				ValutationCriteria criteria = criterias.getOne(criteriaId);
+				moves = playerMoves.findByPlayerAndGameAndCriteriaAndGameNotFinished(player, game, criteria);
+			}
+			else if(gameId != null)
+			{
+				Game game = games.getOne(gameId);
+				moves = playerMoves.findByPlayerAndGameAndGameNotFinished(player, game);
+			}
+			else if(criteriaId != null)
+			{
+				ValutationCriteria criteria = criterias.getOne(criteriaId);
+				moves = playerMoves.findByPlayerAndCriteriaAndGameNotFinished(player, criteria);
+			}
+			else
+			{
+				moves = playerMoves.findByPlayerAndGameNotFinished(player);
+			}
 		}
 		else
 		{
-			moves = playerMoves.findByPlayer(player);
+			if(gameId != null && criteriaId != null)
+			{
+				Game game = games.getOne(gameId);
+				ValutationCriteria criteria = criterias.getOne(criteriaId);
+				moves = playerMoves.findByPlayerAndGameAndCriteria(player, game, criteria);
+			}
+			else if(gameId != null)
+			{
+				Game game = games.getOne(gameId);
+				moves = playerMoves.findByPlayerAndGame(player, game);
+			}
+			else if(criteriaId != null)
+			{
+				ValutationCriteria criteria = criterias.getOne(criteriaId);
+				moves = playerMoves.findByPlayerAndCriteria(player, criteria);
+			}
+			else
+			{
+				moves = playerMoves.findByPlayer(player);
+			}
 		}
-		
 		return moves;
 	}
 	

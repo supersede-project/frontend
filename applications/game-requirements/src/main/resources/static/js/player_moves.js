@@ -66,7 +66,7 @@ app.controllerProvider.register('player_moves', function($scope, $http) {
     }
     
     getActions = function() {
-    	$http.get('game-requirements/playermove', {params: { criteriaId: $scope.selectedCriteria, gameId: $scope.selectedGame }})
+    	$http.get('game-requirements/playermove', {params: { criteriaId: $scope.selectedCriteria, gameId: $scope.selectedGame, gameNotFinished: true }})
     	.success(function(data) {
     		reset();
     		

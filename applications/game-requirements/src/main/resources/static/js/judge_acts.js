@@ -66,7 +66,7 @@ app.controllerProvider.register('judge_acts', function($scope, $http) {
     }
     
     getActs = function() {
-	    $http.get('game-requirements/judgeact', {params: { criteriaId: $scope.selectedCriteria, gameId: $scope.selectedGame }})
+	    $http.get('game-requirements/judgeact', {params: { criteriaId: $scope.selectedCriteria, gameId: $scope.selectedGame, gameNotFinished: true }})
 		.success(function(data) {
 			reset();
 			
