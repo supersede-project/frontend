@@ -3,7 +3,6 @@ package demo.rest;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,7 +17,6 @@ import demo.model.Profile;
 import demo.model.User;
 import demo.model.ValutationCriteria;
 import eu.supersede.fe.exception.NotFoundException;
-import eu.supersede.fe.security.DatabaseUser;
 
 @RestController
 @RequestMapping("/user")
