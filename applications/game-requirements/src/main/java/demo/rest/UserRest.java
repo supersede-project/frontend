@@ -36,19 +36,17 @@ public class UserRest {
 	@Autowired
     private UserCriteriaPointsJpa userCriteriaPoints;
 	
-	// get the loggeduser
-	@RequestMapping("/loggeduser")
-	public User getLoggedUser(Authentication authentication)
+	// get a specific user by the Id
+	@RequestMapping("/{userId}")
+	public User getUser(@PathVariable Long userId)
 	{
-		DatabaseUser currentUser = (DatabaseUser) authentication.getPrincipal();
-		User user = users.findOne(currentUser.getUserId());
-		
-		if(user == null)
+		User u = users.findOne(userId);
+		if(u == null)
 		{
 			throw new NotFoundException();
 		}
 		
-		return user;
+		return u;
 	}
 	
 	// get all the users
