@@ -45,7 +45,6 @@ public class AHPRest {
 		
 		//##################################################################
 		// set the criterias of the game
-		//input.setCriteria( "c1", "c2" );
 		List<String> criteriasList = new ArrayList<>();
 		for(int i=0; i<g.getCriterias().size();i++){
 			criteriasList.add(g.getCriterias().get(i).getCriteriaId().toString());
@@ -56,7 +55,6 @@ public class AHPRest {
 		//ROW - COL - VALUE
 		//##################################################################
 		// set the preferences on couple of criteria
-		//input.setPreference( "c1", "c2", 4 );
 		List<CriteriasMatrixData> criteriasMatrixDataList = criteriasMatricesData.findByGame(g);
 		for(int i=0; i<criteriasMatrixDataList.size();i++){
 			input.setPreference( criteriasMatrixDataList.get(i).getRowCriteria().getCriteriaId().toString(), 
@@ -68,7 +66,6 @@ public class AHPRest {
 		
 		//##################################################################
 		// set the requirements of the game
-		//input.setOptions( "o1", "o2", "o3" );
 		List<String> requirementsList = new ArrayList<>();
 		for(int i=0; i<g.getRequirements().size();i++){
 			requirementsList.add(g.getRequirements().get(i).getRequirementId().toString());
@@ -80,10 +77,6 @@ public class AHPRest {
 		//ROW - COL - CRITERIA - VALUE
 		//##################################################################
 		// set the preferences between two requirements of a specific criteria
-		/*input.setOptionPreference( "o1", "o2", "c1", 0 );
-		input.setOptionPreference( "o1", "o3", "c1", 4 );
-		input.setOptionPreference( "o2", "o3", "c1", 0 );
-		*/
 		List<RequirementsMatrixData> requirementsMatrixDataList = requirementsMatricesData.findByGame(g);
 		for(int i=0; i<requirementsMatrixDataList.size();i++){
 			if((int) (long) requirementsMatrixDataList.get(i).getValue() != -1){
@@ -95,16 +88,6 @@ public class AHPRest {
 		}		
 		//##################################################################
 
-		
-		//##################################################################		
-		// set the preferences between two requirements of a specific criteria
-		/*input.setOptionPreference( "o1", "o2", "c2", 0 );
-		input.setOptionPreference( "o1", "o3", "c2", 4 );
-		input.setOptionPreference( "o2", "o3", "c2", 8 );
-		*/
-		//##################################################################
-
-		
 		AHPAnalyser analyser = new AHPAnalyser();
 		
 		Map<String,Double> map = analyser.eval( input );
