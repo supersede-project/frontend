@@ -15,7 +15,25 @@
 					<div class="col-md-6">
 						<a href="#/game-requirements/games" class="btn btn-lg btn-success">Decision making processes</a>
 					</div>
-				</div>				
+				</div>
+				
+				<div ng-show="hasRole('OPINION_NEGOTIATOR')" class="row">
+					<div class="col-md-6">
+						<p>Go to Negotiator actions:</p>
+					</div>
+					<div class="col-md-6">
+						<a href="#/game-requirements/judge_acts" class="btn btn-lg btn-success">Negotiator actions</a>
+					</div>
+				</div>
+				
+				<div ng-show="hasRole('OPINION_PROVIDER')" class="row">
+					<div class="col-md-6">
+						<p>Go to Opinion provider actions:</p>
+					</div>
+					<div class="col-md-6">
+						<a href="#/game-requirements/player_moves" class="btn btn-lg btn-success">Opinion provider actions</a>
+					</div>
+				</div>
 			</div>
 			<div class="col-md-6">
 				<h1>Criterias points</h1>
