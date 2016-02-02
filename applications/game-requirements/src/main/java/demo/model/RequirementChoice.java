@@ -4,8 +4,11 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name="requirements_choices")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class RequirementChoice {
 
 	@Id

@@ -10,9 +10,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name="users_criteria_points")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class UserCriteriaPoint{
 	
 	@ManyToOne(fetch = FetchType.EAGER)

@@ -5,17 +5,23 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import demo.jpa.GamesJpa;
 import demo.jpa.PlayerMovesJpa;
 import demo.jpa.RequirementsMatricesDataJpa;
 import demo.jpa.UsersJpa;
+import demo.jpa.ValutationCriteriaJpa;
+import demo.model.Game;
 import demo.model.PlayerMove;
 import demo.model.RequirementsMatrixData;
 import demo.model.User;
+import demo.model.ValutationCriteria;
 import eu.supersede.fe.exception.NotFoundException;
 import eu.supersede.fe.security.DatabaseUser;
 
@@ -24,22 +30,54 @@ import eu.supersede.fe.security.DatabaseUser;
 public class PlayerMoveRest {
 
 	@Autowired
-    private UsersJpa users;
+    private GamesJpa games;
 	
 	@Autowired
+    private UsersJpa users;
+
+	@Autowired
     private PlayerMovesJpa playerMoves;
+	
+	@Autowired
+    private ValutationCriteriaJpa criterias;
 	
 	@Autowired
     private RequirementsMatricesDataJpa requirementsMatricesData;
 	
 	// get all the playerMoves of the logged user
 	@RequestMapping(value = "", method = RequestMethod.GET)
-	public List<PlayerMove> getPlayerMoves(Authentication authentication){	
+	@Transactional
+	public List<PlayerMove> getPlayerMoves(Authentication authentication,
+			@RequestParam(required=false) Long gameId,
+			@RequestParam(required=false) Long criteriaId){	
+		
+		List<PlayerMove> moves;
 		
 		DatabaseUser currentUser = (DatabaseUser) authentication.getPrincipal();
 		User player = users.findOne(currentUser.getUserId());
 		
-		return playerMoves.findByPlayer(player);
+		if(gameId != null && criteriaId != null)
+		{
+			Game game = games.getOne(gameId);
+			ValutationCriteria criteria = criterias.getOne(criteriaId);
+			moves = playerMoves.findByPlayerAndGameAndCriteria(player, game, criteria);
+		}
+		else if(gameId != null)
+		{
+			Game game = games.getOne(gameId);
+			moves = playerMoves.findByPlayerAndGame(player, game);
+		}
+		else if(criteriaId != null)
+		{
+			ValutationCriteria criteria = criterias.getOne(criteriaId);
+			moves = playerMoves.findByPlayerAndCriteria(player, criteria);
+		}
+		else
+		{
+			moves = playerMoves.findByPlayer(player);
+		}
+		
+		return moves;
 	}
 	
 	// get a specific playerMove 

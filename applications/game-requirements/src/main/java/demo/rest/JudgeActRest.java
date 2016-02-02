@@ -8,16 +8,21 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import demo.jpa.GamesJpa;
 import demo.jpa.JudgeActsJpa;
 import demo.jpa.PlayerMovesJpa;
 import demo.jpa.RequirementsMatricesDataJpa;
 import demo.jpa.UsersJpa;
+import demo.jpa.ValutationCriteriaJpa;
+import demo.model.Game;
 import demo.model.JudgeAct;
 import demo.model.PlayerMove;
 import demo.model.RequirementsMatrixData;
 import demo.model.User;
+import demo.model.ValutationCriteria;
 import eu.supersede.fe.exception.NotFoundException;
 import eu.supersede.fe.security.DatabaseUser;
 
@@ -32,6 +37,12 @@ public class JudgeActRest {
     private UsersJpa users;
 
 	@Autowired
+    private ValutationCriteriaJpa criterias;
+
+	@Autowired
+    private GamesJpa games;
+	
+	@Autowired
     private RequirementsMatricesDataJpa requirementsMatricesData;
 	
 	@Autowired
@@ -40,9 +51,33 @@ public class JudgeActRest {
 	// get all the judgeActs if user is a judge
 	@PreAuthorize("hasRole('OPINION_NEGOTIATOR')")
 	@RequestMapping(value = "",  method = RequestMethod.GET)
-	public List<JudgeAct> getJudgeActs() {
+	public List<JudgeAct> getJudgeActs(@RequestParam(required=false) Long gameId,
+			@RequestParam(required=false) Long criteriaId) {
 
-		return judgeActs.findAll();
+		List<JudgeAct> acts;
+		
+		if(gameId != null && criteriaId != null)
+		{
+			Game game = games.getOne(gameId);
+			ValutationCriteria criteria = criterias.getOne(criteriaId);
+			acts = judgeActs.findByGameAndCriteria(game, criteria);
+		}
+		else if(gameId != null)
+		{
+			Game game = games.getOne(gameId);
+			acts = judgeActs.findByGame(game);
+		}
+		else if(criteriaId != null)
+		{
+			ValutationCriteria criteria = criterias.getOne(criteriaId);
+			acts = judgeActs.findByCriteria(criteria);
+		}
+		else
+		{
+			acts = judgeActs.findAll();
+		}
+		
+		return acts;
 	}
 	
 	// get a specific judgeAct 

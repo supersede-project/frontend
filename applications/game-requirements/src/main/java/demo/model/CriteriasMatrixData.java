@@ -10,8 +10,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name="criterias_matrices_data")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class CriteriasMatrixData {
 
 	@Id

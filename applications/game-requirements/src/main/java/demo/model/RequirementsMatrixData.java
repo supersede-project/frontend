@@ -14,9 +14,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name="requirements_matrices_data")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class RequirementsMatrixData {
 
 	@Id
@@ -55,7 +57,7 @@ public class RequirementsMatrixData {
     public void setRequirementsMatrixDataId(Long requirementsMatrixDataId) {
         this.requirementsMatrixDataId = requirementsMatrixDataId;
     }
-    
+
     public Game getGame() {
         return game;
     }

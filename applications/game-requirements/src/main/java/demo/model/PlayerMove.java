@@ -9,8 +9,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name="player_moves")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class PlayerMove {
 
 	@Id
