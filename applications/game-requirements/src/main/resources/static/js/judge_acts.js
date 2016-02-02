@@ -17,28 +17,90 @@ app.controllerProvider.register('judge_acts', function($scope, $http) {
 	$scope.pagination.closed.length = 0;
     $scope.pagination.closed.itemsPerPage = 5;
     $scope.pagination.closed.currentPage = 0;
+
+    $scope.selectedCriteria = undefined;
+    $scope.criterias = [];
     
-    $http.get('game-requirements/judgeact')
-	.success(function(data) {
-		for(var i = 0; i < data.length; i++)
-		{
-			if(data[i].voted)
+    $scope.selectedGame = undefined;
+    $scope.games = [];
+    
+    criteriasContains = function(criteria)
+    {
+    	for(var i = 0; i < $scope.criterias.length; i++)
+    	{
+    		if($scope.criterias[i].criteriaId == criteria.criteriaId)
+    		{
+    			return true;
+    		}
+    	}
+    	
+    	return false;
+    }
+    
+    gamesContains = function(game)
+    {
+    	for(var i = 0; i < $scope.games.length; i++)
+    	{
+    		if($scope.games[i].gameId == game.gameId)
+    		{
+    			return true;
+    		}
+    	}
+    	
+    	return false;
+    }
+    
+    getActs = function() {
+	    $http.get('game-requirements/judgeact', {params: { criteriaId: $scope.selectedCriteria, gameId: $scope.selectedGame }})
+		.success(function(data) {
+			$scope.open_acts.length = 0;
+    		$scope.closed_acts.length = 0;
+			
+			for(var i = 0; i < data.length; i++)
 			{
-				$scope.closed_acts.push(data[i]);
+				if(data[i].voted)
+				{
+					$scope.closed_acts.push(data[i]);
+				}
+				else
+				{
+					$scope.open_acts.push(data[i]);
+				}
 			}
-			else
-			{
-				$scope.open_acts.push(data[i]);
-			}
-		}
+			
+			$scope.pagination.open.length = $scope.open_acts.length;
+			$scope.pagination.open.totalPages = Math.max(1, Math.ceil($scope.pagination.open.length / $scope.pagination.open.itemsPerPage));
+			
+			$scope.pagination.closed.length = $scope.closed_acts.length;
+			$scope.pagination.closed.totalPages = Math.max(1, Math.ceil($scope.pagination.closed.length / $scope.pagination.closed.itemsPerPage));	
 		
-		$scope.pagination.open.length = $scope.open_acts.length;
-		$scope.pagination.open.totalPages = Math.max(1, Math.ceil($scope.pagination.open.length / $scope.pagination.open.itemsPerPage));
-		
-		$scope.pagination.closed.length = $scope.closed_acts.length;
-		$scope.pagination.closed.totalPages = Math.max(1, Math.ceil($scope.pagination.closed.length / $scope.pagination.closed.itemsPerPage));	
-	
-	});
+			if(!$scope.selectedCriteria)
+    		{
+    			$scope.criterias.length = 0;
+    			for(var i = 0; i < data.length; i++)
+        		{
+    				if(!criteriasContains(data[i].requirementsMatrixData.criteria))
+    				{
+    					$scope.criterias.push(data[i].requirementsMatrixData.criteria);
+    				}
+        		}
+    		}
+    		
+    		if(!$scope.selectedGame)
+    		{
+    			$scope.games.length = 0;
+    			for(var i = 0; i < data.length; i++)
+        		{
+    				if(!gamesContains(data[i].requirementsMatrixData.game))
+    				{
+    					$scope.games.push(data[i].requirementsMatrixData.game);
+    				}
+        		}
+    		}
+		});
+    };
+    
+    getActs();
     
     $scope.range = function (oc) {
         var ret = [];
@@ -115,5 +177,13 @@ app.controllerProvider.register('judge_acts', function($scope, $http) {
 				}
     	});
 	 };
+	 
 
+	 $scope.changeCriteria = function() {
+		 getActs();
+	 }
+    
+	 $scope.changeGame = function() {
+		 getActs();
+	 }
 });

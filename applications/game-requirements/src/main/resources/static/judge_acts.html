@@ -1,5 +1,24 @@
 <script src="game-requirements/js/judge_acts.js"></script>
 <div class="container" ng-controller="judge_acts">
+	
+	<div class="row">
+    	<div class="col-md-6">	
+			<h3>Filter by criteria: </h3>
+			<select class="form-control" name="selectCriteria" id="selectCriteria" ng-model="selectedCriteria" ng-change="changeCriteria()">
+				<option value="{{undefined}}"></option>
+				<option ng-repeat="criteria in criterias" value="{{criteria.criteriaId}}">{{criteria.name}}</option>
+		    </select>
+	   	 </div>
+    
+	    <div class="col-md-6">
+		    <h3>Filter by game: </h3>
+			<select class="form-control" name="selectGame" id="selectGame" ng-model="selectedGame" ng-change="changeGame()">
+				<option value="{{undefined}}"></option>
+				<option ng-repeat="game in games" value="{{game.gameId}}">{{game.title}}</option>
+		    </select>
+	    </div>
+    </div>
+    
 	<div class="row">
 		<h1>Available actions</h1>			
 		<table class="table table-striped table-condensed table-hover">
