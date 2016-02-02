@@ -61,7 +61,7 @@ public class AHPRest {
 		for(int i=0; i<criteriasMatrixDataList.size();i++){
 			input.setPreference( criteriasMatrixDataList.get(i).getRowCriteria().getCriteriaId().toString(), 
 					criteriasMatrixDataList.get(i).getColumnCriteria().getCriteriaId().toString(), 
-					(int) (long) criteriasMatrixDataList.get(i).getValue() );
+					criteriasMatrixDataList.get(i).getValue().intValue());
 		}	
 		//##################################################################
 		
@@ -90,7 +90,7 @@ public class AHPRest {
 				input.setOptionPreference(requirementsMatrixDataList.get(i).getRowRequirement().getRequirementId().toString(), 
 						requirementsMatrixDataList.get(i).getColumnRequirement().getRequirementId().toString(), 
 						requirementsMatrixDataList.get(i).getCriteria().getCriteriaId().toString(),
-						(int) (long) requirementsMatrixDataList.get(i).getValue());
+						requirementsMatrixDataList.get(i).getValue().intValue());
 			}
 		}		
 		//##################################################################
