@@ -17,8 +17,13 @@
 				</div>
 				<br>
 				<div class="col-md-12">
-					<div ng-repeat="(key, data) in ahpResult" align="center">
-						<b>{{requirementName(key)}}</b> = {{ (Math.round(data * 1000) / 1000) }}
+					<div ng-repeat="(key, data) in ahpResult">
+						<div class="col-md-9">
+							<p>{{requirementName(key)}}</p>
+						</div>
+						<div class="col-md-3" align="right">
+						 <b>{{ (Math.round(data * 1000) / 1000) }}</b>
+						</div>
 					</div>
 				</div>							
 			</div>
