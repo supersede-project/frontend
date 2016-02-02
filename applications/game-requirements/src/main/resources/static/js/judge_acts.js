@@ -24,6 +24,21 @@ app.controllerProvider.register('judge_acts', function($scope, $http) {
     $scope.selectedGame = undefined;
     $scope.games = [];
     
+    reset = function(){
+    	$scope.open_acts.length = 0;
+		$scope.closed_acts.length = 0;
+    	
+    	$scope.pagination.open.totalPages = 1;
+    	$scope.pagination.open.length = 0;
+        $scope.pagination.open.itemsPerPage = 5;
+        $scope.pagination.open.currentPage = 0;
+
+    	$scope.pagination.closed.totalPages = 1;
+    	$scope.pagination.closed.length = 0;
+        $scope.pagination.closed.itemsPerPage = 5;
+        $scope.pagination.closed.currentPage = 0;
+    }
+    
     criteriasContains = function(criteria)
     {
     	for(var i = 0; i < $scope.criterias.length; i++)
@@ -53,8 +68,7 @@ app.controllerProvider.register('judge_acts', function($scope, $http) {
     getActs = function() {
 	    $http.get('game-requirements/judgeact', {params: { criteriaId: $scope.selectedCriteria, gameId: $scope.selectedGame }})
 		.success(function(data) {
-			$scope.open_acts.length = 0;
-    		$scope.closed_acts.length = 0;
+			reset();
 			
 			for(var i = 0; i < data.length; i++)
 			{
