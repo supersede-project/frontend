@@ -5,8 +5,8 @@ app.controllerProvider.register('game', function($scope, $http, $location) {
 	$scope.Math = window.Math;
 	
 	$scope.gameId = $location.search()['gameId'];
-	$scope.game = null;
-	$scope.ahpResult = null;
+	$scope.game = undefined;
+	$scope.ahpResult = undefined;
 	
 	$http.get('game-requirements/game/' + $scope.gameId)
 	.success(function(data) {

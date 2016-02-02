@@ -4,7 +4,7 @@ app.controllerProvider.register('criterias_leaderboard', function($scope, $http)
 	
 	$scope.valutationCriterias = [];
     $scope.criteriaUsers = []; 
-    $scope.selectedCriteria = null;
+    $scope.selectedCriteria = undefined;
     
     $http.get('game-requirements/criteria')
 	.success(function(data) {
