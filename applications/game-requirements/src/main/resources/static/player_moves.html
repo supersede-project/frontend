@@ -37,12 +37,17 @@
 				<tr	ng-repeat="playerMove in open_moves | limitTo:5:pagination.open.currentPage*pagination.open.itemsPerPage">
 					<td>{{playerMove.requirementsMatrixData.criteria.name}}</td>								
 					<td>{{playerMove.requirementsMatrixData.rowRequirement.name}}</td>
-					<td>
+					<td style="width: 170px;">
 						<div align="center">
-							<label class="radio-inline" ng-repeat="requirementsChoice in requirementsChoices">
-						      <input title="{{requirementsChoice.description}}" type="radio" ng-click="setVote(requirementsChoice.value, playerMove.playerMoveId)" ng-value="{{requirementsChoice.value}}" name="{{playerMove.playerMoveId}}">{{requirementsChoice.value}}
-						    </label>
-					    </div>
+							<div style="display: inline-block; margin-left: 2px; margin-right: 2px;" ng-repeat="requirementsChoice in requirementsChoices" align="center">
+								<div align="center">
+									<label>{{requirementsChoice.value}}</label>
+								</div>
+								<div align="center">
+									<input title="{{requirementsChoice.description}}" type="radio" ng-click="setVote(requirementsChoice.value, playerMove.playerMoveId)" ng-value="{{requirementsChoice.value}}" name="{{playerMove.playerMoveId}}">
+								</div>
+							</div>
+						</div>
 					</td>
 					<td>{{playerMove.requirementsMatrixData.columnRequirement.name}}</td>
 					<td>
