@@ -41,6 +41,7 @@ import demo.model.RequirementsMatrixData;
 import demo.model.User;
 import demo.model.ValutationCriteria;
 import eu.supersede.fe.exception.NotFoundException;
+import eu.supersede.fe.notification.NotificationUtil;
 import eu.supersede.fe.security.DatabaseUser;
 
 @RestController
@@ -63,6 +64,10 @@ public class GameRest {
     private PlayerMovesJpa playerMoves;
 	@Autowired
     private JudgeActsJpa judgeActs;
+	
+	@Autowired
+	private NotificationUtil notificationUtil;
+	
 	
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public List<Game> getGames(){
@@ -204,6 +209,12 @@ public class GameRest {
 				}
 			}
 		}
+		
+		for(User u : us)
+		{
+			notificationUtil.createNotificationForUser(u.getUserId(), "A new decision making process has been created, are you ready to vote?", "game-requirements/player_moves");
+		}
+		notificationUtil.createNotificationsForProfile("OPINION_NEGOTIATOR", "A new decision making process has been created, you are in charge to take decisions", "game-requirements/judge_acts");
 		
 		HttpHeaders httpHeaders = new HttpHeaders();
 		httpHeaders.setLocation(ServletUriComponentsBuilder
