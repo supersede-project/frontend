@@ -1,3 +1,21 @@
+<script>
+	allowDropGadget = function(event)
+	{
+		event.preventDefault();
+	};
+	
+	dragGadget = function(event)
+	{
+		event.dataTransfer.setData("sourceId", event.target.id);
+	}
+	
+	dropGadget = function(event, gadgetId)
+	{
+		event.preventDefault();
+		var sourceId = event.dataTransfer.getData("sourceId");
+		angular.element(document.getElementById('dashboard')).scope().dropGadget(sourceId, gadgetId);
+	}
+</script>
 <div id="dashboard" ng-show="authenticated">
 	<div class="dashboard-header">
 		<nav id="dashboard" class="main-navigation menu-left">
@@ -23,9 +41,9 @@
 	<div class="dashboard-content" style="display: block;">
 		<div ng-repeat="gadget in gadgets" class="gadget" ng-class="gadget.size=='large'?'gadget-full':''">
 			<div id="gadget{{$index}}" draggable="true" 
-				ondragstart="angular.element(document.getElementById('dashboard')).scope().dragGadget(event, this.id)" 
-				ondragover="angular.element(document.getElementById('dashboard')).scope().allowDropGadget(event, this.id)" 
-				ondrop="angular.element(document.getElementById('dashboard')).scope().dropGadget(event, this.id)">
+				ondragstart="dragGadget(event)" 
+				ondragover="allowDropGadget(event)" 
+				ondrop="dropGadget(event, this.id)">
 				<div class="gadget-title">
 					<div class="gadget-button-bar">
 						<a ng-show="gadget.size == 'large'" ng-click="shrinkGadget($index)"><span class="glyphicon glyphicon-resize-small gadget-button"></span></a>

@@ -441,25 +441,17 @@ app.controller('dashboard', function($scope, $http) {
 	    	console.log(err);
 	    });
 	}
-	
-	$scope.allowDropGadget = function(ev, index) {
-	    ev.preventDefault();
-	}
 
-	$scope.dragGadget = function(ev, index) {
-	    $scope.dragFrom = parseInt(index.replace("gadget", ""));
-	}
-
-	$scope.dropGadget = function(ev, index) {
-	    ev.preventDefault();
-	    var dragTo = parseInt(index.replace("gadget", ""));
+	$scope.dropGadget = function(sourceId, targetId) {
+	    var dragFrom = parseInt(sourceId.replace("gadget", ""));
+	    var dragTo = parseInt(targetId.replace("gadget", ""));
 	    
 	    //move from to
-	    //$scope.gadgets.splice(dragTo, 0, $scope.gadgets.splice($scope.dragFrom, 1)[0]);
+	    //$scope.gadgets.splice(dragTo, 0, $scope.gadgets.splice(dragFrom, 1)[0]);
 	    
 	    //switch from to
-	    var b = $scope.gadgets[$scope.dragFrom];
-	    $scope.gadgets[$scope.dragFrom] = $scope.gadgets[dragTo];
+	    var b = $scope.gadgets[dragFrom];
+	    $scope.gadgets[dragFrom] = $scope.gadgets[dragTo];
 	    $scope.gadgets[dragTo] = b;
 	    
 	    $scope.$apply();
