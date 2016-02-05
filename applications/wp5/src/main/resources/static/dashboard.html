@@ -4,16 +4,21 @@
 		event.preventDefault();
 	};
 	
-	dragGadget = function(event)
+	dragGadget = function(event, gadgetId)
 	{
-		event.dataTransfer.setData("sourceId", event.target.id);
+	    if((navigator.userAgent.toLowerCase().indexOf('firefox') !== -1)) { 
+	    	event.dataTransfer.setData("sourceId", event.target.id);
+	    }
+		angular.element(document.getElementById('dashboard')).scope().dragGadget(gadgetId);
 	}
 	
 	dropGadget = function(event, gadgetId)
 	{
 		event.preventDefault();
-		var sourceId = event.dataTransfer.getData("sourceId");
-		angular.element(document.getElementById('dashboard')).scope().dropGadget(sourceId, gadgetId);
+		if((navigator.userAgent.toLowerCase().indexOf('firefox') !== -1)) { 
+			var sourceId = event.dataTransfer.getData("sourceId");
+		}
+		angular.element(document.getElementById('dashboard')).scope().dropGadget(gadgetId);
 	}
 </script>
 <div id="dashboard" ng-show="authenticated">
@@ -41,7 +46,7 @@
 	<div class="dashboard-content" style="display: block;">
 		<div ng-repeat="gadget in gadgets" class="gadget" ng-class="gadget.size=='large'?'gadget-full':''">
 			<div id="gadget{{$index}}" draggable="true" 
-				ondragstart="dragGadget(event)" 
+				ondragstart="dragGadget(event, this.id)" 
 				ondragover="allowDropGadget(event)" 
 				ondrop="dropGadget(event, this.id)">
 				<div class="gadget-title">

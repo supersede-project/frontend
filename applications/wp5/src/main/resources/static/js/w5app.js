@@ -442,16 +442,22 @@ app.controller('dashboard', function($scope, $http) {
 	    });
 	}
 
-	$scope.dropGadget = function(sourceId, targetId) {
-	    var dragFrom = parseInt(sourceId.replace("gadget", ""));
+	$scope.dragGadget = function(sourceId) {
+		$scope.dragFrom = parseInt(sourceId.replace("gadget", ""));
+		console.log($scope.dragFrom);
+	}
+	
+	$scope.dropGadget = function(targetId) {
 	    var dragTo = parseInt(targetId.replace("gadget", ""));
-	    
+
+		console.log(dragTo);
+		
 	    //move from to
-	    //$scope.gadgets.splice(dragTo, 0, $scope.gadgets.splice(dragFrom, 1)[0]);
+	    //$scope.gadgets.splice(dragTo, 0, $scope.gadgets.splice($scope.dragFrom, 1)[0]);
 	    
 	    //switch from to
-	    var b = $scope.gadgets[dragFrom];
-	    $scope.gadgets[dragFrom] = $scope.gadgets[dragTo];
+	    var b = $scope.gadgets[$scope.dragFrom];
+	    $scope.gadgets[$scope.dragFrom] = $scope.gadgets[dragTo];
 	    $scope.gadgets[dragTo] = b;
 	    
 	    $scope.$apply();
