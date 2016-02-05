@@ -2,6 +2,8 @@ package eu.supersede.fe.rest;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -40,8 +42,26 @@ public class NotificationRest {
 			HttpServletRequest request, 
 			@RequestParam(defaultValue="true") Boolean toRead)
 	{
-		String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getLocalPort() + "/#/";
+		String scheme;
+		String host;
+		String port;
 		
+		if(request.getHeader("x-forwarded-proto") != null || 
+				request.getHeader("x-forwarded-host") != null || 
+				request.getHeader("x-forwarded-port") != null)
+		{
+			scheme = request.getHeader("x-forwarded-proto") != null ? request.getHeader("x-forwarded-proto") : "http";
+			host =  request.getHeader("x-forwarded-host") != null ? request.getHeader("x-forwarded-host") : request.getServerName();
+			port = request.getHeader("x-forwarded-port") != null ? request.getHeader("x-forwarded-port") : "80";
+		}
+		else
+		{
+			scheme = request.getScheme();
+			host = request.getServerName();
+			port = new Integer(request.getServerPort()).toString();
+		}
+		String baseUrl = scheme + "://" + host + ":" + port + "/#/";
+
 		DatabaseUser currentUser = (DatabaseUser) authentication.getPrincipal();
 		User u = users.getOne(currentUser.getUserId());
 		List<Notification> ns;
