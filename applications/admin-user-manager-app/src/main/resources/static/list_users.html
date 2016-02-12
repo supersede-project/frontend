@@ -1,49 +1,6 @@
 <script src="admin-user-manager-app/js/admin-user-manager-app.js"></script>
-<div class="well" ng-controller="list-users-utilities">
-
-	<table class="table table-striped table-condensed table-hover">
-
-		<thead>
-			<tr>
-				<th class="id" custom-sort order="'id'" sort="sort">Id&nbsp;</th>
-				<th class="name" custom-sort order="'name'" sort="sort">Name&nbsp;</th>
-				<th class="email" custom-sort order="'email'" sort="sort">Email&nbsp;</th>
-				<th class="profiles" custom-sort order="'profiles'" sort="sort">Profiles&nbsp;</th>
-			</tr>
-		</thead>
-
-		<tbody>
-			<tr	ng-repeat="user in users | limitTo:5:currentPage*itemsPerPage">
-				<td>{{user.userId}}</td>
-				<td>{{user.name}}</td>
-				<td>{{user.email}}</td>
-				<td>
-					<div ng-repeat="profile in user.profiles | orderBy:'name'">
-					    {{profile.name}}
-					</div>
-				</td>
-			</tr>
-		</tbody>
-
-		<tfoot>
-			<td colspan="4">
-				<div class="paging_simple_numbers" align="center">
-					<ul class="pagination">
-						<li class="paginate_button previous" ng-class="{disabled: currentPage == 0}"><a href
-							ng-click="prevPage()">Prev</a></li>
-
-						<li class="paginate_button" ng-repeat="n in range()" ng-class="{active: n == (currentPage + 1)}" ng-click="setPage()">
-							<a href ng-bind="n">1</a>
-						</li>
-
-						<li class="paginate_button next" ng-class="{disabled: (currentPage) == totalPages - 1}">
-							<a href ng-click="nextPage()">Next</a>
-						</li>
-					</ul>
-				</div>
-			</td>
-		</tfoot>
-
-	</table>
+<div ng-controller="list-users-utilities">
+	<h1>User List</h1>
+	<jqx-grid jqx-create="createWidget" jqx-settings="gridSettings"></jqx-grid>
 
 </div>

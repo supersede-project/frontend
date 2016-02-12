@@ -1,4 +1,4 @@
-var app = angular.module('w5app', [ 'ngRoute' ]).config(function($routeProvider, $httpProvider, $controllerProvider, $compileProvider, $filterProvider, $provide) {
+var app = angular.module('w5app', [ 'ngRoute', 'jqwidgets' ]).config(function($routeProvider, $httpProvider, $controllerProvider, $compileProvider, $filterProvider, $provide) {
 
 	$routeProvider.when('/', {
 		templateUrl : 'home.html',
