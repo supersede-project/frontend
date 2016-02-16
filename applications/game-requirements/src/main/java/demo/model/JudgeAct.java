@@ -1,5 +1,8 @@
 package demo.model;
 
+import java.util.Date;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -8,7 +11,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
@@ -29,6 +35,10 @@ public class JudgeAct {
 	private User judge;
 	
 	private Boolean voted;
+	
+	@Column(columnDefinition= "TIMESTAMP WITH TIME ZONE")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date votedTime;
 	
 	public JudgeAct(){
 		
@@ -65,4 +75,13 @@ public class JudgeAct {
 	public void setVoted(Boolean voted) {
 		this.voted = voted;
 	}
+	
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd-MM-yyyy HH:mm:ss")
+    public Date getVotedTime() {
+        return votedTime;
+    }
+ 
+    public void setVotedTime(Date votedTime) {
+        this.votedTime = votedTime;
+    }	
 }

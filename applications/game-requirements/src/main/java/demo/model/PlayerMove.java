@@ -1,5 +1,8 @@
 package demo.model;
 
+import java.util.Date;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -8,7 +11,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
@@ -30,6 +36,10 @@ public class PlayerMove {
 	
 	private Long value;
 	private Boolean played;
+	
+	@Column(columnDefinition= "TIMESTAMP WITH TIME ZONE")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date playedTime;
 	 
 	public PlayerMove() {    	
 	}
@@ -73,4 +83,13 @@ public class PlayerMove {
 	public void setPlayed(Boolean played) {
 		this.played = played;
 	}
+	
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd-MM-yyyy HH:mm:ss")
+    public Date getPlayedTime() {
+        return playedTime;
+    }
+ 
+    public void setPlayedTime(Date playedTime) {
+        this.playedTime = playedTime;
+    }	
 }

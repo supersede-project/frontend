@@ -1,5 +1,6 @@
 package demo.rest;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -132,6 +133,7 @@ public class JudgeActRest {
 		
 		judgeAct.setJudge(judge);
 		judgeAct.setVoted(true);
+		judgeAct.setVotedTime(new Date());
 		judgeActs.save(judgeAct);
 		
 		RequirementsMatrixData requirementsMatrixData = judgeAct.getRequirementsMatrixData();		

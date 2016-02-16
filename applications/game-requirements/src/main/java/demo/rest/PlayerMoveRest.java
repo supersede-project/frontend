@@ -1,6 +1,7 @@
 package demo.rest;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -137,6 +138,7 @@ public class PlayerMoveRest {
 		PlayerMove playerMove = playerMoves.findOne(playerMoveId);
 		playerMove.setValue(vote);
 		playerMove.setPlayed(true);
+		playerMove.setPlayedTime(new Date());
 		playerMoves.save(playerMove);
 	}
 	
