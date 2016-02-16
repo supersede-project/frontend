@@ -1,14 +1,18 @@
 package demo.rest;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -48,6 +52,11 @@ import eu.supersede.fe.security.DatabaseUser;
 @RequestMapping("/game")
 public class GameRest {
 
+	private static final String NEW_LINE = System.getProperty("line.separator");
+	private static final String SEPARATOR = ";";
+	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ss");
+	private static final String ZERO_TIME = dateFormat.format(new Date(0));
+	
 	@Autowired
     private GamesJpa games;
 	@Autowired
@@ -87,6 +96,84 @@ public class GameRest {
 		return g;
 	}
 	
+	@RequestMapping("/{gameId}/exportGameData")
+	public ResponseEntity<?> exportGameData(@PathVariable Long gameId)
+	{
+		Game g = games.findOne(gameId);
+		if(g == null)
+		{
+			throw new NotFoundException();
+		}
+		StringBuilder result = new StringBuilder();
+		
+		result.append("REQUIREMENT1").append(SEPARATOR).
+			append("REQUIREMENT2").append(SEPARATOR).
+			append("CRITERIA").append(SEPARATOR).
+			append("USER").append(SEPARATOR).
+			append("VOTE").append(SEPARATOR).
+			append("VOTE_TIME").append(NEW_LINE);
+		
+		for(RequirementsMatrixData rmd : g.getRequirementsMatrixData())
+		{
+			for(PlayerMove pm : rmd.getPlayerMoves())
+			{
+				if(pm.getPlayed())
+				{
+					result.append(rmd.getRowRequirement().getName()).append(SEPARATOR).
+						append(rmd.getColumnRequirement().getName()).append(SEPARATOR).
+						append(rmd.getCriteria().getName()).append(SEPARATOR).
+						append(pm.getPlayer().getName()).append(SEPARATOR).
+						append(pm.getValue()).append(SEPARATOR);
+					if(pm.getPlayedTime() == null)
+					{
+						result.append(ZERO_TIME);
+					}
+					else
+					{
+						result.append(dateFormat.format(pm.getPlayedTime()));
+					}
+					result.append(NEW_LINE);
+				}
+			}
+		}
+		
+		HttpHeaders httpHeaders = new HttpHeaders();
+		httpHeaders.setContentType(new MediaType("text", "csv", Charset.forName("utf-8")));
+		httpHeaders.setContentDispositionFormData("attachment", "dmp_" + g.getGameId() + "_data.csv");
+		
+		return new ResponseEntity<>(result.toString(), httpHeaders, HttpStatus.OK);
+	}
+	
+	@RequestMapping("/{gameId}/exportGameResults")
+	public ResponseEntity<?> exportGameResults(@PathVariable Long gameId)
+	{
+		Game g = games.findOne(gameId);
+		if(g == null)
+		{
+			throw new NotFoundException();
+		}
+		StringBuilder result = new StringBuilder();
+		
+		result.append("REQUIREMENT").append(SEPARATOR).
+		append("RESULT").append(NEW_LINE);
+		
+		List<CriteriasMatrixData> criteriasMatrixDataList = criteriasMatricesData.findByGame(g);
+		
+		Map<String, Double> rs = AHPRest.CalculateAHP(g.getCriterias(), g.getRequirements(), criteriasMatrixDataList, g.getRequirementsMatrixData());
+
+		for(Entry<String, Double> e : rs.entrySet())
+		{
+			result.append(requirements.getOne(new Long(e.getKey())).getName()).append(SEPARATOR).
+				append(e.getValue()).append(NEW_LINE);
+		}
+		
+		HttpHeaders httpHeaders = new HttpHeaders();
+		httpHeaders.setContentType(new MediaType("text", "csv", Charset.forName("utf-8")));
+		httpHeaders.setContentDispositionFormData("attachment", "dmp_" + g.getGameId() + "_results.csv");
+		
+		return new ResponseEntity<>(result.toString(), httpHeaders, HttpStatus.OK);
+	}
+	
 	@RequestMapping(value = "/end/{gameId}", method = RequestMethod.PUT)
 	public void setGameFinished(@PathVariable Long gameId)
 	{
@@ -95,7 +182,7 @@ public class GameRest {
 		games.save(g);
 		
 		// set all judgeActs voted and playerMoves played
-		List<RequirementsMatrixData> rmdList =  requirementsMatricesData.findByGame(g);
+		List<RequirementsMatrixData> rmdList =  g.getRequirementsMatrixData();
 		for(int i = 0; i < rmdList.size(); i++)
 		{
 			RequirementsMatrixData rmd = rmdList.get(i);
@@ -113,7 +200,6 @@ public class GameRest {
 				pmList.get(k).setPlayed(true);
 				playerMoves.save(pmList.get(k));
 			}
-			
 		}
 	}
 	

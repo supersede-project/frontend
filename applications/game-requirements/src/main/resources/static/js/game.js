@@ -13,30 +13,44 @@ app.controllerProvider.register('game', function($scope, $http, $location) {
 		$scope.game = data;
 	});
 
-	 $scope.computeAHP = function(gameId){
-		 $http.get('game-requirements/ahp/' + gameId)
-	    	.success(function(data) {
-	    		$scope.ahpResult = data;
-    	});
-	 };
+	$scope.computeAHP = function(gameId){
+		$http.get('game-requirements/ahp/' + gameId)
+			.success(function(data) {
+				$scope.ahpResult = data;
+		});
+	};
 	
 	$scope.gameEnd = function(gameId){
-		 $http.put('game-requirements/game/end/' + gameId)
-	    	.success(function(data) {
-	    		
-	    	});
-	 };
+		$http.put('game-requirements/game/end/' + gameId)
+			.success(function(data) {
+				
+			});
+	};
 	 
-	 $scope.requirementName = function(id)
-	 {
-		 for(var i = 0; i < $scope.game.requirements.length; i++)
-		 {
-			 if($scope.game.requirements[i].requirementId == id)
-			 {
-				 return $scope.game.requirements[i].name;
-			 }
-		 }
-		 
-		 return "";
-	 }
+	$scope.requirementName = function(id)
+	{
+		for(var i = 0; i < $scope.game.requirements.length; i++)
+		{
+			if($scope.game.requirements[i].requirementId == id)
+			{
+				return $scope.game.requirements[i].name;
+			}
+		}
+		
+		return "";
+	}
+	
+	$scope.exportGameData = function(){
+		var a = document.createElement("a");
+		a.href = 'game-requirements/game/' + $scope.gameId + '/exportGameData'; 
+		a.target      = '_blank';
+		a.click();
+	};
+	
+	$scope.exportGameResults = function(){
+		var a = document.createElement("a");
+		a.href = 'game-requirements/game/' + $scope.gameId + '/exportGameResults'; 
+		a.target      = '_blank';
+		a.click();
+	};
 });

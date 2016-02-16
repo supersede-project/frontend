@@ -12,11 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import demo.jpa.CriteriasMatricesDataJpa;
 import demo.jpa.GamesJpa;
-import demo.jpa.RequirementsMatricesDataJpa;
 import demo.model.CriteriasMatrixData;
 import demo.model.Game;
 import demo.model.PlayerMove;
+import demo.model.Requirement;
 import demo.model.RequirementsMatrixData;
+import demo.model.ValutationCriteria;
 import eu.supersede.algos.AHPAnalyser;
 import eu.supersede.algos.AHPStructure;
 import eu.supersede.fe.exception.NotFoundException;
@@ -29,8 +30,6 @@ public class AHPRest {
     private GamesJpa games;
 	@Autowired
     private CriteriasMatricesDataJpa criteriasMatricesData;
-	@Autowired
-    private RequirementsMatricesDataJpa requirementsMatricesData;
 
 	// AHP alghoritm for a specific game
 	@RequestMapping(value = "/{gameId}", method = RequestMethod.GET)
@@ -42,13 +41,20 @@ public class AHPRest {
 			throw new NotFoundException();
 		}
 		
+		List<CriteriasMatrixData> criteriasMatrixDataList = criteriasMatricesData.findByGame(g);
+		
+		return CalculateAHP(g.getCriterias(), g.getRequirements(), criteriasMatrixDataList, g.getRequirementsMatrixData());
+	}
+	
+	public static Map<String,Double> CalculateAHP(List<ValutationCriteria> criterias, List<Requirement> requirements, List<CriteriasMatrixData> criteriasMatrixDataList, List<RequirementsMatrixData> requirementsMatrixDataList)
+	{
 		AHPStructure input = new AHPStructure();
 		
 		//##################################################################
 		// set the criterias of the game
 		List<String> criteriasList = new ArrayList<>();
-		for(int i=0; i<g.getCriterias().size();i++){
-			criteriasList.add(g.getCriterias().get(i).getCriteriaId().toString());
+		for(int i=0; i<criterias.size();i++){
+			criteriasList.add(criterias.get(i).getCriteriaId().toString());
 		}		
 		input.setCriteria(criteriasList);
 		//##################################################################
@@ -56,7 +62,6 @@ public class AHPRest {
 		//ROW - COL - VALUE
 		//##################################################################
 		// set the preferences on couple of criteria
-		List<CriteriasMatrixData> criteriasMatrixDataList = criteriasMatricesData.findByGame(g);
 		for(int i=0; i<criteriasMatrixDataList.size();i++){
 			input.setPreference( criteriasMatrixDataList.get(i).getRowCriteria().getCriteriaId().toString(), 
 					criteriasMatrixDataList.get(i).getColumnCriteria().getCriteriaId().toString(), 
@@ -68,8 +73,8 @@ public class AHPRest {
 		//##################################################################
 		// set the requirements of the game
 		List<String> requirementsList = new ArrayList<>();
-		for(int i=0; i<g.getRequirements().size();i++){
-			requirementsList.add(g.getRequirements().get(i).getRequirementId().toString());
+		for(int i=0; i<requirements.size();i++){
+			requirementsList.add(requirements.get(i).getRequirementId().toString());
 		}		
 		input.setOptions(requirementsList);
 		//##################################################################
@@ -78,7 +83,6 @@ public class AHPRest {
 		//ROW - COL - CRITERIA - VALUE
 		//##################################################################
 		// set the preferences between two requirements of a specific criteria
-		List<RequirementsMatrixData> requirementsMatrixDataList = requirementsMatricesData.findByGame(g);
 		for(int i=0; i<requirementsMatrixDataList.size();i++){
 			
 			if(requirementsMatrixDataList.get(i).getValue() != null && requirementsMatrixDataList.get(i).getValue() != -1L){
