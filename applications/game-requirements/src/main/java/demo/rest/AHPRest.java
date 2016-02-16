@@ -15,6 +15,7 @@ import demo.jpa.GamesJpa;
 import demo.jpa.RequirementsMatricesDataJpa;
 import demo.model.CriteriasMatrixData;
 import demo.model.Game;
+import demo.model.PlayerMove;
 import demo.model.RequirementsMatrixData;
 import eu.supersede.algos.AHPAnalyser;
 import eu.supersede.algos.AHPStructure;
@@ -30,7 +31,7 @@ public class AHPRest {
     private CriteriasMatricesDataJpa criteriasMatricesData;
 	@Autowired
     private RequirementsMatricesDataJpa requirementsMatricesData;
-	
+
 	// AHP alghoritm for a specific game
 	@RequestMapping(value = "/{gameId}", method = RequestMethod.GET)
 	public Map<String,Double> getValuesFromAlgorithm(@PathVariable Long gameId) {
@@ -79,12 +80,37 @@ public class AHPRest {
 		// set the preferences between two requirements of a specific criteria
 		List<RequirementsMatrixData> requirementsMatrixDataList = requirementsMatricesData.findByGame(g);
 		for(int i=0; i<requirementsMatrixDataList.size();i++){
-			if((int) (long) requirementsMatrixDataList.get(i).getValue() != -1){
+			
+			if(requirementsMatrixDataList.get(i).getValue() != null && requirementsMatrixDataList.get(i).getValue() != -1L){
 				input.setOptionPreference(requirementsMatrixDataList.get(i).getRowRequirement().getRequirementId().toString(), 
 						requirementsMatrixDataList.get(i).getColumnRequirement().getRequirementId().toString(), 
 						requirementsMatrixDataList.get(i).getCriteria().getCriteriaId().toString(),
 						requirementsMatrixDataList.get(i).getValue().intValue());
-			}
+			}else{
+				// find the average
+				List<PlayerMove> playerMovesList = requirementsMatrixDataList.get(i).getPlayerMoves();
+				
+				int total = 0;
+				int times = 0;
+				int average = 0;
+				
+				for(int j=0; j<playerMovesList.size(); j++){
+					if(playerMovesList.get(j).getValue() != null){
+						total = (total + playerMovesList.get(j).getValue().intValue());
+						times++;
+					}
+				}
+				
+				if(times > 0){
+					average = total / times;
+					input.setOptionPreference(requirementsMatrixDataList.get(i).getRowRequirement().getRequirementId().toString(), 
+							requirementsMatrixDataList.get(i).getColumnRequirement().getRequirementId().toString(), 
+							requirementsMatrixDataList.get(i).getCriteria().getCriteriaId().toString(),
+							average);
+				}
+				
+				
+			}			
 		}		
 		//##################################################################
 
