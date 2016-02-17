@@ -43,14 +43,28 @@ app.controllerProvider.register('game', function($scope, $http, $location) {
 	$scope.exportGameData = function(){
 		var a = document.createElement("a");
 		a.href = 'game-requirements/game/' + $scope.gameId + '/exportGameData'; 
-		a.target      = '_blank';
-		a.click();
+		a.target = '_blank';
+		
+		var clickEvent = new MouseEvent("click", {
+		    "view": window,
+		    "bubbles": true,
+		    "cancelable": false
+		});
+		
+		a.dispatchEvent(clickEvent);
 	};
 	
 	$scope.exportGameResults = function(){
 		var a = document.createElement("a");
 		a.href = 'game-requirements/game/' + $scope.gameId + '/exportGameResults'; 
-		a.target      = '_blank';
-		a.click();
+		a.target = '_blank';
+
+		var clickEvent = new MouseEvent("click", {
+		    "view": window,
+		    "bubbles": true,
+		    "cancelable": false
+		});
+		
+		a.dispatchEvent(clickEvent);
 	};
 });
