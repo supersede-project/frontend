@@ -1,7 +1,9 @@
 var app = angular.module('w5app');
 
-app.controllerProvider.register('player_moves', function($scope, $http) {
+app.controllerProvider.register('player_moves', function($scope, $http, $location) {
     
+	$scope.selectedGame = $location.search()['gameId'];
+	
 	$scope.requirementsChoices = [];
 	
 	$scope.open_moves = [];
@@ -21,7 +23,7 @@ app.controllerProvider.register('player_moves', function($scope, $http) {
     $scope.selectedCriteria = undefined;
     $scope.criterias = [];
     
-    $scope.selectedGame = undefined;
+    //$scope.selectedGame = undefined;
     $scope.games = [];
     
     reset = function(){

@@ -3,6 +3,7 @@ package demo.rest;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -84,7 +85,7 @@ public class GameRest {
 		return games.findAll();
 	}
 	
-	@RequestMapping("/{gameId}")
+	@RequestMapping(value = "/{gameId}", method = RequestMethod.GET)
 	public Game getGame(@PathVariable Long gameId)
 	{
 		Game g = games.findOne(gameId);
@@ -94,6 +95,24 @@ public class GameRest {
 		}
 		
 		return g;
+	}
+	
+	@RequestMapping(value = "/of", method = RequestMethod.GET)
+	public List<Game> getPlayerGame(Authentication authentication)
+	{
+		DatabaseUser currentUser = (DatabaseUser) authentication.getPrincipal();
+		User player = users.findOne(currentUser.getUserId());
+		
+		List<Game> gameOfPlayer = new ArrayList<>();
+		List<Game> allGames = games.findAll();
+		
+		for(int i=0; i<allGames.size();i++){
+			if(allGames.get(i).getPlayers().contains(player)){
+				gameOfPlayer.add(allGames.get(i));
+			}
+		}
+				
+		return gameOfPlayer;
 	}
 	
 	@RequestMapping("/{gameId}/exportGameData")

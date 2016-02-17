@@ -3,7 +3,7 @@ var app = angular.module('w5app');
 app.controllerProvider.register('vote_view', function($scope, $http, $location) {
     
     $scope.playerMoveId = $location.search()['playerMoveId'];
-    $scope.playerMove = null;
+    $scope.playerMove = undefined;
     $scope.requirementsChoices = [];
     $scope.selectedRequirementsChoice = {selected:4};
     
