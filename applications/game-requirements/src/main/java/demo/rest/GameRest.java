@@ -317,7 +317,7 @@ public class GameRest {
 		
 		for(User u : us)
 		{
-			notificationUtil.createNotificationForUser(u.getUserId(), "A new decision making process has been created, are you ready to vote?", "game-requirements/player_moves");
+			notificationUtil.createNotificationForUser(u.getUserId(), "A new decision making process has been created, are you ready to vote?", "game-requirements/player_games");
 		}
 		notificationUtil.createNotificationsForProfile("OPINION_NEGOTIATOR", "A new decision making process has been created, you are in charge to take decisions", "game-requirements/judge_acts");
 		
