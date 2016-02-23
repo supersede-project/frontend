@@ -47,7 +47,7 @@ dependencies {
     
     compile("org.springframework.boot:spring-boot-starter-jdbc")
 	compile("org.springframework.boot:spring-boot-starter-data-jpa")
-    compile("org.postgresql:postgresql:9.4-1205-jdbc41")
+    compile("org.postgresql:postgresql:9.4.1208.jre7")
     
     providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
     
