@@ -50,7 +50,7 @@ public class NotificationRest {
 		{
 			scheme = request.getHeader("x-forwarded-proto") != null ? request.getHeader("x-forwarded-proto") : "http";
 			host =  request.getHeader("x-forwarded-host") != null ? request.getHeader("x-forwarded-host") : request.getServerName();
-			port = request.getHeader("x-forwarded-port") != null ? request.getHeader("x-forwarded-port") : scheme.equals("https") ? "443" : "80";
+			port = request.getHeader("x-forwarded-port") != null ? request.getHeader("x-forwarded-port") : null;
 		}
 		else
 		{
@@ -58,7 +58,9 @@ public class NotificationRest {
 			host = request.getServerName();
 			port = new Integer(request.getServerPort()).toString();
 		}
-		String baseUrl = scheme + "://" + host + ":" + port + "/#/";
+		
+		
+		String baseUrl = port != null ? scheme + "://" + host + ":" + port + "/#/" : scheme + "://" + host + "/#/";
 
 		DatabaseUser currentUser = (DatabaseUser) authentication.getPrincipal();
 		User u = users.getOne(currentUser.getUserId());
