@@ -101,15 +101,22 @@ public class GameRest {
 			}
 		}
 		else
-		{
+		{	
+			List<Game> gs;
 			if(finished == null)
 			{
-				return games.findByPlayerContains(user);
+				 gs = games.findByPlayerContains(user);
 			}
 			else
 			{
-				return games.findByPlayerContainsAndFinished(user, finished);
+				gs =  games.findByPlayerContainsAndFinished(user, finished);
 			}
+			
+			for(Game g : gs)
+			{
+				g.setCurrentPlayer(user);
+			}
+			return gs;
 		}
 		
 	}

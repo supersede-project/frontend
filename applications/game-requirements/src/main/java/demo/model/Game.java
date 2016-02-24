@@ -18,6 +18,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -58,6 +59,9 @@ public class Game {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "game")
 	private List<RequirementsMatrixData> requirementsMatrixData;
+    
+    @Transient
+    private User currentPlayer;
     
 	public Game() {    	
 	}
@@ -147,21 +151,55 @@ public class Game {
 	
 	public Float getProgress()
 	{
-		Float total = 0f;
-		Float voted = 0f;
+		Integer total = 0;
+		Integer voted = 0;
 		
 		if(getRequirementsMatrixData() != null)
 		{
 			for(RequirementsMatrixData data : getRequirementsMatrixData())
 			{
 				total++;
-				if(data != null && data.getValue() != null && !data.getValue().equals(-1l))
+				if(data.getValue() != null && !data.getValue().equals(-1l))
 				{
 					voted++;
 				}
 			}
 		}
-		return total.equals(0f) ? 0f : ((voted / total) * 100);
+		return total.equals(0) ? 0f : ((new Float(voted) / new Float(total)) * 100);
 	}
 
+	public void setCurrentPlayer(User currentPlayer)
+	{
+		this.currentPlayer = currentPlayer;
+	}
+	
+	public Float getPlayerProgress()
+	{
+		if(currentPlayer == null)
+		{
+			return null;
+		}
+		
+		Integer total = 0;
+		Integer voted = 0;
+		
+		if(getRequirementsMatrixData() != null)
+		{
+			for(RequirementsMatrixData data : getRequirementsMatrixData())
+			{
+				for(PlayerMove pm : data.getPlayerMoves())
+				{
+					if(pm.getPlayer().getUserId().equals(currentPlayer.getUserId()))
+					{
+						total++;
+						if(pm.getValue() != null && !pm.getValue().equals(-1l))
+						{
+							voted++;
+						}
+					}
+				}
+			}
+		}
+		return total.equals(0) ? 0f : ((new Float(voted) / new Float(total)) * 100);
+	}
 }
