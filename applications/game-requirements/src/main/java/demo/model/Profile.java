@@ -26,26 +26,32 @@ public class Profile {
     @ManyToMany(cascade=CascadeType.ALL, mappedBy="profiles", fetch=FetchType.LAZY)  
     private List<User> users;
     
-    public Profile() {
+    public Profile() 
+    {
     }
  
-    public Profile(String name) {
+    public Profile(String name)
+    {
         this.name = name;
     }
  
-    public Long getProfileId() {
+    public Long getProfileId() 
+    {
         return profileId;
     }
  
-    public void setProfileId(Long profileId) {
+    public void setProfileId(Long profileId)
+    {
         this.profileId = profileId;
     }
  
-    public String getName() {
+    public String getName() 
+    {
         return name;
     }
  
-    public void setName(String name) {
+    public void setName(String name) 
+    {
         this.name = name;
     }
     
@@ -53,5 +59,16 @@ public class Profile {
     public List<User> getUsers()
     {
     	return users;
+    }
+    
+    @Override
+    public boolean equals(Object obj) 
+    {
+    	if(obj instanceof Profile)
+    	{
+    		Profile other =(Profile) obj;
+    		return other.profileId.equals(profileId);
+    	}
+    	return false;
     }
 }

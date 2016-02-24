@@ -4,7 +4,7 @@ app.controllerProvider.register('player_games', function($scope, $http, $locatio
     	
     $scope.playerGames = [];
        
-    $http.get('game-requirements/game/of')
+    $http.get('game-requirements/game', {params:{byUser: true, finished:false}})
 	.success(function(data) {
 		for(var i = 0; i < data.length; i++)
 		{

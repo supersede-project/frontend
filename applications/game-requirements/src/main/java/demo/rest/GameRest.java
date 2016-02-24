@@ -3,7 +3,6 @@ package demo.rest;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -33,6 +32,7 @@ import demo.jpa.CriteriasMatricesDataJpa;
 import demo.jpa.GamesJpa;
 import demo.jpa.JudgeActsJpa;
 import demo.jpa.PlayerMovesJpa;
+import demo.jpa.ProfilesJpa;
 import demo.jpa.RequirementsJpa;
 import demo.jpa.RequirementsMatricesDataJpa;
 import demo.jpa.UsersJpa;
@@ -57,9 +57,11 @@ public class GameRest {
 	private static final String SEPARATOR = ";";
 	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ss");
 	private static final String ZERO_TIME = dateFormat.format(new Date(0));
-	
+
 	@Autowired
     private GamesJpa games;
+	@Autowired
+    private ProfilesJpa profiles;
 	@Autowired
     private RequirementsJpa requirements;
 	@Autowired
@@ -80,9 +82,41 @@ public class GameRest {
 	
 	
 	@RequestMapping(value = "", method = RequestMethod.GET)
-	public List<Game> getGames(){
+	public List<Game> getGames(Authentication authentication, 
+			@RequestParam(required=false) Boolean finished,
+			@RequestParam(defaultValue="false") Boolean byUser){
 	
-		return games.findAll();
+		DatabaseUser currentUser = (DatabaseUser) authentication.getPrincipal();
+		User user = users.findOne(currentUser.getUserId());
+		
+		if(!byUser && userIsGameMaster(user))
+		{
+			if(finished == null)
+			{
+				return games.findAll();
+			}
+			else
+			{
+				return games.findByFinished(finished);
+			}
+		}
+		else
+		{
+			if(finished == null)
+			{
+				return games.findByPlayerContains(user);
+			}
+			else
+			{
+				return games.findByPlayerContainsAndFinished(user, finished);
+			}
+		}
+		
+	}
+	
+	private boolean userIsGameMaster(User user)
+	{
+		return user.getProfiles().contains(profiles.findByName("DECISION_SCOPE_PROVIDER"));
 	}
 	
 	@RequestMapping(value = "/{gameId}", method = RequestMethod.GET)
@@ -95,24 +129,6 @@ public class GameRest {
 		}
 		
 		return g;
-	}
-	
-	@RequestMapping(value = "/of", method = RequestMethod.GET)
-	public List<Game> getPlayerGame(Authentication authentication)
-	{
-		DatabaseUser currentUser = (DatabaseUser) authentication.getPrincipal();
-		User player = users.findOne(currentUser.getUserId());
-		
-		List<Game> gameOfPlayer = new ArrayList<>();
-		List<Game> allGames = games.findAll();
-		
-		for(int i=0; i<allGames.size();i++){
-			if(allGames.get(i).getPlayers().contains(player)){
-				gameOfPlayer.add(allGames.get(i));
-			}
-		}
-				
-		return gameOfPlayer;
 	}
 	
 	@RequestMapping("/{gameId}/exportGameData")
