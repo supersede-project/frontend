@@ -8,7 +8,8 @@
 			<div class="panel-body">
 				{{playerGame.title}}
 				<div style="float: right;">
-	  				Progress: <b>{{ (Math.round(playerGame.playerProgress * 1000) / 1000) }}</b>
+	  				Progress: <b>{{ (Math.round(playerGame.playerProgress * 1000) / 1000) }} %</b>
+	  				<span style="margin-left: 5em;">
 					<a href="#/game-requirements/player_moves?gameId={{playerGame.gameId}}" class="btn btn-lg btn-success" role="button">Enter</a>
 				</div>
 			</div>

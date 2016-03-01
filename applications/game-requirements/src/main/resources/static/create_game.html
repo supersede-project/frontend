@@ -21,7 +21,7 @@
 	</div>
 	
 	<div id="page2" ng-show="currentPage == 'page2'">
-		<p>Select the requirements to prioritize:</p>
+		<p>Select the requirements to prioritize (at least two):</p>
 		<div class="selection">
 			<label ng-repeat="requirement in requirements | orderBy: 'name'" class="selection-choice" 
 				ng-mouseenter="$parent.currentRequirement = requirement"
@@ -40,7 +40,7 @@
 		</div>
 		<div class="clear-div"></div>
 		
-		<p>Select the criterias to prioritize:</p>
+		<p>Select the criterias to prioritize (at least two):</p>
 		<div class="selection">
 			<label ng-repeat="criteria in criterias | orderBy: 'name'"  class="selection-choice" 
 				ng-mouseenter="$parent.currentCriteria = criteria"
@@ -60,7 +60,7 @@
 		<div class="clear-div"></div>
 		
 		
-		<p>Select the players to prioritize:</p>
+		<p>Select the players to prioritize (at least one):</p>
 		<div class="selection">
 			<label ng-repeat="player in players | orderBy: 'name'"  class="selection-choice" 
 				ng-mouseenter="$parent.currentPlayer = player"
@@ -89,6 +89,7 @@
 	</div>
 	<br>
 	<div id="page3" ng-show="currentPage == 'page3'">
+		<p>Here you can set the priority between the choosen criteria:</p>
 		<div ng-repeat="criteria in game.criterias" ng-if="$index < (game.criterias.length - 1)">
 			<div ng-repeat="other_criteria in game.criterias" ng-if="$index > $parent.$index">
 				<div>

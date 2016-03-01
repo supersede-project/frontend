@@ -101,7 +101,7 @@
 			</thead>
 	
 			<tbody>
-				<tr	ng-repeat="playerMove in closed_moves | limitTo:5:pagination.closed.currentPage*pagination.closed.itemsPerPage">
+				<tr	ng-repeat="playerMove in closed_moves | limitTo:5:pagination.closed.currentPage*pagination.closed.itemsPerPage | orderBy: '-playedTime'">
 					<td>{{playerMove.requirementsMatrixData.criteria.name}}</td>								
 					<td>{{playerMove.requirementsMatrixData.rowRequirement.name}}</td>
 					<td>{{playerMove.requirementsMatrixData.columnRequirement.name}}</td>
