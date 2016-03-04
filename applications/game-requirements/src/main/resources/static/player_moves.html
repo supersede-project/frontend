@@ -107,6 +107,9 @@
 					<td>{{playerMove.requirementsMatrixData.columnRequirement.name}}</td>
 					<td ng-if="playerMove.value != null">{{playerMove.value}}</td>
 					<td ng-if="playerMove.value == null">not voted</td>
+					<td>
+						<button ng-show="playerMove.requirementsMatrixData.game.finished != true" type="button" ng-click="openMove(playerMove.playerMoveId)" class="btn btn-lg btn-success">Re-Open</button>
+					</td>
 				</tr>
 			</tbody>
 			

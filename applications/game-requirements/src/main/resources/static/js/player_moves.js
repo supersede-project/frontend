@@ -203,4 +203,11 @@ app.controllerProvider.register('player_moves', function($scope, $http, $locatio
 	 $scope.changeGame = function() {
 		 getActions();
 	 }
+	 
+	$scope.openMove = function(playerMoveId){
+		$http.put('game-requirements/playermove/open/' + playerMoveId)
+			.success(function(data) {
+				getActions();
+		});
+	};
 });

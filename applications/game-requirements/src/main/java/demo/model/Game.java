@@ -167,6 +167,28 @@ public class Game {
 		}
 		return total.equals(0) ? 0f : ((new Float(voted) / new Float(total)) * 100);
 	}
+	
+	public Float getUsersProgress()
+	{
+		Integer total = 0;
+		Integer voted = 0;
+		
+		if(getRequirementsMatrixData() != null)
+		{
+			for(RequirementsMatrixData data : getRequirementsMatrixData())
+			{				
+				for(PlayerMove playerMove : data.getPlayerMoves())
+				{
+					total++;
+					if(playerMove.getValue() != null && !playerMove.getValue().equals(-1l))
+					{
+						voted++;
+					}					
+				}
+			}
+		}
+		return total.equals(0) ? 0f : ((new Float(voted) / new Float(total)) * 100);
+	}
 
 	public void setCurrentPlayer(User currentPlayer)
 	{
@@ -192,7 +214,7 @@ public class Game {
 					if(pm.getPlayer().getUserId().equals(currentPlayer.getUserId()))
 					{
 						total++;
-						if(pm.getValue() != null && !pm.getValue().equals(-1l))
+						if(pm.getPlayed() == true && !pm.getValue().equals(-1l))
 						{
 							voted++;
 						}

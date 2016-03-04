@@ -146,6 +146,15 @@ public class PlayerMoveRest {
 		return rmd.getGame().getGameId();
 	}
 	
+	// open a playerMove
+	@RequestMapping(method = RequestMethod.PUT, value="/open/{playerMoveId}")
+	public void openPlayerMove(@PathVariable Long playerMoveId){	
+		
+		PlayerMove playerMove = playerMoves.findOne(playerMoveId);
+		playerMove.setPlayed(false);
+		playerMoves.save(playerMove);	
+	}
+	
 	// TODO!!!! FINISH ||| get all the players of a specifi requirmentsMatrixData
 	@RequestMapping("/players/{requirementsMatrixDataId}")
 	public List<User> getPlayerMovePlayers(@PathVariable Long requirementsMatrixDataId){	

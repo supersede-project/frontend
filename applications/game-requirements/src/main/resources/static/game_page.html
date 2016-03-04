@@ -3,7 +3,8 @@
 		<div class="row" ng-controller="game">
 			<div class="col-md-6">
 				<h1>Decision making process details</h1>
-				<p>Progress: <b>{{ (Math.round(game.progress * 100) / 100) }} %</b></p>
+				<p>Progress (Negotiators votes): <b>{{ (Math.round(game.progress * 100) / 100) }} %</b></p>
+				<p>Progress (Opinion Providers votes): <b>{{ (Math.round(game.usersProgress * 100) / 100) }} %</b></p>
 				<p>Title: <b>{{game.title}}</b></p>	
 				<p ng-show="game.description">Description: <b>{{game.description}}</b></p>				
 				<p>Criterias: <b ng-repeat="criteria in game.criterias">{{criteria.name  + ($index +1 != game.criterias.length ? ', ' : '')}}</b></p>
