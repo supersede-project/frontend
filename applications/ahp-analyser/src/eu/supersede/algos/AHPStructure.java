@@ -50,8 +50,8 @@ public class AHPStructure {
 	
 	public void setPreference( String crit1, String crit2, int value ) {
 		
-		this.criteriaMatrix.setValue( crit1, crit2, value );
-		this.criteriaMatrix.setValue( crit2, crit1, 8 - value );
+		this.criteriaMatrix.setValue( crit1, crit2, 8 - value );
+		this.criteriaMatrix.setValue( crit2, crit1, value );
 		
 	}
 	
@@ -83,8 +83,8 @@ public class AHPStructure {
 		if( m == null ) {
 			throw new RuntimeException( "Attempting to set a non-existent criterion: " + criterion );
 		}
-		m.setValue( opt1, opt2, value );
-		m.setValue( opt2, opt1, 8 - value );
+		m.setValue( opt1, opt2, 8 - value );
+		m.setValue( opt2, opt1, value );
 		
 	}
 	
