@@ -38,6 +38,10 @@ public class Matrix {
 			this.order.clear();
 			this.set.clear();
 		}
+		
+		public List<String> order() {
+			return this.order;
+		}
 	}
 	
 	Matrix.Index rowHeaders = new Index();

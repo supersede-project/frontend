@@ -57,8 +57,8 @@ public class AHPAnalyser {
 			String[] strList2 = new String[ahpInput.optionsMatrices.size()];
 			{
 				int i = 0;
-				for( Matrix m : ahpInput.optionsMatrices.values() ) {
-					strList2[i] = mkList( m );
+				for( String cr : ahpInput.criteriaMatrix.getRowHeaders().order() ) {
+					strList2[i] = mkList( ahpInput.optionsMatrices.get( cr ) );
 					i++;
 				}
 			}
