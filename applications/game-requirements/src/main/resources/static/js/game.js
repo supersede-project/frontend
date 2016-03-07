@@ -67,4 +67,17 @@ app.controllerProvider.register('game', function($scope, $http, $location) {
 		
 		a.dispatchEvent(clickEvent);
 	};
+	
+	// for the criterias test
+	 $scope.choices = {};
+	 $scope.requirementsChoices = [];
+
+	 $http.get('game-requirements/requirementchoice')
+		.success(function(data) {
+			$scope.requirementsChoices.length = 0;
+			for(var i = 0; i < data.length; i++)
+			{
+				$scope.requirementsChoices.push(data[i]);
+			}
+		});
 });
