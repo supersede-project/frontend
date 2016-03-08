@@ -10,11 +10,13 @@
 				<p>Criterias: <b ng-repeat="criteria in game.criterias">{{criteria.name  + ($index +1 != game.criterias.length ? ', ' : '')}}</b></p>
 				<p>Requirements: <b ng-repeat="requirement in game.requirements">{{requirement.name + ($index +1 != game.requirements.length ? ', ' : '')}}</b></p>
 				<p>Players: <b ng-repeat="player in game.players">{{player.name + ($index +1 != game.players.length ? ', ' : '') }}</b></p>
+				<!-- 
 				<p>Change criterias weight:
 					<button type="button" class="btn btn-warning btn-lg" data-toggle="modal" data-target="#{{game.gameId}}">
 					  CHANGE
 					</button>
 				</p>
+				 -->
 				<p>Export actions: 
 					<a ng-click="exportGameData()">
 						<img src="game-requirements/img/csv.png" title="Data" height="42" width="42">
