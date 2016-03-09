@@ -216,7 +216,7 @@ public class Game {
 						if(pm.getPlayer().getUserId().equals(currentPlayer.getUserId()))
 						{
 							total++;
-							if(pm.getPlayed() == true && !pm.getValue().equals(-1l))
+							if(pm.getPlayed() == true && pm.getValue() != null && !pm.getValue().equals(-1l))
 							{
 								voted++;
 							}
