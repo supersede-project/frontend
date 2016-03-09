@@ -205,23 +205,30 @@ public class Game {
 		Integer total = 0;
 		Integer voted = 0;
 		
-		if(getRequirementsMatrixData() != null)
-		{
-			for(RequirementsMatrixData data : getRequirementsMatrixData())
+		try
+		{	
+			if(getRequirementsMatrixData() != null)
 			{
-				for(PlayerMove pm : data.getPlayerMoves())
+				for(RequirementsMatrixData data : getRequirementsMatrixData())
 				{
-					if(pm.getPlayer().getUserId().equals(currentPlayer.getUserId()))
+					for(PlayerMove pm : data.getPlayerMoves())
 					{
-						total++;
-						if(pm.getPlayed() == true && !pm.getValue().equals(-1l))
+						if(pm.getPlayer().getUserId().equals(currentPlayer.getUserId()))
 						{
-							voted++;
+							total++;
+							if(pm.getPlayed() == true && !pm.getValue().equals(-1l))
+							{
+								voted++;
+							}
 						}
 					}
 				}
 			}
+			return total.equals(0) ? 0f : ((new Float(voted) / new Float(total)) * 100);
 		}
-		return total.equals(0) ? 0f : ((new Float(voted) / new Float(total)) * 100);
+		catch(Exception ex)
+		{
+			return -1f;
+		}
 	}
 }
