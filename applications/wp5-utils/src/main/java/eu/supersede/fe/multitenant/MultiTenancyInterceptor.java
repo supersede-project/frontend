@@ -17,6 +17,7 @@ public class MultiTenancyInterceptor extends HandlerInterceptorAdapter {
 	@Override
 	public boolean preHandle(HttpServletRequest req, HttpServletResponse res, Object handler) throws Exception 
 	{
+		log.debug("pre-handle");
 		String multiTenantId = null;
 		String tmp = null;
 		
@@ -44,6 +45,11 @@ public class MultiTenancyInterceptor extends HandlerInterceptorAdapter {
 			log.debug("setting tenant: " + multiTenantId);
 			req.setAttribute("CURRENT_TENANT_IDENTIFIER", multiTenantId);
 		}
+		else
+		{
+			log.debug("header is null");
+		}
+		
 		return true;
 	}
 }

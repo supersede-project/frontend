@@ -10,14 +10,14 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 @Component
 public class AuthenticationSuccessListener implements ApplicationListener<AuthenticationSuccessEvent> {
-  
-    public void onApplicationEvent(AuthenticationSuccessEvent event) {
-    	
-    	ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-    	DatabaseUser userDetails = (DatabaseUser)event.getAuthentication().getPrincipal();
-        
-        HttpServletRequest req = attr.getRequest();
-        String multiTenantId = req.getHeader("TenantId");
-        userDetails.setTenantId(multiTenantId);
-    }
+
+	public void onApplicationEvent(AuthenticationSuccessEvent event) {
+		
+		ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+		DatabaseUser userDetails = (DatabaseUser)event.getAuthentication().getPrincipal();
+		
+		HttpServletRequest req = attr.getRequest();
+		String multiTenantId = req.getHeader("TenantId");
+		userDetails.setTenantId(multiTenantId);
+	}
 }

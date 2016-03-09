@@ -8,6 +8,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 @Component
 @PropertySource("file:../conf/multitenancy.properties")
@@ -21,6 +22,7 @@ public class CurrentTenantIdentifierResolverImpl implements CurrentTenantIdentif
 	@Override
 	public String resolveCurrentTenantIdentifier()
 	{
+		log.debug("resolve tenant");
 		RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
 		if (requestAttributes != null) 
 		{
@@ -32,6 +34,23 @@ public class CurrentTenantIdentifierResolverImpl implements CurrentTenantIdentif
 			}
 		}
 		
+		//current tenant identifier not set, this may happen on login, if present in header we can just use this one
+		//TODO: investigate better (add MultiTenancyInterceptor before SecurityConfiguration)
+		try
+		{
+			ServletRequestAttributes currentRequestAttributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+			String multiTenantId = currentRequestAttributes.getRequest().getHeader("TenantId");
+			if(multiTenantId != null)
+			{
+				log.debug("returning tenant from header: " + multiTenantId);
+				return multiTenantId;
+			}
+		}
+		catch(IllegalStateException ex)
+		{
+			//throw if no request were make (????)
+		}
+
 		log.debug("returning default tenant: " + DEFAULT_TENANT_ID);
 		return DEFAULT_TENANT_ID;
 	}
