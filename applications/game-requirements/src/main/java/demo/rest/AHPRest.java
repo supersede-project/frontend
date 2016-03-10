@@ -85,6 +85,27 @@ public class AHPRest {
 		// set the preferences between two requirements of a specific criteria
 		for(int i=0; i<requirementsMatrixDataList.size();i++){
 			
+			
+			/*
+			//This part allows to find the requirements ranks for a specific player (you have to insert the user_id)
+			  
+			List<PlayerMove> playerMovesList = requirementsMatrixDataList.get(i).getPlayerMoves();
+			
+			for(int j=0; j<playerMovesList.size(); j++){
+			
+				// SET PLAYER ID
+				if(playerMovesList.get(j).getPlayer().getUserId() == {{id_user}} && playerMovesList.get(j).getValue() != null){
+					input.setOptionPreference(requirementsMatrixDataList.get(i).getRowRequirement().getRequirementId().toString(), 
+							requirementsMatrixDataList.get(i).getColumnRequirement().getRequirementId().toString(), 
+							requirementsMatrixDataList.get(i).getCriteria().getCriteriaId().toString(),
+							playerMovesList.get(j).getValue().intValue());
+				}
+			}
+			
+			
+			*/
+			
+			
 			if(requirementsMatrixDataList.get(i).getValue() != null && requirementsMatrixDataList.get(i).getValue() != -1L){
 				input.setOptionPreference(requirementsMatrixDataList.get(i).getRowRequirement().getRequirementId().toString(), 
 						requirementsMatrixDataList.get(i).getColumnRequirement().getRequirementId().toString(), 
@@ -114,7 +135,8 @@ public class AHPRest {
 				}
 				
 				
-			}			
+			}
+			
 		}		
 		//##################################################################
 
