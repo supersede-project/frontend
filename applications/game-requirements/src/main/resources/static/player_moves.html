@@ -36,7 +36,14 @@
 	
 			<tbody>
 				<tr	ng-repeat="playerMove in open_moves | limitTo:5:pagination.open.currentPage*pagination.open.itemsPerPage">
-					<td>{{playerMove.requirementsMatrixData.criteria.name}}</td>								
+					<td>{{playerMove.requirementsMatrixData.criteria.name}} 
+						<span class="glyphicon glyphicon-question-sign" aria-hidden="true" data-toggle="tooltip" title="{{playerMove.requirementsMatrixData.criteria.description}}"></span>
+						<script>
+							$(document).ready(function(){
+							    $('[data-toggle="tooltip"]').tooltip(); 
+							});
+						</script>
+					</td>													
 					<td>{{playerMove.requirementsMatrixData.rowRequirement.name}}</td>
 					<td style="width: 170px;">
 						<div align="center">
@@ -45,8 +52,13 @@
 									<label>{{requirementsChoice.value}}</label>
 								</div>
 								<div align="center">
-									<input title="{{requirementsChoice.description}}" type="radio" ng-click="setVote(requirementsChoice.value, playerMove.playerMoveId)" ng-value="{{requirementsChoice.value}}" name="{{playerMove.playerMoveId}}">
+									<input data-placement="bottom" data-toggle="tooltip" title="{{requirementsChoice.description}}" type="radio" ng-click="setVote(requirementsChoice.value, playerMove.playerMoveId)" ng-value="{{requirementsChoice.value}}" name="{{playerMove.playerMoveId}}">
 								</div>
+								<script>
+									$(document).ready(function(){
+									    $('[data-toggle="tooltip"]').tooltip(); 
+									});
+								</script>
 							</div>
 						</div>
 					</td>
@@ -138,6 +150,8 @@
 	</div>
 		
 		
+	
+			
 	<!-- START Modal -->
 	<div ng-repeat="playerMove in open_moves" class="modal fade" id="{{playerMove.playerMoveId}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 		<div class="modal-dialog modal-lg" role="document">

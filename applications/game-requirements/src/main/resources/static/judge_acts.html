@@ -35,7 +35,14 @@
 		
 			<tbody>
 				<tr	ng-repeat="judgeAct in open_acts | limitTo:5:pagination.open.currentPage*pagination.open.itemsPerPage">
-					<td>{{judgeAct.requirementsMatrixData.criteria.name}}</td>								
+					<td>{{judgeAct.requirementsMatrixData.criteria.name}}
+						<span class="glyphicon glyphicon-question-sign" aria-hidden="true" data-toggle="tooltip" title="{{judgeAct.requirementsMatrixData.criteria.description}}"></span>
+						<script>
+							$(document).ready(function(){
+							    $('[data-toggle="tooltip"]').tooltip(); 
+							});
+						</script>
+					</td>								
 					<td>{{judgeAct.requirementsMatrixData.rowRequirement.name}}</td>
 					<td style="width: 170px;">
 						<div align="center">
@@ -44,8 +51,13 @@
 									<label>{{requirementsChoice.value}}</label>
 								</div>
 					            <div align="center">
-									<input title="{{requirementsChoice.description}}" type="radio" ng-click="setVote(requirementsChoice.value, judgeAct.judgeActId)" ng-value="{{requirementsChoice.value}}" name="{{judgeAct.judgeActId}}">
+									<input data-placement="bottom" data-toggle="tooltip" title="{{requirementsChoice.description}}" type="radio" ng-click="setVote(requirementsChoice.value, judgeAct.judgeActId)" ng-value="{{requirementsChoice.value}}" name="{{judgeAct.judgeActId}}">
 								</div>
+								<script>
+									$(document).ready(function(){
+									    $('[data-toggle="tooltip"]').tooltip(); 
+									});
+								</script>
 							</div>
 						</div>
 					</td>

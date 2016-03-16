@@ -9,8 +9,6 @@
     			</div>
     		</div>
     	</div>
-    	<br>
-    	<br>
     	<div class="row">
 			<div class="col-md-6">
 				<div class="panel panel-primary">
@@ -30,32 +28,43 @@
 				  </div>
 				</div>			
 			</div>
-			<div align="center">
-				<p>The list of the opinion providers that are involved in this choice:</p>
-				<div ng-repeat="playerMove in playerMoves">
-					<div ng-if="playerMove.value != null">
-						<b>{{playerMove.player.name}}</b>: {{playerMove.value}}	
-					</div>
-					<div ng-if="playerMove.value == null">
-						<b>{{playerMove.player.name}}</b>: not voted	
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="panel panel-primary">
+					<div class="panel-heading">The list of the opinion providers that are involved in this choice</div>
+					<div class="panel-body">
+						<div align="center">
+							<div ng-repeat="playerMove in playerMoves">
+								<div ng-if="playerMove.value != null">
+									<b>{{playerMove.player.name}}</b>: {{playerMove.value}}	
+								</div>
+								<div ng-if="playerMove.value == null">
+									<b>{{playerMove.player.name}}</b>: not voted	
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
-			<div class="row">
-				<div class="col-md-12">
-					<br>
-					<div align="center">
-						<p>Select a grade of preference between <b>{{judgeAct.requirementsMatrixData.rowRequirement.name}}</b> and <b>{{judgeAct.requirementsMatrixData.columnRequirement.name}}</b>.</p>			
-					    <label class="radio-inline" ng-repeat="requirementsChoice in requirementsChoices">
-					      <input type="radio" ng-model="selectedRequirementsChoice.selected" ng-value="{{requirementsChoice.value}}" name="radioRequirementsChoices">{{requirementsChoice.value}}
-					    </label>
-				    </div>
-				    <br>
-					<br>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="panel panel-primary">
+					<div class="panel-heading">Insert your vote</div>
+					<div class="panel-body">
+						<div align="center">
+							<p>Select a grade of preference between <b>{{judgeAct.requirementsMatrixData.rowRequirement.name}}</b> and <b>{{judgeAct.requirementsMatrixData.columnRequirement.name}}</b>.</p>			
+						    <label class="radio-inline" ng-repeat="requirementsChoice in requirementsChoices">
+						      <input type="radio" ng-model="selectedRequirementsChoice.selected" ng-value="{{requirementsChoice.value}}" name="radioRequirementsChoices">{{requirementsChoice.value}}
+						    </label>
+					    </div>
+					</div>
 				</div>
-				<div align="center">
-					<a ng-click="insertJudgeVote(selectedRequirementsChoice.selected)" class="btn btn-lg btn-success">Make decision</a>
-				</div>	
-			</div>			
-		</div>								
+				<br>			
+			</div>
+			<div align="center">
+				<a ng-click="insertJudgeVote(selectedRequirementsChoice.selected)" class="btn btn-lg btn-success">Make decision</a>
+			</div>	
+		</div>													
     </div>
