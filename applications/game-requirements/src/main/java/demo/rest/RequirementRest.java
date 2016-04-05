@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import demo.jpa.RequirementsJpa;
@@ -41,5 +42,15 @@ public class RequirementRest {
 	@RequestMapping("/count")
 	public Long count() {
 		return requirements.count();
+	}
+	
+	// create new requirement
+	@RequestMapping(value = "/create/{name}/description/{description}", method = RequestMethod.PUT)
+	public void createCriteria(@PathVariable String name, @PathVariable String description)
+	{
+		Requirement r = new Requirement();
+		r.setName(name);
+		r.setDescription(description);
+		requirements.save(r);
 	}
 }
