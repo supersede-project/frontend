@@ -9,6 +9,14 @@ app.controllerProvider.register('requirements_criterias_editing', function($scop
 	$scope.requirementName = undefined;
 	$scope.requirementDescription = undefined;
 	
+	$scope.editCriteria = undefined;
+	$scope.editCriteriaName = undefined;
+	$scope.editCriteriaDescription = undefined;
+	
+	$scope.editRequirement = undefined;
+	$scope.editRequirementName = undefined;
+	$scope.editRequirementDescription = undefined;
+	
 	getCriterias = function () {
 	 $http.get('game-requirements/criteria')
 		.success(function(data) {
@@ -32,6 +40,50 @@ app.controllerProvider.register('requirements_criterias_editing', function($scop
 	getCriterias();
 	getRequirements();	 
 	 
+	// EDIT PART ##################################################################################
+	$scope.editFunCriteria = function (criteriaId) {	
+		$scope.editCriteria = undefined;
+		$scope.editCriteriaName = undefined;
+		$scope.editCriteriaDescription = undefined;
+		
+		$http.get('game-requirements/criteria/' + criteriaId)
+		.success(function(data) {
+			$scope.editCriteria = data;
+		});	
+	};
+	
+	$scope.saveEditedCriteria = function () {
+		$http.put('game-requirements/criteria/edit/' + $scope.editCriteria.criteriaId + '/name/' + $scope.editCriteriaName + '/description/' + $scope.editCriteriaDescription)
+		.success(function(data) {
+			$scope.valutationCriterias = [];
+			getCriterias();
+		});
+	};
+	
+	
+	$scope.editFunRequirement = function (requirementId) {	
+		$scope.editRequirement = undefined;
+		$scope.editRequirementName = undefined;
+		$scope.editRequirementDescription = undefined;
+		
+		$http.get('game-requirements/requirement/' + requirementId)
+		.success(function(data) {
+			$scope.editRequirement = data;
+		});	
+	};
+	
+	$scope.saveEditedRequirement = function () {
+		$http.put('game-requirements/requirement/edit/' + $scope.editRequirement.requirementId + '/name/' + $scope.editRequirementName + '/description/' + $scope.editRequirementDescription)
+		.success(function(data) {
+			$scope.requirements = [];
+			getRequirements();
+		});
+	};
+	
+	// ##################################################################################
+	
+	
+	// NEW PART ##################################################################################	
 	$scope.createCriteria = function () {
 		 $http.put('game-requirements/criteria/create/' + $scope.criteriaName + '/description/' + $scope.criteriaDescription)
 			.success(function(data) {
@@ -52,6 +104,9 @@ app.controllerProvider.register('requirements_criterias_editing', function($scop
 			});
    };
    
+   // ##################################################################################
+   
+   // DELETE PART ##################################################################################
    $scope.deleteCriteria = function (criteriaId) {
 		 $http.put('game-requirements/criteria/delete/' + criteriaId)
 			.success(function(data) {
@@ -61,4 +116,6 @@ app.controllerProvider.register('requirements_criterias_editing', function($scop
 				}
 			});
   };
+  
+  //##################################################################################
 });

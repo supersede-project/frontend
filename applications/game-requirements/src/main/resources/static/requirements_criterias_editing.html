@@ -28,7 +28,7 @@
 							<tr	ng-repeat="valutationCriteria in valutationCriterias">
 								<td>{{valutationCriteria.name}}</td>
 								<td>{{valutationCriteria.description}}</td>
-								<td><button>Edit</button></td>
+								<td><button data-toggle="modal" data-target="#editCriteria" ng-click="editFunCriteria(valutationCriteria.criteriaId)">Edit</button></td>
 								<td><button ng-click="deleteCriteria(valutationCriteria.criteriaId)">Delete</button></td>
 							</tr>
 						</tbody>		
@@ -57,7 +57,7 @@
 							<tr	ng-repeat="requirement in requirements">
 								<td>{{requirement.name}}</td>
 								<td>{{requirement.description}}</td>
-								<td><button>Edit</button></td>
+								<td><button data-toggle="modal" data-target="#editRequirement" ng-click="editFunRequirement(requirement.requirementId)">Edit</button></td>
 								<td><button>Delete</button></td>
 							</tr>
 						</tbody>		
@@ -123,6 +123,70 @@
 						<div class="modal-footer">
 							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 							<button type="button" ng-disabled="!requirementName || !requirementDescription" ng-click="createRequirement()" class="btn btn-primary" data-dismiss="modal">Create</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- END Modal -->
+			
+			<!-- START Modal EDIT CRITERIA -->
+			<div class="modal fade" id="editCriteria" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+				<div class="modal-dialog modal-lg" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+							<h4 class="modal-title" id="myModalLabel">Edit criteria</h4>
+						</div>
+						<div class="modal-body">
+							<div class="row">
+								<div class="col-md-12">
+									<div class="col-md-12">
+										<b>Criteria Name:</b>
+										<input ng-model="editCriteriaName" type="text" placeholder="Name" style="width: 100%;"/>										
+									</div>
+									<div class="col-md-12">
+										<b>Criteria Description:</b>
+										<textarea rows="6" ng-model="editCriteriaDescription" placeholder="Description"
+										style="width:100%; display:block; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box;"></textarea> 
+									</div>
+								</div>	
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+							<button type="button" ng-disabled="!editCriteriaName || !editCriteriaDescription" ng-click="saveEditedCriteria()" class="btn btn-primary" data-dismiss="modal">Submit</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- END Modal -->
+			
+			<!-- START Modal EDIT REQUIREMENT -->
+			<div class="modal fade" id="editRequirement" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+				<div class="modal-dialog modal-lg" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+							<h4 class="modal-title" id="myModalLabel">Edit requirement</h4>
+						</div>
+						<div class="modal-body">
+							<div class="row">
+								<div class="col-md-12">
+									<div class="col-md-12">
+										<b>Requirement Name:</b>
+										<input ng-model="editRequirementName" type="text" placeholder="Name" style="width: 100%;"/>										
+									</div>
+									<div class="col-md-12">
+										<b>Requirement Description:</b>
+										<textarea rows="6" ng-model="editRequirementDescription" placeholder="Description"
+										style="width:100%; display:block; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box;"></textarea> 
+									</div>
+								</div>	
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+							<button type="button" ng-disabled="!editRequirementName || !editRequirementDescription" ng-click="saveEditedRequirement()" class="btn btn-primary" data-dismiss="modal">Submit</button>
 						</div>
 					</div>
 				</div>

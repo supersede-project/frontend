@@ -53,4 +53,14 @@ public class RequirementRest {
 		r.setDescription(description);
 		requirements.save(r);
 	}
+	
+	// edit requirement
+	@RequestMapping(value = "/edit/{requirementId}/name/{name}/description/{description}", method = RequestMethod.PUT)
+	public void editRequirement(@PathVariable Long requirementId, @PathVariable String name, @PathVariable String description)
+	{
+		Requirement requirement = requirements.findOne(requirementId);
+		requirement.setName(name);
+		requirement.setDescription(description);
+		requirements.save(requirement);
+	}
 }

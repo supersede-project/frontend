@@ -75,4 +75,14 @@ public class CriteriaRest {
 		}	
 		return false;
 	}
+	
+	// edit criteria
+	@RequestMapping(value = "/edit/{criteriaId}/name/{name}/description/{description}", method = RequestMethod.PUT)
+	public void editCriteria(@PathVariable Long criteriaId, @PathVariable String name, @PathVariable String description)
+	{
+		ValutationCriteria criteria = valutationCriterias.findOne(criteriaId);
+		criteria.setName(name);
+		criteria.setDescription(description);
+		valutationCriterias.save(criteria);
+	}
 }
