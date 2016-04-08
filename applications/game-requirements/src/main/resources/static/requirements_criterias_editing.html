@@ -58,7 +58,7 @@
 								<td>{{requirement.name}}</td>
 								<td>{{requirement.description}}</td>
 								<td><button data-toggle="modal" data-target="#editRequirement" ng-click="editFunRequirement(requirement.requirementId)">Edit</button></td>
-								<td><button>Delete</button></td>
+								<td><button ng-click="deleteRequirement(requirement.requirementId)">Delete</button></td>
 							</tr>
 						</tbody>		
 					</table>

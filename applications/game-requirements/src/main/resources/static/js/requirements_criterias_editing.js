@@ -117,5 +117,15 @@ app.controllerProvider.register('requirements_criterias_editing', function($scop
 			});
   };
   
+  $scope.deleteRequirement = function (requirementId) {
+		 $http.put('game-requirements/requirement/delete/' + requirementId)
+			.success(function(data) {
+				if(data == true){
+					$scope.requirements = [];
+					getRequirements();
+				}
+			});
+};
+  
   //##################################################################################
 });

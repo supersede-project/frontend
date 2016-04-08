@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import demo.jpa.RequirementsJpa;
+import demo.jpa.RequirementsMatricesDataJpa;
 import demo.model.Requirement;
+import demo.model.RequirementsMatrixData;
 import eu.supersede.fe.exception.NotFoundException;
 
 @RestController
@@ -18,6 +20,9 @@ public class RequirementRest {
 	
 	@Autowired
     private RequirementsJpa requirements;
+	
+	@Autowired
+    private RequirementsMatricesDataJpa requirementsMatricesData;
 	
 	// all the requirements
 	@RequestMapping("")
@@ -52,6 +57,23 @@ public class RequirementRest {
 		r.setName(name);
 		r.setDescription(description);
 		requirements.save(r);
+	}
+	
+	// TODO check because is not perfectly correct ##################################################
+	// delete requirement
+	@RequestMapping(value = "/delete/{requirementId}", method = RequestMethod.PUT)
+	public boolean deleteRequirement(@PathVariable Long requirementId)
+	{
+		Requirement requirement = requirements.findOne(requirementId);
+		
+		List<RequirementsMatrixData> listRow = requirementsMatricesData.findByRowRequirement(requirement);
+		List<RequirementsMatrixData> listColumn = requirementsMatricesData.findByColumnRequirement(requirement);
+
+		if(listRow.size() < 1 && listColumn.size() < 1){
+			requirements.delete(requirementId);
+			return true;
+		}	
+		return false;
 	}
 	
 	// edit requirement
