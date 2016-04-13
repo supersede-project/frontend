@@ -7,7 +7,7 @@ version = '0.0.1-SNAPSHOT'
 group = 'eu.supersede'
 
 jar {
-    baseName = 'wp5-utils'
+    baseName = 'supersede-frontend-core'
 }
 
 sourceCompatibility = 1.7
