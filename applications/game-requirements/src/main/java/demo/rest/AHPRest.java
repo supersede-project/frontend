@@ -18,8 +18,12 @@ import demo.model.PlayerMove;
 import demo.model.Requirement;
 import demo.model.RequirementsMatrixData;
 import demo.model.ValutationCriteria;
-import eu.supersede.algos.AHPAnalyser;
-import eu.supersede.algos.AHPStructure;
+//import eu.supersede.algos.AHPAnalyser;
+//import eu.supersede.algos.AHPStructure;
+//import eu.supersede.fe.exception.NotFoundException;
+
+import eu.supersede.dm.algorithms.Ahp;
+import eu.supersede.dm.algorithms.AHPStructure;
 import eu.supersede.fe.exception.NotFoundException;
 
 @RestController
@@ -140,9 +144,14 @@ public class AHPRest {
 		}		
 		//##################################################################
 
-		AHPAnalyser analyser = new AHPAnalyser();
-		
+		/*
+		AHPAnalyser analyser = new AHPAnalyser();	
 		Map<String,Double> map = analyser.eval( input );
+		*/
+		
+		Ahp objCalculateRank = new Ahp(input);				
+		Map<String,Double> map = objCalculateRank.execute();
+		
 		return map;
 	}
 }

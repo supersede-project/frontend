@@ -13,4 +13,6 @@ public interface UserCriteriaPointsJpa extends JpaRepository<UserCriteriaPoint, 
 
 	@Query("SELECT DISTINCT user FROM UserCriteriaPoint ucp WHERE ucp.valutationCriteria = ?1")
 	List<User> findUsersByValutationCriteria(ValutationCriteria valutationCriteria);
+
+	UserCriteriaPoint findByValutationCriteriaAndUser(Long criteriaId, User user);
 }

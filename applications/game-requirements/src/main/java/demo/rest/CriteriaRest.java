@@ -60,7 +60,7 @@ public class CriteriaRest {
 		valutationCriterias.save(vc);
 	}
 	
-	// TODO check because is not perfectly correct ##################################################
+	// TODO check because is not perfectly correct (because maybe it's better check the existence of the criteria in the criteria's game table) ##################################################
 	// delete criteria
 	@RequestMapping(value = "/delete/{criteriaId}", method = RequestMethod.PUT)
 	public boolean deleteCriteria(@PathVariable Long criteriaId)
