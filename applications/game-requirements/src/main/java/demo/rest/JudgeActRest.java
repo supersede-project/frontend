@@ -24,6 +24,7 @@ import demo.model.PlayerMove;
 import demo.model.RequirementsMatrixData;
 import demo.model.User;
 import demo.model.ValutationCriteria;
+import demo.utility.PointsLogic;
 import eu.supersede.fe.exception.NotFoundException;
 import eu.supersede.fe.security.DatabaseUser;
 
@@ -31,6 +32,9 @@ import eu.supersede.fe.security.DatabaseUser;
 @RequestMapping("/judgeact")
 public class JudgeActRest {
 
+	@Autowired
+	private PointsLogic pointsLogic;
+	
 	@Autowired
     private JudgeActsJpa judgeActs;
 	
@@ -140,8 +144,12 @@ public class JudgeActRest {
 		requirementsMatrixData.setValue(vote);
 		requirementsMatricesData.save(requirementsMatrixData);
 		
-		// set played true to all player_moves connected with the requirementsMatrixDataId
+		Long criteriaId = requirementsMatrixData.getCriteria().getCriteriaId();
 		
+		// add points for judge move
+		pointsLogic.addPoint(judge, -2l, criteriaId);
+		
+		// set played true to all player_moves connected with the requirementsMatrixDataId		
 		List<PlayerMove> playerMovesList = playerMoves.findByRequirementsMatrixData(requirementsMatrixData);
 		for(int i=0; i< playerMovesList.size();i++){
 			playerMovesList.get(i).setPlayed(true);

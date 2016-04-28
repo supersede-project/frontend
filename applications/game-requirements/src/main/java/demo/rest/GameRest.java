@@ -45,6 +45,7 @@ import demo.model.Requirement;
 import demo.model.RequirementsMatrixData;
 import demo.model.User;
 import demo.model.ValutationCriteria;
+import demo.utility.PointsLogic;
 import eu.supersede.fe.exception.NotFoundException;
 import eu.supersede.fe.notification.NotificationUtil;
 import eu.supersede.fe.security.DatabaseUser;
@@ -58,6 +59,9 @@ public class GameRest {
 	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ss");
 	private static final String ZERO_TIME = dateFormat.format(new Date(0));
 
+	
+	@Autowired
+	private PointsLogic pointsLogic;
 	@Autowired
     private GamesJpa games;
 	@Autowired
@@ -127,14 +131,17 @@ public class GameRest {
 	}
 	
 	@RequestMapping(value = "/{gameId}", method = RequestMethod.GET)
-	public Game getGame(@PathVariable Long gameId)
+	public Game getGame(Authentication authentication, @PathVariable Long gameId)
 	{
+		DatabaseUser currentUser = (DatabaseUser) authentication.getPrincipal();
+		User user = users.findOne(currentUser.getUserId());
+		
 		Game g = games.findOne(gameId);
 		if(g == null)
 		{
 			throw new NotFoundException();
 		}
-		
+		g.setCurrentPlayer(user);
 		return g;
 	}
 	
@@ -279,6 +286,9 @@ public class GameRest {
 			DatabaseUser dbUser = (DatabaseUser)user;
 			User u = users.getOne(dbUser.getUserId());
 			game.setCreator(u);
+			
+			// add points for the creation of a game
+			pointsLogic.addPoint(u, -3l, -1l);
 		}
 		game.setFinished(false);
 		game = games.save(game);

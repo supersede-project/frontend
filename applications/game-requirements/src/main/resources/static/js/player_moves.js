@@ -1,7 +1,9 @@
 var app = angular.module('w5app');
 
-app.controllerProvider.register('player_moves', function($scope, $http, $location) {
+app.controllerProvider.register('player_moves', function($scope, $http, $location, $interval,  $rootScope) {
     
+	$scope.Math = window.Math;
+	
 	$scope.selectedGame = $location.search()['gameId'];
 	
 	$scope.requirementsChoices = [];
@@ -210,4 +212,26 @@ app.controllerProvider.register('player_moves', function($scope, $http, $locatio
 				getActions();
 		});
 	};
+	
+	// polling methods (every second)
+	
+	$scope.loggedUser = $rootScope.user;
+	$scope.user = undefined;
+	
+	$scope.game = undefined;
+	var update;
+	
+	update = $interval(function() {
+		$http.get('game-requirements/game/' + $scope.selectedGame)
+		.success(function(data) {
+			$scope.game = data;
+		});
+		
+		$http.get('game-requirements/user/' + $scope.loggedUser.userId)
+		.success(function(data) {
+			$scope.user = data;
+		});
+		
+    	}, 1000);
+	
 });

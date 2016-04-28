@@ -23,6 +23,7 @@ import demo.model.PlayerMove;
 import demo.model.RequirementsMatrixData;
 import demo.model.User;
 import demo.model.ValutationCriteria;
+import demo.utility.PointsLogic;
 import eu.supersede.fe.exception.NotFoundException;
 import eu.supersede.fe.security.DatabaseUser;
 
@@ -30,6 +31,9 @@ import eu.supersede.fe.security.DatabaseUser;
 @RequestMapping("/playermove")
 public class PlayerMoveRest {
 
+	@Autowired
+	private PointsLogic pointsLogic;
+	
 	@Autowired
     private GamesJpa games;
 	
@@ -135,6 +139,9 @@ public class PlayerMoveRest {
 	@RequestMapping(method = RequestMethod.PUT, value="/{playerMoveId}/vote/{vote}")
 	public Long setPlayerMoveVote(Authentication authentication, @PathVariable Long playerMoveId, @PathVariable Long vote){	
 		
+		DatabaseUser currentUser = (DatabaseUser) authentication.getPrincipal();
+		User user = users.findOne(currentUser.getUserId());
+		
 		PlayerMove playerMove = playerMoves.findOne(playerMoveId);
 		playerMove.setValue(vote);
 		playerMove.setPlayed(true);
@@ -143,6 +150,11 @@ public class PlayerMoveRest {
 		
 		RequirementsMatrixData rmd = requirementsMatricesData.findOne(playerMove.getRequirementsMatrixData().getRequirementsMatrixDataId());
 		
+		Long criteriaId = rmd.getCriteria().getCriteriaId();
+		
+		// add points for player vote
+		pointsLogic.addPoint(user, -1l, criteriaId);
+				
 		return rmd.getGame().getGameId();
 	}
 	

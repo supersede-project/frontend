@@ -1,6 +1,7 @@
 package demo.utility;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import demo.jpa.PointsJpa;
 import demo.jpa.UserCriteriaPointsJpa;
@@ -12,7 +13,7 @@ import demo.model.UserCriteriaPoint;
 import demo.model.UserPoint;
 import demo.model.ValutationCriteria;
 
-
+@Component
 public class PointsLogic {
 	
 	@Autowired
@@ -29,15 +30,15 @@ public class PointsLogic {
 	
 	public void addPoint(User user,  Long pointId,  Long criteriaId){	
 		
-		Point point = points.getOne(pointId);
+		Point point = points.findOne(pointId);
 				
 		if(criteriaId != -1){
 		
-			UserCriteriaPoint ucp = userCriteriaPoints.findByValutationCriteriaAndUser(criteriaId, user);
+			ValutationCriteria criteria = criterias.findOne(criteriaId);
+			UserCriteriaPoint ucp = userCriteriaPoints.findByValutationCriteriaAndUser(criteria, user);
 			
 			if(ucp == null){
 				UserCriteriaPoint newUcp = new UserCriteriaPoint();
-				ValutationCriteria criteria = criterias.findOne(criteriaId);
 				
 				newUcp.setUser(user);
 				newUcp.setValutationCriteria(criteria);
