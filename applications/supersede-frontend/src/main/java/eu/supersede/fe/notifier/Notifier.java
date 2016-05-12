@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
 import eu.supersede.fe.jpa.NotificationsJpa;
 import eu.supersede.fe.jpa.ProfilesJpa;
 import eu.supersede.fe.jpa.UsersJpa;
-import eu.supersede.fe.mail.MailSender;
+import eu.supersede.fe.mail.SupersedeMailSender;
 import eu.supersede.fe.model.Notification;
 import eu.supersede.fe.model.Profile;
 import eu.supersede.fe.model.User;
@@ -34,7 +34,7 @@ public class Notifier {
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
-	private MailSender mailSender;
+	private SupersedeMailSender supersedeMailSender;
 	
 	@Autowired
     private UsersJpa users;
@@ -99,7 +99,7 @@ public class Notifier {
 	
 	private void sendEmail(Notification n)
 	{
-		mailSender.sendEmail(subject, String.format(emailTemplate, n.getUser().getName()), n.getUser().getEmail());
+		supersedeMailSender.sendEmail(subject, String.format(emailTemplate, n.getUser().getName()), n.getUser().getEmail());
 	}
 	
 	

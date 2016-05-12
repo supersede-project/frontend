@@ -12,7 +12,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MailSender {
+public class SupersedeMailSender {
 
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 	
