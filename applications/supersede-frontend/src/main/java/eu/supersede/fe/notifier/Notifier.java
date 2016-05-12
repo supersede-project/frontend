@@ -21,6 +21,7 @@ import org.springframework.stereotype.Component;
 import eu.supersede.fe.jpa.NotificationsJpa;
 import eu.supersede.fe.jpa.ProfilesJpa;
 import eu.supersede.fe.jpa.UsersJpa;
+import eu.supersede.fe.mail.MailSender;
 import eu.supersede.fe.model.Notification;
 import eu.supersede.fe.model.Profile;
 import eu.supersede.fe.model.User;
@@ -33,6 +34,9 @@ public class Notifier {
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
+	private MailSender mailSender;
+	
+	@Autowired
     private UsersJpa users;
 	
 	@Autowired
@@ -41,9 +45,6 @@ public class Notifier {
 	@Autowired
     private NotificationsJpa notifications;
 
-	@Autowired
-	private JavaMailSender javaMailSender;
-	
 	@Autowired
 	private MultiJpaProvider multiJpaProvider;
 	
@@ -93,33 +94,12 @@ public class Notifier {
 			}
 		}
     }
-	
-	private final String emailTemplate = "Hi %s, \nyou have just received a supersede notification.";
+	private static final String subject = "Supersede notification";
+	private static final String emailTemplate = "Hi %s, \nyou have just received a supersede notification.";
 	
 	private void sendEmail(Notification n)
 	{
-		try
-		{
-			MimeMessage message = javaMailSender.createMimeMessage();
-			MimeMessageHelper helper;
-			// SSL Certhificate.
-			helper = new MimeMessageHelper(message, true);
-			// Multipart messages.
-			helper.setSubject("Supersede notification");
-			helper.setTo(n.getUser().getEmail());
-			helper.setText(String.format(emailTemplate, n.getUser().getName()), true);
-			javaMailSender.send(message);
-		}
-		catch(MailException ex)
-		{
-			log.error("Exception while send an email: " + ex.getMessage());
-			ex.printStackTrace();
-		}
-		catch(MessagingException ex)
-		{
-			log.error("Exception while send an email: " + ex.getMessage());
-			ex.printStackTrace();
-		}
+		mailSender.sendEmail(subject, String.format(emailTemplate, n.getUser().getName()), n.getUser().getEmail());
 	}
 	
 	
