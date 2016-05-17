@@ -23,7 +23,7 @@ version = '0.0.1-SNAPSHOT'
 group = 'eu.supersede'
 
 war {
-    baseName = 'admin-user-manager-app'
+    baseName = 'supersede-frontend'
 }
 
 sourceCompatibility = 1.7
@@ -49,15 +49,17 @@ dependencies {
 	compile("org.springframework.boot:spring-boot-starter-data-jpa")
     compile("org.postgresql:postgresql:9.4.1208.jre7")
     
-    providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
-    
     compile("org.springframework.boot:spring-boot-starter-mail")
+    
+    providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
     
 	compile("org.springframework.session:spring-session:1.2.0.RELEASE")
 	compile("org.springframework.boot:spring-boot-starter-redis")
 	
-	compile files('../supersede-client/build/libs/supersede-client-0.0.1-SNAPSHOT.jar')
-	//compile("eu.supersede:supersede-client:0.0.1-SNAPSHOT")
+	compile files('../supersede-frontend-core/build/libs/supersede-frontend-core-0.0.1-SNAPSHOT.jar')
+	//compile("eu.supersede:supersede-frontend-core:0.0.1-SNAPSHOT")
+	
+	compile("org.apache.oltu.oauth2:org.apache.oltu.oauth2.client:1.0.1")
 }
 
 
