@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
@@ -35,11 +34,14 @@ import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.WebUtils;
 
 import eu.supersede.integration.api.datastore.fe.types.Profile;
 import eu.supersede.integration.api.datastore.fe.types.User;
+import eu.supersede.integration.api.security.types.AuthorizationToken;
 
 @Configuration
 @EnableWebSecurity
@@ -69,11 +71,21 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				String username = (String)auth.getPrincipal();
 				String password = (String)auth.getCredentials();
 				
-				String token = authentificationService.getToken(username, password);
-				if(token == null)
+				ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+				HttpServletRequest req = attr.getRequest();
+				String tenantId = req.getHeader("TenantId");
+				
+				if(tenantId == null)
+				{
+					log.error("Tenant provided");
+					throw new BadCredentialsException("Invalid login request: missing tenant");
+				}
+				
+				AuthorizationToken token = authentificationService.getToken(username, password);
+				if(token == null || token.getAccessToken() == null)
 				{
 					log.error("Supersede integration token is null");
-					throw new BadCredentialsException("Username/Password does not match for " + username);
+					throw new BadCredentialsException("Invalid login request: authentication manager token is null");
 				}
 				
 				//TODO: use find by username
@@ -81,7 +93,7 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				if(user == null)
 				{
 					log.error("Username not found in Supersede integration service");
-					throw new BadCredentialsException("Username/Password does not match for " + username);
+					throw new BadCredentialsException("Invalid login request: user " + username + " not found");
 				}
 				
 				//get authorities from profiles
@@ -96,7 +108,7 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				
 				List<GrantedAuthority> permissions = AuthorityUtils.createAuthorityList(authorities);
 				
-				DatabaseUser dbUser = new DatabaseUser(user.getUser_id(), user.getName(), user.getEmail(), user.getPassword(), true, true, true, true, permissions, user.getLocale());
+				DatabaseUser dbUser = new DatabaseUser(user.getUser_id(), user.getName(), user.getEmail(), user.getPassword(), token, true, true, true, true, permissions, user.getLocale());
 
 				return new UsernamePasswordAuthenticationToken(dbUser, password, permissions);//AUTHORITIES
 			}

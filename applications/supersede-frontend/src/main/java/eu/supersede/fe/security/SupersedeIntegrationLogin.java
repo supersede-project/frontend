@@ -1,6 +1,6 @@
 package eu.supersede.fe.security;
 
-import org.springframework.util.Assert;
+import java.util.List;
 
 import eu.supersede.integration.api.datastore.fe.types.User;
 import eu.supersede.integration.api.datastore.proxies.FEDataStoreProxy;
@@ -20,27 +20,40 @@ public class SupersedeIntegrationLogin {
         am = new IFAuthenticationManager(admin, password);
 	}
 	
-	public String getToken(String username, String password)
+	public AuthorizationToken getToken(String username, String password)
 	{	
-		String accessToken = null;
+		AuthorizationToken token = null;
 		
 		try
 		{
-			AuthorizationToken token = am.getAuthorizationToken(username, password);
-			accessToken = token.getAccessToken();
+			token = am.getAuthorizationToken(username, password);
 		}
 		catch(Exception ex)
 		{
 			ex.printStackTrace();
 		}
 		
-        return accessToken;
+        return token;
 	}
 	
-	public User getUser(String username, String tenantId, String token)
+	public User getUser(String username, String tenantId, AuthorizationToken token)
 	{
-    	User user = userProxy.getUser(tenantId, username, false, token);
-    	return user;
+		//TODO: ask Yosu for a getUserByName function
+    	//User user = userProxy.getUser(tenantId, username, false, token);
+    	//return user;
+		
+		User user = null;
+		List<User> users = userProxy.getUsers(tenantId, false, token);
+		for(User u : users)
+		{
+			if(u.getEmail().equals(username))
+			{
+				user = u;
+				break;
+			}
+		}
+		
+		return user;
 	}
 	
 }
