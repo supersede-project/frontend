@@ -38,10 +38,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.WebUtils;
 
-import eu.supersede.fe.jpa.UsersJpa;
-import eu.supersede.fe.model.Profile;
-import eu.supersede.fe.model.User;
-import eu.supersede.fe.security.oauth2.OAuth2Login;
+import eu.supersede.integration.api.datastore.fe.types.Profile;
+import eu.supersede.integration.api.datastore.fe.types.User;
 
 @Configuration
 @EnableWebSecurity
@@ -63,10 +61,7 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		return new AuthenticationProvider() {
 
 			private final Logger log = LoggerFactory.getLogger(this.getClass());
-			private OAuth2Login authentificationService = new OAuth2Login();
-			
-			@Autowired
-			private UsersJpa users;
+			private SupersedeIntegrationLogin authentificationService = new SupersedeIntegrationLogin();
 			
 			@Override
 			@Transactional
@@ -74,18 +69,18 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				String username = (String)auth.getPrincipal();
 				String password = (String)auth.getCredentials();
 				
-				//TODO: use find by username
-				User user = users.findByEmail(username);
-				if(user == null)
-				{
-					log.error("Username not found in database");
-					throw new BadCredentialsException("Username/Password does not match for " + username);
-				}
-				
 				String token = authentificationService.getToken(username, password);
 				if(token == null)
 				{
-					log.error("OAuth2 token is null");
+					log.error("Supersede integration token is null");
+					throw new BadCredentialsException("Username/Password does not match for " + username);
+				}
+				
+				//TODO: use find by username
+				User user = authentificationService.getUser(username, tenantId, token);
+				if(user == null)
+				{
+					log.error("Username not found in Supersede integration service");
 					throw new BadCredentialsException("Username/Password does not match for " + username);
 				}
 				
@@ -101,7 +96,7 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				
 				List<GrantedAuthority> permissions = AuthorityUtils.createAuthorityList(authorities);
 				
-				DatabaseUser dbUser = new DatabaseUser(user.getUserId(), user.getName(), user.getEmail(), user.getPassword(), true, true, true, true, permissions, user.getLocale());
+				DatabaseUser dbUser = new DatabaseUser(user.getUser_id(), user.getName(), user.getEmail(), user.getPassword(), true, true, true, true, permissions, user.getLocale());
 
 				return new UsernamePasswordAuthenticationToken(dbUser, password, permissions);//AUTHORITIES
 			}

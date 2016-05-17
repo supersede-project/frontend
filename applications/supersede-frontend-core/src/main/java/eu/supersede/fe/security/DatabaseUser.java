@@ -7,12 +7,12 @@ import org.springframework.security.core.GrantedAuthority;
 @SuppressWarnings("serial")
 public class DatabaseUser extends  org.springframework.security.core.userdetails.User {
 
-	private Long userId;
+	private Integer userId;
 	private String name;
 	private String multiTenantId;
 	private String locale;
 
-	public DatabaseUser(Long userId, String name, String username, String password, boolean enabled, boolean accountNonExpired,
+	public DatabaseUser(Integer userId, String name, String username, String password, boolean enabled, boolean accountNonExpired,
 			boolean credentialsNonExpired, boolean accountNonLocked,
 			Collection<? extends GrantedAuthority> authorities, String locale) {
 		super(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
@@ -21,11 +21,11 @@ public class DatabaseUser extends  org.springframework.security.core.userdetails
 		this.locale = locale;
 	}
 
-	public Long getUserId() {
+	public Integer getUserId() {
 		return userId;
 	}
 
-	public void setUserId(Long userId) {
+	public void setUserId(Integer userId) {
 		this.userId = userId;
 	}
 
