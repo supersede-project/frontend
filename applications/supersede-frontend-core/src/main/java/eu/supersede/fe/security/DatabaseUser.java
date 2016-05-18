@@ -13,7 +13,12 @@ public class DatabaseUser extends  org.springframework.security.core.userdetails
 	private String name;
 	private String multiTenantId;
 	private String locale;
-	private AuthorizationToken token;
+	//Token serialized
+	private String tokenType;
+	private Integer expiresIn;
+	private String refreshToken;
+	private String accessToken;
+
 
 	public DatabaseUser(Integer userId, String name, String username, String password, AuthorizationToken token, boolean enabled, boolean accountNonExpired,
 			boolean credentialsNonExpired, boolean accountNonLocked,
@@ -22,7 +27,8 @@ public class DatabaseUser extends  org.springframework.security.core.userdetails
 		this.userId = new Long(userId);
 		this.name = name;
 		this.locale = locale;
-		this.token = token;
+
+		setToken(token);
 	}
 
 	public Long getUserId() {
@@ -61,10 +67,19 @@ public class DatabaseUser extends  org.springframework.security.core.userdetails
 	}
 	
 	public void setToken(AuthorizationToken token) {
-		this.token = token;
+		accessToken = token.getAccessToken();
+		expiresIn = token.getExpiresIn();
+		refreshToken = token.getRefreshToken();
+		tokenType = token.getTokenType();
 	}
 	
 	public AuthorizationToken getToken() {
-		return token;
+		AuthorizationToken t = new AuthorizationToken();
+		t.setAccessToken(accessToken);
+		t.setExpiresIn(expiresIn);
+		t.setRefreshToken(refreshToken);
+		t.setTokenType(tokenType);
+		
+		return t;
 	}
 }
