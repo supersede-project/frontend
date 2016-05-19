@@ -23,11 +23,11 @@ import eu.supersede.fe.application.ApplicationGadget;
 import eu.supersede.fe.application.ApplicationGadgetComparator;
 import eu.supersede.fe.application.ApplicationPage;
 import eu.supersede.fe.application.ApplicationUtil;
-import eu.supersede.fe.jpa.ProfilesJpa;
+import eu.supersede.fe.integration.ProxyWrapper;
 import eu.supersede.fe.jpa.UserGadgetsJpa;
-import eu.supersede.fe.model.Profile;
 import eu.supersede.fe.model.UserGadget;
 import eu.supersede.fe.security.DatabaseUser;
+import eu.supersede.integration.api.datastore.fe.types.Profile;
 
 @RestController
 @RequestMapping("/application")
@@ -35,13 +35,13 @@ public class ApplicationRest {
 	
 	@Autowired
 	private ApplicationUtil applicationUtil;
-
-	@Autowired
-    private ProfilesJpa profiles;
 	
 	@Autowired
     private UserGadgetsJpa userGadgets;
 
+	@Autowired
+	private ProxyWrapper proxy;
+	
 	private final static ApplicationGadgetComparator comparator = new ApplicationGadgetComparator();
 	
 	@RequestMapping("/availableGadget")
@@ -107,7 +107,8 @@ public class ApplicationRest {
 			authNames.add(ga.getAuthority().substring(5));
 		}
 		
-		List<Profile> profList = profiles.findByNameIn(authNames);
+		DatabaseUser currentUser = (DatabaseUser) auth.getPrincipal();
+		List<Profile> profList = proxy.getProfilesInNames(authNames, currentUser.getTenantId(), currentUser.getToken());
 		
 		//make data nicer for frontend
 		for(Profile p : profList)

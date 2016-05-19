@@ -1,6 +1,7 @@
 package eu.supersede.fe.security;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.List;
 
 import javax.servlet.Filter;
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
@@ -39,6 +41,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.WebUtils;
 
+import eu.supersede.fe.integration.ProxyWrapper;
 import eu.supersede.integration.api.datastore.fe.types.Profile;
 import eu.supersede.integration.api.datastore.fe.types.User;
 import eu.supersede.integration.api.security.types.AuthorizationToken;
@@ -58,12 +61,14 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		auth.authenticationProvider(customAuthenticationProvider());
 	}
 	
+	@Autowired
+	ProxyWrapper proxy;
+	
 	@Bean
 	AuthenticationProvider customAuthenticationProvider() {
 		return new AuthenticationProvider() {
 
 			private final Logger log = LoggerFactory.getLogger(this.getClass());
-			private SupersedeIntegrationLogin authentificationService = new SupersedeIntegrationLogin();
 			
 			@Override
 			@Transactional
@@ -81,7 +86,13 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 					throw new BadCredentialsException("Invalid login request: missing tenant");
 				}
 				
-				AuthorizationToken token = authentificationService.getToken(username, password);
+				AuthorizationToken token = null;
+				try {
+					token = proxy.getIFAuthenticationManager(tenantId).getAuthorizationToken(username, password);
+				} catch (URISyntaxException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				if(token == null || token.getAccessToken() == null)
 				{
 					log.error("Supersede integration token is null");
@@ -89,7 +100,7 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				}
 				
 				//TODO: use find by username
-				User user = authentificationService.getUser(username, tenantId, token);
+				User user = proxy.getUserByName(username, tenantId, token);
 				if(user == null)
 				{
 					log.error("Username not found in Supersede integration service");

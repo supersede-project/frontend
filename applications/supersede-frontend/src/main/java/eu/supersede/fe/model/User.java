@@ -11,25 +11,24 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class User {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
     private Long userId;
     private String name;
     private String email;
-    private String password;
+    /*private String password;
     @ManyToMany(cascade=CascadeType.ALL)  
     @JoinTable(name="users_profiles", joinColumns=@JoinColumn(name="user_id"), inverseJoinColumns=@JoinColumn(name="profile_id"))  
-    private List<Profile> profiles;
+    private List<Profile> profiles;*/
     private String locale;
  
     public User() {
     }
  
-    public User(String name, String email, String password, List<Profile> profiles) {
+    /*public User(String name, String email, String password, List<Profile> profiles) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.profiles = profiles;
-    }
+    }*/
  
     public Long getUserId() {
         return userId;
@@ -55,7 +54,7 @@ public class User {
         this.email = email;
     }
  
-    @JsonIgnore
+    /*@JsonIgnore
     public String getPassword() {
         return password;
     }
@@ -70,7 +69,7 @@ public class User {
  
     public void setProfiles(List<Profile> profiles) {
         this.profiles = profiles;
-    }
+    }*/
 
 	public String getLocale() {
 		return locale;
