@@ -14,7 +14,6 @@ import eu.supersede.integration.api.datastore.fe.types.User;
 import eu.supersede.integration.api.datastore.proxies.FEDataStoreProxy;
 import eu.supersede.integration.api.security.IFAuthenticationManager;
 import eu.supersede.integration.api.security.types.AuthorizationToken;
-import eu.supersede.integration.properties.IntegrationProperty;
 
 @Component
 public class ProxyWrapper {
