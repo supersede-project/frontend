@@ -1,7 +1,6 @@
 package eu.supersede.fe.security;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.List;
 
 import javax.servlet.Filter;
@@ -93,7 +92,7 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				AuthorizationToken token = null;
 				try {
 					token = proxy.getIFAuthenticationManager(tenantId).getAuthorizationToken(username, password);
-				} catch (URISyntaxException e) {
+				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
