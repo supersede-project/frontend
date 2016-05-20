@@ -20,11 +20,11 @@ public class DatabaseUser extends  org.springframework.security.core.userdetails
 	private String accessToken;
 
 
-	public DatabaseUser(Integer userId, String name, String username, String password, AuthorizationToken token, boolean enabled, boolean accountNonExpired,
+	public DatabaseUser(Long userId, String name, String username, String password, AuthorizationToken token, boolean enabled, boolean accountNonExpired,
 			boolean credentialsNonExpired, boolean accountNonLocked,
 			Collection<? extends GrantedAuthority> authorities, String locale) {
 		super(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
-		this.userId = new Long(userId);
+		this.userId = userId;
 		this.name = name;
 		this.locale = locale;
 

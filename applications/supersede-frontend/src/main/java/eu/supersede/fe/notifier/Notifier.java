@@ -4,24 +4,20 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.mail.MailException;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import eu.supersede.fe.jpa.NotificationsJpa;
+import eu.supersede.fe.jpa.ProfilesJpa;
 import eu.supersede.fe.jpa.UsersJpa;
 import eu.supersede.fe.mail.SupersedeMailSender;
 import eu.supersede.fe.model.Notification;
+import eu.supersede.fe.model.Profile;
 import eu.supersede.fe.model.User;
 import eu.supersede.fe.multitenant.MultiJpaProvider;
 
@@ -29,14 +25,17 @@ import eu.supersede.fe.multitenant.MultiJpaProvider;
 @PropertySource("classpath:wp5.properties")
 public class Notifier {
 
-	private final Logger log = LoggerFactory.getLogger(this.getClass());
+	//private final Logger log = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
 	private SupersedeMailSender supersedeMailSender;
 	
 	@Autowired
     private UsersJpa users;
-		
+
+	@Autowired
+    private ProfilesJpa profiles;
+	
 	@Autowired
     private NotificationsJpa notifications;
 
@@ -56,18 +55,15 @@ public class Notifier {
 		}
 	}
 
-	
-	//TODO: token for applications as well??
 	public void createForProfile(String profile, String message)
 	{
-		/*Profile p = profiles.findByName(profile);
+		Profile p = profiles.findByName(profile);
 		List<User> us = p.getUsers();
 		for(User u : us)
 		{
 			Notification n = new Notification(message, u);
 			notifications.save(n);
 		}
-		*/
 	}
 
 	@Scheduled(fixedRateString = "${notifier.mail.sender.checkRate}")

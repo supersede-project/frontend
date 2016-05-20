@@ -42,8 +42,9 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.WebUtils;
 
 import eu.supersede.fe.integration.ProxyWrapper;
-import eu.supersede.integration.api.datastore.fe.types.Profile;
-import eu.supersede.integration.api.datastore.fe.types.User;
+import eu.supersede.fe.jpa.UsersJpa;
+import eu.supersede.fe.model.Profile;
+import eu.supersede.fe.model.User;
 import eu.supersede.integration.api.security.types.AuthorizationToken;
 
 @Configuration
@@ -63,6 +64,9 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
 	ProxyWrapper proxy;
+	
+	@Autowired
+	UsersJpa users;
 	
 	@Bean
 	AuthenticationProvider customAuthenticationProvider() {
@@ -99,11 +103,11 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 					throw new BadCredentialsException("Invalid login request: authentication manager token is null");
 				}
 				
-				//TODO: use find by username
-				User user = proxy.getUserByName(username, tenantId, token);
+				User user = users.findByEmail(username);
+				//User user = proxy.getUserByName(username, tenantId, token);
 				if(user == null)
 				{
-					log.error("Username not found in Supersede integration service");
+					log.error("Username not found in Database");
 					throw new BadCredentialsException("Invalid login request: user " + username + " not found");
 				}
 				
@@ -119,7 +123,7 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				
 				List<GrantedAuthority> permissions = AuthorityUtils.createAuthorityList(authorities);
 				
-				DatabaseUser dbUser = new DatabaseUser(user.getUser_id(), user.getName(), user.getEmail(), user.getPassword(), token, true, true, true, true, permissions, user.getLocale());
+				DatabaseUser dbUser = new DatabaseUser(user.getUserId(), user.getName(), user.getEmail(), user.getPassword(), token, true, true, true, true, permissions, user.getLocale());
 
 				return new UsernamePasswordAuthenticationToken(dbUser, password, permissions);//AUTHORITIES
 			}
