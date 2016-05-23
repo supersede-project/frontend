@@ -91,7 +91,7 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				
 				AuthorizationToken token = null;
 				try {
-					token = proxy.getIFAuthenticationManager(tenantId).getAuthorizationToken(username, password);
+					token = proxy.getIFAuthenticationManager(tenantId).getAuthorizationToken(username, password, tenantId);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
