@@ -92,7 +92,7 @@ public class Notifier {
 	
 	private void sendEmail(Notification n)
 	{
-		supersedeMailSender.sendEmail(subject, String.format(emailTemplate, n.getUser().getName()), n.getUser().getEmail());
+		supersedeMailSender.sendEmail(subject, String.format(emailTemplate, n.getUser().getFirstName() + " " + n.getUser().getLastName()), n.getUser().getEmail());
 	}
 	
 	

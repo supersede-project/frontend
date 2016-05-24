@@ -77,9 +77,9 @@ public class UserRest {
 	private eu.supersede.integration.api.security.types.User toSecurityUser(User u, String tenant) throws UserStoreException{
 		eu.supersede.integration.api.security.types.User user = new eu.supersede.integration.api.security.types.User();
 
-		user.setUserName(u.getEmail());
-		user.setFirstname(u.getName());
-		user.setLastname(u.getName());
+		user.setUserName(u.getUsername());
+		user.setFirstname(u.getFirstName());
+		user.setLastname(u.getLastName());
 		user.setEmail(u.getEmail());
     	
     	//Adding roles

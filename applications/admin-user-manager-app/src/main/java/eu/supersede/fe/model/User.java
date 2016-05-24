@@ -13,9 +13,11 @@ public class User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long userId;
-	private String name;
-	private String email;
+    private Long userId;
+	private String username;
+	private String firstName;
+    private String lastName;
+    private String email;
 	private String password;
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "users_profiles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "profile_id"))
@@ -24,13 +26,14 @@ public class User {
 	public User() {
 	}
 
-	public User(String name, String email, String password, List<Profile> profiles) {
-		this.name = name;
-		this.name = name;
-		this.email = email;
-		this.password = password;
-		this.profiles = profiles;
-	}
+	public User(String username, String firstName, String lastName, String email, String password, List<Profile> profiles) {
+    	this.username = username;
+    	this.firstName = firstName;
+    	this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.profiles = profiles;
+    }
 
 	public Long getUserId() {
 		return userId;
@@ -40,12 +43,28 @@ public class User {
 		this.userId = userId;
 	}
 
-	public String getName() {
-		return name;
+	public String getUsername() {
+		return username;
 	}
-
-	public void setName(String name) {
-		this.name = name;
+    
+    public void setUsername(String username) {
+		this.username = username;
+	}
+    
+    public String getFirstName() {
+		return firstName;
+	}
+    
+    public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+    
+    public String getLastName() {
+		return lastName;
+	}
+    
+    public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 
 	public String getEmail() {

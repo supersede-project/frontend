@@ -102,7 +102,7 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 					throw new BadCredentialsException("Invalid login request: authentication manager token is null");
 				}
 				
-				User user = users.findByEmail(username);
+				User user = users.findByUsername(username);
 				//User user = proxy.getUserByName(username, tenantId, token);
 				if(user == null)
 				{
@@ -122,7 +122,7 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				
 				List<GrantedAuthority> permissions = AuthorityUtils.createAuthorityList(authorities);
 				
-				DatabaseUser dbUser = new DatabaseUser(user.getUserId(), user.getName(), user.getEmail(), user.getPassword(), token, true, true, true, true, permissions, user.getLocale());
+				DatabaseUser dbUser = new DatabaseUser(user.getUserId(), user.getFirstName() + " " + user.getLastName(), user.getEmail(), user.getPassword(), token, true, true, true, true, permissions, user.getLocale());
 
 				return new UsernamePasswordAuthenticationToken(dbUser, password, permissions);//AUTHORITIES
 			}
