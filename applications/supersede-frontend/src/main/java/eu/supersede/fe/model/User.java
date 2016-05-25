@@ -12,8 +12,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 @Entity
 @Table(name="users")
 public class User {
@@ -25,7 +23,6 @@ public class User {
 	private String firstName;
     private String lastName;
     private String email;
-    private String password;
     @ManyToMany(cascade=CascadeType.ALL)  
     @JoinTable(name="users_profiles", joinColumns=@JoinColumn(name="user_id"), inverseJoinColumns=@JoinColumn(name="profile_id"))  
     private List<Profile> profiles;
@@ -34,12 +31,11 @@ public class User {
     public User() {
     }
  
-    public User(String username, String firstName, String lastName, String email, String password, List<Profile> profiles) {
+    public User(String username, String firstName, String lastName, String email, List<Profile> profiles) {
     	this.username = username;
     	this.firstName = firstName;
     	this.lastName = lastName;
         this.email = email;
-        this.password = password;
         this.profiles = profiles;
     }
  
@@ -81,15 +77,6 @@ public class User {
  
     public void setEmail(String email) {
         this.email = email;
-    }
- 
-    @JsonIgnore
-    public String getPassword() {
-        return password;
-    }
- 
-    public void setPassword(String password) {
-        this.password = password;
     }
  
     public List<Profile> getProfiles() {

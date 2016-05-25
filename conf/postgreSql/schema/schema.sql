@@ -139,7 +139,6 @@ CREATE TABLE users (
     user_id bigint NOT NULL,
     first_name text NOT NULL,
     email text NOT NULL,
-    password text NOT NULL,
     locale text,
     last_name text,
     username text
@@ -212,8 +211,8 @@ COPY profiles_labels (profile_id, lang, label, profile_label_id) FROM stdin;
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: testDB
 --
 
-COPY users (user_id, first_name, email, password, locale, last_name, username) FROM stdin;
--1	admin	wp_admin	$2a$10$EblZqNptyYvcLm/VwDCVAuBjzZOI7khzdyGPBr08PpIi0na624b8.		\N	wp_admin
+COPY users (user_id, first_name, email, locale, last_name, username) FROM stdin;
+-1	admin	wp_admin		\N	wp_admin
 \.
 
 

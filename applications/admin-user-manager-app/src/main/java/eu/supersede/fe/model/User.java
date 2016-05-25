@@ -2,7 +2,16 @@ package eu.supersede.fe.model;
 
 import java.util.List;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -18,6 +27,7 @@ public class User {
 	private String firstName;
     private String lastName;
     private String email;
+    @Transient
 	private String password;
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "users_profiles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "profile_id"))
@@ -26,12 +36,11 @@ public class User {
 	public User() {
 	}
 
-	public User(String username, String firstName, String lastName, String email, String password, List<Profile> profiles) {
+	public User(String username, String firstName, String lastName, String email, List<Profile> profiles) {
     	this.username = username;
     	this.firstName = firstName;
     	this.lastName = lastName;
         this.email = email;
-        this.password = password;
         this.profiles = profiles;
     }
 
