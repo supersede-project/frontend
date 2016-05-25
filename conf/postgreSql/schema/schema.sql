@@ -11,18 +11,28 @@ SET client_min_messages = warning;
 
 SET search_path = public, pg_catalog;
 
+ALTER TABLE ONLY public.users_gadgets DROP CONSTRAINT users_gadgets_users_fk;
 ALTER TABLE ONLY public.users_profiles DROP CONSTRAINT users_foreign_key;
 ALTER TABLE ONLY public.notifications DROP CONSTRAINT users_foreign_key;
+ALTER TABLE ONLY public.profiles_labels DROP CONSTRAINT profiles_profiles_labels_fk;
 ALTER TABLE ONLY public.users_profiles DROP CONSTRAINT profiles_foreign_key;
+DROP INDEX public.fki_users_gadgets_users_fk;
 DROP INDEX public.fki_users_foreign_key;
+DROP INDEX public.fki_profiles_profiles_labels_fk;
 ALTER TABLE ONLY public.users_profiles DROP CONSTRAINT users_profiles_primary_key;
 ALTER TABLE ONLY public.users DROP CONSTRAINT users_primary_key;
+ALTER TABLE ONLY public.users_gadgets DROP CONSTRAINT users_gadgets_primary_key;
+ALTER TABLE ONLY public.users DROP CONSTRAINT unique_username;
 ALTER TABLE ONLY public.profiles DROP CONSTRAINT unique_name;
 ALTER TABLE ONLY public.users DROP CONSTRAINT unique_email;
 ALTER TABLE ONLY public.profiles DROP CONSTRAINT profiles_primary_key;
+ALTER TABLE ONLY public.profiles_labels DROP CONSTRAINT profiles_labels_profile_id_lang_key;
+ALTER TABLE ONLY public.profiles_labels DROP CONSTRAINT profiles_labels_pk;
 ALTER TABLE ONLY public.notifications DROP CONSTRAINT notifications_primary_key;
 DROP TABLE public.users_profiles;
+DROP TABLE public.users_gadgets;
 DROP TABLE public.users;
+DROP TABLE public.profiles_labels;
 DROP TABLE public.profiles;
 DROP TABLE public.notifications;
 DROP SEQUENCE public.hibernate_sequence;
@@ -108,19 +118,50 @@ CREATE TABLE profiles (
 ALTER TABLE profiles OWNER TO "testDB";
 
 --
+-- Name: profiles_labels; Type: TABLE; Schema: public; Owner: testDB; Tablespace: 
+--
+
+CREATE TABLE profiles_labels (
+    profile_id bigint,
+    lang text NOT NULL,
+    label text NOT NULL,
+    profile_label_id bigint NOT NULL
+);
+
+
+ALTER TABLE profiles_labels OWNER TO "testDB";
+
+--
 -- Name: users; Type: TABLE; Schema: public; Owner: testDB; Tablespace: 
 --
 
 CREATE TABLE users (
     user_id bigint NOT NULL,
-    name text NOT NULL,
+    first_name text NOT NULL,
     email text NOT NULL,
     password text NOT NULL,
-    locale text
+    locale text,
+    last_name text,
+    username text
 );
 
 
 ALTER TABLE users OWNER TO "testDB";
+
+--
+-- Name: users_gadgets; Type: TABLE; Schema: public; Owner: testDB; Tablespace: 
+--
+
+CREATE TABLE users_gadgets (
+    gadget_id bigint NOT NULL,
+    user_id bigint NOT NULL,
+    application_name text NOT NULL,
+    gadget_name text NOT NULL,
+    size text
+);
+
+
+ALTER TABLE users_gadgets OWNER TO "testDB";
 
 --
 -- Name: users_profiles; Type: TABLE; Schema: public; Owner: testDB; Tablespace: 
@@ -135,11 +176,86 @@ CREATE TABLE users_profiles (
 ALTER TABLE users_profiles OWNER TO "testDB";
 
 --
+-- Name: hibernate_sequence; Type: SEQUENCE SET; Schema: public; Owner: testDB
+--
+
+SELECT pg_catalog.setval('hibernate_sequence', 3336, true);
+
+
+--
+-- Data for Name: notifications; Type: TABLE DATA; Schema: public; Owner: testDB
+--
+
+COPY notifications (notification_id, message, user_id, read, email_sent, creation_time, link) FROM stdin;
+\.
+
+
+--
+-- Data for Name: profiles; Type: TABLE DATA; Schema: public; Owner: testDB
+--
+
+COPY profiles (profile_id, name) FROM stdin;
+0	ADMIN
+-1	USER
+\.
+
+
+--
+-- Data for Name: profiles_labels; Type: TABLE DATA; Schema: public; Owner: testDB
+--
+
+COPY profiles_labels (profile_id, lang, label, profile_label_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: testDB
+--
+
+COPY users (user_id, first_name, email, password, locale, last_name, username) FROM stdin;
+-1	admin	wp_admin	$2a$10$EblZqNptyYvcLm/VwDCVAuBjzZOI7khzdyGPBr08PpIi0na624b8.		\N	wp_admin
+\.
+
+
+--
+-- Data for Name: users_gadgets; Type: TABLE DATA; Schema: public; Owner: testDB
+--
+
+COPY users_gadgets (gadget_id, user_id, application_name, gadget_name, size) FROM stdin;
+\.
+
+
+--
+-- Data for Name: users_profiles; Type: TABLE DATA; Schema: public; Owner: testDB
+--
+
+COPY users_profiles (user_id, profile_id) FROM stdin;
+-1	0
+\.
+
+
+--
 -- Name: notifications_primary_key; Type: CONSTRAINT; Schema: public; Owner: testDB; Tablespace: 
 --
 
 ALTER TABLE ONLY notifications
     ADD CONSTRAINT notifications_primary_key PRIMARY KEY (notification_id);
+
+
+--
+-- Name: profiles_labels_pk; Type: CONSTRAINT; Schema: public; Owner: testDB; Tablespace: 
+--
+
+ALTER TABLE ONLY profiles_labels
+    ADD CONSTRAINT profiles_labels_pk PRIMARY KEY (profile_label_id);
+
+
+--
+-- Name: profiles_labels_profile_id_lang_key; Type: CONSTRAINT; Schema: public; Owner: testDB; Tablespace: 
+--
+
+ALTER TABLE ONLY profiles_labels
+    ADD CONSTRAINT profiles_labels_profile_id_lang_key UNIQUE (profile_id, lang);
 
 
 --
@@ -167,6 +283,22 @@ ALTER TABLE ONLY profiles
 
 
 --
+-- Name: unique_username; Type: CONSTRAINT; Schema: public; Owner: testDB; Tablespace: 
+--
+
+ALTER TABLE ONLY users
+    ADD CONSTRAINT unique_username UNIQUE (username);
+
+
+--
+-- Name: users_gadgets_primary_key; Type: CONSTRAINT; Schema: public; Owner: testDB; Tablespace: 
+--
+
+ALTER TABLE ONLY users_gadgets
+    ADD CONSTRAINT users_gadgets_primary_key PRIMARY KEY (gadget_id, user_id);
+
+
+--
 -- Name: users_primary_key; Type: CONSTRAINT; Schema: public; Owner: testDB; Tablespace: 
 --
 
@@ -183,10 +315,24 @@ ALTER TABLE ONLY users_profiles
 
 
 --
+-- Name: fki_profiles_profiles_labels_fk; Type: INDEX; Schema: public; Owner: testDB; Tablespace: 
+--
+
+CREATE INDEX fki_profiles_profiles_labels_fk ON profiles_labels USING btree (profile_id);
+
+
+--
 -- Name: fki_users_foreign_key; Type: INDEX; Schema: public; Owner: testDB; Tablespace: 
 --
 
 CREATE INDEX fki_users_foreign_key ON notifications USING btree (user_id);
+
+
+--
+-- Name: fki_users_gadgets_users_fk; Type: INDEX; Schema: public; Owner: testDB; Tablespace: 
+--
+
+CREATE INDEX fki_users_gadgets_users_fk ON users_gadgets USING btree (user_id);
 
 
 --
@@ -195,6 +341,14 @@ CREATE INDEX fki_users_foreign_key ON notifications USING btree (user_id);
 
 ALTER TABLE ONLY users_profiles
     ADD CONSTRAINT profiles_foreign_key FOREIGN KEY (profile_id) REFERENCES profiles(profile_id);
+
+
+--
+-- Name: profiles_profiles_labels_fk; Type: FK CONSTRAINT; Schema: public; Owner: testDB
+--
+
+ALTER TABLE ONLY profiles_labels
+    ADD CONSTRAINT profiles_profiles_labels_fk FOREIGN KEY (profile_id) REFERENCES profiles(profile_id);
 
 
 --
@@ -211,6 +365,14 @@ ALTER TABLE ONLY notifications
 
 ALTER TABLE ONLY users_profiles
     ADD CONSTRAINT users_foreign_key FOREIGN KEY (user_id) REFERENCES users(user_id);
+
+
+--
+-- Name: users_gadgets_users_fk; Type: FK CONSTRAINT; Schema: public; Owner: testDB
+--
+
+ALTER TABLE ONLY users_gadgets
+    ADD CONSTRAINT users_gadgets_users_fk FOREIGN KEY (user_id) REFERENCES users(user_id);
 
 
 --
