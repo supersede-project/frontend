@@ -3,13 +3,17 @@ package eu.supersede.fe.multitenant;
 import org.hibernate.context.spi.CurrentTenantIdentifierResolver;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 @Component
-@PropertySource("file:../conf/multitenancy.properties")
+@PropertySources({
+	@PropertySource("file:../conf/multitenancy.properties"),
+	@PropertySource(value = "file:../conf/multitenancy_${application.name}.properties", ignoreResourceNotFound=true)
+  })
 public class CurrentTenantIdentifierResolverImpl implements CurrentTenantIdentifierResolver {
 
 	//private final Logger log = LoggerFactory.getLogger(this.getClass());

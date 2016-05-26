@@ -14,12 +14,16 @@ import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 @SuppressWarnings("serial")
 @Component
-@PropertySource("file:../conf/multitenancy.properties")
+@PropertySources({
+		@PropertySource("file:../conf/multitenancy.properties"),
+		@PropertySource(value = "file:../conf/multitenancy_${application.name}.properties", ignoreResourceNotFound=true)
+      })
 @EnableConfigurationProperties(JpaProperties.class)
 public class DataSourceBasedMultiTenantConnectionProviderImpl extends AbstractDataSourceBasedMultiTenantConnectionProviderImpl
 {
