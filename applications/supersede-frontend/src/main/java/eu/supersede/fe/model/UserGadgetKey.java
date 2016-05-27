@@ -47,4 +47,9 @@ public class UserGadgetKey implements Serializable {
 		return false;
 	}
 	
+	@Override
+	public int hashCode() {
+		return userId.hashCode() + gadgetId.hashCode();
+	}
+	
 }
