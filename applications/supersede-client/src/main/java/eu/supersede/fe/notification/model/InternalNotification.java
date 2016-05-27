@@ -16,8 +16,8 @@ import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-@Entity
-@Table(name="notifications")
+//@Entity
+//@Table(name="notifications")
 public class InternalNotification {
 
 	@Id

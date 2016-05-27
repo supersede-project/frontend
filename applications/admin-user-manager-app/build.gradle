@@ -31,7 +31,7 @@ targetCompatibility = 1.7
 
 repositories {
     mavenCentral()
-	maven { url 'http://repo.spring.io/milestone' }
+	maven {url 'http://repo.spring.io/milestone' }
 	maven {url 'http://172.28.16.213:8082/artifactory/libs-snapshot-local/'}
 }
 
