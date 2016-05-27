@@ -13,8 +13,8 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-//@Entity
-//@Table(name="profiles")
+@Entity
+@Table(name="profiles")
 public class InternalProfile {
 
 	@Id
