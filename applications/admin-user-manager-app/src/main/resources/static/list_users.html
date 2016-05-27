@@ -6,6 +6,7 @@
 		<thead>
 			<tr>
 				<th class="id" custom-sort order="'id'" sort="sort">Id&nbsp;</th>
+				<th class="username" custom-sort order="'username'" sort="sort">Username&nbsp;</th>
 				<th class="name" custom-sort order="'name'" sort="sort">Name&nbsp;</th>
 				<th class="email" custom-sort order="'email'" sort="sort">Email&nbsp;</th>
 				<th class="profiles" custom-sort order="'profiles'" sort="sort">Profiles&nbsp;</th>
@@ -15,7 +16,8 @@
 		<tbody>
 			<tr	ng-repeat="user in users | limitTo:5:currentPage*itemsPerPage">
 				<td>{{user.userId}}</td>
-				<td>{{user.name}}</td>
+				<td>{{user.username}}</td>
+				<td>{{user.firstName}} {{user.lastName}}</td>
 				<td>{{user.email}}</td>
 				<td>
 					<div ng-repeat="profile in user.profiles | orderBy:'name'">
@@ -26,7 +28,7 @@
 		</tbody>
 
 		<tfoot>
-			<td colspan="4">
+			<td colspan="5">
 				<div class="paging_simple_numbers" align="center">
 					<ul class="pagination">
 						<li class="paginate_button previous" ng-class="{disabled: currentPage == 0}"><a href
