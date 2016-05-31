@@ -12,7 +12,7 @@ application.multitenancy.senercon.username=supersede
 application.multitenancy.senercon.password=$2pRSid#
 application.multitenancy.senercon.driverClassName=org.postgresql.Driver
 
-application.multitenancy.siemens.url=jdbc:jdbc:postgresql://62.14.219.13:5432/siemens
+application.multitenancy.siemens.url=jdbc:postgresql://62.14.219.13:5432/siemens
 application.multitenancy.siemens.username=supersede
 application.multitenancy.siemens.password=$2pRSid#
 application.multitenancy.siemens.driverClassName=org.postgresql.Driver
