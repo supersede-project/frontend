@@ -1,73 +1,76 @@
 package eu.supersede.fe.notification;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-import eu.supersede.fe.multitenant.MultiJpaProvider;
+import eu.supersede.fe.message.NotificationRedisTemplate;
+import eu.supersede.fe.message.model.Notification;
+import eu.supersede.fe.security.DatabaseUser;
 
 @Component
 public class NotificationUtil {
 
+	private final Logger log = LoggerFactory.getLogger(this.getClass());
+	
 	@Autowired
-	private MultiJpaProvider multiJpaProvider;
+	private NotificationRedisTemplate notificationTemplate;
 
-	public void createNotificationForUser(String tenant, Long userId, String message, String link)
+	private String getCurrentTenant()
 	{
-		//InternalUser u = multiJpaProvider.getRepository(InternalUsersJpa.class, tenant).getOne(userId);
-		//createNotificationForUser(multiJpaProvider.getRepository(InternalNotificationsJpa.class, tenant), u, message, link);
-	}
-	
-	public void createNotificationForUser(Long userId, String message, String link)
-	{
-		//createNotificationForUser(internalNotificationsJpa, internalUsersJpa.getOne(userId), message, link);
-	}
-	
-	public void createNotificationForUser(String tenant, String email, String message, String link)
-	{
-		//InternalUser u = multiJpaProvider.getRepository(InternalUsersJpa.class, tenant).findByEmail(email);
-		//createNotificationForUser(multiJpaProvider.getRepository(InternalNotificationsJpa.class, tenant), u, message, link);
+		String tenant = null;
+		
+		SecurityContext securityContext = SecurityContextHolder.getContext();
+		if(securityContext != null)
+		{
+			Authentication authentication = securityContext.getAuthentication();
+			if(authentication != null)
+			{
+				DatabaseUser userDetails = (DatabaseUser)authentication.getPrincipal();
+				tenant = userDetails.getTenantId();
+			}	
+		}
+		return tenant;
 	}
 	
 	public void createNotificationForUser(String email, String message, String link)
 	{
-		//createNotificationForUser(internalNotificationsJpa, internalUsersJpa.findByEmail(email), message, link);
+		createNotificationForUser(getCurrentTenant(), email, message, link);
 	}
 	
-	private void createNotificationForUser(/*InternalNotificationsJpa nJpa,*/ User u, String message, String link)
+	public void createNotificationForUser(String tenant, String email, String message, String link)
 	{
-		//InternalNotification n = new InternalNotification(message, link, u);
-		//nJpa.save(n);
-	}
-	
-	public void createNotificationsForProfile(String tenant, String profile, String message, String link)
-	{
-		//createNotificationsForProfile(tenant, multiJpaProvider.getRepository(InternalProfilesJpa.class, tenant).findByName(profile), message, link);
+		if(tenant == null)
+		{
+			log.error("Tenant can not be null");
+			return;
+		}
+		
+		Notification n = new Notification(tenant, email, false, message, link);
+		notificationTemplate.opsForSet().add("notifications", n);
+		notificationTemplate.convertAndSend("notification", "");
 	}
 	
 	public void createNotificationsForProfile(String profile, String message, String link)
 	{
-		//createNotificationsForProfile(internalProfilesJpa.findByName(profile), message, link);
+		createNotificationsForProfile(getCurrentTenant(), profile, message, link);
 	}
 	
-	private void createNotificationsForProfile(Profile p, String message, String link)
+	public void createNotificationsForProfile(String tenant, String profile, String message, String link)
 	{
-		/*p = internalProfilesJpa.getOne(p.getProfileId());
-		List<InternalUser> users = p.getUsers();
-
-		for(InternalUser u : users)
+		if(tenant == null)
 		{
-			createNotificationForUser(internalNotificationsJpa, u, message, link);
-		}*/
+			log.error("Tenant can not be null");
+			return;
+		}
+		
+		Notification n = new Notification("tenant", profile, true, message, link);
+		notificationTemplate.opsForSet().add("notifications", n);
+		notificationTemplate.convertAndSend("notification", "");
 	}
 	
-	private void createNotificationsForProfile(String tenant, Profile p, String message, String link)
-	{
-		/*p = multiJpaProvider.getRepository(InternalProfilesJpa.class, tenant).getOne(p.getProfileId());
-		List<InternalUser> users = p.getUsers();
-
-		for(InternalUser u : users)
-		{
-			createNotificationForUser(multiJpaProvider.getRepository(InternalNotificationsJpa.class, tenant), u, message, link);
-		}*/
-	}
 }

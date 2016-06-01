@@ -12,4 +12,8 @@ public class Templates {
 		return new ProfileRedisTemplate(connectionFactory);
 	}
 	
+	@Bean
+	NotificationRedisTemplate notificationTemplate(RedisConnectionFactory connectionFactory) {
+		return new NotificationRedisTemplate(connectionFactory);
+	}
 }
