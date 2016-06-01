@@ -2,8 +2,10 @@ package eu.supersede.fe.application;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 
@@ -12,11 +14,17 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
+import eu.supersede.fe.message.ProfileRedisTemplate;
+import eu.supersede.fe.message.model.Profile;
+
 @Component
 @PropertySource("classpath:wp5_application.properties")
 public class ApplicationConfigLoader {
 
 	private static final String[] langs = {"en", "de", "es", "it"};
+	
+	@Autowired
+	private ProfileRedisTemplate profileTemplate;
 	
 	@Autowired
 	private ApplicationUtil applicationUtil;
@@ -27,6 +35,8 @@ public class ApplicationConfigLoader {
 	@PostConstruct
 	public void load()
 	{
+		Set<String> requiredProfiles = new HashSet<String>();
+		
 		String applicationName = env.getProperty("application.name");
 		String applicationLabel = env.getProperty("application.label");
 		
@@ -51,10 +61,10 @@ public class ApplicationConfigLoader {
 			for(String pageName : pageNames)
 			{
 				Map<String, String> pageLabels = new HashMap<>();
-				List<String> trimmedPageRoles = new ArrayList<>();
+				List<String> trimmedPageProfiles = new ArrayList<>();
 				pageName = pageName.trim();
 				
-				String[] pageRoles = env.getRequiredProperty("application.page." + pageName + ".profiles").split(",");
+				String[] pageProfiles = env.getRequiredProperty("application.page." + pageName + ".profiles").split(",");
 				String pageLabel = env.getRequiredProperty("application.page." + pageName + ".label");
 				pageLabels.put("", pageLabel);
 				
@@ -67,12 +77,14 @@ public class ApplicationConfigLoader {
 					}
 				}
 				
-				for(String pageRole : pageRoles)
+				for(String pageProfile : pageProfiles)
 				{
-					trimmedPageRoles.add(pageRole.trim());
+					String p = pageProfile.trim();
+					trimmedPageProfiles.add(p);
 				}
 				
-				applicationUtil.addApplicationPage(applicationName, pageName, pageLabels, trimmedPageRoles);
+				requiredProfiles.addAll(trimmedPageProfiles);
+				applicationUtil.addApplicationPage(applicationName, pageName, pageLabels, trimmedPageProfiles);
 			}
 			
 			String[] gadgets = env.getProperty("application.gadgets").split(",");
@@ -80,20 +92,36 @@ public class ApplicationConfigLoader {
 			{
 				for(String gadget : gadgets)
 				{
-					List<String> trimmedGadgetRoles = new ArrayList<>();
+					List<String> trimmedGadgetProfiles = new ArrayList<>();
 					gadget = gadget.trim();
 				
-					String[] gadgetRoles = env.getRequiredProperty("application.gadgets." + gadget + ".profiles").split(",");
+					String[] gadgetProfiles = env.getRequiredProperty("application.gadgets." + gadget + ".profiles").split(",");
 					
-					for(String gadgetRole : gadgetRoles)
+					for(String gadgetProfile : gadgetProfiles)
 					{
-						trimmedGadgetRoles.add(gadgetRole.trim());
+						trimmedGadgetProfiles.add(gadgetProfile.trim());
 					}
 					
-					applicationUtil.addApplicationGadget(applicationName, gadget, trimmedGadgetRoles);
+					requiredProfiles.addAll(trimmedGadgetProfiles);
+					applicationUtil.addApplicationGadget(applicationName, gadget, trimmedGadgetProfiles);
 				}
 			}
+			
+			createProfiles(requiredProfiles);
 		}
 	}
 	
+	private void createProfiles(Set<String> profiles)
+	{
+		if(profiles.size() > 0)
+		{
+			for(String p : profiles)
+			{
+				Profile prof = new Profile();
+				prof.setName(p);
+				profileTemplate.opsForSet().add("profiles", prof);
+			}
+			profileTemplate.convertAndSend("profile", "");
+		}
+	}
 }
