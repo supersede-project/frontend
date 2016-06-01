@@ -29,10 +29,9 @@ public class ProfileListener {
 	
 	private void loadProfiles()
 	{
+		multiJpaProvider.clearTenants();
 		Map<String, ProfilesJpa> profilesJpa = multiJpaProvider.getRepositories(ProfilesJpa.class);
 
-		multiJpaProvider.clearTenants();
-		
 		while (profileTemplate.opsForSet().size("profiles") > 0L)
 		{
 			Profile p = profileTemplate.opsForSet().pop("profiles");

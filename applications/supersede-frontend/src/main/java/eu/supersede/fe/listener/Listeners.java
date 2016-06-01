@@ -13,6 +13,8 @@ public class Listeners {
 
 	@Autowired
 	private ProfileListener profileListener;
+	@Autowired
+	private NotificationListener notificationListener;
 	
 	@Bean
 	RedisMessageListenerContainer container(RedisConnectionFactory connectionFactory) {
@@ -22,8 +24,11 @@ public class Listeners {
 		
 		MessageListenerAdapter profileAdapter = new MessageListenerAdapter(profileListener, "receiveMessage");
 		profileAdapter.afterPropertiesSet();
-		
 		container.addMessageListener(profileAdapter, new PatternTopic("profile"));
+		
+		MessageListenerAdapter notificationAdapter = new MessageListenerAdapter(notificationListener, "receiveMessage");
+		profileAdapter.afterPropertiesSet();
+		container.addMessageListener(notificationAdapter, new PatternTopic("notification"));
 
 		return container;
 	}
