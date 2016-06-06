@@ -3,7 +3,10 @@ package eu.supersede.fe.listener;
 import java.util.Date;
 
 import javax.annotation.PostConstruct;
+import javax.transaction.Transactional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +22,8 @@ import eu.supersede.fe.multitenant.MultiJpaProvider;
 @Component
 public class NotificationListener {
 
+	private final Logger log = LoggerFactory.getLogger(this.getClass());
+	
 	@Autowired
 	private NotificationRedisTemplate notificationTemplate;
 	
@@ -31,14 +36,14 @@ public class NotificationListener {
 		loadNotifications();
 	}
 	
+	@Transactional
 	private void loadNotifications()
 	{
+		multiJpaProvider.clearTenants();
 		while (notificationTemplate.opsForSet().size("notifications") > 0L)
 		{
 			Notification n = notificationTemplate.opsForSet().pop("notifications");
 			String tenant = n.getTenant();
-			
-			multiJpaProvider.clearTenant(tenant);
 			
 			if(n.getProfile())
 			{
@@ -55,10 +60,14 @@ public class NotificationListener {
 			}
 		}
 	}
-	
+
+	@Transactional
 	private void createNotification(String tenant, String email, String link, String message)
 	{
+		log.debug("Create notif: " + message + " to: " + email);
+		NotificationsJpa notifications = multiJpaProvider.getRepository(NotificationsJpa.class, tenant);
 		UsersJpa users = multiJpaProvider.getRepository(UsersJpa.class, tenant);
+		
 		User u = users.findByEmail(email);
 		
 		eu.supersede.fe.model.Notification notif = new eu.supersede.fe.model.Notification();
@@ -68,7 +77,7 @@ public class NotificationListener {
 		notif.setMessage(message);
 		notif.setRead(false);
 		notif.setUser(u);
-		NotificationsJpa notifications = multiJpaProvider.getRepository(NotificationsJpa.class, tenant);
+		
 		notifications.save(notif);
 	}
 	

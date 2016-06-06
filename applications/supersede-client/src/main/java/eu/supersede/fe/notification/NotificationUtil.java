@@ -68,7 +68,7 @@ public class NotificationUtil {
 			return;
 		}
 		
-		Notification n = new Notification("tenant", profile, true, message, link);
+		Notification n = new Notification(tenant, profile, true, message, link);
 		notificationTemplate.opsForSet().add("notifications", n);
 		notificationTemplate.convertAndSend("notification", "");
 	}

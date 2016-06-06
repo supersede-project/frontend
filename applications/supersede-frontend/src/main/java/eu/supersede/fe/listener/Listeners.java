@@ -27,7 +27,7 @@ public class Listeners {
 		container.addMessageListener(profileAdapter, new PatternTopic("profile"));
 		
 		MessageListenerAdapter notificationAdapter = new MessageListenerAdapter(notificationListener, "receiveMessage");
-		profileAdapter.afterPropertiesSet();
+		notificationAdapter.afterPropertiesSet();
 		container.addMessageListener(notificationAdapter, new PatternTopic("notification"));
 
 		return container;
