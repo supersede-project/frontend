@@ -46,7 +46,7 @@ public class MultiJpaProvider {
 	@Autowired
 	EntityManagerFactoryBuilder builder;
 
-	private Map<String, Triple<JpaRepositoryFactory, EntityManagerFactory, EntityManager>> repositoriesFactory;
+	private Map<String, ContainerUtil> repositoriesFactory;
 	
 	@PostConstruct
 	private void load()
@@ -67,7 +67,6 @@ public class MultiJpaProvider {
 			{
 				packages.add(t.trim());
 			}
-			packages.add("eu.supersede.fe.notification.model");
 			
 			LocalContainerEntityManagerFactoryBean emfb = builder.dataSource(datasources.get(n))
 					.packages(packages.toArray(new String[packages.size()]))
@@ -83,41 +82,34 @@ public class MultiJpaProvider {
 			JpaRepositoryFactory jpaFactory = new JpaRepositoryFactory(em);
 			jpaFactory.addRepositoryProxyPostProcessor(new MultiJpaRepositoryProxyPostProcessor(jpaTranMan));
 			
-			repositoriesFactory.put(n, new Triple<>(jpaFactory, emf, em));
+			repositoriesFactory.put(n, new ContainerUtil(jpaFactory, emf, em));
 		}
 	}
 	
-	public <T extends JpaRepository<?, ?>> Map<String, T> getRepositories(Class<T> c)
+	public <T extends JpaRepository<?, ?>> Map<String, T> getRepositories(Class<T> jpaRepositoryClass)
 	{
 		Map<String, T> tmp = new HashMap<String, T>();
 		
 		for(String tenant : repositoriesFactory.keySet())
 		{
-			Triple<JpaRepositoryFactory, EntityManagerFactory, EntityManager> factory = repositoriesFactory.get(tenant);
-			tmp.put(tenant, factory.a.getRepository(c));
-			
-			if(!TransactionSynchronizationManager.hasResource(factory.b))
-			{
-				EntityManagerHolder emh = new EntityManagerHolder(factory.c);
-				TransactionSynchronizationManager.bindResource(factory.b, emh);
-			}
+			tmp.put(tenant, getRepository(jpaRepositoryClass, tenant));
 		}
 		
 		return tmp;
 	}
 	
-	public <T extends JpaRepository<?, ?>> T getRepository(Class<T> c, String tenant)
+	public <T extends JpaRepository<?, ?>> T getRepository(Class<T> jpaRepositoryClass, String tenant)
 	{
 		T repo = null;
 		if(repositoriesFactory.containsKey(tenant))
 		{
-			Triple<JpaRepositoryFactory, EntityManagerFactory, EntityManager> factory = repositoriesFactory.get(tenant);
-			repo = factory.a.getRepository(c);
+			ContainerUtil factory = repositoriesFactory.get(tenant);
+			repo = factory.jpaRepositoryFactory.getRepository(jpaRepositoryClass);
 			
-			if(!TransactionSynchronizationManager.hasResource(factory.b))
+			if(!TransactionSynchronizationManager.hasResource(factory.entityManagerFactory))
 			{
-				EntityManagerHolder emh = new EntityManagerHolder(factory.c);
-				TransactionSynchronizationManager.bindResource(factory.b, emh);
+				EntityManagerHolder emh = new EntityManagerHolder(factory.entityManager);
+				TransactionSynchronizationManager.bindResource(factory.entityManagerFactory, emh);
 			}
 		}
 		
@@ -128,15 +120,18 @@ public class MultiJpaProvider {
 	{
 		for(String tenant : repositoriesFactory.keySet())
 		{
-			Triple<JpaRepositoryFactory, EntityManagerFactory, EntityManager> factory = repositoriesFactory.get(tenant);
-			factory.c.clear();
+			clearTenant(tenant);
 		}
 	}
 	
 	public void clearTenant(String tenant)
 	{
-		Triple<JpaRepositoryFactory, EntityManagerFactory, EntityManager> factory = repositoriesFactory.get(tenant);
-		factory.c.clear();
+		ContainerUtil factory = repositoriesFactory.get(tenant);
+		if(factory.entityManager.getTransaction().isActive())
+		{
+			factory.entityManager.getTransaction().commit();
+		}
+		factory.entityManager.clear();
 	}
 	
 	private class MultiJpaRepositoryProxyPostProcessor implements RepositoryProxyPostProcessor
@@ -154,16 +149,16 @@ public class MultiJpaProvider {
 	    }
 	}
 	
-	private class Triple<T, U, V>
+	private class ContainerUtil
 	{
-		private T a;
-		private U b;
-		private V c;
+		private JpaRepositoryFactory jpaRepositoryFactory;
+		private EntityManagerFactory entityManagerFactory;
+		private EntityManager entityManager;
 
-		private Triple(T a, U b, V c) {
-			this.a = a;
-			this.b = b;
-			this.c = c;
+		private ContainerUtil(JpaRepositoryFactory jpaRepositoryFactory, EntityManagerFactory entityManagerFactory, EntityManager entityManager) {
+			this.jpaRepositoryFactory = jpaRepositoryFactory;
+			this.entityManagerFactory = entityManagerFactory;
+			this.entityManager = entityManager;
 		}
 	}
 }

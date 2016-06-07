@@ -1,9 +1,9 @@
 package eu.supersede.fe.listener;
 
 import java.util.Date;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
-import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +22,7 @@ import eu.supersede.fe.multitenant.MultiJpaProvider;
 @Component
 public class NotificationListener {
 
+	@SuppressWarnings("unused")
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 	
 	@Autowired
@@ -36,38 +37,37 @@ public class NotificationListener {
 		loadNotifications();
 	}
 	
-	@Transactional
-	private void loadNotifications()
+	
+	private synchronized void loadNotifications()
 	{
 		multiJpaProvider.clearTenants();
+
+		Map<String, ProfilesJpa> profiles = multiJpaProvider.getRepositories(ProfilesJpa.class);
+		Map<String, NotificationsJpa> notifications = multiJpaProvider.getRepositories(NotificationsJpa.class);
+		Map<String, UsersJpa> users = multiJpaProvider.getRepositories(UsersJpa.class);
+		
 		while (notificationTemplate.opsForSet().size("notifications") > 0L)
 		{
 			Notification n = notificationTemplate.opsForSet().pop("notifications");
 			String tenant = n.getTenant();
-			
+
 			if(n.getProfile())
 			{
-				ProfilesJpa profiles = multiJpaProvider.getRepository(ProfilesJpa.class, tenant);
-				Profile p = profiles.findByName(n.getRecipient());
+				Profile p = profiles.get(tenant).findByName(n.getRecipient());
 				for(User u : p.getUsers())
 				{
-					createNotification(tenant, u.getEmail(), n.getLink(), n.getMessage());
+					createNotification(users.get(tenant), notifications.get(tenant), u.getEmail(), n.getLink(), n.getMessage());
 				}
 			}
 			else
 			{
-				createNotification(tenant, n.getRecipient(), n.getLink(), n.getMessage());
+				createNotification(users.get(tenant), notifications.get(tenant), n.getRecipient(), n.getLink(), n.getMessage());
 			}
 		}
 	}
 
-	@Transactional
-	private void createNotification(String tenant, String email, String link, String message)
+	private void createNotification(UsersJpa users, NotificationsJpa notifications, String email, String link, String message)
 	{
-		log.debug("Create notif: " + message + " to: " + email);
-		NotificationsJpa notifications = multiJpaProvider.getRepository(NotificationsJpa.class, tenant);
-		UsersJpa users = multiJpaProvider.getRepository(UsersJpa.class, tenant);
-		
 		User u = users.findByEmail(email);
 		
 		eu.supersede.fe.model.Notification notif = new eu.supersede.fe.model.Notification();
@@ -78,7 +78,7 @@ public class NotificationListener {
 		notif.setRead(false);
 		notif.setUser(u);
 		
-		notifications.save(notif);
+		notifications.saveAndFlush(notif);
 	}
 	
 	public void receiveMessage(String message) {
