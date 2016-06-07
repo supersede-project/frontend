@@ -1,5 +1,6 @@
 package eu.supersede.fe.rest;
 
+import java.net.MalformedURLException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -94,6 +95,34 @@ public class UserRest {
 		return user;
 	}
 
+	@RequestMapping(value = "/{userId}", method = RequestMethod.PUT)
+	public User editUser(@PathVariable Long userId, Authentication authentication, @RequestBody User user) {
+		DatabaseUser currentUser = (DatabaseUser) authentication.getPrincipal();
+		String tenant = currentUser.getTenantId();
+
+		try {
+			proxy.getIFAuthenticationManager(tenant).updateUser(toSecurityUser(user, tenant));
+		} catch (UserStoreException e) {
+			log.error("IFAuthenticationManager thrown an exception: ");
+			e.printStackTrace();
+			throw new InternalServerErrorException();
+		} catch (MalformedURLException e) {
+			log.error("IFAuthenticationManager thrown an exception: ");
+			e.printStackTrace();
+			throw new InternalServerErrorException();
+		}
+		
+		// re-attach detached profiles
+		List<Profile> ps = user.getProfiles();
+		for (int i = 0; i < ps.size(); i++) {
+			ps.set(i, profiles.findOne(ps.get(i).getProfileId()));
+		}
+
+		user = users.save(user);
+		
+		return user;
+	}
+	
 	// @Secured({"ROLE_ADMIN"})
 	@RequestMapping("/{userId}")
 	public User getUser(@PathVariable Long userId) {
