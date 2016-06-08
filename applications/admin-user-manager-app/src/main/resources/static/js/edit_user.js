@@ -44,32 +44,34 @@ app.controllerProvider.register('edit_user', function($scope, $http, $location) 
 			columns: [
 			    { text: 'Name', datafield: 'name' },
 			    { text: 'Email', datafield: 'email' }
-			]
+			],
+			ready: function()
+			{
+				$('#jqxGrid').bind('rowselect', function(event)  {
+					var current_index = event.args.rowindex;
+					var datarow = $('#jqxGrid').jqxGrid('getrowdata', current_index);
+					
+					$http({
+						url: "admin-user-manager-app/user/" + datarow.userId,
+						method: 'GET'
+					}).success(function(data){
+						var tmp = data.profiles.splice(0, data.profiles.length);
+						data.profiles.length = 0;
+						for(var i = 0; i < tmp.length; i++)
+						{
+							data.profiles[tmp[i].profileId] = tmp[i];
+						}
+						
+						$scope.user = data;
+					}).error(function(err){
+						console.log(err);
+					});
+				});
+			}
 		};
 		$scope.createWidget = true;
 	}).error(function (data, status) {
 		alert(status);
-	});
-	
-	$('#jqxGrid0').bind('rowselect', function(event)  {
-		var current_index = event.args.rowindex;
-		var datarow = $('#jqxGrid0').jqxGrid('getrowdata', current_index);
-		
-		$http({
-			url: "admin-user-manager-app/user/" + datarow.userId,
-			method: 'GET'
-		}).success(function(data){
-			var tmp = data.profiles.splice(0, data.profiles.length);
-			data.profiles.length = 0;
-			for(var i = 0; i < tmp.length; i++)
-			{
-				data.profiles[tmp[i].profileId] = tmp[i];
-			}
-			
-			$scope.user = data;
-		}).error(function(err){
-			console.log(err);
-		});
 	});
 	
 	$http.get('admin-user-manager-app/profile')
