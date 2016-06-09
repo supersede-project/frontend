@@ -1,22 +1,39 @@
-<nav id="site-navigation" class="main-navigation menu-left">
-	<div ng-controller="navigation" class="ak-container">
+<div ng-controller="navigation">
+
+	<jqx-menu id="navigationMenu" jqx-width="'60%'" jqx-height="'30px'" style="margin: 0 auto;">
+		<ul>
+			<li>
+		    	<a href="#/">Home</a>
+			</li>
+			<li ng-show="authenticated">
+				<a href="#/dashboard">Dashboard</a>
+			</li>
+			
+			<li ng-show="authenticated" data-ng-repeat="application in applications" ng-if="checkApplicationUrl(application)">
+				<a>{{application.applicationLabel?application.applicationLabel:application.applicationName}}</a>
+				<!-- <ul style="width: 250px;">
+					<li ng-repeat="page in application.pages">
+						<a ng-href="#/{{application.applicationName}}/{{page.name}}">{{page.label?page.label:page.name}}</a>
+					</li> -->
+				</ul>
+			</li>
+			
+			<div style="float: right;">
+				<li ng-show="!(authenticated)"><a href="#/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+				<li ng-show="authenticated"><a href="" ng-click="logout()"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+			</div>
+        </ul>
+	 </jqx-menu>
+
+
+
+	<!-- <nav id="site-navigation" class="main-navigation menu-left">
 		<h1 class="menu-toggle">Menu</h1>
 	    <div class="menu-menu-1-container">
 	    	<ul class="nav navbar-nav">
-	    		<li>
-	    			<a href="#/">Home</a>
-	    		</li>
-	    		<li ng-show="authenticated">
-	        		<a href="#/dashboard">Dashboard</a>
-	        	</li>
-	        	<li ng-show="authenticated" ng-repeat="application in applications" ng-if="checkApplicationUrl(application)">
-	     			<a class="dropdown-toggle">{{application.applicationLabel?application.applicationLabel:application.applicationName}}</a>
-	        		<ul class="dropdown-menu">
-                		<li ng-repeat="page in application.pages">
-                			<a ng-href="#/{{application.applicationName}}/{{page.name}}">{{page.label?page.label:page.name}}</a>
-                		</li>
-                	</ul>
-	        	</li>
+	    		
+	    		
+	        	
 		    </ul>
 			<ul class="nav navbar-nav navbar-right">
 	      		<li ng-show="authenticated">
@@ -58,9 +75,8 @@
 			   		</ul>
 	     		</li>
 	        
-		        <li ng-show="!(authenticated)"><a href="#/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-			    <li ng-show="authenticated"><a href="" ng-click="logout()"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+		        
 	      	</ul>
 	    </div>
-	</div>
-</nav>
+	</nav> -->
+</div>
