@@ -482,3 +482,11 @@ app.controller('main_home', function($scope, $http, $location) {
 	};
 	
 });
+
+app.controller('header', function($scope, $http) {
+	
+});
+
+app.controller('footer', function($scope, $http) {
+	
+});

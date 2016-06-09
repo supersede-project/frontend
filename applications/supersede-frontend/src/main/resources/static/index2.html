@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+<head>
+<title>Supersede</title>
+<link href="css/wp5app.css" rel="stylesheet">
+
+<link href="jqx/styles/jqx.base.css" rel="stylesheet">
+<link href="jqx/styles/jqx.bootstrap.css" rel="stylesheet">
+
+<style type="text/css">
+[ng\:cloak], [ng-cloak], .ng-cloak {
+  display: none !important;
+}
+</style>
+</head>
+
+    <body ng-app="w5app" ng-cloak class="ng-cloak">
+        
+        <div id="page">
+			
+			<div ng-include src="'header.html'"></div>
+        	
+			<ng-include src="'navigation.html'"></ng-include>
+        	
+	        <div ng-view class="container site-content" id="content"></div>
+	        
+			<ng-include src="'footer.html'"></ng-include>
+
+        </div>
+        
+        <script src="js/jquery-2.1.4.min.js" type="text/javascript"></script>
+        <script src="js/angular.min.js" type="text/javascript"></script>
+        <script src="js/angular-route.min.js" type="text/javascript"></script>
+        <script src="js/w5app.js"></script>
+        
+        <script src="jqx/jqx-all.js"></script>
+    </body>
+</html>

@@ -1,0 +1,66 @@
+<nav id="site-navigation" class="main-navigation menu-left">
+	<div ng-controller="navigation" class="ak-container">
+		<h1 class="menu-toggle">Menu</h1>
+	    <div class="menu-menu-1-container">
+	    	<ul class="nav navbar-nav">
+	    		<li>
+	    			<a href="#/">Home</a>
+	    		</li>
+	    		<li ng-show="authenticated">
+	        		<a href="#/dashboard">Dashboard</a>
+	        	</li>
+	        	<li ng-show="authenticated" ng-repeat="application in applications" ng-if="checkApplicationUrl(application)">
+	     			<a class="dropdown-toggle">{{application.applicationLabel?application.applicationLabel:application.applicationName}}</a>
+	        		<ul class="dropdown-menu">
+                		<li ng-repeat="page in application.pages">
+                			<a ng-href="#/{{application.applicationName}}/{{page.name}}">{{page.label?page.label:page.name}}</a>
+                		</li>
+                	</ul>
+	        	</li>
+		    </ul>
+			<ul class="nav navbar-nav navbar-right">
+	      		<li ng-show="authenticated">
+	      			<p class="navbar-text p-welcome">Welcome, {{user.name}}</p>
+	      		</li>
+	      		
+	      		<li ng-show="authenticated">
+	      			<a class="dropdown-toggle"><img src="img/flags/{{currentLang}}.png" height="32" width="32"></img></a>
+	      			<ul class="dropdown-menu">
+	      				<li class="dropdown-inline" ng-repeat="l in langs">
+	      					<a ng-click="setCurrentLang()" class="a_button"><img src="img/flags/{{l.lang}}.png" height="32" width="32"/> {{l.language}}</a>
+	      				</li>
+	      			</ul>
+	      		</li>
+	      		
+	     		<li ng-show="authenticated">
+	     			<a class="dropdown-toggle">{{notificationsCount}} <span class="glyphicon glyphicon-comment"></span></a>
+	     			<ul class="dropdown-menu">
+			        
+			        	<li class="dropdown-inline" ng-repeat="notif in notifications | orderBy:'creationTime' | limitTo:5">
+			        		<a ng-show="!notif.link" ng-click="readNotification()" class="a_button">
+			        			<span class="glyphicon" ng-class="{'glyphicon-check': notif.read == true, 'glyphicon-unchecked': notif.read == false}"></span>
+			        		</a>
+			        		<a ng-show="!notif.link" class="a_message">{{notif.message}}</a>
+			        	
+			        		<a ng-show="notif.link" ng-click="openNotificationLink()" class="a_button">
+			        			<span class="glyphicon glyphicon-link"></span>
+			        		</a>
+				        	<a ng-show="notif.link" ng-click="openNotificationLink()" class="a_message">
+				        		{{notif.message}}
+				        	</a>
+			        	
+			        		<a ng-click="deleteNotification()" class="a_button"><span class="glyphicon glyphicon-remove"></span></a>
+			        	</li>
+			        
+				        <li>
+				        	<a href="#/notifications">Show all</a>
+				        </li>
+			   		</ul>
+	     		</li>
+	        
+		        <li ng-show="!(authenticated)"><a href="#/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+			    <li ng-show="authenticated"><a href="" ng-click="logout()"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+	      	</ul>
+	    </div>
+	</div>
+</nav>
