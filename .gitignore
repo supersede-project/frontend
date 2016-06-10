@@ -7,4 +7,5 @@
 **/gradlew.bat
 **/gradle/wrapper/
 **/build/
+**/target/
 dist/

@@ -21,6 +21,10 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import eu.supersede.integration.api.datastore.fe.types.Profile;
@@ -30,11 +34,18 @@ import eu.supersede.integration.api.security.IFAuthenticationManager;
 import eu.supersede.integration.api.security.types.AuthorizationToken;
 
 @Component
+@PropertySources({
+	@PropertySource("file:../conf/multitenancy.properties"),
+	@PropertySource("file:../conf/if.properties")
+})
 public class ProxyWrapper {
-
-	private static List<String> tenants;
-	private static Map<String, String> users;
-	private static Map<String, String> passwords;
+	
+	@Autowired
+	Environment env;
+	
+	private String[] tenants;
+	
+	private static Map<String, AuthManagerUser> users;
 	
 	private static FEDataStoreProxy proxy;
 	private static Map<String, IFAuthenticationManager> ams;
@@ -42,28 +53,30 @@ public class ProxyWrapper {
 	@PostConstruct
 	public void load()
 	{
-		tenants = new ArrayList<>();
-		tenants.add("atos");
-		tenants.add("senercon");
-		tenants.add("siemens");
-		
 		users = new HashMap<>();
-		users.put("atos", "admin@atos.supersede.eu");
-		users.put("senercon", "admin@senercon.supersede.eu");
-		users.put("siemens", "admin@siemens.supersede.eu");
+		ams = new HashMap<>();
+		tenants = env.getRequiredProperty("application.multitenancy.names").split(",");
 		
-		passwords = new HashMap<>();
-		passwords.put("atos", "rtgWCyrc");
-		passwords.put("senercon", "J9JAQmvy");
-		passwords.put("siemens", "pSMTykFC");
+		for(int i = 0; i < tenants.length; i++)
+		{
+			tenants[i] = tenants[i].trim();
+		}
+		
+		for(String t : tenants)
+		{
+			String[] pair = env.getRequiredProperty("is.authorization." + t + ".tenant.pair").split("/");
+			String domain = env.getRequiredProperty("is.authorization." + t + ".tenant.domain");
+			
+			String password = pair[1];
+			String user = pair[0] + domain;
+			
+			AuthManagerUser authUser = new AuthManagerUser(user, password);
+			users.put(t, authUser);
+			ams.put(t, new IFAuthenticationManager(authUser.user, authUser.password));
+		}
 		
 		proxy = new FEDataStoreProxy();
         
-		ams = new HashMap<>();
-		for(String t : tenants)
-		{
-			ams.put(t, new IFAuthenticationManager(users.get(t), passwords.get(t)));
-		}
 	}
 	
 	public FEDataStoreProxy getFEDataStoreProxy()
@@ -123,6 +136,17 @@ public class ProxyWrapper {
 		}
 		
 		return ret;
+	}
+	
+	private class AuthManagerUser
+	{
+		private String user;
+		private String password;
+		
+		public AuthManagerUser(String user, String password) {
+			this.user = user;
+			this.password = password;
+		}
 	}
 	
 }
