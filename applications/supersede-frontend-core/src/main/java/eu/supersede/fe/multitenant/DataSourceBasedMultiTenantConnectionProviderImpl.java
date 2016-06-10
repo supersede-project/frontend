@@ -48,7 +48,6 @@ public class DataSourceBasedMultiTenantConnectionProviderImpl extends AbstractDa
 		
 		for(String n : tenantNames)
 		{
-			n = n.trim();
 			DataSourceBuilder factory = DataSourceBuilder
 					.create(env.getClass().getClassLoader())
 					.driverClassName(env.getRequiredProperty("application.multitenancy." + n + ".driverClassName"))
