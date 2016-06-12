@@ -9,9 +9,11 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -27,14 +29,36 @@ import org.springframework.web.util.WebUtils;
 
 @Configuration
 @EnableWebSecurity
+@PropertySource("classpath:wp5_application.properties")
 @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
 class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+
+	@Value("${application.not_secured.urls:}")
+	private String PERMIT_URLS;
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
+		
+		String[] permitUrls;
+		if(PERMIT_URLS.equals(""))
+		{
+			permitUrls = new String[0];
+		}
+		else
+		{
+			permitUrls = PERMIT_URLS.split(",");
+			for(int i = 0; i < permitUrls.length; i++)
+			{
+				permitUrls[i] = permitUrls[i].trim();
+			}
+		}
+		
 		http.httpBasic().disable();
-		http.anonymous().disable();
-	    http.authorizeRequests().anyRequest().authenticated().and().csrf().csrfTokenRepository(csrfTokenRepository()).and()
+		//http.anonymous().disable();
+	    http.authorizeRequests()
+	    .antMatchers(permitUrls).permitAll()
+	    .anyRequest().authenticated()
+	    .and().csrf().csrfTokenRepository(csrfTokenRepository()).and()
 				.addFilterAfter(csrfHeaderFilter(), CsrfFilter.class);
 	}
 

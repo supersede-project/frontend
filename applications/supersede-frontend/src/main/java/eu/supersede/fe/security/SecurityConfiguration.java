@@ -47,7 +47,7 @@ import eu.supersede.fe.model.Profile;
 class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
-	
+
 	@Value("#{'${web.security.permit.urls}'.split(',')}") 
 	private String[] PERMIT_URLS;
 	
