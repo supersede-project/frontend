@@ -60,6 +60,7 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	    .anyRequest().authenticated()
 	    .and().csrf().csrfTokenRepository(csrfTokenRepository()).and()
 				.addFilterAfter(csrfHeaderFilter(), CsrfFilter.class);
+	    http.csrf().disable();
 	}
 
 	private Filter csrfHeaderFilter() {
