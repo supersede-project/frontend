@@ -52,6 +52,7 @@ import eu.supersede.integration.api.security.types.AuthorizationToken;
 @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
 class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	
+	@SuppressWarnings("unused")
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
 	@Value("#{'${web.security.permit.urls}'.split(',')}") 
