@@ -28,66 +28,6 @@ var app = angular.module('w5app', [ 'ngRoute', 'jqwidgets' ]).config(function($r
 
 });
 
-(function(angular) {
-    'use strict';
-    // initializes all jQWidgets controls
-    angular.module("w5app").directive('asd', function (config) {
-    	alert("ciao");
-        function link(scope, element, attrs) {
-        	 var widgetElement = $(element[0]);
-             var widget = attrs.ngJqwidgets;
-             var settings = eval("(" + attrs.ngJqxsettings + ")");
-             scope.$on("ngRepeatFinished", function (event, args) {
-                 if (attrs.id == args)
-                 {
-                     widgetElement.css("visibility", "hidden");
-                     // initializes the widget
-                     widgetElement[widget](settings);
-                     widgetElement.css("visibility", "visible");
-                 };
-             });
-        };
-        return {
-            link: link
-        };
-    });
-    
-    angular.module("w5app").directive('ngJqxsettings', function ($timeout) {
-    	function link(scope, element, attrs) {
-       	 var widgetElement = $(element[0]);
-            var widget = attrs.ngJqwidgets;
-            var settings = eval("(" + attrs.ngJqxsettings + ")");
-            scope.$on("ngRepeatFinished", function (event, args) {
-                if (attrs.id == args)
-                {
-                    widgetElement.css("visibility", "hidden");
-                    // initializes the widget
-                    widgetElement[widget](settings);
-                    widgetElement.css("visibility", "visible");
-                };
-            });
-       };
-        return {
-            link: link
-        };
-    });
-    
-    // fires an event when ng-repeat has finished
-    angular.module("w5app").directive('onRender', function ($timeout) {
-        function link(scope, element, attrs) {
-            if (scope.$last === true)
-            {
-                setTimeout(function () {
-                    scope.$emit('ngRepeatFinished', attrs.onRender);
-                }, 0);
-            }
-        };
-        return {
-            link: link
-        };
-    });
-}( this.angular ));
-
 app.controller('navigation', function($rootScope, $scope, $http, $location, $route, $interval) {
 	
 			$scope.tab = function(route) {
