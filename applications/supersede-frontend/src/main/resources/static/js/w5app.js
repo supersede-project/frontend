@@ -28,8 +28,68 @@ var app = angular.module('w5app', [ 'ngRoute', 'jqwidgets' ]).config(function($r
 
 });
 
-app.controller('navigation', function($rootScope, $scope, $http, $location, $route, $interval) {
+(function(angular) {
+    'use strict';
+    // initializes all jQWidgets controls
+    angular.module("w5app").directive('asd', function (config) {
+    	alert("ciao");
+        function link(scope, element, attrs) {
+        	 var widgetElement = $(element[0]);
+             var widget = attrs.ngJqwidgets;
+             var settings = eval("(" + attrs.ngJqxsettings + ")");
+             scope.$on("ngRepeatFinished", function (event, args) {
+                 if (attrs.id == args)
+                 {
+                     widgetElement.css("visibility", "hidden");
+                     // initializes the widget
+                     widgetElement[widget](settings);
+                     widgetElement.css("visibility", "visible");
+                 };
+             });
+        };
+        return {
+            link: link
+        };
+    });
+    
+    angular.module("w5app").directive('ngJqxsettings', function ($timeout) {
+    	function link(scope, element, attrs) {
+       	 var widgetElement = $(element[0]);
+            var widget = attrs.ngJqwidgets;
+            var settings = eval("(" + attrs.ngJqxsettings + ")");
+            scope.$on("ngRepeatFinished", function (event, args) {
+                if (attrs.id == args)
+                {
+                    widgetElement.css("visibility", "hidden");
+                    // initializes the widget
+                    widgetElement[widget](settings);
+                    widgetElement.css("visibility", "visible");
+                };
+            });
+       };
+        return {
+            link: link
+        };
+    });
+    
+    // fires an event when ng-repeat has finished
+    angular.module("w5app").directive('onRender', function ($timeout) {
+        function link(scope, element, attrs) {
+            if (scope.$last === true)
+            {
+                setTimeout(function () {
+                    scope.$emit('ngRepeatFinished', attrs.onRender);
+                }, 0);
+            }
+        };
+        return {
+            link: link
+        };
+    });
+}( this.angular ));
 
+app.controller('navigation', function($rootScope, $scope, $http, $location, $route, $interval) {
+	
 			$scope.tab = function(route) {
 				return $route.current && route === $route.current.controller;
 			};
@@ -38,6 +98,7 @@ app.controller('navigation', function($rootScope, $scope, $http, $location, $rou
 			$rootScope.notifications = [];
 			$rootScope.profiles = [];
 			$rootScope.applications = [];
+			$rootScope.currentApplication = {pages: []};
 			$rootScope.roles = [];
 			$rootScope.tenants = [];
 			$rootScope.selectedTenant = "";
@@ -108,9 +169,10 @@ app.controller('navigation', function($rootScope, $scope, $http, $location, $rou
 			var getApplications = function()
 			{
 				$http.get('application/page').success(function(data) {
+					$rootScope.applications = [];
 					for(var i = 0;i < data.length; i++ )
 					{
-						$rootScope.applications.push(data[i]);
+						$rootScope.applications[i] = data[i];
 					}
 				});
 			}
@@ -182,10 +244,20 @@ app.controller('navigation', function($rootScope, $scope, $http, $location, $rou
 					});
 			}
 			
-			$scope.checkApplicationUrl = function(application)
+			$scope.checkApplicationUrl = function()
 			{
-				var test = '/' + application.applicationName + '/';
-				return $location.url().slice(0, test.length) == test;
+				for(var i = 0; i < $rootScope.applications.length; i++)
+				{
+					var application = $rootScope.applications[i];
+					var test = '/' + application.applicationName + '/';
+					if( $location.url().slice(0, test.length) == test)
+					{
+						$rootScope.currentApplication = application;
+						return true;
+					}
+					$rootScope.currentApplication = {pages: []};
+					return false;
+				}
 			}
 			
 			var getTenants = function()
