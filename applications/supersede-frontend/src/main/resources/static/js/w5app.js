@@ -360,13 +360,35 @@ app.controller('notifications', function($scope, $http) {
 	
 });
 
+var numGadgetRendered = 0;
+
+app.directive('renderGadgets', function() {
+	return function(scope, element, attrs) {
+		numGadgetRendered++;
+		if(numGadgetRendered == scope.gadgets.length){
+			$('#docking').jqxDocking({ orientation: 'horizontal', mode: 'docked' });
+			$('#docking').on('dragEnd', function (event) { 
+				 console.log(JSON.stringify(event));
+			});
+		}
+	};
+});
 app.controller('dashboard', function($scope, $http) {
 
 	$scope.gadgets = [];
 	$scope.availableGadgets = [];
 	$scope.selectedAvailableGadgets = [];
+	$scope.panels = [];
 	
-	$http.get('application/availableGadget').success(function(data)
+	$http.get('gadget/panel').success(function(data)
+	{
+		for(var i = 0; i < data; i++)
+		{
+			$scope.panels.push(i);
+		}
+	});
+	
+	$http.get('gadget/available').success(function(data)
 	{
 		$scope.availableGadgets.length = 0;
 		for(var i = 0; i < data.length; i++)
@@ -375,115 +397,48 @@ app.controller('dashboard', function($scope, $http) {
 		}
 	});
 	
-	$http.get('application/userGadget').success(function(data)
+	$http.get('gadget').success(function(data)
 	{
 		$scope.gadgets.length = 0;
 		for(var i = 0; i < data.length; i++)
 		{
-			var g = {'applicationName' : data[i].applicationName, 'gadgetName' : data[i].gadgetName, 'size' : data[i].size}
-			$scope.gadgets.push(g);
+			$scope.gadgets.push(data[i]);
 		}
 	});
-	
-	$scope.toggleSelection = function(gadget)
-	{
-	    var idx = $scope.selectedAvailableGadgets.indexOf(gadget);
-
-	    // is currently selected
-	    if (idx > -1) {
-	      $scope.selectedAvailableGadgets.splice(idx, 1);
-	    }
-
-	    // is newly selected
-	    else {
-	      $scope.selectedAvailableGadgets.push(gadget);
-	    }
-	};
-	
-	$scope.addGadgets = function()
-	{
-		$('#modalGadgets').modal('hide');
-		for(var i = 0; i < $scope.selectedAvailableGadgets.length; i++)
-		{
-			var sg = $scope.selectedAvailableGadgets[i];
-			var g = {'applicationName' : sg.applicationName, 'gadgetName' : sg.applicationGadget, 'size' : 'small'}
-			
-			var contains = false;
-			for(var j = 0; j < $scope.gadgets.length && !contains; j++)
-			{
-				if($scope.gadgets[j].applicationName == g.applicationName && $scope.gadgets[j].gadgetName == g.gadgetName)
-				{
-					contains = true;
-				}
-			}
-
-			if(!contains)
-			{
-				$scope.gadgets.push(g);
-			}
-		}
-		$scope.selectedAvailableGadgets.length = 0;
-	}
-	
-	$scope.cancelAddGadgets = function()
-	{
-		$('#modalGadgets').modal('hide');
-		$scope.selectedAvailableGadgets.length = 0;
-	}
 	
 	$scope.removeGadget = function(index)
 	{
 		$scope.gadgets.splice(index, 1);
 	}
 	
-	$scope.saveSelectedGadgets = function() 
+	$scope.save = function() 
 	{
+		var toSave = [];
+		for(var i = 0; i < $scope.panels.length; i++)
+		{
+			var divs = $("#panel" + i).children(':visible');
+			for(var j = 0; j < divs.length; j++)
+			{
+				if(divs[j].id)
+				{
+					var id = divs[j].id.replace("gadget", "");
+					var tmp = $scope.gadgets[id];
+					tmp.panel = i;
+					toSave.push(tmp)
+				}
+			}
+		}
 		$http({
-			url: "application/userGadget",
-	        data: $scope.gadgets,
+			url: "gadget",
+	        data: toSave,
 	        method: 'POST'
 	    }).success(function(data){
-	    	$scope.gadgets.length = 0;
-			for(var i = 0; i < data.length; i++)
-			{
-				var g = {'applicationName' : data[i].applicationName, 'gadgetName' : data[i].gadgetName, 'size' : data[i].size}
-				$scope.gadgets.push(g);
-			}
+	    	
 	    }).error(function(err){
 	    	console.log(err);
 	    });
 	}
 
-	$scope.dragGadget = function(sourceId) {
-		$scope.dragFrom = parseInt(sourceId.replace("gadget", ""));
-		console.log($scope.dragFrom);
-	}
-	
-	$scope.dropGadget = function(targetId) {
-	    var dragTo = parseInt(targetId.replace("gadget", ""));
-
-		console.log(dragTo);
-		
-	    //move from to
-	    //$scope.gadgets.splice(dragTo, 0, $scope.gadgets.splice($scope.dragFrom, 1)[0]);
-	    
-	    //switch from to
-	    var b = $scope.gadgets[$scope.dragFrom];
-	    $scope.gadgets[$scope.dragFrom] = $scope.gadgets[dragTo];
-	    $scope.gadgets[dragTo] = b;
-	    
-	    $scope.$apply();
-	}
-
-	$scope.shrinkGadget = function(index)
-	{
-		$scope.gadgets[index].size="small";
-	}
-	
-	$scope.enlargeGadget = function(index)
-	{
-		$scope.gadgets[index].size="large";
-	}
 });
 
 

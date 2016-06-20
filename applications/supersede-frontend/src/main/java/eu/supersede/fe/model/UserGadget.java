@@ -27,7 +27,7 @@ public class UserGadget {
 	private Long gadgetId;
 	private String applicationName;
 	private String gadgetName;
-	private String size;
+	private Long panel;
 	
 	public UserGadget() 
 	{
@@ -65,13 +65,12 @@ public class UserGadget {
 	public void setGadgetName(String gadgetName) {
 		this.gadgetName = gadgetName;
 	}
-
-	public String getSize() {
-		return size;
-	}
-
-	public void setSize(String size) {
-		this.size = size;
+	
+	public Long getPanel() {
+		return panel;
 	}
 	
+	public void setPanel(Long panel) {
+		this.panel = panel;
+	}
 }
