@@ -14,17 +14,17 @@ var app = angular.module('w5app', [ 'ngRoute', 'jqwidgets' ]).config(function($r
 		controller : 'notifications'
 	}).when('/:name*', {
 		templateUrl : function(urlattr){
-            return urlattr.name + '.html';
-        }
+			return urlattr.name + '.html';
+		}
 	}).otherwise('/');
 
 	$httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 	
 	app.controllerProvider = $controllerProvider;
-    app.compileProvider    = $compileProvider;
-    app.routeProvider      = $routeProvider;
-    app.filterProvider     = $filterProvider;
-    app.provide            = $provide;
+	app.compileProvider	= $compileProvider;
+	app.routeProvider	  = $routeProvider;
+	app.filterProvider	 = $filterProvider;
+	app.provide			= $provide;
 
 });
 
@@ -232,7 +232,7 @@ app.controller('navigation', function($rootScope, $scope, $http, $location, $rou
 						}
 					});
 				}
-	        	}, 1000);
+				}, 1000);
 			
 
 });
@@ -241,48 +241,48 @@ app.controller('notifications', function($scope, $http) {
 	
 	$scope.totalPages = 1;
 	$scope.notificationsLength = 0;
-    $scope.itemsPerPage = 5;
-    $scope.currentPage = 0;
+	$scope.itemsPerPage = 5;
+	$scope.currentPage = 0;
 	$scope.notifications = [];
 	
 	$scope.range = function () {
-        var ret = [];
-        var showPages = Math.min(5, $scope.totalPages);
-        
-        var start = Math.max(1, $scope.currentPage - Math.floor(showPages / 2));
-        var end = Math.min($scope.totalPages, $scope.currentPage + Math.ceil(showPages / 2))
-        
-        if(start == 1)
-        {
-        	end = start + showPages - 1;
-        }
-        if(end == $scope.totalPages)
-        {
-        	start = end - showPages + 1;
-        }
-        
-        for (var i = start; i < start + showPages; i++) {
-            ret.push(i);
-        }
-        
-        return ret;
-    };
-    
-    $scope.prevPage = function () {
-        if ($scope.currentPage > 0) {
-            $scope.currentPage--;
-        }
-    };
-    
-    $scope.nextPage = function () {
-        if ($scope.currentPage < $scope.totalPages - 1) {
-            $scope.currentPage++;
-        }
-    };
-    
-    $scope.setPage = function () {
-        $scope.currentPage = this.n -1;
-    };
+		var ret = [];
+		var showPages = Math.min(5, $scope.totalPages);
+		
+		var start = Math.max(1, $scope.currentPage - Math.floor(showPages / 2));
+		var end = Math.min($scope.totalPages, $scope.currentPage + Math.ceil(showPages / 2))
+		
+		if(start == 1)
+		{
+			end = start + showPages - 1;
+		}
+		if(end == $scope.totalPages)
+		{
+			start = end - showPages + 1;
+		}
+		
+		for (var i = start; i < start + showPages; i++) {
+			ret.push(i);
+		}
+		
+		return ret;
+	};
+	
+	$scope.prevPage = function () {
+		if ($scope.currentPage > 0) {
+			$scope.currentPage--;
+		}
+	};
+	
+	$scope.nextPage = function () {
+		if ($scope.currentPage < $scope.totalPages - 1) {
+			$scope.currentPage++;
+		}
+	};
+	
+	$scope.setPage = function () {
+		$scope.currentPage = this.n -1;
+	};
 	
 	$scope.getNotifications = function()
 	{
@@ -365,7 +365,6 @@ var numGadgetRendered = 0;
 app.directive('renderGadgets', function() {
 	return function(scope, element, attrs) {
 		numGadgetRendered++;
-		console.log(numGadgetRendered + " == " + scope.gadgets.length)
 		if(numGadgetRendered == scope.gadgets.length){
 			$('#docking').jqxDocking({ orientation: 'horizontal', mode: 'docked' });
 			numGadgetRendered = 0;
@@ -386,15 +385,6 @@ app.controller('dashboard', function($scope, $http) {
 		}
 	});
 	
-	$http.get('gadget/available').success(function(data)
-	{
-		$scope.availableGadgets.length = 0;
-		for(var i = 0; i < data.length; i++)
-		{
-			$scope.availableGadgets.push(data[i]);
-		}
-	});
-	
 	$http.get('gadget').success(function(data)
 	{
 		$scope.gadgets.length = 0;
@@ -403,7 +393,23 @@ app.controller('dashboard', function($scope, $http) {
 			$scope.gadgets.push(data[i]);
 		}
 	});
+	
+	var scope = $scope;
+	addGadget = function(applicationName, applicationGadget)
+	{
+		console.log(applicationName);
+		console.log(applicationGadget);
+		console.log($scope.gadgets);
+		var tmp = {};
+		tmp.applicationName = applicationName;
+		tmp.gadgetName = applicationGadget;
+		tmp.panel = 0;
 		
+		$scope.gadgets.push(tmp);
+		
+		$scope.$apply();
+	}
+	
 	$scope.save = function() 
 	{
 		var toSave = [];
@@ -414,24 +420,76 @@ app.controller('dashboard', function($scope, $http) {
 			{
 				if(divs[j].id)
 				{
-					var id = divs[j].id.replace("gadget", "");
-					var tmp = JSON.parse(JSON.stringify($scope.gadgets[id]));
-					tmp.panel = i;
-					toSave.push(tmp)
+					if(divs[j].id.startsWith("gadget"))
+					{
+						var id = divs[j].id.replace("gadget", "");
+						var tmp = JSON.parse(JSON.stringify($scope.gadgets[id]));
+						tmp.panel = i;
+						toSave.push(tmp)
+					}
 				}
 			}
 		}
 		$http({
 			url: "gadget",
-	        data: toSave,
-	        method: 'POST'
-	    }).success(function(data){
-	    	
-	    }).error(function(err){
-	    	console.log(err);
-	    });
+			data: toSave,
+			method: 'POST'
+		}).success(function(data){
+			
+		}).error(function(err){
+			console.log(err);
+		});
 	}
 
+	$scope.modalAddGadgetSettings = {
+		height: 800, width: 1024, draggable: false,
+		resizable: false, isModal: true, autoOpen: false, modalOpacity: 0.3
+	};
+	// show button click handler.
+	$scope.showModalAddGadget = function () {
+		$scope.modalAddGadgetSettings.apply('open');
+		$("#availGadgets").jqxDataTable('render');
+	}
+	
+	$scope.availGadgetsSettings =
+	{
+		width: 790,
+		source:   new $.jqx.dataAdapter({
+			dataType: "json",
+			dataFields: [
+				{ name: 'applicationName', type: 'string' },
+				{ name: 'applicationGadget', type: 'string' }
+			],
+			id: 'id',
+			url: "gadget/available"
+		}),
+		sortable: false,
+		pageable: true,
+		pageSize: 3,
+		pagerButtonsCount: 5,
+		enableHover: false,
+		selectionMode: 'none',
+		columns: [
+			  {
+				  text: 'Gadgets', align: 'left', dataField: 'model',
+				  cellsRenderer: function (row, column, value, rowData) {
+					  var container = "<div>";
+					  
+					  container += '<div style="float: left;"><img width=160 height=120 style="display: block;" src="broken"/>';
+					  container += "</div>";
+						  
+					  container += '<div  style="float: left; margin: 10px;">' + rowData.applicationName + " " + rowData.applicationGadget + "</div>"
+					  
+					  container += '<div  style="float: right; margin: 10px;">';
+					  container += "<jqx-button onclick=\"addGadget('" + rowData.applicationName + "', '" + rowData.applicationGadget + "')\">Add</jqx-button>";
+					  container += "</div>";
+
+					  container += "</div>";
+					  return container;
+				  }
+			  }
+		]
+	};
 });
 
 

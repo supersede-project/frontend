@@ -36,6 +36,7 @@ public class GadgetRest {
 	@RequestMapping("/available")
 	public List<ApplicationGadget> getUserAuthenticatedAvailableApplicationsGadgets(Authentication auth)
 	{
+		DatabaseUser user = (DatabaseUser)auth.getPrincipal();
 		List<String> authNames = new ArrayList<>();
 		Collection<? extends GrantedAuthority> authorities = auth.getAuthorities();
 		for(GrantedAuthority ga : authorities)
@@ -43,11 +44,32 @@ public class GadgetRest {
 			authNames.add(ga.getAuthority().substring(5));
 		}
 		
-		List<ApplicationGadget> gadgets = new ArrayList<>(applicationUtil.getApplicationsGadgetsByProfilesNames(authNames));
-	
-		Collections.sort(gadgets, comparator);
+		List<ApplicationGadget> availGadgets = new ArrayList<>(applicationUtil.getApplicationsGadgetsByProfilesNames(authNames));
+		List<UserGadget> gadgets = userGadgets.findByUserIdOrderByGadgetIdAsc(user.getUserId());
 		
-		return gadgets;
+		//filterGadgets(availGadgets, gadgets);
+		
+		Collections.sort(availGadgets, comparator);
+		
+		return availGadgets;
+	}
+	
+	private void filterGadgets(List<ApplicationGadget> availGadgets, List<UserGadget> gadgets)
+	{
+		for(int i = availGadgets.size() - 1; i >= 0; i--)
+		{
+			ApplicationGadget ag = availGadgets.get(i);
+			
+			for(int j = 0; j < gadgets.size(); j ++)
+			{
+				UserGadget ug = gadgets.get(j);
+				if(ag.getApplicationName().equals(ug.getApplicationName()) && ag.getApplicationGadget().equals(ug.getGadgetName()))
+				{
+					availGadgets.remove(i);
+					break;
+				}
+			}
+		}
 	}
 	
 	@RequestMapping("")

@@ -1,8 +1,8 @@
-
 <div id="dashboard" ng-show="authenticated">
 	
 	<div>
 		<jqx-button ng-click="save()">Save</jqx-button>
+		<jqx-button ng-click="showModalAddGadget()">Add</jqx-button>
 	</div>
 	
 	<div id="docking">
@@ -10,9 +10,9 @@
 		<div id="panel{{$index}}" ng-repeat="p in panels" >
 			
 			<div id="gadget{{$index}}" ng-repeat="gadget in gadgets" ng-if="gadget.panel == p" render-gadgets>
-                <div>Gadget {{$index}}</div>
-                <div style="overflow: hidden;">
-					<div ng-include="'/' + gadget.applicationName + '/' + gadget.gadgetName + '.html'"></div>
+				<div>Gadget {{$index}}</div>
+				<div style="overflow: hidden;">
+					<div id="gadgetContent" ng-include="'/' + gadget.applicationName + '/' + gadget.gadgetName + '.html'"></div>
 				</div>
 			</div>
 			
@@ -20,55 +20,16 @@
 		
 	</div>
 
-	<!-- <div class="dashboard-header">
-		<nav id="dashboard" class="main-navigation menu-left">
-			<div class="ak-container">
-				<div class="menu-menu-1-container">
-					<ul class="nav navbar-nav">
-						<li ng-show="authenticated">
-							<p class="navbar-text">Dashboard</p>
-						</li>
-					</ul>
-					<ul class="nav navbar-nav navbar-right">
-				  		<li ng-show="authenticated">
-				  			<a href="" data-toggle="modal" data-target="#modalGadgets"><span class="glyphicon glyphicon-plus"></span> Add gadget</a>
-				  		</li>
-				  		<li ng-show="authenticated">
-				  			<a ng-click="saveSelectedGadgets()"><span class="glyphicon glyphicon-floppy-save"></span> Save</a>
-				  		</li>
-				  	</ul>	
-				</div>			
-			</div>
-		</nav>
-	</div> -->
-	
-	<!-- Modal -->
-	<!-- <div id="modalGadgets" class="modal fade" role="dialog">
-  		<div class="modal-dialog">
-
-			<div class="modal-content">
-	  			<div class="modal-header">
-					<button type="button" class="close" ng-click="cancelAddGadgets()">&times;</button>
-					<h4 class="modal-title">Available gadgets</h4>
-	  			</div>
-	  			<div class="modal-body">
-					<label ng-repeat="gadget in availableGadgets" style="display: block;">
-						<input
-							type="checkbox"
-							name="selectedAvailableGadgets"
-							value="{{gadget}}"
-							ng-checked="selectedAvailableGadgets.indexOf(gadget) > -1"
-							ng-click="toggleSelection(gadget)"
-					  	> {{gadget.applicationName + '/' + gadget.applicationGadget}}
-					</label>
-	  			</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" ng-click="addGadgets()">Add</button>
-					<button type="button" class="btn btn-default" ng-click="cancelAddGadgets()">Cancel</button>
-				</div>
+	<jqx-window id="modalAddGadget" jqx-settings="modalAddGadgetSettings">
+		<div>Available gadgets</div>
+		<div>
+			<div>
+				<jqx-data-table id="availGadgets" jqx-settings="availGadgetsSettings" style="margin-top: 10px;"></jqx-data-table>
 			</div>
 		</div>
-	</div> -->
+	</jqx-window>
+	
+
 </div>
 <div ng-show="!authenticated">
 	Login first
