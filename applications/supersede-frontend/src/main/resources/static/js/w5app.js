@@ -365,11 +365,10 @@ var numGadgetRendered = 0;
 app.directive('renderGadgets', function() {
 	return function(scope, element, attrs) {
 		numGadgetRendered++;
+		console.log(numGadgetRendered + " == " + scope.gadgets.length)
 		if(numGadgetRendered == scope.gadgets.length){
 			$('#docking').jqxDocking({ orientation: 'horizontal', mode: 'docked' });
-			$('#docking').on('dragEnd', function (event) { 
-				 console.log(JSON.stringify(event));
-			});
+			numGadgetRendered = 0;
 		}
 	};
 });
@@ -377,7 +376,6 @@ app.controller('dashboard', function($scope, $http) {
 
 	$scope.gadgets = [];
 	$scope.availableGadgets = [];
-	$scope.selectedAvailableGadgets = [];
 	$scope.panels = [];
 	
 	$http.get('gadget/panel').success(function(data)
@@ -405,12 +403,7 @@ app.controller('dashboard', function($scope, $http) {
 			$scope.gadgets.push(data[i]);
 		}
 	});
-	
-	$scope.removeGadget = function(index)
-	{
-		$scope.gadgets.splice(index, 1);
-	}
-	
+		
 	$scope.save = function() 
 	{
 		var toSave = [];
@@ -422,7 +415,7 @@ app.controller('dashboard', function($scope, $http) {
 				if(divs[j].id)
 				{
 					var id = divs[j].id.replace("gadget", "");
-					var tmp = $scope.gadgets[id];
+					var tmp = JSON.parse(JSON.stringify($scope.gadgets[id]));
 					tmp.panel = i;
 					toSave.push(tmp)
 				}
