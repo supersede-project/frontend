@@ -362,15 +362,29 @@ app.controller('notifications', function($scope, $http) {
 
 var numGadgetRendered = 0;
 
-app.directive('renderGadgets', function() {
+app.directive('renderGadgets', [ '$timeout', function($timeout) {
 	return function(scope, element, attrs) {
 		numGadgetRendered++;
 		if(numGadgetRendered == scope.gadgets.length){
 			$('#docking').jqxDocking({ orientation: 'horizontal', mode: 'docked' });
-			numGadgetRendered = 0;
+			
+			$timeout(function() {
+				for(var i = 0; i < numGadgetRendered; i++)
+				{
+					g = $('#gadget' + i);
+					g.css({ 'height': "auto" });
+					var children = g.children();
+					children.css({ 'height': "auto" });
+					$('#gadget' + i + 'Content').css({ 'height': "auto" });
+				}
+				
+				numGadgetRendered = 0;
+			}, 0);
+			
+			
 		}
 	};
-});
+}]);
 app.controller('dashboard', function($scope, $http) {
 
 	$scope.gadgets = [];
