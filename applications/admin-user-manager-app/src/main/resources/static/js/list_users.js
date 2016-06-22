@@ -51,20 +51,21 @@ app.controllerProvider.register('list_users', function($scope, $http) {
 			columns: [
 			    { text: 'Name', datafield: 'name' },
 				{ text: 'Email', datafield: 'email' },
-				{ text: 'Profiles', datafield: 'profiles', cellsRenderer: function (row, columnDataField, value) {
-					var tmp = value.split(";");
-					var r = '<div class="jqx-grid-cell-left-align" style="margin-top: 4px; margin-bottom: 4px;">';
-					for(var x = 0; x < tmp.length; x++)
-					{
-						r = r.concat(tmp[x]);
-						if(x < tmp.length - 1)
+				{ text: 'Profiles', datafield: 'profiles', 
+					cellsRenderer: function (row, columnDataField, value) {
+						var tmp = value.split(";");
+						var r = '<div class="jqx-grid-cell-left-align" style="margin-top: 4px; margin-bottom: 4px;">';
+						for(var x = 0; x < tmp.length; x++)
 						{
-							r = r.concat("<br/>");
+							r = r.concat(tmp[x]);
+							if(x < tmp.length - 1)
+							{
+								r = r.concat("<br/>");
+							}
 						}
+						return r.concat("</div>");
 					}
-					return r.concat("</div>");
 				}
-			}
 			]
 		};
 		$scope.createWidget = true;
