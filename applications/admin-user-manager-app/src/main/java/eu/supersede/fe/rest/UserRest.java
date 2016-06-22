@@ -119,11 +119,11 @@ public class UserRest {
 		} catch (UserStoreException e) {
 			log.error("IFAuthenticationManager thrown an exception: ");
 			e.printStackTrace();
-			throw new InternalServerErrorException();
+			throw new InternalServerErrorException(e.getMessage());
 		} catch (MalformedURLException e) {
 			log.error("IFAuthenticationManager thrown an exception: ");
 			e.printStackTrace();
-			throw new InternalServerErrorException();
+			throw new InternalServerErrorException(e.getMessage());
 		}
 		
 		// re-attach detached profiles
