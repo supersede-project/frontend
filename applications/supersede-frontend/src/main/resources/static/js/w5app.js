@@ -239,77 +239,88 @@ app.controller('navigation', function($rootScope, $scope, $http, $location, $rou
 
 app.controller('notifications', function($scope, $http) {
 	
-	$scope.totalPages = 1;
-	$scope.notificationsLength = 0;
-	$scope.itemsPerPage = 5;
-	$scope.currentPage = 0;
+	$scope.createWidget = false;
 	$scope.notifications = [];
+	$scope.dataAdapter = {};
 	
-	$scope.range = function () {
-		var ret = [];
-		var showPages = Math.min(5, $scope.totalPages);
-		
-		var start = Math.max(1, $scope.currentPage - Math.floor(showPages / 2));
-		var end = Math.min($scope.totalPages, $scope.currentPage + Math.ceil(showPages / 2))
-		
-		if(start == 1)
+	$http.get('notification', {params: 
 		{
-			end = start + showPages - 1;
+			toRead : false
 		}
-		if(end == $scope.totalPages)
+	}).success(function (data, status) {
+		$scope.notifications.length = 0;
+		
+		for(var i = 0; i < data.length; i++)
 		{
-			start = end - showPages + 1;
+			$scope.notifications.push(data[i]);
 		}
 		
-		for (var i = start; i < start + showPages; i++) {
-			ret.push(i);
-		}
+		// prepare the data
+		var source =
+		{
+			datatype: "json",
+			datafields: [
+				{ name: 'notificationId', type: 'int' },
+				{ name: 'message', type: 'string' },
+				{ name: 'link', type: 'string' },
+				{ name: 'read', type: 'bool' },
+				{ name: 'emailSent', type: 'bool' },
+				{ name: 'creationTime', type: 'int' }
+			],
+			id: 'notificationId',
+			localdata: $scope.notifications
+		};
 		
-		return ret;
-	};
+		$scope.dataAdapter = new $.jqx.dataAdapter(source);
+		$scope.notificationsSettings =
+		{
+			width: '100%',
+			pageable: true,
+			autoheight: true,
+			autorowheight: true,
+			source: $scope.dataAdapter,
+			columnsresize: true,
+			columns: [
+				{ text: 'Read', datafield: 'read', width: 50, 
+					cellsRenderer: function (row, columnDataField, value) {
+						var data = $('#notificationsGrid').jqxGrid('getrowdata', row);
+						var r = '<jqx-check-box style="margin-top: 6px; margin-left: 12px;" jqx-checked="' + value + '" ng-click="readNotification(' + data.notificationId + ')"></jqx-check-box>';
+						
+						return r;
+					}
+				},
+				{ text: 'Message', datafield: 'message' },
+				{ text: 'Link', datafield: 'link', width: 90, 
+					cellsRenderer: function (row, columnDataField, value) {
+						var data = $('#notificationsGrid').jqxGrid('getrowdata', row);
+						var r = '<div></div>';
+						if(value)
+						{
+							r = '<jqx-button style="margin-top: 3px; margin-left: 6px;" ng-click="openNotificationLink(' + data.notificationId + ', \'' + data.link + '\')">Open Link</jqx-button>';
+						}
+					
+						return r;
+					}
+				},
+				{ text: 'Delete', datafield: 'notificationId', width: 65, 
+					cellsRenderer: function (row, columnDataField, value) {
+						var r = '<jqx-button style="margin-top: 3px; margin-left: 6px;" ng-click="deleteNotification(' + value + ')">Delete</jqx-button>';
+					
+						return r;
+					}
+				}
+			]
+		};
+		$scope.createWidget = true;
+	 }).error(function (data, status) {
+		 alert(status);
+	 });
 	
-	$scope.prevPage = function () {
-		if ($scope.currentPage > 0) {
-			$scope.currentPage--;
-		}
-	};
-	
-	$scope.nextPage = function () {
-		if ($scope.currentPage < $scope.totalPages - 1) {
-			$scope.currentPage++;
-		}
-	};
-	
-	$scope.setPage = function () {
-		$scope.currentPage = this.n -1;
-	};
-	
-	$scope.getNotifications = function()
+	$scope.readNotification = function(notificationId)
 	{
-		$http.get('notification', {params: 
-				{
-					toRead : false
-				}
-			}).
-			success(function(data) {
-				angular.copy({}, $scope.notifications);
-				
-				for(var i = 0; i < data.length; i++)
-				{
-					$scope.notifications.push(data[i]);
-				}
-				$scope.notificationsLength = data.length;
-				$scope.totalPages = Math.max(1, Math.ceil($scope.notificationsLength / $scope.itemsPerPage));
+		$http.put('notification/' + notificationId + '/read').success(function(data) {
+			
 		});
-	}
-	
-	$scope.readNotification = function()
-	{
-		var notificationId = this.notif.notificationId;
-		$http.put('notification/' + notificationId + '/read').
-			success(function(data) {
-				
-			});
 		
 		for(var i = 0; i < $scope.notifications.length; i++)
 		{
@@ -319,26 +330,20 @@ app.controller('notifications', function($scope, $http) {
 				break;
 			}
 		}
+		$scope.dataAdapter.dataBind();
 	}
 	
-	$scope.openNotificationLink = function()
+	$scope.openNotificationLink = function(notificationId, link)
 	{
-		var notificationId = this.notif.notificationId;
-		var link = this.notif.link;
-		$http.put('notification/' + notificationId + '/read').
-			success(function(data) {
-				
-			});
+		$scope.readNotification(notificationId);
 		window.location.href=link;
 	}
 	
-	$scope.deleteNotification = function()
+	$scope.deleteNotification = function(notificationId)
 	{
-		var notificationId = this.notif.notificationId;
-		$http.delete('notification/' + notificationId).
-			success(function(data) {
+		$http.delete('notification/' + notificationId).success(function(data) {
 			
-			});
+		});
 		
 		for(var i = 0; i < $scope.notifications.length; i++)
 		{
@@ -348,15 +353,8 @@ app.controller('notifications', function($scope, $http) {
 				break;
 			}
 		}
-		$scope.notificationsLength--;
-		$scope.totalPages = Math.max(1, Math.ceil($scope.notificationsLength / $scope.itemsPerPage));
-		if($scope.totalPages == $scope.currentPage && $scope.currentPage != 0)
-		{
-			$scope.currentPage--;
-		}
+		$scope.dataAdapter.dataBind();
 	}
-	
-	$scope.getNotifications();
 	
 });
 
