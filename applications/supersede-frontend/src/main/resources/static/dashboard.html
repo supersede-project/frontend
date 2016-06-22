@@ -1,8 +1,25 @@
 <div id="dashboard" ng-show="authenticated">
 	
 	<div>
-		<jqx-button ng-click="save()">Save</jqx-button>
-		<jqx-button ng-click="showModalAddGadget()">Add</jqx-button>
+		<table>
+			<tr>
+				<td>
+					<jqx-button ng-click="save()">Save</jqx-button>
+				</td>
+				<td>
+					<jqx-button ng-click="showModalAddGadget()">Add</jqx-button>
+				</td>
+				<td>
+					<jqx-drop-down-button jqx-created="columnsButtonContent" jqx-width="150" jqx-height="25">
+						<div style="padding:10px;">
+							<jqx-radio-button id="columns1" jqx-on-change="setColumns(event)" jqx-checked="panels.length == 1" jqx-width="120" jqx-height="25" style='margin-top: 10px;'>1 Column</jqx-radio-button>
+							<jqx-radio-button id="columns2" jqx-on-change="setColumns(event)" jqx-checked="panels.length == 2" jqx-width="120" jqx-height="25" style='margin-top: 10px;'>2 Columns</jqx-radio-button>
+							<jqx-radio-button id="columns3" jqx-on-change="setColumns(event)" jqx-checked="panels.length == 3" jqx-width="120" jqx-height="25" style='margin-top: 10px;'>3 Columns</jqx-radio-button>
+						</div>
+	  				</jqx-drop-down-button>
+				</td>
+			</tr>
+		</table>
 	</div>
 	
 	<div id="docking">

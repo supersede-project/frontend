@@ -379,7 +379,7 @@ app.directive('renderGadgets', [ '$timeout', function($timeout) {
 				}
 				
 				numGadgetRendered = 0;
-			}, 0);
+			}, 1);
 			
 			
 		}
@@ -419,7 +419,15 @@ app.controller('dashboard', function($scope, $http) {
 		$scope.gadgets.push(tmp);
 		
 		$scope.$apply();
-		$('#docking').jqxDocking('addWindow', 'gadget' + ($scope.gadgets.length - 1), 'default', 0, 0);
+		
+		var i = $scope.gadgets.length - 1;
+		$('#docking').jqxDocking('addWindow', 'gadget' + (i), 'default', 0, 0);
+		
+		g = $('#gadget' + i);
+		g.css({ 'height': "auto" });
+		var children = g.children();
+		children.css({ 'height': "auto" });
+		$('#gadget' + i + 'Content').css({ 'height': "auto" });
 	}
 	
 	$scope.save = function() 
@@ -502,6 +510,33 @@ app.controller('dashboard', function($scope, $http) {
 			  }
 		]
 	};
+	
+	$scope.columnsButtonContent = function (args) {
+		var dropDownContent = '<div style="position: relative; margin-left: 3px; margin-top: 5px;">Columns</div>';
+		args.instance.setContent(dropDownContent);
+	}
+	
+	$scope.setColumns = function (event) {
+		if(event.args.checked)
+		{
+			var newColumns = event.target.id.replace("columns", "");
+			var oldColumns = $scope.panels.length;
+			
+			if(newColumns != oldColumns)
+			{
+				$http({
+					url: "gadget/panel",
+					data: newColumns,
+					method: 'PUT'
+				}).success(function(data){
+					window.location.reload();
+				}).error(function(err){
+					console.log(err);
+				});
+			}
+		}
+	}
+	
 });
 
 

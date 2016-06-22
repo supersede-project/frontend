@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 import eu.supersede.fe.application.ApplicationGadget;
 import eu.supersede.fe.application.ApplicationGadgetComparator;
 import eu.supersede.fe.application.ApplicationUtil;
+import eu.supersede.fe.jpa.UserDashboardJpa;
 import eu.supersede.fe.jpa.UserGadgetsJpa;
+import eu.supersede.fe.model.UserDashboard;
 import eu.supersede.fe.model.UserGadget;
 import eu.supersede.fe.security.DatabaseUser;
 
@@ -27,16 +29,21 @@ public class GadgetRest {
 
 	@Autowired
 	private ApplicationUtil applicationUtil;
-	
+
 	@Autowired
     private UserGadgetsJpa userGadgets;
+	
+	@Autowired
+    private UserDashboardJpa userDashboards;
 
 	private final static ApplicationGadgetComparator comparator = new ApplicationGadgetComparator();
+
+	private static final Long USER_DASHBOARD_PANELS_DEFAULT = 2L;
 	
 	@RequestMapping("/available")
 	public List<ApplicationGadget> getUserAuthenticatedAvailableApplicationsGadgets(Authentication auth)
 	{
-		DatabaseUser user = (DatabaseUser)auth.getPrincipal();
+		//DatabaseUser user = (DatabaseUser)auth.getPrincipal();
 		List<String> authNames = new ArrayList<>();
 		Collection<? extends GrantedAuthority> authorities = auth.getAuthorities();
 		for(GrantedAuthority ga : authorities)
@@ -45,7 +52,7 @@ public class GadgetRest {
 		}
 		
 		List<ApplicationGadget> availGadgets = new ArrayList<>(applicationUtil.getApplicationsGadgetsByProfilesNames(authNames));
-		List<UserGadget> gadgets = userGadgets.findByUserIdOrderByGadgetIdAsc(user.getUserId());
+		//List<UserGadget> gadgets = userGadgets.findByUserIdOrderByGadgetIdAsc(user.getUserId());
 		
 		//filterGadgets(availGadgets, gadgets);
 		
@@ -54,7 +61,7 @@ public class GadgetRest {
 		return availGadgets;
 	}
 	
-	private void filterGadgets(List<ApplicationGadget> availGadgets, List<UserGadget> gadgets)
+	/*private void filterGadgets(List<ApplicationGadget> availGadgets, List<UserGadget> gadgets)
 	{
 		for(int i = availGadgets.size() - 1; i >= 0; i--)
 		{
@@ -70,7 +77,7 @@ public class GadgetRest {
 				}
 			}
 		}
-	}
+	}*/
 	
 	@RequestMapping("")
 	public List<UserGadget> getUserAuthenticatedApplicationsGadgets(Authentication auth)
@@ -103,14 +110,50 @@ public class GadgetRest {
 	}
 
 	@RequestMapping(value = "/panel", method = RequestMethod.GET)
-	public Integer getNumPanels()
+	public Long getNumPanels(Authentication auth)
 	{
-		return 2;
+		Long p = null;
+		
+		DatabaseUser user = (DatabaseUser)auth.getPrincipal();
+		Long userId = user.getUserId();
+		
+		UserDashboard ud = userDashboards.findOne(userId);
+		if(ud == null)
+		{
+			p = USER_DASHBOARD_PANELS_DEFAULT;
+		}
+		else
+		{
+			p = ud.getPanels();
+		}
+		
+		return p;
 	}
 	
 	@RequestMapping(value = "/panel", method = RequestMethod.PUT)
-	public void setNumPanels(@RequestBody Integer numPanels)
+	public void setNumPanels(Authentication auth, @RequestBody Long numPanels)
 	{
+		DatabaseUser user = (DatabaseUser)auth.getPrincipal();
+		Long userId = user.getUserId();
 		
+		UserDashboard ud = userDashboards.findOne(userId);
+		if(ud == null)
+		{
+			ud = new UserDashboard();
+			ud.setUserId(userId);
+		}
+		
+		ud.setPanels(numPanels);
+		userDashboards.save(ud);
+		
+		List<UserGadget> gadgets = userGadgets.findByUserIdOrderByGadgetIdAsc(user.getUserId());
+		for(UserGadget g : gadgets)
+		{
+			if(g.getPanel() > (numPanels - 1L))
+			{
+				g.setPanel(0L);
+				userGadgets.save(g);
+			}
+		}
 	}
 }
