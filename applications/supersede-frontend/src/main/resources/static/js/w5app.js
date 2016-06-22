@@ -411,9 +411,6 @@ app.controller('dashboard', function($scope, $http) {
 	var scope = $scope;
 	addGadget = function(applicationName, applicationGadget)
 	{
-		console.log(applicationName);
-		console.log(applicationGadget);
-		console.log($scope.gadgets);
 		var tmp = {};
 		tmp.applicationName = applicationName;
 		tmp.gadgetName = applicationGadget;
@@ -422,6 +419,7 @@ app.controller('dashboard', function($scope, $http) {
 		$scope.gadgets.push(tmp);
 		
 		$scope.$apply();
+		$('#docking').jqxDocking('addWindow', 'gadget' + ($scope.gadgets.length - 1), 'default', 0, 0);
 	}
 	
 	$scope.save = function() 
