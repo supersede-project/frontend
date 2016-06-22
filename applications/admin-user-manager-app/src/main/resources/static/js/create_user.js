@@ -4,7 +4,9 @@ app.controllerProvider.register('create_user', function($scope, $http, $location
 	
 	$scope.profiles = [];
 	$scope.user = {profiles : []};
-		
+	
+	$scope.errorMessage = undefined;
+	
 	$scope.createUser = function()
 	{
 		var tmpProfiles = $scope.user.profiles;
@@ -23,7 +25,7 @@ app.controllerProvider.register('create_user', function($scope, $http, $location
 			}).success(function(data){
 				$location.url('admin-user-manager-app/list_users');
 			}).error(function(err){
-				console.log(err);
+				$scope.errorMessage = err.message;
 			});
 	};
 	
