@@ -154,36 +154,7 @@ app.controller('navigation', function($rootScope, $scope, $http, $location, $rou
 					$location.path("/");
 				});
 			}
-			
-			$scope.openNotificationLink = function()
-			{
-				var notificationId = this.notif.notificationId;
-				var link = this.notif.link;
-				$http.put('notification/' + notificationId + '/read').
-					success(function(data) {
-						
-					});
-				window.location.href=link;
-			}
-			
-			$scope.readNotification = function()
-			{
-				var notificationId = this.notif.notificationId;
-				$http.put('notification/' + notificationId + '/read').
-					success(function(data) {
-						
-					});
-			}
-			
-			$scope.deleteNotification = function()
-			{
-				var notificationId = this.notif.notificationId;
-				$http.delete('notification/' + notificationId).
-					success(function(data) {
-					
-					});
-			}
-			
+
 			$scope.checkApplicationUrl = function()
 			{
 				for(var i = 0; i < $rootScope.applications.length; i++)
@@ -210,9 +181,14 @@ app.controller('navigation', function($rootScope, $scope, $http, $location, $rou
 			
 			getTenants();
 			
-			var stop;
+			$scope.navigationMenuSettings = 
+			{
+				width : '60%',
+				height : '30px'
+			}
 			
-			stop = $interval(function() {
+			
+			var stop = $interval(function() {
 				if($rootScope.authenticated)
 				{
 					$http.get('notification/count').success(function(data) {
@@ -232,7 +208,7 @@ app.controller('navigation', function($rootScope, $scope, $http, $location, $rou
 						}
 					});
 				}
-				}, 1000);
+			}, 1000);
 			
 
 });
