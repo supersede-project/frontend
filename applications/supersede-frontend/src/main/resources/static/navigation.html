@@ -12,7 +12,7 @@
 			<li ng-show="authenticated && checkApplicationUrl()">
 				<a>{{currentApplication.applicationLabel?currentApplication.applicationLabel:currentApplication.applicationName}}</a>
 				<ul>
-					<li data-ng-repeat="page in currentApplication.pages">
+					<li data-ng-repeat="page in currentApplication.pages" class="jqx-item jqx-menu-item jqx-rc-all" ng-class="{'jqx-fill-state-hover jqx-menu-item-hover ':hovering}" ng-mouseenter="hovering=true" ng-mouseleave="hovering=false" role="menuitem">
 						<a ng-href="#/{{currentApplication.applicationName}}/{{page.name}}">{{page.label?page.label:page.name}}</a>
 					</li>
 				</ul>
@@ -24,7 +24,7 @@
 				<li ng-show="authenticated">
 	      			<a><img src="img/flags/{{currentLang}}2.png" height="20" width="32" style="position: relative; top: -2px;"></img></a>
 	      			<ul>
-	      				<li ng-repeat="l in langs">
+						<li ng-repeat="l in langs" class="jqx-item jqx-menu-item jqx-rc-all" ng-class="{'jqx-fill-state-hover jqx-menu-item-hover ':hovering}" ng-mouseenter="hovering=true" ng-mouseleave="hovering=false" role="menuitem">
 	      					<a ng-click="setCurrentLang()"><img src="img/flags/{{l.lang}}2.png" height="20" width="32"/>
 	      						<span style="position: relative; top: -4px;">{{l.language}}</span>
 	      					</a>
@@ -36,23 +36,6 @@
 	     			<a style="position: relative; top: -6px;">{{notificationsCount}} </a>
 	     			<img src="img/envelope.png" height="20" width="20" style="position: relative; top: -2px;"/>
 	     			<ul>
-			        	<!--
-			        	<li ng-repeat="notif in notifications | orderBy:'creationTime' | limitTo:5">
-			        		<a ng-show="!notif.link" ng-click="readNotification()">
-			        			<span class="glyphicon" ng-class="{'glyphicon-check': notif.read == true, 'glyphicon-unchecked': notif.read == false}"></span>
-			        		</a>
-			        		<a ng-show="!notif.link">{{notif.message}}</a>
-			        	
-			        		<a ng-show="notif.link" ng-click="openNotificationLink()">
-			        			<span class="glyphicon glyphicon-link"></span>
-			        		</a>
-				        	<a ng-show="notif.link" ng-click="openNotificationLink()">
-				        		{{notif.message}}
-				        	</a>
-			        	
-			        		<a ng-click="deleteNotification()"><span class="glyphicon glyphicon-remove"></span></a>
-			        	</li>
-						-->
 				        <li>
 				        	<a href="#/notifications">Show all</a>
 				        </li>
