@@ -43,9 +43,11 @@ app.controllerProvider.register('create_user', function($scope, $http, $location
 		hintType: 'label',
 		animationDuration: 0,
 		rules: [
-			   { input: '#nameInput', message: 'Name is required!', action: 'keyup, blur', rule: 'required' },
-			   { input: '#nameInput', message: 'Name must contain only letters!', action: 'keyup', rule: 'notNumber' },
-			   {
+			    { input: '#firstNameInput', message: 'First name is required!', action: 'keyup, blur', rule: 'required' },
+				{ input: '#firstNameInput', message: 'Name must contain only letters!', action: 'keyup', rule: 'notNumber' },
+				{ input: '#lastNameInput', message: 'Last name is required!', action: 'keyup, blur', rule: 'required' },
+				{ input: '#lastNameInput', message: 'Name must contain only letters!', action: 'keyup', rule: 'notNumber' },
+				{
 				   input: '#birthInput', message: 'Birth date must be between 1/1/1900 and 1/1/2014.', action: 'valueChanged', rule: function (input, commit) {
 					   var date = $('#birthInput').jqxDateTimeInput('value');
 					   var result = date.getFullYear() >= 1900 && date.getFullYear() <= 2014;
