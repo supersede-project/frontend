@@ -43,6 +43,7 @@ app.controllerProvider.register('create_user', function($scope, $http, $location
 		hintType: 'label',
 		animationDuration: 0,
 		rules: [
+		        { input: '#usernameInput', message: 'First name is required!', action: 'keyup, blur', rule: 'required' },
 			    { input: '#firstNameInput', message: 'First name is required!', action: 'keyup, blur', rule: 'required' },
 				{ input: '#firstNameInput', message: 'Name must contain only letters!', action: 'keyup', rule: 'notNumber' },
 				{ input: '#lastNameInput', message: 'Last name is required!', action: 'keyup, blur', rule: 'required' },
