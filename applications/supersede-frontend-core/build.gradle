@@ -28,7 +28,7 @@ dependencies {
     
     compile("org.springframework.boot:spring-boot-starter-mail:1.3.5.RELEASE")
     
-	compile files('../../../supersede_integration/IF/API/eu.supersede.if.api/build/libs/eu.supersede.if.api.jar')
+	compile files('../../../integration/IF/API/eu.supersede.if.api/build/libs/eu.supersede.if.api.jar')
 }
 
 eclipse {
