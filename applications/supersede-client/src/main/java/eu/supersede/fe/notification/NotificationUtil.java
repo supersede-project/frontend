@@ -42,7 +42,7 @@ public class NotificationUtil {
 		if(securityContext != null)
 		{
 			Authentication authentication = securityContext.getAuthentication();
-			if(authentication != null && authentication instanceof DatabaseUser)
+			if(authentication != null && authentication.getPrincipal() instanceof DatabaseUser)
 			{
 				DatabaseUser userDetails = (DatabaseUser)authentication.getPrincipal();
 				tenant = userDetails.getTenantId();
