@@ -72,6 +72,9 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Value("#{'${web.security.permit.urls}'.split(',')}") 
 	private String[] PERMIT_URLS;
 	
+	@Value("${security.configuration.IFAuthManager}")
+	private Boolean AUTH_MANAGER_ENABLED;
+	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		//auth.userDetailsService(dbUserDetailsService()).passwordEncoder(bcryptEncoder);
@@ -106,21 +109,9 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 					throw new BadCredentialsException("Invalid login request: missing tenant");
 				}
 				
-				AuthorizationToken token = null;
-				try {
-					token = proxy.getIFAuthenticationManager(tenantId).getAuthorizationToken(username, password, tenantId);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				if(token == null || token.getAccessToken() == null)
-				{
-					log.error("Supersede integration token is null");
-					throw new BadCredentialsException("Invalid login request: authentication manager token is null");
-				}
+				AuthorizationToken token = getAuthToken(username, password, tenantId);
 				
 				User user = users.findByUsername(username);
-				//User user = proxy.getUserByName(username, tenantId, token);
 				if(user == null)
 				{
 					log.error("Username not found in Database");
@@ -142,6 +133,30 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				DatabaseUser dbUser = new DatabaseUser(user.getUserId(), user.getFirstName() + " " + user.getLastName(), user.getEmail(), password, token, true, true, true, true, permissions, user.getLocale());
 
 				return new UsernamePasswordAuthenticationToken(dbUser, password, permissions);//AUTHORITIES
+			}
+
+			private AuthorizationToken getAuthToken(String username, String password, String tenantId) {
+				AuthorizationToken token = null;
+				
+				if(AUTH_MANAGER_ENABLED)
+				{
+					try {
+						token = proxy.getIFAuthenticationManager(tenantId).getAuthorizationToken(username, password, tenantId);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					if(token == null || token.getAccessToken() == null)
+					{
+						log.error("Supersede integration token is null");
+						throw new BadCredentialsException("Invalid login request: authentication manager token is null");
+					}
+				}
+				else
+				{
+					log.warn("IF Authentication Manager disable, user token is NULL");
+				}
+				return token;
 			}
 
 			@SuppressWarnings("rawtypes")

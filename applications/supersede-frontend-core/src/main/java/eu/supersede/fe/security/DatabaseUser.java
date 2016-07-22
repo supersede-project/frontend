@@ -81,19 +81,25 @@ public class DatabaseUser extends  org.springframework.security.core.userdetails
 	}
 	
 	public void setToken(AuthorizationToken token) {
-		accessToken = token.getAccessToken();
-		expiresIn = token.getExpiresIn();
-		refreshToken = token.getRefreshToken();
-		tokenType = token.getTokenType();
+		if(token != null)
+		{
+			accessToken = token.getAccessToken();
+			expiresIn = token.getExpiresIn();
+			refreshToken = token.getRefreshToken();
+			tokenType = token.getTokenType();
+		}
 	}
 	
 	public AuthorizationToken getToken() {
-		AuthorizationToken t = new AuthorizationToken();
-		t.setAccessToken(accessToken);
-		t.setExpiresIn(expiresIn);
-		t.setRefreshToken(refreshToken);
-		t.setTokenType(tokenType);
-		
+		AuthorizationToken t = null;
+		if(accessToken != null)
+		{
+			t = new AuthorizationToken();
+			t.setAccessToken(accessToken);
+			t.setExpiresIn(expiresIn);
+			t.setRefreshToken(refreshToken);
+			t.setTokenType(tokenType);
+		}
 		return t;
 	}
 }

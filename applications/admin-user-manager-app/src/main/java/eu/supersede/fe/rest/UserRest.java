@@ -67,14 +67,21 @@ public class UserRest {
 		DatabaseUser currentUser = (DatabaseUser) authentication.getPrincipal();
 		String tenant = currentUser.getTenantId();
 
-		try {
-			proxy.getIFAuthenticationManager(tenant).addUser(toSecurityUser(user, tenant), user.getPassword(), false);
-		} catch (UserStoreException e) {
-			log.error("IFAuthenticationManager thrown an exception: ");
-			e.printStackTrace();
-			throw new InternalServerErrorException(e.getMessage());
+		if(currentUser.getToken() != null)
+		{
+			try {
+				proxy.getIFAuthenticationManager(tenant).addUser(toSecurityUser(user, tenant), user.getPassword(), false);
+			} catch (UserStoreException e) {
+				log.error("IFAuthenticationManager thrown an exception: ");
+				e.printStackTrace();
+				throw new InternalServerErrorException(e.getMessage());
+			}
 		}
-
+		else
+		{
+			log.warn("IF Authentication Manager disable, user token is NULL");
+		}
+		
 		// re-attach detached profiles
 		List<Profile> ps = user.getProfiles();
 		for (int i = 0; i < ps.size(); i++) {
@@ -113,18 +120,26 @@ public class UserRest {
 	public User editUser(@PathVariable Long userId, Authentication authentication, @RequestBody User user) {
 		DatabaseUser currentUser = (DatabaseUser) authentication.getPrincipal();
 		String tenant = currentUser.getTenantId();
-
-		try {
-			proxy.getIFAuthenticationManager(tenant).updateUser(toSecurityUser(user, tenant));
-		} catch (UserStoreException e) {
-			log.error("IFAuthenticationManager thrown an exception: ");
-			e.printStackTrace();
-			throw new InternalServerErrorException(e.getMessage());
-		} catch (MalformedURLException e) {
-			log.error("IFAuthenticationManager thrown an exception: ");
-			e.printStackTrace();
-			throw new InternalServerErrorException(e.getMessage());
+		
+		if(currentUser.getToken() != null)
+		{
+			try {
+				proxy.getIFAuthenticationManager(tenant).updateUser(toSecurityUser(user, tenant));
+			} catch (UserStoreException e) {
+				log.error("IFAuthenticationManager thrown an exception: ");
+				e.printStackTrace();
+				throw new InternalServerErrorException(e.getMessage());
+			} catch (MalformedURLException e) {
+				log.error("IFAuthenticationManager thrown an exception: ");
+				e.printStackTrace();
+				throw new InternalServerErrorException(e.getMessage());
+			}
 		}
+		else
+		{
+			log.warn("IF Authentication Manager disable, user token is NULL");
+		}
+		
 		
 		// re-attach detached profiles
 		List<Profile> ps = user.getProfiles();
