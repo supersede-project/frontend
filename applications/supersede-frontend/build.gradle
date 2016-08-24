@@ -52,7 +52,7 @@ targetCompatibility = 1.7
 repositories {
     mavenCentral()
     maven { url 'http://repo.spring.io/milestone' }
-    maven {url 'http://172.28.16.213:8082/artifactory/libs-snapshot-local/'}
+//    maven {url 'http://172.28.16.213:8082/artifactory/libs-snapshot-local/'}
     add buildscript.repositories.getByName ("maven-supersede-snapshot")
     add buildscript.repositories.getByName ("maven-supersede-release")
 }
