@@ -4,10 +4,28 @@ buildscript {
     }
     repositories {
         mavenCentral()
+	maven {
+            url 'http://supersede.es.atos.net:10080/artifactory/libs-snapshot'
+            name = 'maven-supersede-snapshot'
+	    credentials {
+                username = "${artifactory_user}"
+                password = "${artifactory_password}"
+	    }
+        }
+	maven {
+            url 'http://supersede.es.atos.net:10080/artifactory/libs-release'
+            name = 'maven-supersede-release'
+	    credentials {
+                username = "${artifactory_user}"
+                password = "${artifactory_password}"
+	    }
+        }
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}") 
         classpath('io.spring.gradle:dependency-management-plugin:0.5.2.RELEASE')
+	//Check for the latest version here: http://plugins.gradle.org/plugin/com.jfrog.artifactory
+        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4+"
     }
 }
 
@@ -18,6 +36,8 @@ apply plugin: 'spring-boot'
 apply plugin: 'io.spring.dependency-management' 
 apply plugin: 'war'
 apply plugin: 'maven'
+apply plugin: 'maven-publish'
+apply plugin: "com.jfrog.artifactory"
 
 version = '0.0.1-SNAPSHOT'
 group = 'eu.supersede'
@@ -31,8 +51,10 @@ targetCompatibility = 1.7
 
 repositories {
     mavenCentral()
-	maven {url 'http://repo.spring.io/milestone' }
-	maven {url 'http://172.28.16.213:8082/artifactory/libs-snapshot-local/'}
+    maven {url 'http://repo.spring.io/milestone' }
+    maven {url 'http://172.28.16.213:8082/artifactory/libs-snapshot-local/'}
+    add buildscript.repositories.getByName ("maven-supersede-snapshot")
+    add buildscript.repositories.getByName ("maven-supersede-release")
 }
 
 configurations {
@@ -53,22 +75,24 @@ dependencies {
     
     compile("org.springframework.boot:spring-boot-starter-mail")
     
-	compile("org.springframework.session:spring-session:1.2.0.RELEASE")
-	compile("org.springframework.boot:spring-boot-starter-redis")
+    compile("org.springframework.session:spring-session:1.2.0.RELEASE")
+    compile("org.springframework.boot:spring-boot-starter-redis")
 	
-	compile files('../supersede-client/build/libs/supersede-client-0.0.1-SNAPSHOT.jar')
-	//compile("eu.supersede:supersede-client:0.0.1-SNAPSHOT")
+    compile(group: 'eu.supersede', name: 'supersede-client', version: '0.0.1-SNAPSHOT')
+    //compile("eu.supersede:supersede-client:0.0.1-SNAPSHOT")
 	
-	//required by integration
-	compile files('../../../integration/IF/API/eu.supersede.if.api/build/libs/eu.supersede.if.api.jar')
-	compile ("org.apache.axis2:axis2:1.6.1")
+    //required by integration
+    compile(group: 'eu.supersede', name: 'supersede-frontend-core', version: '0.0.1-SNAPSHOT')
+    compile ("org.apache.axis2:axis2:1.6.1")
     compile ("org.apache.axis2:axis2-transport-http:1.6.1")
     compile ("org.apache.axis2:axis2-transport-local:1.6.1")
-    compile files('../../../integration/IF/API/eu.supersede.if.api.test/lib/org.wso2.carbon.um.ws.api.stub_4.2.2.jar')
-    compile files('../../../integration/IF/API/eu.supersede.if.api.test/lib/org.wso2.carbon.um.ws.api_4.2.2.jar')
-    compile files('../../../integration/IF/API/eu.supersede.if.api.test/lib/org.wso2.carbon.user.api_4.2.0.jar')
-    compile files('../../../integration/IF/API/eu.supersede.if.api.test/lib/org.wso2.carbon.user.core_4.2.0.jar')
-    compile files('../../../integration/IF/API/eu.supersede.if.api.test/lib/org.wso2.carbon.utils_4.2.0.jar')
+
+    compile(group: 'org.wso2.carbon', name: 'org.wso2.carbon.um.ws.api.stub', version: '4.2.2')
+    compile(group: 'org.wso2.carbon', name: 'org.wso2.carbon.um.ws.api', version: '4.2.2')
+    compile(group: 'org.wso2.carbon', name: 'org.wso2.carbon.user.api', version: '4.2.0')
+    compile(group: 'org.wso2.carbon', name: 'org.wso2.carbon.user.core', version: '4.2.0')
+    compile(group: 'org.wso2.carbon', name: 'org.wso2.carbon.utils', version: '4.2.0')
+
     compile ("ca.juliusdavies:not-yet-commons-ssl:0.3.9")
 }
 
