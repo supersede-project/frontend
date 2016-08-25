@@ -66,11 +66,11 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-web')
     
     testCompile('org.springframework.boot:spring-boot-starter-test')
-    testCompile('commons-collections:commons-collections:3.2.1')
-    testCompile('org.apache.velocity:velocity:1.6.2')    
+    compile('commons-collections:commons-collections:3.2.1')
+    compile('org.apache.velocity:velocity:1.6.2')    
 
     compile("org.springframework.boot:spring-boot-starter-jdbc")
-	compile("org.springframework.boot:spring-boot-starter-data-jpa")
+    compile("org.springframework.boot:spring-boot-starter-data-jpa")
     compile("org.postgresql:postgresql:9.4.1208.jre7")
     
     providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
