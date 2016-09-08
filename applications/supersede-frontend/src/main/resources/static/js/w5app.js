@@ -166,9 +166,9 @@ app.controller('navigation', function($rootScope, $scope, $http, $location, $rou
 						$rootScope.currentApplication = application;
 						return true;
 					}
-					$rootScope.currentApplication = {pages: []};
-					return false;
 				}
+				$rootScope.currentApplication = {pages: []};
+				return false;
 			}
 			
 			var getTenants = function()
