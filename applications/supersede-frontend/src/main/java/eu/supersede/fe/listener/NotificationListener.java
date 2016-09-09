@@ -84,15 +84,18 @@ public class NotificationListener {
 	{
 		User u = users.findByEmail(email);
 		
-		eu.supersede.fe.model.Notification notif = new eu.supersede.fe.model.Notification();
-		notif.setCreationTime(new Date());
-		notif.setEmailSent(false);
-		notif.setLink(link);
-		notif.setMessage(message);
-		notif.setRead(false);
-		notif.setUser(u);
-		
-		notifications.saveAndFlush(notif);
+		if(u != null)
+		{
+			eu.supersede.fe.model.Notification notif = new eu.supersede.fe.model.Notification();
+			notif.setCreationTime(new Date());
+			notif.setEmailSent(false);
+			notif.setLink(link);
+			notif.setMessage(message);
+			notif.setRead(false);
+			notif.setUser(u);
+			
+			notifications.saveAndFlush(notif);
+		}
 	}
 	
 	public void receiveMessage(String message) {

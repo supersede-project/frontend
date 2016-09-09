@@ -65,8 +65,11 @@ public class Notifier {
 		for(String email : usersEmail)
 		{
 			User u = users.findByEmail(email);
-			Notification n = new Notification(message, u);
-			notifications.save(n);
+			if(u != null)
+			{
+				Notification n = new Notification(message, u);
+				notifications.save(n);
+			}
 		}
 	}
 
