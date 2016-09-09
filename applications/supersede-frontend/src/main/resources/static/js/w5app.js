@@ -208,7 +208,7 @@ app.controller('navigation', function($rootScope, $scope, $http, $location, $rou
 						}
 					});
 				}
-			}, 1000);
+			}, 10000);
 			
 
 });
