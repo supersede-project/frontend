@@ -14,6 +14,7 @@
 
 package eu.supersede.fe.integration;
 
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -93,7 +94,15 @@ public class ProxyWrapper {
 	public User getUserByName(String username, String tenantId, AuthorizationToken token)
 	{
 		User user = null;
-		List<User> users = proxy.getUsers(tenantId, false, token);
+		List<User> users = null;
+		try
+		{
+			users = proxy.getUsers(tenantId, false, token);
+		}
+		catch(URISyntaxException ex)
+		{
+			return null;
+		}
 		for(User u : users)
 		{
 			if(u.getEmail().equals(username))
