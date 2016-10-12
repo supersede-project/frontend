@@ -10,7 +10,7 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
-*/
+ */
 
 package eu.supersede.fe;
 
@@ -18,7 +18,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.context.web.SpringBootServletInitializer;
+import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
@@ -27,19 +27,18 @@ import eu.supersede.fe.configuration.ApplicationConfiguration;
 
 @SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
 @ComponentScan
-@EnableGlobalMethodSecurity( securedEnabled = true )
+@EnableGlobalMethodSecurity(securedEnabled = true)
 @EnableRedisHttpSession
 public class Application extends SpringBootServletInitializer {
 
-	@Override
+    @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-		ApplicationConfiguration.init();
+        ApplicationConfiguration.init();
         return application.sources(Application.class);
     }
-	
-	public static void main(String[] args) {
-		ApplicationConfiguration.init();
-		SpringApplication.run(Application.class, args);
-	}
 
+    public static void main(String[] args) {
+        ApplicationConfiguration.init();
+        SpringApplication.run(Application.class, args);
+    }
 }
