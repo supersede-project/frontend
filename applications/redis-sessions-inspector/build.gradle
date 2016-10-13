@@ -29,6 +29,5 @@ dependencies {
     testCompile('org.springframework.boot:spring-boot-starter-test')
     
     compile("org.springframework.boot:spring-boot-starter-redis")
-    compile("org.springframework.session:spring-session:1.2.2.RELEASE")
     
 }

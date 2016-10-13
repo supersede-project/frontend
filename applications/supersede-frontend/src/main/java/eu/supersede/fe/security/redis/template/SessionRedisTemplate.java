@@ -12,7 +12,7 @@
    limitations under the License.
 */
 
-package eu.supersede.template;
+package eu.supersede.fe.security.redis.template;
 
 import org.springframework.data.redis.connection.DefaultStringRedisConnection;
 import org.springframework.data.redis.connection.RedisConnection;
@@ -22,8 +22,7 @@ import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
-import eu.supersede.template.session.Session;
-
+import eu.supersede.fe.security.redis.session.Session;
 
 public class SessionRedisTemplate extends RedisTemplate<String, Session> {
 	

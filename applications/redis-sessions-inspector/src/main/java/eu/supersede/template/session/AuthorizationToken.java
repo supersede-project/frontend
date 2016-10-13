@@ -1,4 +1,4 @@
-package eu.supersede.integration.api.security.types;
+package eu.supersede.template.session;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

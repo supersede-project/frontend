@@ -1,25 +1,19 @@
-package eu.supersede.model;
+package eu.supersede.fe.security.redis.session;
 
 import java.util.Date;
 
 import eu.supersede.fe.security.DatabaseUser;
 
-public class SessionContent {
+public class Session {
 
+	public final static String SUPERSEDE_SESSION_PREFIX = "eu.supersede.session:";
+	
 	private String id;
 	private Date creationTime;
 	private Date lastAccessTime;
 	private DatabaseUser databaseUser;
 	
-	public SessionContent() {
-	}
-
-	public SessionContent(String id, Date creationTime, Date lastAccessTime, DatabaseUser databaseUser)
-	{
-		this.id = id;
-		this.creationTime = creationTime;
-		this.lastAccessTime = lastAccessTime;
-		this.databaseUser = databaseUser;
+	public Session() {
 	}
 	
 	public String getId() {
@@ -53,5 +47,4 @@ public class SessionContent {
 	public void setDatabaseUser(DatabaseUser databaseUser) {
 		this.databaseUser = databaseUser;
 	}
-
 }

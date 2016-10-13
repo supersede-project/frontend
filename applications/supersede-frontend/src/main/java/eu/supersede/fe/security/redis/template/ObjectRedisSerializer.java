@@ -1,4 +1,4 @@
-package eu.supersede.template;
+package eu.supersede.fe.security.redis.template;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
