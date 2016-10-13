@@ -24,27 +24,27 @@ buildscript {
     }
     repositories {
         mavenCentral()
-	maven {
+        maven {
             url 'http://supersede.es.atos.net:10080/artifactory/libs-snapshot'
             name = 'maven-supersede-snapshot'
-	    credentials {
+            credentials {
                 username = "${artifactory_user}"
                 password = "${artifactory_password}"
-	    }
+            }
         }
-	maven {
+        maven {
             url 'http://supersede.es.atos.net:10080/artifactory/libs-release'
             name = 'maven-supersede-release'
-	    credentials {
+            credentials {
                 username = "${artifactory_user}"
                 password = "${artifactory_password}"
-	    }
+            }
         }
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}") 
         classpath('io.spring.gradle:dependency-management-plugin:0.5.2.RELEASE')
-	//Check for the latest version here: http://plugins.gradle.org/plugin/com.jfrog.artifactory
+        //Check for the latest version here: http://plugins.gradle.org/plugin/com.jfrog.artifactory
         classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4+"
     }
 }
@@ -101,8 +101,4 @@ eclipse {
          containers.remove('org.eclipse.jdt.launching.JRE_CONTAINER')
          containers 'org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8'
     }
-}
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '2.7'
 }

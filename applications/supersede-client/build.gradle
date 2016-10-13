@@ -22,28 +22,31 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 buildscript {
+    ext {
+        springBootVersion = '1.4.1.RELEASE'
+    }
     repositories {
         mavenCentral()
-    maven {
+        maven {
             url 'http://supersede.es.atos.net:10080/artifactory/libs-snapshot'
             name = 'maven-supersede-snapshot'
-        credentials {
+            credentials {
                 username = "${artifactory_user}"
                 password = "${artifactory_password}"
+            }
         }
-        }
-    maven {
+        maven {
             url 'http://supersede.es.atos.net:10080/artifactory/libs-release'
             name = 'maven-supersede-release'
-        credentials {
+            credentials {
                 username = "${artifactory_user}"
                 password = "${artifactory_password}"
-        }
+            }
         }
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.7.RELEASE")
-    //Check for the latest version here: http://plugins.gradle.org/plugin/com.jfrog.artifactory
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        //Check for the latest version here: http://plugins.gradle.org/plugin/com.jfrog.artifactory
         classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4+"
     }
 }
@@ -55,15 +58,15 @@ repositories {
 }
 
 dependencies {
-    compile('org.springframework.boot:spring-boot-starter-security:1.4.1.RELEASE')
-    compile('org.springframework.boot:spring-boot-starter-web:1.4.1.RELEASE')
+    compile('org.springframework.boot:spring-boot-starter-security:${springBootVersion}')
+    compile('org.springframework.boot:spring-boot-starter-web:${springBootVersion}')
 
     compile("org.springframework.session:spring-session:1.2.2.RELEASE")
 
-    compile("org.springframework.boot:spring-boot-starter-jdbc:1.4.1.RELEASE")
-    compile("org.springframework.boot:spring-boot-starter-data-jpa:1.4.1.RELEASE")
+    compile("org.springframework.boot:spring-boot-starter-jdbc:${springBootVersion}")
+    compile("org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}")
 
-    compile("org.springframework.boot:spring-boot-starter-redis:1.4.1.RELEASE")
+    compile("org.springframework.boot:spring-boot-starter-redis:${springBootVersion}")
 
     compile("eu.supersede:supersede-frontend-core:0.0.2-SNAPSHOT")
 }
@@ -76,23 +79,19 @@ eclipse {
     }
 }
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '2.7'
-}
-
 // Artifactory configuration to publish built jars
 artifactory {
     contextUrl = "${artifactory_contextUrl}"   //The base Artifactory URL if not overridden by the publisher/resolver
     publish {
         repository {
             repoKey = 'libs-snapshot-local'
-        username = "${artifactory_user}"
-        password = "${artifactory_password}"
+            username = "${artifactory_user}"
+            password = "${artifactory_password}"
             maven = true
         }
-    defaults {
+        defaults {
            publications ('mavenJava')
-    }
+        }
     }
     resolve {
         repository {
