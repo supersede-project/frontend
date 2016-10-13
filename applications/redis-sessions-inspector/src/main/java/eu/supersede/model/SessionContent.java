@@ -2,22 +2,24 @@ package eu.supersede.model;
 
 import java.util.Date;
 
+import eu.supersede.fe.security.DatabaseUser;
+
 public class SessionContent {
 
 	private String id;
 	private Date creationTime;
 	private Date lastAccessTime;
-	private String name;
+	private DatabaseUser databaseUser;
 	
 	public SessionContent() {
 	}
 
-	public SessionContent(String id, Date creationTime, Date lastAccessTime, String name)
+	public SessionContent(String id, Date creationTime, Date lastAccessTime, DatabaseUser databaseUser)
 	{
 		this.id = id;
 		this.creationTime = creationTime;
 		this.lastAccessTime = lastAccessTime;
-		this.name = name;
+		this.databaseUser = databaseUser;
 	}
 	
 	public String getId() {
@@ -44,12 +46,12 @@ public class SessionContent {
 		this.lastAccessTime = lastAccessTime;
 	}
 
-	public String getName() {
-		return name;
+	public DatabaseUser getDatabaseUser() {
+		return databaseUser;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setDatabaseUser(DatabaseUser databaseUser) {
+		this.databaseUser = databaseUser;
 	}
-	
+
 }
