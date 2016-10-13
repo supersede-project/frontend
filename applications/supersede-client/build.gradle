@@ -58,8 +58,8 @@ repositories {
 }
 
 dependencies {
-    compile('org.springframework.boot:spring-boot-starter-security:${springBootVersion}')
-    compile('org.springframework.boot:spring-boot-starter-web:${springBootVersion}')
+    compile("org.springframework.boot:spring-boot-starter-security:${springBootVersion}")
+    compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
 
     compile("org.springframework.session:spring-session:1.2.2.RELEASE")
 
