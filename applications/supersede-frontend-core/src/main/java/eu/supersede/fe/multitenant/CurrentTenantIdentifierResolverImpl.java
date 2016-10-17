@@ -14,12 +14,15 @@
 
 package eu.supersede.fe.multitenant;
 
+import javax.annotation.PostConstruct;
+
 import org.hibernate.context.spi.CurrentTenantIdentifierResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -27,16 +30,23 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 @Component
 @PropertySources({
-	@PropertySource("file:../conf/multitenancy.properties"),
+	@PropertySource(value = "file:../conf/multitenancy.properties", ignoreResourceNotFound=true),
 	@PropertySource(value = "file:../conf/multitenancy_${application.name}.properties", ignoreResourceNotFound=true)
   })
 public class CurrentTenantIdentifierResolverImpl implements CurrentTenantIdentifierResolver {
 
+	@Autowired
+	Environment env;
+	
 	@SuppressWarnings("unused")
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 	
-	@Value("${application.multitenancy.default}")
 	private String DEFAULT_TENANT_ID;
+	
+	@PostConstruct
+	public void load() {
+		DEFAULT_TENANT_ID = env.getProperty("application.multitenancy.default");
+	}
 	
 	@Override
 	public String resolveCurrentTenantIdentifier()
