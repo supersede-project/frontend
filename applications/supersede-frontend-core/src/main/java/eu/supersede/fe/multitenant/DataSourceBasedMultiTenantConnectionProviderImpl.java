@@ -15,7 +15,9 @@
 package eu.supersede.fe.multitenant;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
@@ -52,11 +54,14 @@ public class DataSourceBasedMultiTenantConnectionProviderImpl extends AbstractDa
 	public void load() {
 		datasources = new HashMap<>();
 		
-		tenantNames = env.getProperty("application.multitenancy.names").split(",");
-		if(tenantNames == null)
+		String tmpTenants = env.getProperty("application.multitenancy.names");
+		if(tmpTenants == null)
 		{
+			datasources.put("fake", getFakeDatasource());
 			return;
 		}
+		
+		tenantNames = tmpTenants.split(",");
 		
 		for(int i = 0; i < tenantNames.length; i++)
 		{
@@ -84,6 +89,21 @@ public class DataSourceBasedMultiTenantConnectionProviderImpl extends AbstractDa
 				datasources.put(n, tmp);
 			}
 		}
+		
+		if(datasources.size() == 0)
+		{
+			datasources.put("fake", getFakeDatasource());
+		}
+	}
+	
+	private DataSource getFakeDatasource()
+	{
+		DataSourceBuilder factory = DataSourceBuilder
+				.create(env.getClass().getClassLoader())
+				.driverClassName("org.h2.Driver")
+				.username("test")
+				.url("jdbc:h2:mem:");
+		return factory.build();
 	}
 
 	@Bean(name = "dataSource")
@@ -97,6 +117,16 @@ public class DataSourceBasedMultiTenantConnectionProviderImpl extends AbstractDa
 		if(datasources.containsKey(defaultTenant))
 		{
 			dS = datasources.get(defaultTenant);	
+		}
+		else
+		{
+			Set<String> keys = datasources.keySet();
+			Iterator keysIt = keys.iterator();
+			while(keysIt.hasNext())
+			{
+				dS = datasources.get(keysIt.next());
+				break;
+			}
 		}
 		return dS;
 	}

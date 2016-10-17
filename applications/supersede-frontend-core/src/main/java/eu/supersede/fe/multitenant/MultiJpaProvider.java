@@ -57,7 +57,7 @@ public class MultiJpaProvider {
 	@Autowired
 	private JpaProperties jpaProperties;
 	
-	@Autowired
+	@Autowired(required=false)
 	EntityManagerFactoryBuilder builder;
 
 	private Map<String, ContainerUtil> repositoriesFactory;

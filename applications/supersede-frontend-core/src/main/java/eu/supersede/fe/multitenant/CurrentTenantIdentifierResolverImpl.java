@@ -41,7 +41,7 @@ public class CurrentTenantIdentifierResolverImpl implements CurrentTenantIdentif
 	@SuppressWarnings("unused")
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 	
-	private String DEFAULT_TENANT_ID;
+	private String DEFAULT_TENANT_ID = "";
 	
 	@PostConstruct
 	public void load() {
