@@ -32,8 +32,7 @@ public class DatabaseUser extends  org.springframework.security.core.userdetails
 	private Integer expiresIn;
 	private String refreshToken;
 	private String accessToken;
-
-
+	
 	public DatabaseUser(Long userId, String name, String username, String password, AuthorizationToken token, boolean enabled, boolean accountNonExpired,
 			boolean credentialsNonExpired, boolean accountNonLocked,
 			Collection<? extends GrantedAuthority> authorities, String locale) {

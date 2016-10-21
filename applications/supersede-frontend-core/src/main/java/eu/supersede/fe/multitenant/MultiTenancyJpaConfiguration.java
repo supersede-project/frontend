@@ -43,7 +43,7 @@ public class MultiTenancyJpaConfiguration {
 	@Value("${application.multitenancy.models.packages}")
 	private String MODELS_PACKAGES;
 	
-	@Autowired
+	@Autowired(required=false)
 	private DataSource dataSource;
 	
 	@Autowired
@@ -57,6 +57,10 @@ public class MultiTenancyJpaConfiguration {
 
 	@Bean
 	public LocalContainerEntityManagerFactoryBean entityManagerFactory(EntityManagerFactoryBuilder builder) {
+		if(dataSource == null)
+		{
+			return null;
+		}
 		Map<String, Object> hibernateProps = new LinkedHashMap<>();
 		hibernateProps.putAll(jpaProperties.getHibernateProperties(dataSource));
 

@@ -22,6 +22,8 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
@@ -36,10 +38,12 @@ import eu.supersede.integration.api.security.types.AuthorizationToken;
 
 @Component
 @PropertySources({
-	@PropertySource("file:../conf/multitenancy.properties"),
-	@PropertySource("file:../conf/if.properties")
+	@PropertySource(value = "file:../conf/multitenancy.properties", ignoreResourceNotFound=true),
+	@PropertySource(value = "file:../conf/if.properties", ignoreResourceNotFound=true)
 })
 public class ProxyWrapper {
+	
+	private final Logger log = LoggerFactory.getLogger(this.getClass());
 	
 	@Autowired
 	Environment env;
@@ -56,7 +60,16 @@ public class ProxyWrapper {
 	{
 		users = new HashMap<>();
 		ams = new HashMap<>();
-		tenants = env.getRequiredProperty("application.multitenancy.names").split(",");
+		String tmpTenants = env.getProperty("application.multitenancy.names");
+		if(tmpTenants != null)
+		{
+			tenants = tmpTenants.split(",");
+		}
+		else
+		{
+			log.warn("No tenants set, can not setup " + this.getClass().getSimpleName());
+			tenants = new String[0];
+		}
 		
 		for(int i = 0; i < tenants.length; i++)
 		{
@@ -65,19 +78,22 @@ public class ProxyWrapper {
 		
 		for(String t : tenants)
 		{
-			String[] pair = env.getRequiredProperty("is.authorization." + t + ".tenant.pair").split("/");
-			String domain = env.getRequiredProperty("is.authorization." + t + ".tenant.domain");
+			String domain = env.getProperty("is.authorization." + t + ".tenant.domain");
 			
-			String password = pair[1];
-			String user = pair[0] + domain;
-			
-			AuthManagerUser authUser = new AuthManagerUser(user, password);
-			users.put(t, authUser);
-			ams.put(t, new IFAuthenticationManager(authUser.user, authUser.password));
+			if(domain != null)
+			{
+				String[] pair = env.getRequiredProperty("is.authorization." + t + ".tenant.pair").split("/");
+				
+				String password = pair[1];
+				String user = pair[0] + domain;
+				
+				AuthManagerUser authUser = new AuthManagerUser(user, password);
+				users.put(t, authUser);
+				ams.put(t, new IFAuthenticationManager(authUser.user, authUser.password));
+			}
 		}
 		
 		proxy = new FEDataStoreProxy();
-        
 	}
 	
 	public FEDataStoreProxy getFEDataStoreProxy()
