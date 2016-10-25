@@ -43,9 +43,9 @@ buildscript {
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-        classpath('io.spring.gradle:dependency-management-plugin:0.5.2.RELEASE')
+        classpath('io.spring.gradle:dependency-management-plugin:0.6.1.RELEASE')
         //Check for the latest version here: http://plugins.gradle.org/plugin/com.jfrog.artifactory
-        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4+"
+        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.4.7"
     }
 }
 
@@ -64,25 +64,25 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-web')
 
     testCompile('org.springframework.boot:spring-boot-starter-test')
-    compile('commons-collections:commons-collections:3.2.1')
-    compile('org.apache.velocity:velocity:1.6.2')
+    compile('commons-collections:commons-collections:3.2.2')
+    compile('org.apache.velocity:velocity:1.7')
 
     compile("org.springframework.boot:spring-boot-starter-jdbc")
     compile("org.springframework.boot:spring-boot-starter-data-jpa")
-    compile("org.postgresql:postgresql:9.4.1208.jre7")
+    compile("org.postgresql:postgresql:9.4.1211.jre7")
 
     compile("org.springframework.boot:spring-boot-starter-mail")
 
     providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
 
     compile("org.springframework.session:spring-session:1.2.2.RELEASE")
-    compile("org.springframework.boot:spring-boot-starter-redis")
+    compile("org.springframework.boot:spring-boot-starter-data-redis")
 
     compile("eu.supersede:supersede-frontend-core:0.0.3-SNAPSHOT")
 }
 
 configurations.all {
-	//Avoids conflict: SL4J Multiple bindings were found on the class path 
+	//Avoids conflict: SL4J Multiple bindings were found on the class path
 	exclude group: "org.slf4j", module: "slf4j-log4j12"
 }
 

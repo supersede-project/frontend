@@ -41,7 +41,7 @@ buildscript {
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
         //Check for the latest version here: http://plugins.gradle.org/plugin/com.jfrog.artifactory
-        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4+"
+        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.4.7"
     }
 }
 
@@ -60,11 +60,10 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-jdbc:${springBootVersion}")
     compile("org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}")
 
-    compile("org.springframework.boot:spring-boot-starter-redis:${springBootVersion}")
+    compile("org.springframework.boot:spring-boot-starter-data-redis:${springBootVersion}")
 
     compile("eu.supersede:supersede-frontend-core:0.0.3-SNAPSHOT")
 }
-
 
 eclipse {
     classpath {

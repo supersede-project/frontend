@@ -1,5 +1,7 @@
-cd supersede-frontend-core/ && gradle build && 
-cd ../supersede-client && gradle build && 
-cd ../supersede-frontend && gradle build && 
-cd ../admin-user-manager-app && gradle build && 
-cd ..
+#!/bin/bash
+
+cd supersede-frontend-core/ && ./gradlew build &&
+cd ../supersede-frontend && ./gradlew build &&
+cd ../supersede-client && ./gradlew build &&
+cd ../admin-user-manager-app && ./gradlew build &&
+cd ../redis-sessions-inspector && ./gradlew build
