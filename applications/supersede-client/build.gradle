@@ -5,7 +5,7 @@ apply plugin: 'maven'
 apply plugin: 'maven-publish'
 apply plugin: "com.jfrog.artifactory"
 
-version = '0.0.3-SNAPSHOT'
+version = '0.2-SNAPSHOT'
 group = 'eu.supersede'
 
 jar {
@@ -62,7 +62,7 @@ dependencies {
 
     compile("org.springframework.boot:spring-boot-starter-data-redis:${springBootVersion}")
 
-    compile("eu.supersede:supersede-frontend-core:0.0.3-SNAPSHOT")
+    compile("eu.supersede:supersede-frontend-core:0.2-SNAPSHOT")
 }
 
 eclipse {
