@@ -67,6 +67,11 @@ dependencies {
     compile("eu.supersede.if:eu.supersede.if.api:0.2.0-SNAPSHOT")
 }
 
+configurations.all {
+	// check for updates at every build
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}
+
 eclipse {
     classpath {
          containers.remove('org.eclipse.jdt.launching.JRE_CONTAINER')
