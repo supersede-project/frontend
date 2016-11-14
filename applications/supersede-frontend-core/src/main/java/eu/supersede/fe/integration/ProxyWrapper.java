@@ -39,6 +39,7 @@ import eu.supersede.integration.api.security.types.AuthorizationToken;
 @Component
 @PropertySources({
 	@PropertySource(value = "file:../conf/multitenancy.properties", ignoreResourceNotFound=true),
+	@PropertySource(value = "file:../conf/multitenancy_${application.name}.properties", ignoreResourceNotFound=true),
 	@PropertySource(value = "file:../conf/if.properties", ignoreResourceNotFound=true)
 })
 public class ProxyWrapper {

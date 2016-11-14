@@ -18,12 +18,16 @@ import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/tenant")
-@PropertySource("file:../conf/multitenancy.properties")
+@PropertySources({
+	@PropertySource(value = "file:../conf/multitenancy.properties", ignoreResourceNotFound=true),
+	@PropertySource(value = "file:../conf/multitenancy_${application.name}.properties", ignoreResourceNotFound=true)
+  })
 public class TenantRest {
 
 	@Value("#{'${application.multitenancy.names}'.split(',')}") 
