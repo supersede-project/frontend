@@ -14,6 +14,7 @@
 
 package eu.supersede.fe.multitenant;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -26,6 +27,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
 import org.hibernate.cfg.Environment;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -48,6 +51,8 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 @PropertySource("classpath:wp5_application.properties")
 public class MultiJpaProvider {
 
+	private final Logger log = LoggerFactory.getLogger(this.getClass());
+
 	@Value("${application.multitenancy.models.packages}")
 	private String MODELS_PACKAGES;
 	
@@ -68,8 +73,16 @@ public class MultiJpaProvider {
 		Map<String, DataSource> datasources = dataSourceBasedMultiTenantConnectionProviderImpl.getDataSources();
 		
 		repositoriesFactory = new HashMap<>();
+
 		for(String n : datasources.keySet())
 		{
+			try {
+				log.info("Loading database: " + datasources.get(n).getConnection().getMetaData().getURL());
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 			Map<String, Object> hibernateProps = new LinkedHashMap<>();
 			hibernateProps.putAll(jpaProperties.getHibernateProperties(datasources.get(n)));
 
