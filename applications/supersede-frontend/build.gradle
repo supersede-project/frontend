@@ -84,6 +84,8 @@ dependencies {
 configurations.all {
 	//Avoids conflict: SL4J Multiple bindings were found on the class path
 	exclude group: "org.slf4j", module: "slf4j-log4j12"
+    // check for updates at every build
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
 }
 
 eclipse {
