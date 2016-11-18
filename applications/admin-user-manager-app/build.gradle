@@ -78,8 +78,9 @@ dependencies {
     compile("org.springframework.session:spring-session:1.2.2.RELEASE")
     compile("org.springframework.boot:spring-boot-starter-data-redis")
 	
-    compile("eu.supersede:supersede-client:0.2-SNAPSHOT")
-    compile("eu.supersede:supersede-frontend-core:0.2-SNAPSHOT")
+    compile("eu.supersede.if:eu.supersede.if.api:0.2.0-SNAPSHOT")
+    compile files('../supersede-client/build/libs/supersede-client-0.2-SNAPSHOT.jar')
+    compile files('../supersede-frontend-core/build/libs/supersede-frontend-core-0.2-SNAPSHOT.jar')
 	
 }
 

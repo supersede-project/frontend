@@ -64,140 +64,161 @@ import eu.supersede.integration.api.security.types.AuthorizationToken;
 @EnableWebSecurity
 @PropertySource("classpath:wp5.properties")
 @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
-class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-	
-	@SuppressWarnings("unused")
-	private final Logger log = LoggerFactory.getLogger(this.getClass());
+class SecurityConfiguration extends WebSecurityConfigurerAdapter
+{
 
-	@Value("#{'${web.security.permit.urls}'.split(',')}") 
-	private String[] PERMIT_URLS;
-	
-	@Value("${security.configuration.IFAuthManager}")
-	private Boolean AUTH_MANAGER_ENABLED;
-	
-	@Override
-	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		//auth.userDetailsService(dbUserDetailsService()).passwordEncoder(bcryptEncoder);
-		auth.authenticationProvider(customAuthenticationProvider());
-	}
-	
-	@Autowired
-	ProxyWrapper proxy;
-	
-	@Autowired
-	UsersJpa users;
-	
-	@Bean
-	AuthenticationProvider customAuthenticationProvider() {
-		return new AuthenticationProvider() {
+    @SuppressWarnings("unused")
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-			private final Logger log = LoggerFactory.getLogger(this.getClass());
-			
-			@Override
-			@Transactional
-			public Authentication authenticate(Authentication auth) throws AuthenticationException {
-				String username = (String)auth.getPrincipal();
-				String password = (String)auth.getCredentials();
-				
-				ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-				HttpServletRequest req = attr.getRequest();
-				String tenantId = req.getHeader("TenantId");
-				
-				if(tenantId == null)
-				{
-					log.error("Tenant provided");
-					throw new BadCredentialsException("Invalid login request: missing tenant");
-				}
-				
-				AuthorizationToken token = getAuthToken(username, password, tenantId);
-				
-				User user = users.findByUsername(username);
-				if(user == null)
-				{
-					log.error("Username not found in Database");
-					throw new BadCredentialsException("Invalid login request: user " + username + " not found");
-				}
-				
-				//get authorities from profiles
-				List<Profile> profiles = user.getProfiles();
-				String[] authorities = new String[profiles.size()];
-				for(int i = 0; i < profiles.size(); i++)
-				{
-					authorities[i] = "ROLE_" + profiles.get(i).getName();
-				}
-				
-				log.debug("User has " + authorities.length + " authorities");
-				
-				List<GrantedAuthority> permissions = AuthorityUtils.createAuthorityList(authorities);
-				
-				DatabaseUser dbUser = new DatabaseUser(user.getUserId(), user.getFirstName() + " " + user.getLastName(), user.getEmail(), password, token, true, true, true, true, permissions, user.getLocale());
+    @Value("#{'${web.security.permit.urls}'.split(',')}")
+    private String[] PERMIT_URLS;
 
-				return new UsernamePasswordAuthenticationToken(dbUser, password, permissions);//AUTHORITIES
-			}
+    @Value("${security.configuration.IFAuthManager}")
+    private Boolean AUTH_MANAGER_ENABLED;
 
-			private AuthorizationToken getAuthToken(String username, String password, String tenantId) {
-				AuthorizationToken token = null;
-				
-				if(AUTH_MANAGER_ENABLED)
-				{
-					try {
-						token = proxy.getIFAuthenticationManager(tenantId).getAuthorizationToken(username, password, tenantId);
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					if(token == null || token.getAccessToken() == null)
-					{
-						log.error("Supersede integration token is null");
-						throw new BadCredentialsException("Invalid login request: authentication manager token is null");
-					}
-				}
-				else
-				{
-					log.warn("IF Authentication Manager disable, user token is NULL");
-				}
-				return token;
-			}
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception
+    {
+        // auth.userDetailsService(dbUserDetailsService()).passwordEncoder(bcryptEncoder);
+        auth.authenticationProvider(customAuthenticationProvider());
+    }
 
-			@SuppressWarnings("rawtypes")
-			public boolean supports(Class authentication) {
-				return (UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication));
-			}
+    @Autowired
+    ProxyWrapper proxy;
 
-		};
-	}
+    @Autowired
+    UsersJpa users;
 
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		http.httpBasic().and().authorizeRequests()
-				.antMatchers(PERMIT_URLS).permitAll()
-				.anyRequest().authenticated().and().csrf().csrfTokenRepository(csrfTokenRepository()).and()
-				.addFilterAfter(csrfHeaderFilter(), CsrfFilter.class);
-	}
+    @Bean
+    AuthenticationProvider customAuthenticationProvider()
+    {
+        return new AuthenticationProvider()
+        {
 
-	private Filter csrfHeaderFilter() {
-		return new OncePerRequestFilter() {
-			@Override
-			protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
-					FilterChain filterChain) throws ServletException, IOException {
-				CsrfToken csrf = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
-				if (csrf != null) {
-					Cookie cookie = WebUtils.getCookie(request, "XSRF-TOKEN");
-					String token = csrf.getToken();
-					if (cookie == null || token != null && !token.equals(cookie.getValue())) {
-						cookie = new Cookie("XSRF-TOKEN", token);
-						cookie.setPath("/");
-						response.addCookie(cookie);
-					}
-				}
-				filterChain.doFilter(request, response);
-			}
-		};
-	}
+            private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-	private CsrfTokenRepository csrfTokenRepository() {
-		HttpSessionCsrfTokenRepository repository = new HttpSessionCsrfTokenRepository();
-		repository.setHeaderName("X-XSRF-TOKEN");
-		return repository;
-	}
+            @Override
+            @Transactional
+            public Authentication authenticate(Authentication auth) throws AuthenticationException
+            {
+                String username = (String) auth.getPrincipal();
+                String password = (String) auth.getCredentials();
+
+                ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder
+                        .currentRequestAttributes();
+                HttpServletRequest req = attr.getRequest();
+                String tenantId = req.getHeader("TenantId");
+
+                if (tenantId == null)
+                {
+                    log.error("Tenant provided");
+                    throw new BadCredentialsException("Invalid login request: missing tenant");
+                }
+
+                AuthorizationToken token = getAuthToken(username, password, tenantId);
+
+                User user = users.findByUsername(username);
+                if (user == null)
+                {
+                    log.error("Username not found in Database");
+                    throw new BadCredentialsException("Invalid login request: user " + username + " not found");
+                }
+
+                // get authorities from profiles
+                List<Profile> profiles = user.getProfiles();
+                String[] authorities = new String[profiles.size()];
+                for (int i = 0; i < profiles.size(); i++)
+                {
+                    authorities[i] = "ROLE_" + profiles.get(i).getName();
+                }
+
+                log.debug("User has " + authorities.length + " authorities");
+
+                List<GrantedAuthority> permissions = AuthorityUtils.createAuthorityList(authorities);
+
+                DatabaseUser dbUser = new DatabaseUser(user.getUserId(), user.getFirstName() + " " + user.getLastName(),
+                        user.getEmail(), password, token, true, true, true, true, permissions, user.getLocale());
+
+                return new UsernamePasswordAuthenticationToken(dbUser, password, permissions);// AUTHORITIES
+            }
+
+            private AuthorizationToken getAuthToken(String username, String password, String tenantId)
+            {
+                AuthorizationToken token = null;
+
+                if (AUTH_MANAGER_ENABLED)
+                {
+                    try
+                    {
+                        token = proxy.getIFAuthenticationManager(tenantId).getAuthorizationToken(username, password,
+                                tenantId);
+                    }
+                    catch (Exception e)
+                    {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                    if (token == null || token.getAccessToken() == null)
+                    {
+                        log.error("Supersede integration token is null");
+                        throw new BadCredentialsException(
+                                "Invalid login request: authentication manager token is null");
+                    }
+                }
+                else
+                {
+                    log.warn("IF Authentication Manager disable, user token is NULL");
+                }
+                return token;
+            }
+
+            @Override
+            @SuppressWarnings("rawtypes")
+            public boolean supports(Class authentication)
+            {
+                return (UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication));
+            }
+
+        };
+    }
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception
+    {
+        http.httpBasic().and().authorizeRequests().antMatchers(PERMIT_URLS).permitAll().anyRequest().authenticated()
+                .and().csrf().csrfTokenRepository(csrfTokenRepository()).and()
+                .addFilterAfter(csrfHeaderFilter(), CsrfFilter.class);
+    }
+
+    private Filter csrfHeaderFilter()
+    {
+        return new OncePerRequestFilter()
+        {
+            @Override
+            protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+                    FilterChain filterChain) throws ServletException, IOException
+            {
+                CsrfToken csrf = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+                if (csrf != null)
+                {
+                    Cookie cookie = WebUtils.getCookie(request, "XSRF-TOKEN");
+                    String token = csrf.getToken();
+                    if (cookie == null || token != null && !token.equals(cookie.getValue()))
+                    {
+                        cookie = new Cookie("XSRF-TOKEN", token);
+                        cookie.setPath("/");
+                        response.addCookie(cookie);
+                    }
+                }
+                filterChain.doFilter(request, response);
+            }
+        };
+    }
+
+    private CsrfTokenRepository csrfTokenRepository()
+    {
+        HttpSessionCsrfTokenRepository repository = new HttpSessionCsrfTokenRepository();
+        repository.setHeaderName("X-XSRF-TOKEN");
+        return repository;
+    }
 }

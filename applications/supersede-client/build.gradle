@@ -62,7 +62,7 @@ dependencies {
 
     compile("org.springframework.boot:spring-boot-starter-data-redis:${springBootVersion}")
 
-    compile("eu.supersede:supersede-frontend-core:0.2-SNAPSHOT")
+    compile files('../supersede-frontend-core/build/libs/supersede-frontend-core-0.2-SNAPSHOT.jar')
 }
 
 configurations.all {

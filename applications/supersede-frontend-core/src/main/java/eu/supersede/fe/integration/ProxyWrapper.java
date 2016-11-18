@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
@@ -37,7 +38,8 @@ import eu.supersede.integration.api.security.IFAuthenticationManager;
 import eu.supersede.integration.api.security.types.AuthorizationToken;
 
 @Component
-@PropertySource("file:../conf/multitenancy.properties")
+@PropertySources({ @PropertySource(value = "file:../conf/multitenancy.properties", ignoreResourceNotFound = true),
+        @PropertySource(value = "file:../conf/if.properties", ignoreResourceNotFound = true) })
 public class ProxyWrapper
 {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
@@ -59,14 +61,14 @@ public class ProxyWrapper
         ams = new HashMap<>();
         String applicationName = ApplicationConfiguration.getApplicationName();
         String tmpTenants = env.getProperty(applicationName + ".multitenancy.names");
-        System.out.println(applicationName + ".multitenancy.names = " + tmpTenants);
+        log.info(applicationName + ".multitenancy.names = " + tmpTenants);
 
         // Read values of the default application
         if (tmpTenants == null)
         {
             applicationName = ApplicationConfiguration.DEFAULT_APPLICATION_NAME;
             tmpTenants = env.getProperty(applicationName + ".multitenancy.names");
-            System.out.println(applicationName + ".multitenancy.names = " + tmpTenants);
+            log.info(applicationName + ".multitenancy.names = " + tmpTenants);
         }
 
         if (tmpTenants != null)
@@ -84,9 +86,11 @@ public class ProxyWrapper
             tenants[i] = tenants[i].trim();
         }
 
+        log.info("Tenants: " + tenants.length);
         for (String t : tenants)
         {
             String domain = env.getProperty("is.authorization." + t + ".tenant.domain");
+            log.info("domain is null: " + (domain == null));
 
             if (domain != null)
             {
