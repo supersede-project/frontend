@@ -38,139 +38,148 @@ import eu.supersede.integration.api.security.types.AuthorizationToken;
 
 @Component
 @PropertySource("file:../conf/multitenancy.properties")
-public class ProxyWrapper {
+public class ProxyWrapper
+{
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-	private final Logger log = LoggerFactory.getLogger(this.getClass());
+    @Autowired
+    Environment env;
 
-	@Autowired
-	Environment env;
+    private String[] tenants;
 
-	private String[] tenants;
+    private static Map<String, AuthManagerUser> users;
 
-	private static Map<String, AuthManagerUser> users;
+    private static FEDataStoreProxy proxy;
+    private static Map<String, IFAuthenticationManager> ams;
 
-	private static FEDataStoreProxy proxy;
-	private static Map<String, IFAuthenticationManager> ams;
+    @PostConstruct
+    public void load()
+    {
+        users = new HashMap<>();
+        ams = new HashMap<>();
+        String applicationName = ApplicationConfiguration.getApplicationName();
+        String tmpTenants = env.getProperty(applicationName + ".multitenancy.names");
+        System.out.println(applicationName + ".multitenancy.names = " + tmpTenants);
 
-	@PostConstruct
-	public void load()
-	{
-		users = new HashMap<>();
-		ams = new HashMap<>();
-		String applicationName = ApplicationConfiguration.getApplicationName();
-		String tmpTenants = env.getProperty(applicationName + ".multitenancy.names");
+        // Read values of the default application
+        if (tmpTenants == null)
+        {
+            applicationName = ApplicationConfiguration.DEFAULT_APPLICATION_NAME;
+            tmpTenants = env.getProperty(applicationName + ".multitenancy.names");
+            System.out.println(applicationName + ".multitenancy.names = " + tmpTenants);
+        }
 
-		if(tmpTenants != null)
-		{
-			tenants = tmpTenants.split(",");
-		}
-		else
-		{
-			log.warn("No tenants set, can not setup " + this.getClass().getSimpleName());
-			tenants = new String[0];
-		}
+        if (tmpTenants != null)
+        {
+            tenants = tmpTenants.split(",");
+        }
+        else
+        {
+            log.warn("No tenants set, can not setup " + this.getClass().getSimpleName());
+            tenants = new String[0];
+        }
 
-		for(int i = 0; i < tenants.length; i++)
-		{
-			tenants[i] = tenants[i].trim();
-		}
+        for (int i = 0; i < tenants.length; i++)
+        {
+            tenants[i] = tenants[i].trim();
+        }
 
-		for(String t : tenants)
-		{
-			String domain = env.getProperty("is.authorization." + t + ".tenant.domain");
+        for (String t : tenants)
+        {
+            String domain = env.getProperty("is.authorization." + t + ".tenant.domain");
 
-			if(domain != null)
-			{
-				String[] pair = env.getRequiredProperty("is.authorization." + t + ".tenant.pair").split("/");
+            if (domain != null)
+            {
+                String[] pair = env.getRequiredProperty("is.authorization." + t + ".tenant.pair").split("/");
 
-				String password = pair[1];
-				String user = pair[0] + domain;
+                String password = pair[1];
+                String user = pair[0] + domain;
 
-				AuthManagerUser authUser = new AuthManagerUser(user, password);
-				users.put(t, authUser);
-				ams.put(t, new IFAuthenticationManager(authUser.user, authUser.password));
-			}
-		}
+                AuthManagerUser authUser = new AuthManagerUser(user, password);
+                users.put(t, authUser);
+                ams.put(t, new IFAuthenticationManager(authUser.user, authUser.password));
+            }
+        }
 
-		proxy = new FEDataStoreProxy();
-	}
+        proxy = new FEDataStoreProxy();
+    }
 
-	public FEDataStoreProxy getFEDataStoreProxy()
-	{
-		return proxy;
-	}
+    public FEDataStoreProxy getFEDataStoreProxy()
+    {
+        return proxy;
+    }
 
-	public IFAuthenticationManager getIFAuthenticationManager(String tenant)
-	{
-		return ams.get(tenant);
-	}
+    public IFAuthenticationManager getIFAuthenticationManager(String tenant)
+    {
+        return ams.get(tenant);
+    }
 
-	//TODO: functions to ask Josu to implement:
-	public User getUserByName(String username, String tenantId, AuthorizationToken token)
-	{
-		User user = null;
-		List<User> users = null;
-		try
-		{
-			users = proxy.getUsers(tenantId, false, token);
-		}
-		catch(URISyntaxException ex)
-		{
-			return null;
-		}
-		for(User u : users)
-		{
-			if(u.getEmail().equals(username))
-			{
-				user = u;
-				break;
-			}
-		}
+    // TODO: functions to ask Josu to implement:
+    public User getUserByName(String username, String tenantId, AuthorizationToken token)
+    {
+        User user = null;
+        List<User> users = null;
+        try
+        {
+            users = proxy.getUsers(tenantId, false, token);
+        }
+        catch (URISyntaxException ex)
+        {
+            return null;
+        }
+        for (User u : users)
+        {
+            if (u.getEmail().equals(username))
+            {
+                user = u;
+                break;
+            }
+        }
 
-		return user;
-	}
+        return user;
+    }
 
-	public Profile getProfileByName(String profileName, String tenantId, AuthorizationToken token)
-	{
-		Profile profile = null;
-		List<Profile> profiles = proxy.getProfiles(tenantId, token);
-		for(Profile p : profiles)
-		{
-			if(p.getName().equals(profileName))
-			{
-				profile = p;
-				break;
-			}
-		}
+    public Profile getProfileByName(String profileName, String tenantId, AuthorizationToken token)
+    {
+        Profile profile = null;
+        List<Profile> profiles = proxy.getProfiles(tenantId, token);
+        for (Profile p : profiles)
+        {
+            if (p.getName().equals(profileName))
+            {
+                profile = p;
+                break;
+            }
+        }
 
-		return profile;
-	}
+        return profile;
+    }
 
-	public List<Profile> getProfilesInNames(List<String> profileNames, String tenantId, AuthorizationToken token)
-	{
-		List<Profile> ret = new ArrayList<Profile>();
+    public List<Profile> getProfilesInNames(List<String> profileNames, String tenantId, AuthorizationToken token)
+    {
+        List<Profile> ret = new ArrayList<>();
 
-		List<Profile> profiles = proxy.getProfiles(tenantId, token);
-		for(Profile p : profiles)
-		{
-			if(profileNames.contains(p.getName()) && !ret.contains(p))
-			{
-				ret.add(p);
-			}
-		}
+        List<Profile> profiles = proxy.getProfiles(tenantId, token);
+        for (Profile p : profiles)
+        {
+            if (profileNames.contains(p.getName()) && !ret.contains(p))
+            {
+                ret.add(p);
+            }
+        }
 
-		return ret;
-	}
+        return ret;
+    }
 
-	private class AuthManagerUser
-	{
-		private String user;
-		private String password;
+    private class AuthManagerUser
+    {
+        private String user;
+        private String password;
 
-		public AuthManagerUser(String user, String password) {
-			this.user = user;
-			this.password = password;
-		}
-	}
-
+        public AuthManagerUser(String user, String password)
+        {
+            this.user = user;
+            this.password = password;
+        }
+    }
 }

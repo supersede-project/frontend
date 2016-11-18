@@ -23,37 +23,43 @@ import org.slf4j.LoggerFactory;
 
 public class ApplicationConfiguration
 {
-	private static String APPLICATION_PROPERTIES = "/wp5_application.properties";
-	private static String APPLICATION_NAME = "application.name";
+    private static String APPLICATION_PROPERTIES = "/wp5_application.properties";
+    private static String APPLICATION_NAME = "application.name";
 
-	@SuppressWarnings("unused")
-	private static final Logger log = LoggerFactory.getLogger(ApplicationConfiguration.class);
+    // Used to read the default multitenancy configuration.
+    public static String DEFAULT_APPLICATION_NAME = "supersede-frontend";
 
-	public static String getApplicationName()
-	{
-		InputStream input = Runtime.class.getResourceAsStream(APPLICATION_PROPERTIES);
+    @SuppressWarnings("unused")
+    private static final Logger log = LoggerFactory.getLogger(ApplicationConfiguration.class);
 
-		if (input == null)
-		{
-			input = ApplicationConfiguration.class.getClassLoader().getResourceAsStream(APPLICATION_PROPERTIES);
-		}
+    public static String getApplicationName()
+    {
+        InputStream input = Runtime.class.getResourceAsStream(APPLICATION_PROPERTIES);
 
-		Properties props = new Properties();
+        if (input == null)
+        {
+            input = ApplicationConfiguration.class.getClassLoader().getResourceAsStream(APPLICATION_PROPERTIES);
+        }
 
-		try {
-			props.load(input);
-		} catch (IOException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
+        Properties props = new Properties();
 
-		String applicationName = props.getProperty(APPLICATION_NAME);
+        try
+        {
+            props.load(input);
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
 
-		if (applicationName == null)
-		{
-			throw new RuntimeException("application.name properties is missing!");
-		}
+        String applicationName = props.getProperty(APPLICATION_NAME);
 
-		return applicationName;
-	}
+        if (applicationName == null)
+        {
+            throw new RuntimeException("application.name properties is missing!");
+        }
+
+        return applicationName;
+    }
 }

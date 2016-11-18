@@ -31,59 +31,71 @@ import eu.supersede.fe.configuration.ApplicationConfiguration;
 
 @Component
 @PropertySource("file:../conf/multitenancy.properties")
-public class CurrentTenantIdentifierResolverImpl implements CurrentTenantIdentifierResolver {
+public class CurrentTenantIdentifierResolverImpl implements CurrentTenantIdentifierResolver
+{
 
-	@Autowired
-	Environment env;
+    @Autowired
+    Environment env;
 
-	@SuppressWarnings("unused")
-	private final Logger log = LoggerFactory.getLogger(this.getClass());
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-	private String DEFAULT_TENANT_ID = "";
+    private String DEFAULT_TENANT_ID = "";
 
-	@PostConstruct
-	public void load() {
-		String applicationName = ApplicationConfiguration.getApplicationName();
-		DEFAULT_TENANT_ID = env.getProperty(applicationName + ".multitenancy.default");
-	}
+    @PostConstruct
+    public void load()
+    {
+        String applicationName = ApplicationConfiguration.getApplicationName();
+        DEFAULT_TENANT_ID = env.getProperty(applicationName + ".multitenancy.default");
+        log.info(applicationName + ".multitenancy.default = " + DEFAULT_TENANT_ID);
 
-	@Override
-	public String resolveCurrentTenantIdentifier()
-	{
-		RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+        // Read value of the default application
+        if (DEFAULT_TENANT_ID == null)
+        {
+            applicationName = ApplicationConfiguration.DEFAULT_APPLICATION_NAME;
+            DEFAULT_TENANT_ID = env.getProperty(applicationName + ".multitenancy.default");
+            log.info(applicationName + ".multitenancy.default = " + DEFAULT_TENANT_ID);
+        }
+    }
 
-		if (requestAttributes != null)
-		{
-			String identifier = (String) requestAttributes.getAttribute("CURRENT_TENANT_IDENTIFIER",
-					RequestAttributes.SCOPE_REQUEST);
+    @Override
+    public String resolveCurrentTenantIdentifier()
+    {
+        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
 
-			if (identifier != null) {
-				return identifier;
-			}
-		}
+        if (requestAttributes != null)
+        {
+            String identifier = (String) requestAttributes.getAttribute("CURRENT_TENANT_IDENTIFIER",
+                    RequestAttributes.SCOPE_REQUEST);
 
-		//current tenant identifier not set, this may happen on login, if present in header we can just use this one
-		//TODO: investigate better (add MultiTenancyInterceptor before SecurityConfiguration)
-		try
-		{
-			ServletRequestAttributes currentRequestAttributes =
-					(ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-			String multiTenantId = currentRequestAttributes.getRequest().getHeader("TenantId");
-			if(multiTenantId != null)
-			{
-				return multiTenantId;
-			}
-		}
-		catch(IllegalStateException ex)
-		{
-			//throw if no request were make (????)
-		}
+            if (identifier != null)
+            {
+                return identifier;
+            }
+        }
 
-		return DEFAULT_TENANT_ID;
-	}
+        // current tenant identifier not set, this may happen on login, if present in header we can just use this one
+        // TODO: investigate better (add MultiTenancyInterceptor before SecurityConfiguration)
+        try
+        {
+            ServletRequestAttributes currentRequestAttributes = (ServletRequestAttributes) RequestContextHolder
+                    .currentRequestAttributes();
+            String multiTenantId = currentRequestAttributes.getRequest().getHeader("TenantId");
+            if (multiTenantId != null)
+            {
+                return multiTenantId;
+            }
+        }
+        catch (IllegalStateException ex)
+        {
+            // throw if no request were make (????)
+        }
 
-	@Override
-	public boolean validateExistingCurrentSessions() {
-		return true;
-	}
+        return DEFAULT_TENANT_ID;
+    }
+
+    @Override
+    public boolean validateExistingCurrentSessions()
+    {
+        return true;
+    }
 }
