@@ -21,50 +21,53 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.annotation.PropertySources;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import eu.supersede.fe.configuration.ApplicationConfiguration;
+
 @Component
-@PropertySources({
-	@PropertySource(value = "file:../conf/multitenancy.properties", ignoreResourceNotFound=true),
-	@PropertySource(value = "file:../conf/multitenancy_${application.name}.properties", ignoreResourceNotFound=true)
-  })
+@PropertySource("file:../conf/multitenancy.properties")
 public class CurrentTenantIdentifierResolverImpl implements CurrentTenantIdentifierResolver {
 
 	@Autowired
 	Environment env;
-	
+
 	@SuppressWarnings("unused")
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
-	
+
 	private String DEFAULT_TENANT_ID = "";
-	
+
 	@PostConstruct
 	public void load() {
-		DEFAULT_TENANT_ID = env.getProperty("application.multitenancy.default");
+		String applicationName = ApplicationConfiguration.getApplicationName();
+		DEFAULT_TENANT_ID = env.getProperty(applicationName + ".multitenancy.default");
 	}
-	
+
 	@Override
 	public String resolveCurrentTenantIdentifier()
 	{
 		RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
-		if (requestAttributes != null) 
+
+		if (requestAttributes != null)
 		{
-			String identifier = (String) requestAttributes.getAttribute("CURRENT_TENANT_IDENTIFIER", RequestAttributes.SCOPE_REQUEST);
+			String identifier = (String) requestAttributes.getAttribute("CURRENT_TENANT_IDENTIFIER",
+					RequestAttributes.SCOPE_REQUEST);
+
 			if (identifier != null) {
 				return identifier;
 			}
 		}
-		
+
 		//current tenant identifier not set, this may happen on login, if present in header we can just use this one
 		//TODO: investigate better (add MultiTenancyInterceptor before SecurityConfiguration)
 		try
 		{
-			ServletRequestAttributes currentRequestAttributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+			ServletRequestAttributes currentRequestAttributes =
+					(ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
 			String multiTenantId = currentRequestAttributes.getRequest().getHeader("TenantId");
 			if(multiTenantId != null)
 			{

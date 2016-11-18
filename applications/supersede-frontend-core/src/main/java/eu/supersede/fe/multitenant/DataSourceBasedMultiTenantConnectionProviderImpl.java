@@ -23,79 +23,84 @@ import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 
 import org.hibernate.engine.jdbc.connections.spi.AbstractDataSourceBasedMultiTenantConnectionProviderImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.annotation.PropertySources;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
+import eu.supersede.fe.configuration.ApplicationConfiguration;
+
 @SuppressWarnings("serial")
 @Component
-@PropertySources({
-		@PropertySource(value = "file:../conf/multitenancy.properties", ignoreResourceNotFound=true),
-		@PropertySource(value = "file:../conf/multitenancy_${application.name}.properties", ignoreResourceNotFound=true)
-      })
+@PropertySource("file:../conf/multitenancy.properties")
 @EnableConfigurationProperties(JpaProperties.class)
 public class DataSourceBasedMultiTenantConnectionProviderImpl extends AbstractDataSourceBasedMultiTenantConnectionProviderImpl
 {
+	private final Logger log = LoggerFactory.getLogger(this.getClass());
+
 	@Autowired
 	Environment env;
-		
+
 	private String[] tenantNames;
 	private String defaultTenant;
-	
+
 	private Map<String, DataSource> datasources;
 
 	@PostConstruct
 	public void load() {
 		datasources = new HashMap<>();
-		
-		String tmpTenants = env.getProperty("application.multitenancy.names");
-		if(tmpTenants == null)
+		String applicationName = ApplicationConfiguration.getApplicationName();
+		String tmpTenants = env.getProperty(applicationName + ".multitenancy.names");
+
+		if (tmpTenants == null)
 		{
 			datasources.put("fake", getFakeDatasource());
 			return;
 		}
-		
+
 		tenantNames = tmpTenants.split(",");
-		
+
 		for(int i = 0; i < tenantNames.length; i++)
 		{
 			tenantNames[i] = tenantNames[i].trim();
+			log.info("Found tenant: " + tenantNames[i]);
 		}
-		
-		defaultTenant = env.getRequiredProperty("application.multitenancy.default");
-		if(defaultTenant == null)
+
+		defaultTenant = env.getRequiredProperty(applicationName + ".multitenancy.default");
+
+		if (defaultTenant == null)
 		{
 			defaultTenant = tenantNames[0];
 		}
-		
-		for(String n : tenantNames)
+
+		for (String n : tenantNames)
 		{
-			if(env.getProperty("application.multitenancy." + n + ".driverClassName") != null)
+			if (env.getProperty(applicationName + ".multitenancy." + n + ".driverClassName") != null)
 			{
 				DataSourceBuilder factory = DataSourceBuilder
 						.create(env.getClass().getClassLoader())
-						.driverClassName(env.getRequiredProperty("application.multitenancy." + n + ".driverClassName"))
-						.username(env.getRequiredProperty("application.multitenancy." + n + ".username"))
-						.password(env.getRequiredProperty("application.multitenancy." + n + ".password"))
-						.url(env.getRequiredProperty("application.multitenancy." + n + ".url"));
+						.driverClassName(env.getRequiredProperty(applicationName + ".multitenancy." + n + ".driverClassName"))
+						.username(env.getRequiredProperty(applicationName + ".multitenancy." + n + ".username"))
+						.password(env.getRequiredProperty(applicationName + ".multitenancy." + n + ".password"))
+						.url(env.getRequiredProperty(applicationName + ".multitenancy." + n + ".url"));
 				DataSource tmp = factory.build();
-				
+
 				datasources.put(n, tmp);
 			}
 		}
-		
+
 		if(datasources.size() == 0)
 		{
 			datasources.put("fake", getFakeDatasource());
 		}
 	}
-	
+
 	private DataSource getFakeDatasource()
 	{
 		DataSourceBuilder factory = DataSourceBuilder
@@ -110,13 +115,13 @@ public class DataSourceBasedMultiTenantConnectionProviderImpl extends AbstractDa
 	public DataSource dataSource() {
 		return selectAnyDataSource();
 	}
-	
+
 	@Override
 	protected DataSource selectAnyDataSource() {
 		DataSource dS = null;
 		if(datasources.containsKey(defaultTenant))
 		{
-			dS = datasources.get(defaultTenant);	
+			dS = datasources.get(defaultTenant);
 		}
 		else
 		{
@@ -140,7 +145,7 @@ public class DataSourceBasedMultiTenantConnectionProviderImpl extends AbstractDa
 		}
 		return dS;
 	}
-	
+
 	protected Map<String, DataSource> getDataSources()
 	{
 		return datasources;
