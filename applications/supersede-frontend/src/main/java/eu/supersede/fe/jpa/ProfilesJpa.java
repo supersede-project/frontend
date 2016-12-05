@@ -20,10 +20,20 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import eu.supersede.fe.model.Profile;
 
-public interface ProfilesJpa extends JpaRepository<Profile, Long> {
-	
-	Profile findByName(String name);
+/**
+ * Class that provides methods that query the database about profiles.
+ */
+public interface ProfilesJpa extends JpaRepository<Profile, Long>
+{
+    /**
+     * Return the profile having the given name.
+     * @param name
+     */
+    Profile findByName(String name);
 
-	List<Profile> findByNameIn(List<String> authNames);
-	
+    /**
+     * Return the profiles corresponding to the given names.
+     * @param authNames
+     */
+    List<Profile> findByNameIn(List<String> authNames);
 }
