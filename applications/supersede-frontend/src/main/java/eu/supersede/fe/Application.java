@@ -24,22 +24,24 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 
-import eu.supersede.fe.configuration.ApplicationConfiguration;
-
+/**
+ * Main class used to run the frontend.
+ */
 @SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
 @ComponentScan
-@EnableGlobalMethodSecurity( securedEnabled = true )
+@EnableGlobalMethodSecurity(securedEnabled = true)
 @EnableScheduling
 @EnableRedisHttpSession
-public class Application extends SpringBootServletInitializer {
+public class Application extends SpringBootServletInitializer
+{
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder application)
+    {
+        return application.sources(Application.class);
+    }
 
-	@Override
-	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-		return application.sources(Application.class);
-	}
-
-	public static void main(String[] args) {
-		SpringApplication.run(Application.class, args);
-	}
-
+    public static void main(String[] args)
+    {
+        SpringApplication.run(Application.class, args);
+    }
 }

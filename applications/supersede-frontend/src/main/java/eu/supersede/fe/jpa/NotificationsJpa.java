@@ -22,16 +22,43 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import eu.supersede.fe.model.Notification;
 import eu.supersede.fe.model.User;
 
-public interface NotificationsJpa extends JpaRepository<Notification, Long> {
+/**
+ * Class that provides methods that query the database about notifications.
+ */
+public interface NotificationsJpa extends JpaRepository<Notification, Long>
+{
+    /**
+     * Return the list of notifications for the given user, ordered by creation time.
+     * @param user
+     */
+    List<Notification> findByUserOrderByCreationTimeDesc(User user);
 
-	List<Notification> findByUserOrderByCreationTimeDesc(User u);
+    /**
+     * Return the list of notifications read (or not read) by the given user, ordered by creation time.
+     * @param user
+     * @param read
+     */
+    List<Notification> findByUserAndReadOrderByCreationTimeDesc(User user, boolean read);
 
-	List<Notification> findByUserAndReadOrderByCreationTimeDesc(User u, boolean b);
-	
-	Long countByUser(User u);
-	
-	Long countByUserAndRead(User u, boolean b);
+    /**
+     * Return the number of notifications for the given user.
+     * @param user
+     */
+    Long countByUser(User user);
 
-	List<Notification> findByReadAndEmailSentAndCreationTimeLessThan(boolean b, boolean c, Date limit);
-	
+    /**
+     * Return the number of notifications read (or not read) by the given user.
+     * @param user
+     * @param read
+     */
+    Long countByUserAndRead(User user, boolean read);
+
+    /**
+     * Return the list of read (or not read) notifications for which an email has been sent (or not) and created before
+     * the specified date.
+     * @param read
+     * @param mailSent
+     * @param limit
+     */
+    List<Notification> findByReadAndEmailSentAndCreationTimeLessThan(boolean read, boolean mailSent, Date limit);
 }
