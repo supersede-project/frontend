@@ -21,6 +21,9 @@ import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Class containing configuration properties for the application.
+ */
 public class ApplicationConfiguration
 {
     private static String APPLICATION_PROPERTIES = "/wp5_application.properties";
@@ -32,6 +35,9 @@ public class ApplicationConfiguration
     @SuppressWarnings("unused")
     private static final Logger log = LoggerFactory.getLogger(ApplicationConfiguration.class);
 
+    /**
+     * Return the application name, read from the corresponding configuration file.
+     */
     public static String getApplicationName()
     {
         InputStream input = Runtime.class.getResourceAsStream(APPLICATION_PROPERTIES);

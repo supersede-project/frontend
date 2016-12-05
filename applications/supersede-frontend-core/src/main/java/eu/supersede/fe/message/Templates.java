@@ -19,15 +19,17 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.stereotype.Component;
 
 @Component
-public class Templates {
+public class Templates
+{
+    @Bean
+    ProfileRedisTemplate profileTemplate(RedisConnectionFactory connectionFactory)
+    {
+        return new ProfileRedisTemplate(connectionFactory);
+    }
 
-	@Bean
-	ProfileRedisTemplate profileTemplate(RedisConnectionFactory connectionFactory) {
-		return new ProfileRedisTemplate(connectionFactory);
-	}
-	
-	@Bean
-	NotificationRedisTemplate notificationTemplate(RedisConnectionFactory connectionFactory) {
-		return new NotificationRedisTemplate(connectionFactory);
-	}
+    @Bean
+    NotificationRedisTemplate notificationTemplate(RedisConnectionFactory connectionFactory)
+    {
+        return new NotificationRedisTemplate(connectionFactory);
+    }
 }

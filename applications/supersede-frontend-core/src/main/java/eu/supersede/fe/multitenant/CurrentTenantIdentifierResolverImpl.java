@@ -29,18 +29,23 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import eu.supersede.fe.configuration.ApplicationConfiguration;
 
+/**
+ * Class used to get the identifier of the currently used tenant.
+ */
 @Component
 @PropertySource("file:../conf/multitenancy.properties")
 public class CurrentTenantIdentifierResolverImpl implements CurrentTenantIdentifierResolver
 {
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     Environment env;
 
-    private final Logger log = LoggerFactory.getLogger(this.getClass());
-
     private String DEFAULT_TENANT_ID = "";
 
+    /**
+     * Load the default tenant id from configuration properties.
+     */
     @PostConstruct
     public void load()
     {
@@ -57,6 +62,9 @@ public class CurrentTenantIdentifierResolverImpl implements CurrentTenantIdentif
         }
     }
 
+    /**
+     * Return the identifier of the currently used tenant.
+     */
     @Override
     public String resolveCurrentTenantIdentifier()
     {
@@ -80,6 +88,7 @@ public class CurrentTenantIdentifierResolverImpl implements CurrentTenantIdentif
             ServletRequestAttributes currentRequestAttributes = (ServletRequestAttributes) RequestContextHolder
                     .currentRequestAttributes();
             String multiTenantId = currentRequestAttributes.getRequest().getHeader("TenantId");
+
             if (multiTenantId != null)
             {
                 return multiTenantId;
@@ -87,7 +96,7 @@ public class CurrentTenantIdentifierResolverImpl implements CurrentTenantIdentif
         }
         catch (IllegalStateException ex)
         {
-            // throw if no request were make (????)
+            // throw if no request has been made (????)
         }
 
         return DEFAULT_TENANT_ID;

@@ -26,39 +26,51 @@ import org.springframework.web.servlet.LocaleResolver;
 
 import eu.supersede.fe.security.DatabaseUser;
 
-public class UserPreferredOrHeaderLocaleResolver implements LocaleResolver {
+/**
+ * Locale to be used in pages.
+ */
+public class UserPreferredOrHeaderLocaleResolver implements LocaleResolver
+{
+    /**
+     * Return the locale to be used for the given request.
+     */
+    @Override
+    public Locale resolveLocale(HttpServletRequest request)
+    {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Locale loc = request.getLocale();
 
-	@Override
-	public Locale resolveLocale(HttpServletRequest request) {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		Locale loc = request.getLocale();
-		
-		if ((authentication == null) || (authentication instanceof AnonymousAuthenticationToken)) {
+        if ((authentication == null) || (authentication instanceof AnonymousAuthenticationToken))
+        {
             return loc;
         }
-		
-		if(SecurityContextHolder.getContext().getAuthentication() != null &&
-			SecurityContextHolder.getContext().getAuthentication().getPrincipal() != null)
-		{
-			Object user = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-			if(user instanceof DatabaseUser)
-			{
-				DatabaseUser dbUser = (DatabaseUser)user;
-				String l = dbUser.getLocale();
-				if(l != null && !l.equals(""))
-				{
-					loc = new Locale.Builder().setLanguage(l).build();
-				}
-			}
-		}
-		
-		return loc;
-	}
 
-	@Override
-	public void setLocale(HttpServletRequest request, HttpServletResponse response, Locale locale) {
-		throw new UnsupportedOperationException(
-				"Cannot change locale - use a different locale resolution strategy");
-	}
+        if (SecurityContextHolder.getContext().getAuthentication() != null
+                && SecurityContextHolder.getContext().getAuthentication().getPrincipal() != null)
+        {
+            Object user = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
+            if (user instanceof DatabaseUser)
+            {
+                DatabaseUser dbUser = (DatabaseUser) user;
+                String l = dbUser.getLocale();
+
+                if (l != null && !l.equals(""))
+                {
+                    loc = new Locale.Builder().setLanguage(l).build();
+                }
+            }
+        }
+
+        return loc;
+    }
+
+    /**
+     * Throw an exception when trying to set the locale for the given request or response.
+     */
+    @Override
+    public void setLocale(HttpServletRequest request, HttpServletResponse response, Locale locale)
+    {
+        throw new UnsupportedOperationException("Cannot change locale - use a different locale resolution strategy");
+    }
 }

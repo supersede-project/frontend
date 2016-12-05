@@ -42,17 +42,16 @@ import eu.supersede.integration.api.security.types.AuthorizationToken;
         @PropertySource(value = "file:../conf/if.properties", ignoreResourceNotFound = true) })
 public class ProxyWrapper
 {
+    private static Map<String, AuthManagerUser> users;
+    private static FEDataStoreProxy proxy;
+    private static Map<String, IFAuthenticationManager> ams;
+
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     Environment env;
 
     private String[] tenants;
-
-    private static Map<String, AuthManagerUser> users;
-
-    private static FEDataStoreProxy proxy;
-    private static Map<String, IFAuthenticationManager> ams;
 
     @PostConstruct
     public void load()
@@ -87,6 +86,7 @@ public class ProxyWrapper
         }
 
         log.info("Tenants: " + tenants.length);
+
         for (String t : tenants)
         {
             String domain = env.getProperty("is.authorization." + t + ".tenant.domain");
@@ -118,11 +118,12 @@ public class ProxyWrapper
         return ams.get(tenant);
     }
 
-    // TODO: functions to ask Josu to implement:
+    // TODO: functions to ask Yosu to implement:
     public User getUserByName(String username, String tenantId, AuthorizationToken token)
     {
         User user = null;
         List<User> users = null;
+
         try
         {
             users = proxy.getUsers(tenantId, false, token);
@@ -131,6 +132,7 @@ public class ProxyWrapper
         {
             return null;
         }
+
         for (User u : users)
         {
             if (u.getEmail().equals(username))
@@ -147,6 +149,7 @@ public class ProxyWrapper
     {
         Profile profile = null;
         List<Profile> profiles = proxy.getProfiles(tenantId, token);
+
         for (Profile p : profiles)
         {
             if (p.getName().equals(profileName))
@@ -164,6 +167,7 @@ public class ProxyWrapper
         List<Profile> ret = new ArrayList<>();
 
         List<Profile> profiles = proxy.getProfiles(tenantId, token);
+
         for (Profile p : profiles)
         {
             if (profileNames.contains(p.getName()) && !ret.contains(p))

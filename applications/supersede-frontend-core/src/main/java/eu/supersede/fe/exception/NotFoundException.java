@@ -17,17 +17,20 @@ package eu.supersede.fe.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+/**
+ * Custom exception for the not found error.
+ */
 @SuppressWarnings("serial")
 @ResponseStatus(HttpStatus.NOT_FOUND)
-public class NotFoundException extends SupersedeRuntimeException {
+public class NotFoundException extends SupersedeRuntimeException
+{
+    public NotFoundException()
+    {
+        super();
+    }
 
-	public NotFoundException() {
-		super();
-	}
-	
-	public NotFoundException(String message)
-	{
-		super(message);
-	}
-	
+    public NotFoundException(String message)
+    {
+        super(message);
+    }
 }

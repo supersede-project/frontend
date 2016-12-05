@@ -36,6 +36,9 @@ import org.springframework.stereotype.Component;
 
 import eu.supersede.fe.configuration.ApplicationConfiguration;
 
+/**
+ * Class used to dynamically change at runtime the database to be used based on the identifier of the current tenant.
+ */
 @SuppressWarnings("serial")
 @Component
 @PropertySource("file:../conf/multitenancy.properties")
@@ -50,9 +53,11 @@ public class DataSourceBasedMultiTenantConnectionProviderImpl
 
     private String[] tenantNames;
     private String defaultTenant;
-
     private Map<String, DataSource> datasources;
 
+    /**
+     * Load multitenancy configuration properties to load the correct database.
+     */
     @PostConstruct
     public void load()
     {
@@ -114,6 +119,9 @@ public class DataSourceBasedMultiTenantConnectionProviderImpl
         }
     }
 
+    /**
+     * Return a fake in-memory database if no tenants are specified.
+     */
     private DataSource getFakeDatasource()
     {
         DataSourceBuilder factory = DataSourceBuilder.create(env.getClass().getClassLoader())
@@ -127,10 +135,14 @@ public class DataSourceBasedMultiTenantConnectionProviderImpl
         return selectAnyDataSource();
     }
 
+    /**
+     * Return the data source of the default tenant if specified, the first data source otherwise.
+     */
     @Override
     protected DataSource selectAnyDataSource()
     {
         DataSource dS = null;
+
         if (datasources.containsKey(defaultTenant))
         {
             dS = datasources.get(defaultTenant);
@@ -139,26 +151,36 @@ public class DataSourceBasedMultiTenantConnectionProviderImpl
         {
             Set<String> keys = datasources.keySet();
             Iterator keysIt = keys.iterator();
+
             while (keysIt.hasNext())
             {
                 dS = datasources.get(keysIt.next());
                 break;
             }
         }
+
         return dS;
     }
 
+    /**
+     * Return the data source corresponding to the given tenant identifier.
+     */
     @Override
     protected DataSource selectDataSource(String tenantIdentifier)
     {
         DataSource dS = null;
+
         if (datasources.containsKey(tenantIdentifier))
         {
             dS = datasources.get(tenantIdentifier);
         }
+
         return dS;
     }
 
+    /**
+     * Return all the data sources.
+     */
     protected Map<String, DataSource> getDataSources()
     {
         return datasources;
