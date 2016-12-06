@@ -64,14 +64,12 @@ public class DataSourceBasedMultiTenantConnectionProviderImpl
         datasources = new HashMap<>();
         String applicationName = ApplicationConfiguration.getApplicationName();
         String tmpTenants = env.getProperty(applicationName + ".multitenancy.names");
-        System.out.println(applicationName + ".multitenancy.names = " + tmpTenants);
 
         // Read values of the default application
         if (tmpTenants == null)
         {
             applicationName = ApplicationConfiguration.DEFAULT_APPLICATION_NAME;
             tmpTenants = env.getProperty(applicationName + ".multitenancy.names");
-            System.out.println(applicationName + ".multitenancy.names = " + tmpTenants);
         }
 
         if (tmpTenants == null)
@@ -100,7 +98,6 @@ public class DataSourceBasedMultiTenantConnectionProviderImpl
         {
             if (env.getProperty(applicationName + ".multitenancy." + n + ".driverClassName") != null)
             {
-                System.out.println(applicationName + ".multitenancy." + n + ".driverClassName = found");
                 DataSourceBuilder factory = DataSourceBuilder.create(env.getClass().getClassLoader())
                         .driverClassName(
                                 env.getRequiredProperty(applicationName + ".multitenancy." + n + ".driverClassName"))
@@ -108,6 +105,12 @@ public class DataSourceBasedMultiTenantConnectionProviderImpl
                         .password(env.getRequiredProperty(applicationName + ".multitenancy." + n + ".password"))
                         .url(env.getRequiredProperty(applicationName + ".multitenancy." + n + ".url"));
                 DataSource tmp = factory.build();
+
+                if (tmp instanceof org.apache.tomcat.jdbc.pool.DataSource)
+                {
+                    org.apache.tomcat.jdbc.pool.DataSource tmp1 = (org.apache.tomcat.jdbc.pool.DataSource) tmp;
+                    tmp1.setMaxActive(3);
+                }
 
                 datasources.put(n, tmp);
             }
