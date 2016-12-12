@@ -44,7 +44,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
@@ -66,7 +65,6 @@ import eu.supersede.integration.api.security.types.AuthorizationToken;
 @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
 class SecurityConfiguration extends WebSecurityConfigurerAdapter
 {
-
     @SuppressWarnings("unused")
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
@@ -94,7 +92,6 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter
     {
         return new AuthenticationProvider()
         {
-
             private final Logger log = LoggerFactory.getLogger(this.getClass());
 
             @Override
@@ -116,8 +113,8 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter
                 }
 
                 AuthorizationToken token = getAuthToken(username, password, tenantId);
-
                 User user = users.findByUsername(username);
+
                 if (user == null)
                 {
                     log.error("Username not found in Database");
@@ -127,6 +124,7 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter
                 // get authorities from profiles
                 List<Profile> profiles = user.getProfiles();
                 String[] authorities = new String[profiles.size()];
+
                 for (int i = 0; i < profiles.size(); i++)
                 {
                     authorities[i] = "ROLE_" + profiles.get(i).getName();
@@ -158,6 +156,7 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter
                         // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
+
                     if (token == null || token.getAccessToken() == null)
                     {
                         log.error("Supersede integration token is null");
@@ -169,6 +168,7 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter
                 {
                     log.warn("IF Authentication Manager disable, user token is NULL");
                 }
+
                 return token;
             }
 
@@ -178,16 +178,18 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter
             {
                 return (UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication));
             }
-
         };
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception
     {
-        http.httpBasic().and().authorizeRequests().antMatchers(PERMIT_URLS).permitAll().anyRequest().authenticated()
-                .and().csrf().csrfTokenRepository(csrfTokenRepository()).and()
-                .addFilterAfter(csrfHeaderFilter(), CsrfFilter.class);
+        http.httpBasic().and().authorizeRequests().antMatchers(PERMIT_URLS).permitAll().anyRequest().authenticated();
+
+        // TODO: investigate exception thrown by the doFilter method.
+        // Temporary fix: do not apply the filter.
+        // .and().csrf().csrfTokenRepository(csrfTokenRepository()).and()
+        // .addFilterAfter(csrfHeaderFilter(), CsrfFilter.class);
     }
 
     private Filter csrfHeaderFilter()
@@ -199,10 +201,12 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter
                     FilterChain filterChain) throws ServletException, IOException
             {
                 CsrfToken csrf = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+
                 if (csrf != null)
                 {
                     Cookie cookie = WebUtils.getCookie(request, "XSRF-TOKEN");
                     String token = csrf.getToken();
+
                     if (cookie == null || token != null && !token.equals(cookie.getValue()))
                     {
                         cookie = new Cookie("XSRF-TOKEN", token);
@@ -210,6 +214,7 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter
                         response.addCookie(cookie);
                     }
                 }
+
                 filterChain.doFilter(request, response);
             }
         };
