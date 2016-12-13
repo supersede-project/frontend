@@ -21,66 +21,90 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.annotation.PropertySources;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import eu.supersede.fe.configuration.ApplicationConfiguration;
+
+/**
+ * Class used to get the identifier of the currently used tenant.
+ */
 @Component
-@PropertySources({
-	@PropertySource(value = "file:../conf/multitenancy.properties", ignoreResourceNotFound=true),
-	@PropertySource(value = "file:../conf/multitenancy_${application.name}.properties", ignoreResourceNotFound=true)
-  })
-public class CurrentTenantIdentifierResolverImpl implements CurrentTenantIdentifierResolver {
+@PropertySource("file:../conf/multitenancy.properties")
+public class CurrentTenantIdentifierResolverImpl implements CurrentTenantIdentifierResolver
+{
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-	@Autowired
-	Environment env;
-	
-	@SuppressWarnings("unused")
-	private final Logger log = LoggerFactory.getLogger(this.getClass());
-	
-	private String DEFAULT_TENANT_ID = "";
-	
-	@PostConstruct
-	public void load() {
-		DEFAULT_TENANT_ID = env.getProperty("application.multitenancy.default");
-	}
-	
-	@Override
-	public String resolveCurrentTenantIdentifier()
-	{
-		RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
-		if (requestAttributes != null) 
-		{
-			String identifier = (String) requestAttributes.getAttribute("CURRENT_TENANT_IDENTIFIER", RequestAttributes.SCOPE_REQUEST);
-			if (identifier != null) {
-				return identifier;
-			}
-		}
-		
-		//current tenant identifier not set, this may happen on login, if present in header we can just use this one
-		//TODO: investigate better (add MultiTenancyInterceptor before SecurityConfiguration)
-		try
-		{
-			ServletRequestAttributes currentRequestAttributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-			String multiTenantId = currentRequestAttributes.getRequest().getHeader("TenantId");
-			if(multiTenantId != null)
-			{
-				return multiTenantId;
-			}
-		}
-		catch(IllegalStateException ex)
-		{
-			//throw if no request were make (????)
-		}
+    @Autowired
+    Environment env;
 
-		return DEFAULT_TENANT_ID;
-	}
+    private String DEFAULT_TENANT_ID = "";
 
-	@Override
-	public boolean validateExistingCurrentSessions() {
-		return true;
-	}
+    /**
+     * Load the default tenant id from configuration properties.
+     */
+    @PostConstruct
+    public void load()
+    {
+        String applicationName = ApplicationConfiguration.getApplicationName();
+        DEFAULT_TENANT_ID = env.getProperty(applicationName + ".multitenancy.default");
+        log.info(applicationName + ".multitenancy.default = " + DEFAULT_TENANT_ID);
+
+        // Read value of the default application
+        if (DEFAULT_TENANT_ID == null)
+        {
+            applicationName = ApplicationConfiguration.DEFAULT_APPLICATION_NAME;
+            DEFAULT_TENANT_ID = env.getProperty(applicationName + ".multitenancy.default");
+            log.info(applicationName + ".multitenancy.default = " + DEFAULT_TENANT_ID);
+        }
+    }
+
+    /**
+     * Return the identifier of the currently used tenant.
+     */
+    @Override
+    public String resolveCurrentTenantIdentifier()
+    {
+        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+
+        if (requestAttributes != null)
+        {
+            String identifier = (String) requestAttributes.getAttribute("CURRENT_TENANT_IDENTIFIER",
+                    RequestAttributes.SCOPE_REQUEST);
+
+            if (identifier != null)
+            {
+                return identifier;
+            }
+        }
+
+        // current tenant identifier not set, this may happen on login, if present in header we can just use this one
+        // TODO: investigate better (add MultiTenancyInterceptor before SecurityConfiguration)
+        try
+        {
+            ServletRequestAttributes currentRequestAttributes = (ServletRequestAttributes) RequestContextHolder
+                    .currentRequestAttributes();
+            String multiTenantId = currentRequestAttributes.getRequest().getHeader("TenantId");
+
+            if (multiTenantId != null)
+            {
+                return multiTenantId;
+            }
+        }
+        catch (IllegalStateException ex)
+        {
+            // throw if no request has been made (????)
+        }
+
+        return DEFAULT_TENANT_ID;
+    }
+
+    @Override
+    public boolean validateExistingCurrentSessions()
+    {
+        return true;
+    }
 }

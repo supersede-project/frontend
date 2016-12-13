@@ -25,44 +25,52 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
+/**
+ * Mail sender.
+ */
 @Component
-public class SupersedeMailSender {
+public class SupersedeMailSender
+{
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-	private final Logger log = LoggerFactory.getLogger(this.getClass());
-	
-	@Autowired(required= false)
-	private JavaMailSender javaMailSender;
-	
-	public void sendEmail(String subject, String text, String... to)
-	{
-		if(javaMailSender != null)
-		{
-			try
-			{
-				MimeMessage message = javaMailSender.createMimeMessage();
-				MimeMessageHelper helper;
-				// SSL Certhificate.
-				helper = new MimeMessageHelper(message, true);
-				// Multipart messages.
-				helper.setSubject(subject);
-				helper.setTo(to);
-				helper.setText(text, true);
-				javaMailSender.send(message);
-			}
-			catch(MailException ex)
-			{
-				log.error("Exception while send an email: " + ex.getMessage());
-				ex.printStackTrace();
-			}
-			catch(MessagingException ex)
-			{
-				log.error("Exception while send an email: " + ex.getMessage());
-				ex.printStackTrace();
-			}
-		}
-		else
-		{
-			log.error("Java mail not configured");
-		}
-	}
+    @Autowired(required = false)
+    private JavaMailSender javaMailSender;
+
+    /**
+     * Send an email with the given subject and the given text to the given recipients.
+     * @param subject
+     * @param text
+     * @param to
+     */
+    public void sendEmail(String subject, String text, String... recipients)
+    {
+        if (javaMailSender != null)
+        {
+            try
+            {
+                MimeMessage message = javaMailSender.createMimeMessage();
+                MimeMessageHelper helper;
+                // SSL Certificate.
+                helper = new MimeMessageHelper(message, true);
+                helper.setSubject(subject);
+                helper.setTo(recipients);
+                helper.setText(text, true);
+                javaMailSender.send(message);
+            }
+            catch (MailException ex)
+            {
+                log.error("Exception while send an email: " + ex.getMessage());
+                ex.printStackTrace();
+            }
+            catch (MessagingException ex)
+            {
+                log.error("Exception while send an email: " + ex.getMessage());
+                ex.printStackTrace();
+            }
+        }
+        else
+        {
+            log.error("Java mail not configured");
+        }
+    }
 }

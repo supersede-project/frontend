@@ -18,74 +18,121 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+/**
+ * Generic gadget handled by the frontend.
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ApplicationGadget {
+public class ApplicationGadget
+{
+    private String applicationName;
+    private String applicationGadget;
+    private List<String> profilesRequired;
 
-	private String applicationName;
-	private String applicationGadget;
-	private List<String> profilesRequired;
+    /**
+     * Is this necessary?
+     */
+    public ApplicationGadget()
+    {
+    }
 
-	public ApplicationGadget()
-	{}
-	
-	public ApplicationGadget(String applicationName, String applicationGadget, List<String> profilesRequired) {
-		this.setApplicationName(applicationName);
-		this.setApplicationGadget(applicationGadget);
-		this.setProfilesRequired(profilesRequired);
-	}
-	
-	public String getId()
-	{
-		return applicationName + applicationGadget;
-	}
-	
-	public String getApplicationName() {
-		return applicationName;
-	}
+    /**
+     * Default constructor.
+     * @param applicationName
+     * @param applicationGadget
+     * @param profilesRequired
+     */
+    public ApplicationGadget(String applicationName, String applicationGadget, List<String> profilesRequired)
+    {
+        this.setApplicationName(applicationName);
+        this.setApplicationGadget(applicationGadget);
+        this.setProfilesRequired(profilesRequired);
+    }
 
-	public void setApplicationName(String applicationName) {
-		this.applicationName = applicationName;
-	}
+    /**
+     * Return the id of the gadget.
+     */
+    public String getId()
+    {
+        return applicationName + applicationGadget;
+    }
 
-	public String getApplicationGadget() {
-		return applicationGadget;
-	}
+    /**
+     * Return the name of the application associated to the gadget.
+     */
+    public String getApplicationName()
+    {
+        return applicationName;
+    }
 
-	public void setApplicationGadget(String applicationGadget) {
-		this.applicationGadget = applicationGadget;
-	}
+    /**
+     * Set the application name.
+     * @param applicationName
+     */
+    public void setApplicationName(String applicationName)
+    {
+        this.applicationName = applicationName;
+    }
 
-	public List<String> getProfilesRequired() {
-		return profilesRequired;
-	}
+    /**
+     * Return the name of the gadget.
+     */
+    public String getApplicationGadget()
+    {
+        return applicationGadget;
+    }
 
-	public void setProfilesRequired(List<String> profilesRequired) {
-		this.profilesRequired = profilesRequired;
-	}
+    /**
+     * Set the name of the gadget.
+     * @param applicationGadget
+     */
+    public void setApplicationGadget(String applicationGadget)
+    {
+        this.applicationGadget = applicationGadget;
+    }
 
-	@Override
-	public int hashCode()
-	{
-		return applicationName.hashCode() + applicationGadget .hashCode();
-	}
-	
-	@Override
-	public boolean equals(Object obj)
-	{
-		if (this == obj)
-		{
-			return true;
-		}
-		if (obj == null)
-		{
-			return false;
-		}
-		if (ApplicationGadget.class != obj.getClass())
-		{
-			return false;
-		}
-		ApplicationGadget other = (ApplicationGadget)obj;
-		return this.applicationName.equals(other.applicationName) && 
-				this.applicationGadget.equals(other.applicationGadget);
-	}
+    /**
+     * Return the profiles required by the gadget.
+     */
+    public List<String> getProfilesRequired()
+    {
+        return profilesRequired;
+    }
+
+    /**
+     * Set the profiles required by the gadget.
+     * @param profilesRequired
+     */
+    public void setProfilesRequired(List<String> profilesRequired)
+    {
+        this.profilesRequired = profilesRequired;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return applicationName.hashCode() + applicationGadget.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (this == obj)
+        {
+            return true;
+        }
+
+        if (obj == null)
+        {
+            return false;
+        }
+
+        if (ApplicationGadget.class != obj.getClass())
+        {
+            return false;
+        }
+
+        ApplicationGadget other = (ApplicationGadget) obj;
+        return this.applicationName.equals(other.applicationName)
+                && this.applicationGadget.equals(other.applicationGadget);
+    }
 }

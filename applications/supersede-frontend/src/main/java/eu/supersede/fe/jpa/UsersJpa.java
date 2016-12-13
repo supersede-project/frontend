@@ -18,13 +18,20 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import eu.supersede.fe.model.User;
 
-public interface UsersJpa extends JpaRepository<User, Long> {
+/**
+ * Class that provides methods that query the database about users.
+ */
+public interface UsersJpa extends JpaRepository<User, Long>
+{
+    /**
+     * Return the user having the given email.
+     * @param email
+     */
+    User findByEmail(String email);
 
-	/*@Query("SELECT u FROM User u WHERE u.alias IS NOT NULL")
-    List<User> findAliased();*/
-
-	User findByEmail(String email);
-	
-	User findByUsername(String username);
-	
+    /**
+     * Return the user having the given username.
+     * @param username
+     */
+    User findByUsername(String username);
 }

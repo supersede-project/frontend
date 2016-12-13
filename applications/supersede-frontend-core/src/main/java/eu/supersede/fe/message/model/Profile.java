@@ -14,16 +14,27 @@
 
 package eu.supersede.fe.message.model;
 
-public class Profile {
+/**
+ * Profile used for authentication.
+ */
+public class Profile
+{
+    private String name;
 
-	private String name;
-	
-	public String getName() {
-		return name;
-	}
-	
-	public void setName(String name) {
-		this.name = name;
-	}
-	
+    /**
+     * Return the name associated to the profile.
+     */
+    public String getName()
+    {
+        return name;
+    }
+
+    /**
+     * Set the name associated to the profile.
+     * @param name
+     */
+    public void setName(String name)
+    {
+        this.name = name;
+    }
 }

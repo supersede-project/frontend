@@ -14,65 +14,123 @@
 
 package eu.supersede.fe.message.model;
 
-public class Notification {
+/**
+ * Notification used in the frontend.
+ */
+public class Notification
+{
+    private String recipient;
+    private Boolean profile;
+    private String message;
+    private String link;
+    private String tenant;
 
-	private String recipient;
-	private Boolean profile;
-	private String message;
-	private String link;
-	private String tenant;
-	
-	public Notification()
-	{}
-	
-	public Notification(String tenant, String recipient, Boolean profile, String message, String link)
-	{
-		this.tenant = tenant;
-		this.recipient = recipient;
-		this.profile = profile;
-		this.message = message;
-		this.link = link;
-		
-	}
-	
-	public String getRecipient() {
-		return recipient;
-	}
-	
-	public void setRecipient(String recipient) {
-		this.recipient = recipient;
-	}
-	
-	public Boolean getProfile() {
-		return profile;
-	}
-	
-	public void setProfile(Boolean profile) {
-		this.profile = profile;
-	}
-	
-	public String getMessage() {
-		return message;
-	}
-	
-	public void setMessage(String message) {
-		this.message = message;
-	}
-	
-	public String getLink() {
-		return link;
-	}
-	
-	public void setLink(String link) {
-		this.link = link;
-	}
-	
-	public String getTenant() {
-		return tenant;
-	}
-	
-	public void setTenant(String tenant) {
-		this.tenant = tenant;
-	}
-	
+    /**
+     * Is this necessary?
+     */
+    public Notification()
+    {
+    }
+
+    /**
+     * Default constructor.
+     * @param tenant
+     * @param recipient
+     * @param profile
+     * @param message
+     * @param link
+     */
+    public Notification(String tenant, String recipient, Boolean profile, String message, String link)
+    {
+        this.tenant = tenant;
+        this.recipient = recipient;
+        this.profile = profile;
+        this.message = message;
+        this.link = link;
+    }
+
+    /**
+     * Return the recipient of the notification.
+     */
+    public String getRecipient()
+    {
+        return recipient;
+    }
+
+    /**
+     * Set the recipient of the notification.
+     * @param recipient
+     */
+    public void setRecipient(String recipient)
+    {
+        this.recipient = recipient;
+    }
+
+    /**
+     * Return the profile associated to the notification.
+     */
+    public Boolean getProfile()
+    {
+        return profile;
+    }
+
+    /**
+     * Set the profile associated to the notification.
+     * @param profile
+     */
+    public void setProfile(Boolean profile)
+    {
+        this.profile = profile;
+    }
+
+    /**
+     * Return the message of the notification.
+     */
+    public String getMessage()
+    {
+        return message;
+    }
+
+    /**
+     * Set the message of the notification.
+     * @param message
+     */
+    public void setMessage(String message)
+    {
+        this.message = message;
+    }
+
+    /**
+     * Return the link associated to the notification.
+     */
+    public String getLink()
+    {
+        return link;
+    }
+
+    /**
+     * Set the link associated to the notification.
+     * @param link
+     */
+    public void setLink(String link)
+    {
+        this.link = link;
+    }
+
+    /**
+     * Return the tenant associated to the notification.
+     */
+    public String getTenant()
+    {
+        return tenant;
+    }
+
+    /**
+     * Set the tenant associated to the notification.
+     * @param tenant
+     */
+    public void setTenant(String tenant)
+    {
+        this.tenant = tenant;
+    }
 }

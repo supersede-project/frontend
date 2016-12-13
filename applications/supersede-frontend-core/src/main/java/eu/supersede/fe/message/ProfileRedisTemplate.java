@@ -24,24 +24,31 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import eu.supersede.fe.message.model.Profile;
 
-public class ProfileRedisTemplate extends RedisTemplate<String, Profile> {
-	
-	public ProfileRedisTemplate() {
-		RedisSerializer<String> stringSerializer = new StringRedisSerializer();
-		Jackson2JsonRedisSerializer<Profile> jacksonSerializer = new Jackson2JsonRedisSerializer<>(Profile.class);
-		setKeySerializer(stringSerializer);
-		setValueSerializer(jacksonSerializer);
-		setHashKeySerializer(stringSerializer);
-		setHashValueSerializer(stringSerializer);
-	}
-	
-	public ProfileRedisTemplate(RedisConnectionFactory connectionFactory) {
-		this();
-		setConnectionFactory(connectionFactory);
-		afterPropertiesSet();
-	}
+/**
+ * Custom Redis template for profiles.
+ */
+public class ProfileRedisTemplate extends RedisTemplate<String, Profile>
+{
+    public ProfileRedisTemplate()
+    {
+        RedisSerializer<String> stringSerializer = new StringRedisSerializer();
+        Jackson2JsonRedisSerializer<Profile> jacksonSerializer = new Jackson2JsonRedisSerializer<>(Profile.class);
+        setKeySerializer(stringSerializer);
+        setValueSerializer(jacksonSerializer);
+        setHashKeySerializer(stringSerializer);
+        setHashValueSerializer(stringSerializer);
+    }
 
-	protected RedisConnection preProcessConnection(RedisConnection connection, boolean existingConnection) {
-		return new DefaultStringRedisConnection(connection);
-	}
+    public ProfileRedisTemplate(RedisConnectionFactory connectionFactory)
+    {
+        this();
+        setConnectionFactory(connectionFactory);
+        afterPropertiesSet();
+    }
+
+    @Override
+    protected RedisConnection preProcessConnection(RedisConnection connection, boolean existingConnection)
+    {
+        return new DefaultStringRedisConnection(connection);
+    }
 }

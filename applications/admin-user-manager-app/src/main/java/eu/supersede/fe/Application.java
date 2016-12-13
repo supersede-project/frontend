@@ -33,12 +33,10 @@ public class Application extends SpringBootServletInitializer {
 
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-        ApplicationConfiguration.init();
         return application.sources(Application.class);
     }
 
     public static void main(String[] args) {
-        ApplicationConfiguration.init();
         SpringApplication.run(Application.class, args);
     }
 }

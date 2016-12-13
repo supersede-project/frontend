@@ -18,6 +18,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import eu.supersede.fe.model.UserDashboard;
 
-public interface UserDashboardJpa extends JpaRepository<UserDashboard, Long> {
+/**
+ * Class that provides methods that query the database about the user dashboard.
+ */
+public interface UserDashboardJpa extends JpaRepository<UserDashboard, Long>
+{
 
 }

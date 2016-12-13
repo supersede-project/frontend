@@ -22,29 +22,31 @@ import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 import org.springframework.stereotype.Component;
 
+/**
+ * Container of listeners for profiles and notifications.
+ */
 @Component
-public class Listeners {
+public class Listeners
+{
+    @Autowired
+    private ProfileListener profileListener;
+    @Autowired
+    private NotificationListener notificationListener;
 
-	@Autowired
-	private ProfileListener profileListener;
-	@Autowired
-	private NotificationListener notificationListener;
-	
-	@Bean
-	RedisMessageListenerContainer container(RedisConnectionFactory connectionFactory) {
+    @Bean
+    RedisMessageListenerContainer container(RedisConnectionFactory connectionFactory)
+    {
+        RedisMessageListenerContainer container = new RedisMessageListenerContainer();
+        container.setConnectionFactory(connectionFactory);
 
-		RedisMessageListenerContainer container = new RedisMessageListenerContainer();
-		container.setConnectionFactory(connectionFactory);
-		
-		MessageListenerAdapter profileAdapter = new MessageListenerAdapter(profileListener, "receiveMessage");
-		profileAdapter.afterPropertiesSet();
-		container.addMessageListener(profileAdapter, new PatternTopic("profile"));
-		
-		MessageListenerAdapter notificationAdapter = new MessageListenerAdapter(notificationListener, "receiveMessage");
-		notificationAdapter.afterPropertiesSet();
-		container.addMessageListener(notificationAdapter, new PatternTopic("notification"));
+        MessageListenerAdapter profileAdapter = new MessageListenerAdapter(profileListener, "receiveMessage");
+        profileAdapter.afterPropertiesSet();
+        container.addMessageListener(profileAdapter, new PatternTopic("profile"));
 
-		return container;
-	}
-	
+        MessageListenerAdapter notificationAdapter = new MessageListenerAdapter(notificationListener, "receiveMessage");
+        notificationAdapter.afterPropertiesSet();
+        container.addMessageListener(notificationAdapter, new PatternTopic("notification"));
+
+        return container;
+    }
 }

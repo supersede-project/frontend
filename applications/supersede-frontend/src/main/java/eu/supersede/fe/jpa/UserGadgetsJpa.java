@@ -21,10 +21,20 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import eu.supersede.fe.model.UserGadget;
 import eu.supersede.fe.model.UserGadgetKey;
 
-public interface UserGadgetsJpa extends JpaRepository<UserGadget, UserGadgetKey>{
+/**
+ * Class that provides methods that query the database about user gadgets.
+ */
+public interface UserGadgetsJpa extends JpaRepository<UserGadget, UserGadgetKey>
+{
+    /**
+     * Return the gadgets associated to the user with the given id.
+     * @param userId
+     */
+    List<UserGadget> findByUserIdOrderByGadgetIdAsc(Long userId);
 
-	List<UserGadget> findByUserIdOrderByGadgetIdAsc(Long userId);
-	
-	Long deleteByUserId(Long userId);
-	
+    /**
+     * Return the number of deleted gadgets associated to the user with the given id.
+     * @param userId
+     */
+    Long deleteByUserId(Long userId);
 }
