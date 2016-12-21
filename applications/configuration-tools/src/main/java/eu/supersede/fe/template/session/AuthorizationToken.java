@@ -1,4 +1,4 @@
-package eu.supersede.template.session;
+package eu.supersede.fe.template.session;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

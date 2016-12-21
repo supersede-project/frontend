@@ -12,7 +12,7 @@
    limitations under the License.
 */
 
-package eu.supersede.template.session;
+package eu.supersede.fe.template.session;
 
 import java.util.Collection;
 

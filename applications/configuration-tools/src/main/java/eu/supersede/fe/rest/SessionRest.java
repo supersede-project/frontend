@@ -1,4 +1,4 @@
-package eu.supersede.rest;
+package eu.supersede.fe.rest;
 
 import java.io.IOException;
 
@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.WebUtils;
 
-import eu.supersede.template.SessionRedisTemplate;
-import eu.supersede.template.session.Session;
+import eu.supersede.fe.template.SessionRedisTemplate;
+import eu.supersede.fe.template.session.Session;
 
 @RestController
 @RequestMapping("/session")

@@ -1,4 +1,4 @@
-package eu.supersede;
+package eu.supersede.fe;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

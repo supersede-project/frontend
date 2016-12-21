@@ -1,4 +1,4 @@
-package eu.supersede.template.session;
+package eu.supersede.fe.template.session;
 
 public class Authority {
 

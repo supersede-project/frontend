@@ -12,7 +12,7 @@
    limitations under the License.
 */
 
-package eu.supersede.template;
+package eu.supersede.fe.template;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
