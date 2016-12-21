@@ -1,3 +1,19 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'war'
+
+version = '0.0.1-SNAPSHOT'
+group = 'eu.supersede'
+
+war {
+    baseName = 'configuration-tools'
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
 buildscript {
     repositories {
         mavenCentral()
@@ -5,16 +21,6 @@ buildscript {
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:1.4.2.RELEASE")
     }
-}
-
-apply plugin: 'java'
-apply plugin: 'eclipse'
-apply plugin: 'idea'
-apply plugin: 'org.springframework.boot'
-
-jar {
-    baseName = 'configuration-tools'
-    version =  '0.0.1'
 }
 
 repositories {
@@ -29,4 +35,18 @@ dependencies {
     testCompile('org.springframework.boot:spring-boot-starter-test')
 
     compile("org.springframework.boot:spring-boot-starter-data-redis")
+}
+
+configurations.all {
+	//Avoids conflict: SL4J Multiple bindings were found on the class path
+	exclude group: "org.slf4j", module: "slf4j-log4j12"
+    // check for updates at every build
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}
+
+eclipse {
+    classpath {
+         containers.remove('org.eclipse.jdt.launching.JRE_CONTAINER')
+         containers 'org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8'
+    }
 }

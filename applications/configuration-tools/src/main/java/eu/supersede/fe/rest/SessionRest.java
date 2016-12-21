@@ -17,21 +17,20 @@ import eu.supersede.fe.template.session.Session;
 
 @RestController
 @RequestMapping("/session")
-public class SessionRest {
-	
-	@SuppressWarnings("unused")
-	private final Logger log = LoggerFactory.getLogger(this.getClass());
-	
-	@Autowired
-	private SessionRedisTemplate sessionTemplate;
-	
-	@RequestMapping("")
-	public Session getSession(HttpServletRequest request) throws IOException, ClassNotFoundException
-	{
-		Cookie cookie = WebUtils.getCookie(request, "SESSION");
-		Session s = sessionTemplate.opsForValue().get(Session.SUPERSEDE_SESSION_PREFIX + cookie.getValue());
-		
-		return s;
-	}
-	
+public class SessionRest
+{
+    @SuppressWarnings("unused")
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
+
+    @Autowired
+    private SessionRedisTemplate sessionTemplate;
+
+    @RequestMapping("")
+    public Session getSession(HttpServletRequest request) throws IOException, ClassNotFoundException
+    {
+        Cookie cookie = WebUtils.getCookie(request, "SESSION");
+        Session s = sessionTemplate.opsForValue().get(Session.SUPERSEDE_SESSION_PREFIX + cookie.getValue());
+
+        return s;
+    }
 }
