@@ -87,7 +87,6 @@ public class DataSourceBasedMultiTenantConnectionProviderImpl
         }
 
         defaultTenant = env.getRequiredProperty(applicationName + ".multitenancy.default");
-        log.info(applicationName + ".multitenancy.default = " + defaultTenant);
 
         if (defaultTenant == null)
         {

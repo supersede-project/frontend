@@ -39,14 +39,12 @@ public class TenantRest
     {
         String applicationName = ApplicationConfiguration.getApplicationName();
         String tmpTenants = env.getProperty(applicationName + ".multitenancy.names");
-        System.out.println(applicationName + ".multitenancy.names = " + tmpTenants);
 
         // Read values of the default application
         if (tmpTenants == null)
         {
             applicationName = ApplicationConfiguration.DEFAULT_APPLICATION_NAME;
             tmpTenants = env.getProperty(applicationName + ".multitenancy.names");
-            System.out.println(applicationName + ".multitenancy.names = " + tmpTenants);
         }
 
         tenantNames = tmpTenants.split(",");

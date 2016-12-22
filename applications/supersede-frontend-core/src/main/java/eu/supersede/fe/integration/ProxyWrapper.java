@@ -90,7 +90,6 @@ public class ProxyWrapper
         for (String t : tenants)
         {
             String domain = env.getProperty("is.authorization." + t + ".tenant.domain");
-            log.info("domain is null: " + (domain == null));
 
             if (domain != null)
             {
