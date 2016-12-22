@@ -153,8 +153,7 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter
                     }
                     catch (Exception e)
                     {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
+                        log.error("Unable to get authorization token, check your username and password.");
                     }
 
                     if (token == null || token.getAccessToken() == null)
