@@ -1,20 +1,21 @@
 package eu.supersede.fe.template.session;
 
-public class Authority {
+public class Authority
+{
+    private String authority;
 
-	private String authority;
-	
-	public Authority()
-	{
-		
-	}
+    public Authority()
+    {
 
-	public String getAuthority() {
-		return authority;
-	}
+    }
 
-	public void setAuthority(String authority) {
-		this.authority = authority;
-	}
-	
+    public String getAuthority()
+    {
+        return authority;
+    }
+
+    public void setAuthority(String authority)
+    {
+        this.authority = authority;
+    }
 }
