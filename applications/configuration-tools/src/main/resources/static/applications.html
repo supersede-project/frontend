@@ -1,4 +1,8 @@
 <script src="supersede-first-app/js/applications.js"></script>
 <div ng-controller="applications">
-My session id is: {{session_id}}
+    <h1>List of applications</h1>
+    <div ng-repeat="x in applications">
+        <!--<a target="_blank" href="{{x.url}}?id={{session_id}}"></a>-->
+        <p><strong>{{x.name}}</strong>: <a target="_blank" ng-href='{{x.url + "?id=" + session_id}}'>{{x.url}}</a></p>
+    </div>
 </div>
