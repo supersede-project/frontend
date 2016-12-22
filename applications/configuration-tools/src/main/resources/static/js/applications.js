@@ -5,7 +5,7 @@ app.controllerProvider.register('applications', function($scope, $http) {
 
     $scope.getSession = function() {
         $http({
-            url: "supersede-first-app/session",
+            url: "configuration-tools/session",
             method: 'GET'
         }).success(function(data) {
             $scope.session_id = data.id;
@@ -16,7 +16,7 @@ app.controllerProvider.register('applications', function($scope, $http) {
 
     $scope.getApplications = function() {
         $http({
-            url: "supersede-first-app/applicationlist",
+            url: "configuration-tools/applicationlist",
             method: 'GET'
         }).success(function(data) {
             console.log("Applications:");
