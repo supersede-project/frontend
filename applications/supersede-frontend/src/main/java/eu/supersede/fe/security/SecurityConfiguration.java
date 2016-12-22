@@ -48,6 +48,7 @@ import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -151,9 +152,17 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter
                         token = proxy.getIFAuthenticationManager(tenantId).getAuthorizationToken(username, password,
                                 tenantId);
                     }
-                    catch (Exception e)
+                    catch (HttpClientErrorException e)
                     {
-                        log.error("Unable to get authorization token, check your username and password.");
+                        log.error("Invalid username and password.");
+                    }
+                    catch (NullPointerException e1)
+                    {
+                        log.error("Authorization token is null, check your if.properties file in the conf/ folder");
+                    }
+                    catch (Exception e2)
+                    {
+                        e2.printStackTrace();
                     }
 
                     if (token == null || token.getAccessToken() == null)
