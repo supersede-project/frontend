@@ -1,5 +1,5 @@
 var app = angular.module('w5app');
-app.controllerProvider.register('session', function($scope, $http) {
+app.controllerProvider.register('applications', function($scope, $http) {
     $scope.session = "";
 
     $scope.getSession = function() {
