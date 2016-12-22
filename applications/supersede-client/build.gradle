@@ -68,6 +68,7 @@ dependencies {
 configurations.all {
 	// check for updates at every build
     resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+    resolutionStrategy.cacheDynamicVersionsFor 0, 'seconds'
 }
 
 eclipse {
