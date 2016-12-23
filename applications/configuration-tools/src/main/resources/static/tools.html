@@ -1,0 +1,9 @@
+<script src="configuration-tools/js/tools.js"></script>
+<div ng-controller="tools">
+    <h1>Tools</h1>
+    <div ng-repeat="x in applications">
+        <p><strong><a target="_blank" ng-href='{{x.url + "?sid=" + session_id}}'>{{x.title}}</a></strong></p>
+        <p>{{x.description}}</p>
+        <br>
+    </div>
+</div>

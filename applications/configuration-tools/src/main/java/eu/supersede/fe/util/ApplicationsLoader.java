@@ -20,6 +20,9 @@ public class ApplicationsLoader
 {
     private final String APPLICATION_NAMES = "configuration.tools.applications";
     private final String APPLICATION_PROPERTY = "configuration.tools.application.";
+    private final String TITLE_PROPERTY = "title";
+    private final String DESCRIPTION_PROPERTY = "description";
+    private final String URL_PROPERTY = "url";
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
@@ -45,9 +48,23 @@ public class ApplicationsLoader
 
         for (String applicationName : applicationNames)
         {
-            String url_property = APPLICATION_PROPERTY + applicationName + ".url";
+            String title_property = APPLICATION_PROPERTY + applicationName + "." + TITLE_PROPERTY;
+            String description_property = APPLICATION_PROPERTY + applicationName + "." + DESCRIPTION_PROPERTY;
+            String url_property = APPLICATION_PROPERTY + applicationName + "." + URL_PROPERTY;
+            String title = env.getProperty(title_property);
+            String description = env.getProperty(description_property);
             String url = env.getProperty(url_property);
 
+            if (title == null)
+            {
+                log.error("Missing required property: " + title_property);
+                return;
+            }
+            if (description == null)
+            {
+                log.error("Missing required property: " + description_property);
+                return;
+            }
             if (url == null)
             {
                 log.error("Missing required property: " + url_property);
@@ -55,7 +72,8 @@ public class ApplicationsLoader
             }
 
             Application application = new Application();
-            application.setName(applicationName);
+            application.setTitle(title);
+            application.setDescription(description);
             application.setUrl(url);
             applications.add(application);
         }

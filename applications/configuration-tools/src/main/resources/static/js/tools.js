@@ -1,5 +1,5 @@
 var app = angular.module('w5app');
-app.controllerProvider.register('applications', function($scope, $http) {
+app.controllerProvider.register('tools', function($scope, $http) {
     $scope.session_id = "";
     $scope.applications = {};
 
@@ -19,8 +19,6 @@ app.controllerProvider.register('applications', function($scope, $http) {
             url: "configuration-tools/applicationlist",
             method: 'GET'
         }).success(function(data) {
-            console.log("Applications:");
-            console.log(data);
             $scope.applications = data;
             }).error(function(err) {
                 console.log(err);

@@ -1,8 +1,0 @@
-<script src="configuration-tools/js/applications.js"></script>
-<div ng-controller="applications">
-    <h1>List of applications</h1>
-    <div ng-repeat="x in applications">
-        <!--<a target="_blank" href="{{x.url}}?id={{session_id}}"></a>-->
-        <p><strong>{{x.name}}</strong>: <a target="_blank" ng-href='{{x.url + "?sid=" + session_id}}'>{{x.url}}</a></p>
-    </div>
-</div>

@@ -15,21 +15,32 @@ public class Application
 {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private String name;
+    private String title;
+    private String description;
     private String url;
 
     public Application()
     {
     }
 
-    public String getName()
+    public String getTitle()
     {
-        return name;
+        return title;
     }
 
-    public void setName(String name)
+    public void setTitle(String title)
     {
-        this.name = name;
+        this.title = title;
+    }
+
+    public String getdescription()
+    {
+        return description;
+    }
+
+    public void setDescription(String description)
+    {
+        this.description = description;
     }
 
     public String getUrl()
