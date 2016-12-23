@@ -19,7 +19,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
@@ -28,7 +27,6 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
  * Main class used to run the frontend.
  */
 @SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
-@ComponentScan
 @EnableGlobalMethodSecurity(securedEnabled = true)
 @EnableScheduling
 @EnableRedisHttpSession
