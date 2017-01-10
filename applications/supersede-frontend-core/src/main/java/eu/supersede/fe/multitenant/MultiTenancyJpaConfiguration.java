@@ -40,6 +40,8 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 @EnableConfigurationProperties(JpaProperties.class)
 public class MultiTenancyJpaConfiguration
 {
+    private final static String HBM2DDL_AUTO_PROPERTY = "application.multitenancy.hibernate.hbm2ddl.auto";
+
     @Value("${application.multitenancy.models.packages}")
     private String MODELS_PACKAGES;
 
@@ -54,6 +56,9 @@ public class MultiTenancyJpaConfiguration
 
     @Autowired
     private CurrentTenantIdentifierResolver currentTenantIdentifierResolver;
+
+    @Autowired
+    private org.springframework.core.env.Environment env;
 
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(EntityManagerFactoryBuilder builder)
@@ -70,6 +75,13 @@ public class MultiTenancyJpaConfiguration
         hibernateProps.put(Environment.MULTI_TENANT_CONNECTION_PROVIDER, multiTenantConnectionProvider);
         hibernateProps.put(Environment.MULTI_TENANT_IDENTIFIER_RESOLVER, currentTenantIdentifierResolver);
         hibernateProps.put(Environment.DIALECT, "org.hibernate.dialect.PostgreSQLDialect");
+
+        String HBM2DDL_AUTO = env.getProperty(HBM2DDL_AUTO_PROPERTY);
+
+        if (HBM2DDL_AUTO != null)
+        {
+            hibernateProps.put(Environment.HBM2DDL_AUTO, HBM2DDL_AUTO);
+        }
 
         Set<String> packages = new HashSet<>();
         String[] tmp = MODELS_PACKAGES.split(",");

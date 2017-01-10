@@ -39,7 +39,7 @@ public class CurrentTenantIdentifierResolverImpl implements CurrentTenantIdentif
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    Environment env;
+    private Environment env;
 
     private String DEFAULT_TENANT_ID = "";
 
