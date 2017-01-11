@@ -25,6 +25,9 @@ buildscript {
     repositories {
         mavenCentral()
         maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+        maven {
             url 'http://supersede.es.atos.net:10080/artifactory/libs-snapshot'
             name = 'maven-supersede-snapshot'
             credentials {
@@ -45,7 +48,7 @@ buildscript {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
         classpath('io.spring.gradle:dependency-management-plugin:0.6.1.RELEASE')
         //Check for the latest version here: http://plugins.gradle.org/plugin/com.jfrog.artifactory
-        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.4.9"
+        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.4.12"
     }
 }
 
