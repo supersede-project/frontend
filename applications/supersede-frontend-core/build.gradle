@@ -64,7 +64,7 @@ dependencies {
     compile("org.postgresql:postgresql:9.4.1211.jre7")
 	compile("com.h2database:h2:1.4.192")
 
-    compile("eu.supersede.if:eu.supersede.if.api:0.2.0-SNAPSHOT")
+    compile("eu.supersede.if:eu.supersede.if.api:0.3.0-SNAPSHOT")
 }
 
 configurations.all {
