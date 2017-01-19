@@ -183,7 +183,7 @@ app.controller('navigation', function($rootScope, $scope, $http, $location, $rou
 			
 			$scope.navigationMenuSettings = 
 			{
-				width : '60%',
+				width : '90%',
 				height : '30px'
 			}
 			
