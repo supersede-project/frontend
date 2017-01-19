@@ -19,15 +19,17 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.stereotype.Component;
 
 @Component
-public class RedisTemplates {
+public class RedisTemplates
+{
+    @Bean
+    SessionRedisTemplate sessionTemplate(RedisConnectionFactory connectionFactory)
+    {
+        return new SessionRedisTemplate(connectionFactory);
+    }
 
-	@Bean
-	SessionRedisTemplate sessionTemplate(RedisConnectionFactory connectionFactory) {
-		return new SessionRedisTemplate(connectionFactory);
-	}
-	
-	@Bean
-	SessionObjectRedisTemplate sessionObjectTemplate(RedisConnectionFactory connectionFactory) {
-		return new SessionObjectRedisTemplate(connectionFactory);
-	}
+    @Bean
+    SessionObjectRedisTemplate sessionObjectTemplate(RedisConnectionFactory connectionFactory)
+    {
+        return new SessionObjectRedisTemplate(connectionFactory);
+    }
 }

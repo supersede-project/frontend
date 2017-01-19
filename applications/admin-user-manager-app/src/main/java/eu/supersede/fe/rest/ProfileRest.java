@@ -25,14 +25,15 @@ import eu.supersede.fe.model.Profile;
 
 @RestController
 @RequestMapping("/profile")
-public class ProfileRest {
+public class ProfileRest
+{
+    @Autowired
+    private ProfilesJpa profiles;
 
-	@Autowired
-	private ProfilesJpa profiles;
-	
-	//@Secured({"ROLE_ADMIN"})
-	@RequestMapping("")
-	public List<Profile> getProfiles() {
-		return profiles.findAll();
-	}
+    // @Secured({"ROLE_ADMIN"})
+    @RequestMapping("")
+    public List<Profile> getProfiles()
+    {
+        return profiles.findAll();
+    }
 }

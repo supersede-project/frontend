@@ -134,7 +134,6 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter
                 log.debug("User has " + authorities.length + " authorities");
 
                 List<GrantedAuthority> permissions = AuthorityUtils.createAuthorityList(authorities);
-
                 DatabaseUser dbUser = new DatabaseUser(user.getUserId(), user.getFirstName() + " " + user.getLastName(),
                         user.getEmail(), password, token, true, true, true, true, permissions, user.getLocale());
 

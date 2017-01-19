@@ -76,6 +76,7 @@ public class NotificationListener
             if (n.getProfile())
             {
                 Profile p = profiles.get(tenant).findByName(n.getRecipient());
+
                 for (User u : p.getUsers())
                 {
                     createNotification(users.get(tenant), notifications.get(tenant), u.getEmail(), n.getLink(),

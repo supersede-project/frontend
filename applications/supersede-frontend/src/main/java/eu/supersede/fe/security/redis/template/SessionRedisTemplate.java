@@ -24,24 +24,28 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import eu.supersede.fe.security.redis.session.Session;
 
-public class SessionRedisTemplate extends RedisTemplate<String, Session> {
-	
-	public SessionRedisTemplate() {
-		RedisSerializer<String> stringSerializer = new StringRedisSerializer();
-		Jackson2JsonRedisSerializer<Session> jacksonSerializer = new Jackson2JsonRedisSerializer<>(Session.class);
-		setKeySerializer(stringSerializer);
-		setValueSerializer(jacksonSerializer);
-		setHashKeySerializer(stringSerializer);
-		setHashValueSerializer(jacksonSerializer);
-	}
-	
-	public SessionRedisTemplate(RedisConnectionFactory connectionFactory) {
-		this();
-		setConnectionFactory(connectionFactory);
-		afterPropertiesSet();
-	}
+public class SessionRedisTemplate extends RedisTemplate<String, Session>
+{
+    public SessionRedisTemplate()
+    {
+        RedisSerializer<String> stringSerializer = new StringRedisSerializer();
+        Jackson2JsonRedisSerializer<Session> jacksonSerializer = new Jackson2JsonRedisSerializer<>(Session.class);
+        setKeySerializer(stringSerializer);
+        setValueSerializer(jacksonSerializer);
+        setHashKeySerializer(stringSerializer);
+        setHashValueSerializer(jacksonSerializer);
+    }
 
-	protected RedisConnection preProcessConnection(RedisConnection connection, boolean existingConnection) {
-		return new DefaultStringRedisConnection(connection);
-	}
+    public SessionRedisTemplate(RedisConnectionFactory connectionFactory)
+    {
+        this();
+        setConnectionFactory(connectionFactory);
+        afterPropertiesSet();
+    }
+
+    @Override
+    protected RedisConnection preProcessConnection(RedisConnection connection, boolean existingConnection)
+    {
+        return new DefaultStringRedisConnection(connection);
+    }
 }

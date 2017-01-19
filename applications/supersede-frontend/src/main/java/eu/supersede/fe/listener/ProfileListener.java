@@ -29,7 +29,6 @@ import eu.supersede.fe.multitenant.MultiJpaProvider;
 @Component
 public class ProfileListener
 {
-
     @Autowired
     private ProfileRedisTemplate profileTemplate;
 
@@ -50,6 +49,7 @@ public class ProfileListener
         while (profileTemplate.opsForSet().size("profiles") > 0L)
         {
             Profile p = profileTemplate.opsForSet().pop("profiles");
+
             for (ProfilesJpa profiles : profilesJpa.values())
             {
                 if (p.getName() != null && !p.getName().equals("") && profiles.findByName(p.getName()) == null)
