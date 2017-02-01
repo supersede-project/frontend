@@ -10,7 +10,7 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
-*/
+ */
 
 package eu.supersede.fe.listener;
 
@@ -48,12 +48,20 @@ public class NotificationListener
     @Autowired
     private MultiJpaProvider multiJpaProvider;
 
+    private Map<String, ProfilesJpa> profiles;
+    private Map<String, NotificationsJpa> notifications;
+    private Map<String, UsersJpa> users;
+
     /**
      * Load notifications at initialization.
      */
     @PostConstruct
     private void init()
     {
+        profiles = multiJpaProvider.getRepositories(ProfilesJpa.class);
+        notifications = multiJpaProvider.getRepositories(NotificationsJpa.class);
+        users = multiJpaProvider.getRepositories(UsersJpa.class);
+
         loadNotifications();
     }
 
@@ -62,12 +70,6 @@ public class NotificationListener
      */
     private synchronized void loadNotifications()
     {
-        multiJpaProvider.clearTenants();
-
-        Map<String, ProfilesJpa> profiles = multiJpaProvider.getRepositories(ProfilesJpa.class);
-        Map<String, NotificationsJpa> notifications = multiJpaProvider.getRepositories(NotificationsJpa.class);
-        Map<String, UsersJpa> users = multiJpaProvider.getRepositories(UsersJpa.class);
-
         while (notificationTemplate.opsForSet().size("notifications") > 0L)
         {
             Notification n = notificationTemplate.opsForSet().pop("notifications");

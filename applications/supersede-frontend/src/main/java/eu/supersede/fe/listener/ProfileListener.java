@@ -10,7 +10,7 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
-*/
+ */
 
 package eu.supersede.fe.listener;
 
@@ -35,17 +35,17 @@ public class ProfileListener
     @Autowired
     private MultiJpaProvider multiJpaProvider;
 
+    private Map<String, ProfilesJpa> profilesJpa;
+
     @PostConstruct
     private void init()
     {
+        profilesJpa = multiJpaProvider.getRepositories(ProfilesJpa.class);
         loadProfiles();
     }
 
     private void loadProfiles()
     {
-        multiJpaProvider.clearTenants();
-        Map<String, ProfilesJpa> profilesJpa = multiJpaProvider.getRepositories(ProfilesJpa.class);
-
         while (profileTemplate.opsForSet().size("profiles") > 0L)
         {
             Profile p = profileTemplate.opsForSet().pop("profiles");

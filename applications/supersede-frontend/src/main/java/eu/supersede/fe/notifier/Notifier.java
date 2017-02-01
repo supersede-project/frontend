@@ -10,13 +10,15 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
-*/
+ */
 
 package eu.supersede.fe.notifier;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
+import javax.annotation.PostConstruct;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,6 +62,14 @@ public class Notifier
     @Value("${notifier.mail.sender.delay}")
     private int SENDER_DELAY;
 
+    private Map<String, NotificationsJpa> notificationsJpa;
+
+    @PostConstruct
+    private void init()
+    {
+        notificationsJpa = multiJpaProvider.getRepositories(NotificationsJpa.class);
+    }
+
     public void createForUsers(List<String> usersEmail, String message)
     {
         for (String email : usersEmail)
@@ -92,8 +102,6 @@ public class Notifier
         // now
         Date now = new Date();
         Date limit = new Date(now.getTime() - SENDER_DELAY);
-
-        Map<String, NotificationsJpa> notificationsJpa = multiJpaProvider.getRepositories(NotificationsJpa.class);
 
         for (NotificationsJpa nJpa : notificationsJpa.values())
         {
