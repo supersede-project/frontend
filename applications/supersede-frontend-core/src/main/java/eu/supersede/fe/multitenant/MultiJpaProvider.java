@@ -146,26 +146,6 @@ public class MultiJpaProvider
         return repo;
     }
 
-    public void clearTenants()
-    {
-        for (String tenant : repositoriesFactory.keySet())
-        {
-            clearTenant(tenant);
-        }
-    }
-
-    public void clearTenant(String tenant)
-    {
-        ContainerUtil factory = repositoriesFactory.get(tenant);
-
-        if (factory.entityManager.getTransaction().isActive())
-        {
-            factory.entityManager.getTransaction().commit();
-        }
-
-        factory.entityManager.clear();
-    }
-
     private class MultiJpaRepositoryProxyPostProcessor implements RepositoryProxyPostProcessor
     {
         private JpaTransactionManager jpaTranMan;
