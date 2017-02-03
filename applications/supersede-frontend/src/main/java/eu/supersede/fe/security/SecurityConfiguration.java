@@ -44,6 +44,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
@@ -66,7 +67,8 @@ import eu.supersede.integration.api.security.types.AuthorizationToken;
 @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
 class SecurityConfiguration extends WebSecurityConfigurerAdapter
 {
-    @SuppressWarnings("unused")
+    private static boolean csrf_error = false;
+
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Value("#{'${web.security.permit.urls}'.split(',')}")
@@ -191,12 +193,9 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter
     @Override
     protected void configure(HttpSecurity http) throws Exception
     {
-        http.httpBasic().and().authorizeRequests().antMatchers(PERMIT_URLS).permitAll().anyRequest().authenticated();
-
-        // TODO: investigate exception thrown by the doFilter method.
-        // Temporary fix: do not apply the filter.
-        // .and().csrf().csrfTokenRepository(csrfTokenRepository()).and()
-        // .addFilterAfter(csrfHeaderFilter(), CsrfFilter.class);
+        http.httpBasic().and().authorizeRequests().antMatchers(PERMIT_URLS).permitAll().anyRequest().authenticated()
+                .and().csrf().csrfTokenRepository(csrfTokenRepository()).and()
+                .addFilterAfter(csrfHeaderFilter(), CsrfFilter.class);
     }
 
     private Filter csrfHeaderFilter()
@@ -222,7 +221,21 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter
                     }
                 }
 
-                filterChain.doFilter(request, response);
+                try
+                {
+                    filterChain.doFilter(request, response);
+                }
+                catch (IOException e)
+                {
+                    if (!csrf_error)
+                    {
+                        log.warn("Unable to apply the CSRF filter. This message will not be displayed again");
+                    }
+                    else
+                    {
+                        csrf_error = true;
+                    }
+                }
             }
         };
     }

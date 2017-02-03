@@ -23,6 +23,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
@@ -47,6 +49,10 @@ import org.springframework.web.util.WebUtils;
 @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
 class SecurityConfiguration extends WebSecurityConfigurerAdapter
 {
+    private static boolean csrf_error = false;
+
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
+
     @Value("${application.unsecured.urls:}")
     private String PERMIT_URLS;
 
@@ -105,7 +111,21 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter
                     }
                 }
 
-                filterChain.doFilter(request, response);
+                try
+                {
+                    filterChain.doFilter(request, response);
+                }
+                catch (IOException e)
+                {
+                    if (!csrf_error)
+                    {
+                        log.warn("Unable to apply the CSRF filter. This message will not be displayed again");
+                    }
+                    else
+                    {
+                        csrf_error = true;
+                    }
+                }
             }
         };
     }
