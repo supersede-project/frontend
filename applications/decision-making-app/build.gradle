@@ -1,0 +1,97 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'war'
+apply plugin: 'maven'
+apply plugin: 'maven-publish'
+apply plugin: 'com.jfrog.artifactory'
+
+version = '0.0.1-SNAPSHOT'
+group = 'eu.supersede'
+
+war {
+    baseName = 'decision-making-app'
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+buildscript {
+    ext {
+        springBootVersion = '1.4.2.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+        maven {
+            url 'http://supersede.es.atos.net:10080/artifactory/libs-snapshot'
+            name = 'maven-supersede-snapshot'
+            credentials {
+                username = "${artifactory_user}"
+                password = "${artifactory_password}"
+            }
+        }
+        maven {
+            url 'http://supersede.es.atos.net:10080/artifactory/libs-release'
+            name = 'maven-supersede-release'
+            credentials {
+                username = "${artifactory_user}"
+                password = "${artifactory_password}"
+            }
+        }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath('io.spring.gradle:dependency-management-plugin:0.6.1.RELEASE')
+        //Check for the latest version here: http://plugins.gradle.org/plugin/com.jfrog.artifactory
+        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.4.9"
+    }
+}
+
+repositories {
+    mavenCentral()
+    add buildscript.repositories.getByName ("maven-supersede-snapshot")
+    add buildscript.repositories.getByName ("maven-supersede-release")
+}
+
+configurations {
+    providedRuntime
+}
+
+dependencies {
+compile('org.springframework.boot:spring-boot-starter-security')
+    compile('org.springframework.boot:spring-boot-starter-web')
+
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+    compile('commons-collections:commons-collections:3.2.2')
+    compile('org.apache.velocity:velocity:1.7')
+
+    compile("org.springframework.boot:spring-boot-starter-jdbc")
+    compile("org.springframework.boot:spring-boot-starter-data-jpa")
+    compile("org.postgresql:postgresql:9.4.1211.jre7")
+
+    providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
+
+    compile("org.springframework.boot:spring-boot-starter-mail")
+
+    compile("org.springframework.session:spring-session:1.2.2.RELEASE")
+    compile("org.springframework.boot:spring-boot-starter-data-redis")
+	
+    compile("eu.supersede:supersede-frontend-core:0.2.1-SNAPSHOT")
+    compile("eu.supersede:supersede-client:0.2.1-SNAPSHOT")
+}
+
+configurations.all {
+	//Avoids conflict: SL4J Multiple bindings were found on the class path
+	exclude group: "org.slf4j", module: "slf4j-log4j12"
+    // check for updates at every build
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}
+
+eclipse {
+    classpath {
+         containers.remove('org.eclipse.jdt.launching.JRE_CONTAINER')
+         containers 'org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8'
+    }
+}

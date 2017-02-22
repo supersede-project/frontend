@@ -1,0 +1,13 @@
+<script src="decision-making-app/js/configuration.js"></script>
+<div ng-controller="configuration">
+	<h1>Configuration</h1>
+		<div style="float:left;" id='rbtnSupervised'>Supervised Enactment</div>
+		<div style="margin-right: 400px; float:right;" id='rbtnAutomatic'>Automated Enactment</div>
+		<br><br>
+		<div id="supervision">
+			<jqx-grid id="jqxGrid" jqx-create="createWidget" jqx-settings="gridSettings"></jqx-grid>
+			<br>
+			<jqx-button id="btnEnable" ng-click="">Enable</jqx-button>
+			<jqx-button id="btnDisable" ng-click="">Disable</jqx-button>
+		</div>
+</div>
