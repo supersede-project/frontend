@@ -27,64 +27,66 @@ import eu.supersede.fe.message.model.Notification;
 import eu.supersede.fe.security.DatabaseUser;
 
 @Component
-public class NotificationUtil {
+public class NotificationUtil
+{
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-	private final Logger log = LoggerFactory.getLogger(this.getClass());
-	
-	@Autowired
-	private NotificationRedisTemplate notificationTemplate;
+    @Autowired
+    private NotificationRedisTemplate notificationTemplate;
 
-	private String getCurrentTenant()
-	{
-		String tenant = null;
-		
-		SecurityContext securityContext = SecurityContextHolder.getContext();
-		if(securityContext != null)
-		{
-			Authentication authentication = securityContext.getAuthentication();
-			if(authentication != null && authentication.getPrincipal() instanceof DatabaseUser)
-			{
-				DatabaseUser userDetails = (DatabaseUser)authentication.getPrincipal();
-				tenant = userDetails.getTenantId();
-			}	
-		}
-		return tenant;
-	}
-	
-	public void createNotificationForUser(String email, String message, String link)
-	{
-		createNotificationForUser(getCurrentTenant(), email, message, link);
-	}
-	
-	public void createNotificationForUser(String tenant, String email, String message, String link)
-	{
-		if(tenant == null)
-		{
-			log.error("Tenant can not be null");
-			return;
-		}
-		
-		Notification n = new Notification(tenant, email, false, message, link);
-		notificationTemplate.opsForSet().add("notifications", n);
-		notificationTemplate.convertAndSend("notification", "");
-	}
-	
-	public void createNotificationsForProfile(String profile, String message, String link)
-	{
-		createNotificationsForProfile(getCurrentTenant(), profile, message, link);
-	}
-	
-	public void createNotificationsForProfile(String tenant, String profile, String message, String link)
-	{
-		if(tenant == null)
-		{
-			log.error("Tenant can not be null");
-			return;
-		}
-		
-		Notification n = new Notification(tenant, profile, true, message, link);
-		notificationTemplate.opsForSet().add("notifications", n);
-		notificationTemplate.convertAndSend("notification", "");
-	}
-	
+    private String getCurrentTenant()
+    {
+        String tenant = null;
+
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+
+        if (securityContext != null)
+        {
+            Authentication authentication = securityContext.getAuthentication();
+
+            if (authentication != null && authentication.getPrincipal() instanceof DatabaseUser)
+            {
+                DatabaseUser userDetails = (DatabaseUser) authentication.getPrincipal();
+                tenant = userDetails.getTenantId();
+            }
+        }
+
+        return tenant;
+    }
+
+    public void createNotificationForUser(String email, String message, String link)
+    {
+        createNotificationForUser(getCurrentTenant(), email, message, link);
+    }
+
+    public void createNotificationForUser(String tenant, String email, String message, String link)
+    {
+        if (tenant == null)
+        {
+            log.error("Tenant can not be null");
+            return;
+        }
+
+        Notification n = new Notification(tenant, email, false, message, link);
+        notificationTemplate.opsForSet().add("notifications", n);
+        notificationTemplate.convertAndSend("notification", "");
+    }
+
+    public void createNotificationsForProfile(String profile, String message, String link)
+    {
+        createNotificationsForProfile(getCurrentTenant(), profile, message, link);
+    }
+
+    public void createNotificationsForProfile(String tenant, String profile, String message, String link)
+    {
+        if (tenant == null)
+        {
+            log.error("Tenant can not be null");
+            return;
+        }
+
+        Notification n = new Notification(tenant, profile, true, message, link);
+        notificationTemplate.opsForSet().add("notifications", n);
+        notificationTemplate.convertAndSend("notification", "");
+    }
 }

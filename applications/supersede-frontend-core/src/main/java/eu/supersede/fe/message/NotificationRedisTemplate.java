@@ -24,24 +24,32 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import eu.supersede.fe.message.model.Notification;
 
-public class NotificationRedisTemplate extends RedisTemplate<String, Notification> {
-	
-	public NotificationRedisTemplate() {
-		RedisSerializer<String> stringSerializer = new StringRedisSerializer();
-		Jackson2JsonRedisSerializer<Notification> jacksonSerializer = new Jackson2JsonRedisSerializer<>(Notification.class);
-		setKeySerializer(stringSerializer);
-		setValueSerializer(jacksonSerializer);
-		setHashKeySerializer(stringSerializer);
-		setHashValueSerializer(stringSerializer);
-	}
-	
-	public NotificationRedisTemplate(RedisConnectionFactory connectionFactory) {
-		this();
-		setConnectionFactory(connectionFactory);
-		afterPropertiesSet();
-	}
+/**
+ * Custom Redis template for notifications.
+ */
+public class NotificationRedisTemplate extends RedisTemplate<String, Notification>
+{
+    public NotificationRedisTemplate()
+    {
+        RedisSerializer<String> stringSerializer = new StringRedisSerializer();
+        Jackson2JsonRedisSerializer<Notification> jacksonSerializer = new Jackson2JsonRedisSerializer<>(
+                Notification.class);
+        setKeySerializer(stringSerializer);
+        setValueSerializer(jacksonSerializer);
+        setHashKeySerializer(stringSerializer);
+        setHashValueSerializer(stringSerializer);
+    }
 
-	protected RedisConnection preProcessConnection(RedisConnection connection, boolean existingConnection) {
-		return new DefaultStringRedisConnection(connection);
-	}
+    public NotificationRedisTemplate(RedisConnectionFactory connectionFactory)
+    {
+        this();
+        setConnectionFactory(connectionFactory);
+        afterPropertiesSet();
+    }
+
+    @Override
+    protected RedisConnection preProcessConnection(RedisConnection connection, boolean existingConnection)
+    {
+        return new DefaultStringRedisConnection(connection);
+    }
 }

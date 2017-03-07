@@ -18,84 +18,134 @@ import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+/**
+ * Generic application handled by the frontend.
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Application {
+public class Application
+{
+    private String applicationName;
+    private Map<String, String> applicationLabels;
+    private String homePage;
 
-	private String applicationName;
-	private Map<String, String> applicationLabels;
-	private String homePage;
-	
-	public Application()
-	{}
-	
-	public Application(String applicationName, 
-			Map<String, String> applicationLabels, 
-			String homePage) {
-		this.applicationName = applicationName;
-		this.setApplicationLabels(applicationLabels);
-		this.setHomePage(homePage);
-	}
+    /**
+     * Is this necessary?
+     */
+    public Application()
+    {
+    }
 
-	public String getId()
-	{
-		return applicationName;
-	}
-	
-	public String getApplicationName() {
-		return applicationName;
-	}
-	
-	public void setApplicationName(String applicationName) {
-		this.applicationName = applicationName;
-	}
+    /**
+     * Default constructor.
+     * @param applicationName
+     * @param applicationLabels
+     * @param homePage
+     */
+    public Application(String applicationName, Map<String, String> applicationLabels, String homePage)
+    {
+        this.applicationName = applicationName;
+        this.setApplicationLabels(applicationLabels);
+        this.setHomePage(homePage);
+    }
 
-	public Map<String, String> getApplicationLabels() {
-		return applicationLabels;
-	}
+    /**
+     * Return the application id, which corresponds to the application name.
+     */
+    public String getId()
+    {
+        return applicationName;
+    }
 
-	public void setApplicationLabels(Map<String, String> applicationLabels) {
-		this.applicationLabels = applicationLabels;
-	}
+    /**
+     * Return the application name.
+     */
+    public String getApplicationName()
+    {
+        return applicationName;
+    }
 
-	 public String getLocalizedApplicationLabel(String lang)
-	 {
-		 if(applicationLabels.containsKey(lang))
-         {
-			 return applicationLabels.get(lang);
-         }
-		 return applicationLabels.get("");
-	 }
-	 	
-	public String getHomePage() {
-		return homePage;
-	}
+    /**
+     * Set the application name.
+     * @param applicationName
+     */
+    public void setApplicationName(String applicationName)
+    {
+        this.applicationName = applicationName;
+    }
 
-	public void setHomePage(String homePage) {
-		this.homePage = homePage;
-	}
+    /**
+     * Return the localized labels associated to the application.
+     */
+    public Map<String, String> getApplicationLabels()
+    {
+        return applicationLabels;
+    }
 
-	@Override
-	public int hashCode()
-	{
-		return applicationName.hashCode();
-	}
-	
-	@Override
-	public boolean equals(Object obj)
-	{
-		if (this == obj)
-		{
-			return true;
-		}
-		if (obj == null)
-		{
-			return false;
-		}
-		if (Application.class != obj.getClass())
-		{
-			return false;
-		}
-		Application other = (Application)obj;
-		return this.applicationName.equals(other.applicationName);
-	}
+    /**
+     * Set the localized labels associated to the application.
+     * @param applicationLabels
+     */
+    public void setApplicationLabels(Map<String, String> applicationLabels)
+    {
+        this.applicationLabels = applicationLabels;
+    }
+
+    /**
+     * Get the application label for the given language.
+     * @param lang
+     */
+    public String getLocalizedApplicationLabel(String language)
+    {
+        if (applicationLabels.containsKey(language))
+        {
+            return applicationLabels.get(language);
+        }
+
+        return applicationLabels.get("");
+    }
+
+    /**
+     * Return the home page of the application.
+     */
+    public String getHomePage()
+    {
+        return homePage;
+    }
+
+    /**
+     * Set the home page of the application.
+     * @param homePage
+     */
+    public void setHomePage(String homePage)
+    {
+        this.homePage = homePage;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return applicationName.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (this == obj)
+        {
+            return true;
+        }
+
+        if (obj == null)
+        {
+            return false;
+        }
+
+        if (Application.class != obj.getClass())
+        {
+            return false;
+        }
+
+        Application other = (Application) obj;
+        return this.applicationName.equals(other.applicationName);
+    }
 }

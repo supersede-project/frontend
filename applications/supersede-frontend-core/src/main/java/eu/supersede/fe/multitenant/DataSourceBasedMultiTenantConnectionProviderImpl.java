@@ -23,126 +23,168 @@ import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 
 import org.hibernate.engine.jdbc.connections.spi.AbstractDataSourceBasedMultiTenantConnectionProviderImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.annotation.PropertySources;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
+import eu.supersede.fe.configuration.ApplicationConfiguration;
+
+/**
+ * Class used to dynamically change at runtime the database to be used based on the identifier of the current tenant.
+ */
 @SuppressWarnings("serial")
 @Component
-@PropertySources({
-		@PropertySource(value = "file:../conf/multitenancy.properties", ignoreResourceNotFound=true),
-		@PropertySource(value = "file:../conf/multitenancy_${application.name}.properties", ignoreResourceNotFound=true)
-      })
+@PropertySource("file:../conf/multitenancy.properties")
 @EnableConfigurationProperties(JpaProperties.class)
-public class DataSourceBasedMultiTenantConnectionProviderImpl extends AbstractDataSourceBasedMultiTenantConnectionProviderImpl
+public class DataSourceBasedMultiTenantConnectionProviderImpl
+        extends AbstractDataSourceBasedMultiTenantConnectionProviderImpl
 {
-	@Autowired
-	Environment env;
-		
-	private String[] tenantNames;
-	private String defaultTenant;
-	
-	private Map<String, DataSource> datasources;
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-	@PostConstruct
-	public void load() {
-		datasources = new HashMap<>();
-		
-		String tmpTenants = env.getProperty("application.multitenancy.names");
-		if(tmpTenants == null)
-		{
-			datasources.put("fake", getFakeDatasource());
-			return;
-		}
-		
-		tenantNames = tmpTenants.split(",");
-		
-		for(int i = 0; i < tenantNames.length; i++)
-		{
-			tenantNames[i] = tenantNames[i].trim();
-		}
-		
-		defaultTenant = env.getRequiredProperty("application.multitenancy.default");
-		if(defaultTenant == null)
-		{
-			defaultTenant = tenantNames[0];
-		}
-		
-		for(String n : tenantNames)
-		{
-			if(env.getProperty("application.multitenancy." + n + ".driverClassName") != null)
-			{
-				DataSourceBuilder factory = DataSourceBuilder
-						.create(env.getClass().getClassLoader())
-						.driverClassName(env.getRequiredProperty("application.multitenancy." + n + ".driverClassName"))
-						.username(env.getRequiredProperty("application.multitenancy." + n + ".username"))
-						.password(env.getRequiredProperty("application.multitenancy." + n + ".password"))
-						.url(env.getRequiredProperty("application.multitenancy." + n + ".url"));
-				DataSource tmp = factory.build();
-				
-				datasources.put(n, tmp);
-			}
-		}
-		
-		if(datasources.size() == 0)
-		{
-			datasources.put("fake", getFakeDatasource());
-		}
-	}
-	
-	private DataSource getFakeDatasource()
-	{
-		DataSourceBuilder factory = DataSourceBuilder
-				.create(env.getClass().getClassLoader())
-				.driverClassName("org.h2.Driver")
-				.username("test")
-				.url("jdbc:h2:mem:");
-		return factory.build();
-	}
+    @Autowired
+    Environment env;
 
-	@Bean(name = "dataSource")
-	public DataSource dataSource() {
-		return selectAnyDataSource();
-	}
-	
-	@Override
-	protected DataSource selectAnyDataSource() {
-		DataSource dS = null;
-		if(datasources.containsKey(defaultTenant))
-		{
-			dS = datasources.get(defaultTenant);	
-		}
-		else
-		{
-			Set<String> keys = datasources.keySet();
-			Iterator keysIt = keys.iterator();
-			while(keysIt.hasNext())
-			{
-				dS = datasources.get(keysIt.next());
-				break;
-			}
-		}
-		return dS;
-	}
+    private String[] tenantNames;
+    private String defaultTenant;
+    private Map<String, DataSource> datasources;
 
-	@Override
-	protected DataSource selectDataSource(String tenantIdentifier) {
-		DataSource dS = null;
-		if(datasources.containsKey(tenantIdentifier))
-		{
-			dS = datasources.get(tenantIdentifier);
-		}
-		return dS;
-	}
-	
-	protected Map<String, DataSource> getDataSources()
-	{
-		return datasources;
-	}
+    /**
+     * Load multitenancy configuration properties to load the correct database.
+     */
+    @PostConstruct
+    public void load()
+    {
+        datasources = new HashMap<>();
+        String applicationName = ApplicationConfiguration.getApplicationName();
+        String tmpTenants = env.getProperty(applicationName + ".multitenancy.names");
+
+        // Read values of the default application
+        if (tmpTenants == null)
+        {
+            applicationName = ApplicationConfiguration.DEFAULT_APPLICATION_NAME;
+            tmpTenants = env.getProperty(applicationName + ".multitenancy.names");
+        }
+
+        if (tmpTenants == null)
+        {
+            datasources.put("fake", getFakeDatasource());
+            return;
+        }
+
+        tenantNames = tmpTenants.split(",");
+
+        for (int i = 0; i < tenantNames.length; i++)
+        {
+            tenantNames[i] = tenantNames[i].trim();
+            log.info("Found tenant: " + tenantNames[i]);
+        }
+
+        defaultTenant = env.getRequiredProperty(applicationName + ".multitenancy.default");
+
+        if (defaultTenant == null)
+        {
+            defaultTenant = tenantNames[0];
+        }
+
+        for (String n : tenantNames)
+        {
+            if (env.getProperty(applicationName + ".multitenancy." + n + ".driverClassName") != null)
+            {
+                DataSourceBuilder factory = DataSourceBuilder.create(env.getClass().getClassLoader())
+                        .driverClassName(
+                                env.getRequiredProperty(applicationName + ".multitenancy." + n + ".driverClassName"))
+                        .username(env.getRequiredProperty(applicationName + ".multitenancy." + n + ".username"))
+                        .password(env.getRequiredProperty(applicationName + ".multitenancy." + n + ".password"))
+                        .url(env.getRequiredProperty(applicationName + ".multitenancy." + n + ".url"));
+                DataSource tmp = factory.build();
+
+                if (tmp instanceof org.apache.tomcat.jdbc.pool.DataSource)
+                {
+                    org.apache.tomcat.jdbc.pool.DataSource tmp1 = (org.apache.tomcat.jdbc.pool.DataSource) tmp;
+                    tmp1.setMaxActive(3);
+                }
+
+                datasources.put(n, tmp);
+            }
+        }
+
+        if (datasources.size() == 0)
+        {
+            datasources.put("fake", getFakeDatasource());
+        }
+    }
+
+    /**
+     * Return a fake in-memory database if no tenants are specified.
+     */
+    private DataSource getFakeDatasource()
+    {
+        DataSourceBuilder factory = DataSourceBuilder.create(env.getClass().getClassLoader())
+                .driverClassName("org.h2.Driver").username("test").url("jdbc:h2:mem:");
+        return factory.build();
+    }
+
+    @Bean(name = "dataSource")
+    public DataSource dataSource()
+    {
+        return selectAnyDataSource();
+    }
+
+    /**
+     * Return the data source of the default tenant if specified, the first data source otherwise.
+     */
+    @Override
+    protected DataSource selectAnyDataSource()
+    {
+        DataSource dS = null;
+
+        if (datasources.containsKey(defaultTenant))
+        {
+            dS = datasources.get(defaultTenant);
+        }
+        else
+        {
+            Set<String> keys = datasources.keySet();
+            Iterator keysIt = keys.iterator();
+
+            while (keysIt.hasNext())
+            {
+                dS = datasources.get(keysIt.next());
+                break;
+            }
+        }
+
+        return dS;
+    }
+
+    /**
+     * Return the data source corresponding to the given tenant identifier.
+     */
+    @Override
+    protected DataSource selectDataSource(String tenantIdentifier)
+    {
+        DataSource dS = null;
+
+        if (datasources.containsKey(tenantIdentifier))
+        {
+            dS = datasources.get(tenantIdentifier);
+        }
+
+        return dS;
+    }
+
+    /**
+     * Return all the data sources.
+     */
+    protected Map<String, DataSource> getDataSources()
+    {
+        return datasources;
+    }
 }

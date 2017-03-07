@@ -39,123 +39,128 @@ import eu.supersede.fe.security.DatabaseUser;
 
 @RestController
 @RequestMapping("/notification")
-public class NotificationRest {
-
-	@Autowired
+public class NotificationRest
+{
+    @Autowired
     private UsersJpa users;
 
-	@Autowired
+    @Autowired
     private NotificationsJpa notifications;
-	
-	private final Logger log = LoggerFactory.getLogger(this.getClass());
-	
-	@RequestMapping("")
-	public List<Notification> getByUserId(Authentication authentication,
-			HttpServletRequest request, 
-			@RequestParam(defaultValue="true") Boolean toRead)
-	{
-		String scheme;
-		String host;
-		String port;
-		
-		if(request.getHeader("x-forwarded-proto") != null || 
-				request.getHeader("x-forwarded-host") != null || 
-				request.getHeader("x-forwarded-port") != null)
-		{
-			scheme = request.getHeader("x-forwarded-proto") != null ? request.getHeader("x-forwarded-proto") : "http";
-			host =  request.getHeader("x-forwarded-host") != null ? request.getHeader("x-forwarded-host") : request.getServerName();
-			port = request.getHeader("x-forwarded-port") != null ? request.getHeader("x-forwarded-port") : null;
-		}
-		else
-		{
-			scheme = request.getScheme();
-			host = request.getServerName();
-			port = new Integer(request.getServerPort()).toString();
-		}
-		
-		
-		String baseUrl = port != null ? scheme + "://" + host + ":" + port + "/#/" : scheme + "://" + host + "/#/";
 
-		DatabaseUser currentUser = (DatabaseUser) authentication.getPrincipal();
-		User u = users.getOne(currentUser.getUserId());
-		List<Notification> ns;
-		if(toRead)
-		{
-			ns = notifications.findByUserAndReadOrderByCreationTimeDesc(u, !toRead);
-		}
-		else
-		{
-			ns = notifications.findByUserOrderByCreationTimeDesc(u);
-		}
-		
-		for(Notification n : ns)
-		{
-			if(n.getLink() != null && !n.getLink().equals(""))
-			{
-				try {
-					URI uri = new URI(n.getLink());
-					if(!uri.isAbsolute())
-					{
-						n.setLink(baseUrl + n.getLink());
-					}
-				} catch (URISyntaxException e) {
-					log.debug("Error inside link: " + e.getMessage());
-				}
-			}
-		}
-		
-		return ns;
-	}
-	
-	@RequestMapping("/count")
-	public Long countByUserId(Authentication authentication, @RequestParam(defaultValue="true") Boolean toRead)
-	{
-		DatabaseUser currentUser = (DatabaseUser) authentication.getPrincipal();
-		User u = users.getOne(currentUser.getUserId());
-		Long c;
-		if(toRead)
-		{
-			c = notifications.countByUserAndRead(u, !toRead);
-		}
-		else
-		{
-			c = notifications.countByUser(u);
-		}
-		
-		return c;
-	}
-	
-	@RequestMapping(method = RequestMethod.PUT, value="/{notificationId}/read")
-	public void setRead(Authentication authentication, @PathVariable Long notificationId) {
-		DatabaseUser currentUser = (DatabaseUser) authentication.getPrincipal();
-		User u = users.getOne(currentUser.getUserId());
-		Notification n = notifications.findOne(notificationId);
-		
-		if(n.getUser().equals(u))
-		{
-			n.setRead(true);
-			notifications.save(n);
-		}
-		else
-		{
-			throw new UnauthorizedException();
-		}
-	}
-	
-	@RequestMapping(method=RequestMethod.DELETE, value="/{notificationId}")
-	public void delete(Authentication authentication, @PathVariable Long notificationId)
-	{
-		DatabaseUser currentUser = (DatabaseUser) authentication.getPrincipal();
-		User u = users.getOne(currentUser.getUserId());
-		Notification n = notifications.findOne(notificationId);
-		
-		if(n.getUser().equals(u))
-		{
-			notifications.delete(notificationId);
-		}
-		else
-		{
-			throw new UnauthorizedException();
-		}
-	}
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
+
+    @RequestMapping("")
+    public List<Notification> getByUserId(Authentication authentication, HttpServletRequest request,
+            @RequestParam(defaultValue = "true") Boolean toRead)
+    {
+        String scheme;
+        String host;
+        String port;
+
+        if (request.getHeader("x-forwarded-proto") != null || request.getHeader("x-forwarded-host") != null
+                || request.getHeader("x-forwarded-port") != null)
+        {
+            scheme = request.getHeader("x-forwarded-proto") != null ? request.getHeader("x-forwarded-proto") : "http";
+            host = request.getHeader("x-forwarded-host") != null ? request.getHeader("x-forwarded-host")
+                    : request.getServerName();
+            port = request.getHeader("x-forwarded-port") != null ? request.getHeader("x-forwarded-port") : null;
+        }
+        else
+        {
+            scheme = request.getScheme();
+            host = request.getServerName();
+            port = new Integer(request.getServerPort()).toString();
+        }
+
+        String baseUrl = port != null ? scheme + "://" + host + ":" + port + "/#/" : scheme + "://" + host + "/#/";
+
+        DatabaseUser currentUser = (DatabaseUser) authentication.getPrincipal();
+        User u = users.getOne(currentUser.getUserId());
+        List<Notification> ns;
+
+        if (toRead)
+        {
+            ns = notifications.findByUserAndReadOrderByCreationTimeDesc(u, !toRead);
+        }
+        else
+        {
+            ns = notifications.findByUserOrderByCreationTimeDesc(u);
+        }
+
+        for (Notification n : ns)
+        {
+            if (n.getLink() != null && !n.getLink().equals(""))
+            {
+                try
+                {
+                    URI uri = new URI(n.getLink());
+
+                    if (!uri.isAbsolute())
+                    {
+                        n.setLink(baseUrl + n.getLink());
+                    }
+                }
+                catch (URISyntaxException e)
+                {
+                    log.debug("Error inside link: " + e.getMessage());
+                }
+            }
+        }
+
+        return ns;
+    }
+
+    @RequestMapping("/count")
+    public Long countByUserId(Authentication authentication, @RequestParam(defaultValue = "true") Boolean toRead)
+    {
+        DatabaseUser currentUser = (DatabaseUser) authentication.getPrincipal();
+        User u = users.getOne(currentUser.getUserId());
+        Long c;
+
+        if (toRead)
+        {
+            c = notifications.countByUserAndRead(u, !toRead);
+        }
+        else
+        {
+            c = notifications.countByUser(u);
+        }
+
+        return c;
+    }
+
+    @RequestMapping(method = RequestMethod.PUT, value = "/{notificationId}/read")
+    public void setRead(Authentication authentication, @PathVariable Long notificationId)
+    {
+        DatabaseUser currentUser = (DatabaseUser) authentication.getPrincipal();
+        User u = users.getOne(currentUser.getUserId());
+        Notification n = notifications.findOne(notificationId);
+
+        if (n.getUser().equals(u))
+        {
+            n.setRead(true);
+            notifications.save(n);
+        }
+        else
+        {
+            throw new UnauthorizedException();
+        }
+    }
+
+    @RequestMapping(method = RequestMethod.DELETE, value = "/{notificationId}")
+    public void delete(Authentication authentication, @PathVariable Long notificationId)
+    {
+        DatabaseUser currentUser = (DatabaseUser) authentication.getPrincipal();
+        User u = users.getOne(currentUser.getUserId());
+        Notification n = notifications.findOne(notificationId);
+
+        if (n.getUser().equals(u))
+        {
+            notifications.delete(notificationId);
+        }
+        else
+        {
+            throw new UnauthorizedException();
+        }
+    }
 }

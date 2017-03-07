@@ -1,15 +1,15 @@
-apply plugin: 'java'
-apply plugin: 'eclipse'
-apply plugin: 'idea'
-apply plugin: 'maven'
-apply plugin: 'maven-publish'
+apply plugin: "java"
+apply plugin: "eclipse"
+apply plugin: "idea"
+apply plugin: "maven"
+apply plugin: "maven-publish"
 apply plugin: "com.jfrog.artifactory"
 
-version = '0.2-SNAPSHOT'
-group = 'eu.supersede'
+version = "0.2.1-SNAPSHOT"
+group = "eu.supersede"
 
 jar {
-    baseName = 'supersede-client'
+    baseName = "supersede-client"
 }
 
 sourceCompatibility = 1.8
@@ -17,21 +17,24 @@ targetCompatibility = 1.8
 
 buildscript {
     ext {
-        springBootVersion = '1.4.1.RELEASE'
+        springBootVersion = "1.4.3.RELEASE"
     }
     repositories {
         mavenCentral()
         maven {
-            url 'http://supersede.es.atos.net:10080/artifactory/libs-snapshot'
-            name = 'maven-supersede-snapshot'
+            url "https://plugins.gradle.org/m2/"
+        }
+        maven {
+            url "http://supersede.es.atos.net:10080/artifactory/libs-snapshot"
+            name = "maven-supersede-snapshot"
             credentials {
                 username = "${artifactory_user}"
                 password = "${artifactory_password}"
             }
         }
         maven {
-            url 'http://supersede.es.atos.net:10080/artifactory/libs-release'
-            name = 'maven-supersede-release'
+            url "http://supersede.es.atos.net:10080/artifactory/libs-release"
+            name = "maven-supersede-release"
             credentials {
                 username = "${artifactory_user}"
                 password = "${artifactory_password}"
@@ -41,7 +44,7 @@ buildscript {
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
         //Check for the latest version here: http://plugins.gradle.org/plugin/com.jfrog.artifactory
-        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.4.7"
+        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.4.12"
     }
 }
 
@@ -62,18 +65,19 @@ dependencies {
 
     compile("org.springframework.boot:spring-boot-starter-data-redis:${springBootVersion}")
 
-    compile("eu.supersede:supersede-frontend-core:0.2-SNAPSHOT")
+    compile files("../supersede-frontend-core/build/libs/supersede-frontend-core-0.2.1-SNAPSHOT.jar")
 }
 
 configurations.all {
 	// check for updates at every build
-    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+    resolutionStrategy.cacheChangingModulesFor 0, "seconds"
+    resolutionStrategy.cacheDynamicVersionsFor 0, "seconds"
 }
 
 eclipse {
     classpath {
-         containers.remove('org.eclipse.jdt.launching.JRE_CONTAINER')
-         containers 'org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8'
+        containers.remove("org.eclipse.jdt.launching.JRE_CONTAINER")
+        containers "org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"
     }
 }
 
@@ -82,18 +86,18 @@ artifactory {
     contextUrl = "${artifactory_contextUrl}"   //The base Artifactory URL if not overridden by the publisher/resolver
     publish {
         repository {
-            repoKey = 'libs-snapshot-local'
+            repoKey = "libs-snapshot-local"
             username = "${artifactory_user}"
             password = "${artifactory_password}"
             maven = true
         }
         defaults {
-           publications ('mavenJava')
+           publications ("mavenJava")
         }
     }
     resolve {
         repository {
-            repoKey = 'libs-snapshot'
+            repoKey = "libs-snapshot"
             username = "${artifactory_user}"
             password = "${artifactory_password}"
             maven = true

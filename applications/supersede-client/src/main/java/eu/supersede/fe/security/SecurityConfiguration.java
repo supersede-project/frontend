@@ -23,6 +23,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
@@ -45,76 +47,101 @@ import org.springframework.web.util.WebUtils;
 @EnableWebSecurity
 @PropertySource("classpath:wp5_application.properties")
 @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
-class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+class SecurityConfiguration extends WebSecurityConfigurerAdapter
+{
+    private static boolean csrf_error = false;
 
-	@Value("${application.unsecured.urls:}")
-	private String PERMIT_URLS;
-	
-	private static CsrfRequestMatcher csrfRequestMatcher;
-	
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		
-		String[] permitUrls;
-		if(PERMIT_URLS.equals(""))
-		{
-			permitUrls = new String[0];
-		}
-		else
-		{
-			permitUrls = PERMIT_URLS.split(",");
-			for(int i = 0; i < permitUrls.length; i++)
-			{
-				permitUrls[i] = permitUrls[i].trim();
-			}
-		}
-		
-		if(csrfRequestMatcher == null)
-		{
-			csrfRequestMatcher = new CsrfRequestMatcher(permitUrls);
-		}
-		
-		http.httpBasic().disable();
-		//http.anonymous().disable();
-	    http.authorizeRequests()
-	    .antMatchers(permitUrls).permitAll()
-	    .anyRequest().authenticated()
-	    .and().csrf().requireCsrfProtectionMatcher(csrfRequestMatcher).and()
-	    	.csrf().csrfTokenRepository(csrfTokenRepository()).and()
-				.addFilterAfter(csrfHeaderFilter(), CsrfFilter.class);
-	}
-	
-	private Filter csrfHeaderFilter() {
-		return new OncePerRequestFilter() {
-			@Override
-			protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
-					FilterChain filterChain) throws ServletException, IOException {
-				CsrfToken csrf = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
-				if (csrf != null) {
-					Cookie cookie = WebUtils.getCookie(request, "XSRF-TOKEN");
-					String token = csrf.getToken();
-					if (cookie == null || token != null && !token.equals(cookie.getValue())) {
-						cookie = new Cookie("XSRF-TOKEN", token);
-						cookie.setPath("/");
-						response.addCookie(cookie);
-					}
-				}
-				filterChain.doFilter(request, response);
-			}
-		};
-	}
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-	private CsrfTokenRepository csrfTokenRepository() {
-		HttpSessionCsrfTokenRepository repository = new HttpSessionCsrfTokenRepository();
-		repository.setHeaderName("X-XSRF-TOKEN");
-		return repository;
-	}
-	
-	 @Bean
-     public CookieSerializer cookieSerializer() {
-             DefaultCookieSerializer serializer = new DefaultCookieSerializer();
-             serializer.setCookiePath("/");
-             return serializer;
-     }
+    @Value("${application.unsecured.urls:}")
+    private String PERMIT_URLS;
 
+    private static CsrfRequestMatcher csrfRequestMatcher;
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception
+    {
+        String[] permitUrls;
+
+        if (PERMIT_URLS.equals(""))
+        {
+            permitUrls = new String[0];
+        }
+        else
+        {
+            permitUrls = PERMIT_URLS.split(",");
+
+            for (int i = 0; i < permitUrls.length; i++)
+            {
+                permitUrls[i] = permitUrls[i].trim();
+            }
+        }
+
+        if (csrfRequestMatcher == null)
+        {
+            csrfRequestMatcher = new CsrfRequestMatcher(permitUrls);
+        }
+
+        http.httpBasic().disable();
+        http.authorizeRequests().antMatchers(permitUrls).permitAll().anyRequest().authenticated().and().csrf()
+                .requireCsrfProtectionMatcher(csrfRequestMatcher).and().csrf()
+                .csrfTokenRepository(csrfTokenRepository()).and().addFilterAfter(csrfHeaderFilter(), CsrfFilter.class);
+    }
+
+    private Filter csrfHeaderFilter()
+    {
+        return new OncePerRequestFilter()
+        {
+            @Override
+            protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+                    FilterChain filterChain) throws ServletException, IOException
+            {
+                CsrfToken csrf = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+
+                if (csrf != null)
+                {
+                    Cookie cookie = WebUtils.getCookie(request, "XSRF-TOKEN");
+                    String token = csrf.getToken();
+
+                    if (cookie == null || token != null && !token.equals(cookie.getValue()))
+                    {
+                        cookie = new Cookie("XSRF-TOKEN", token);
+                        cookie.setPath("/");
+                        response.addCookie(cookie);
+                    }
+                }
+
+                try
+                {
+                    filterChain.doFilter(request, response);
+                }
+                catch (IOException e)
+                {
+                    if (!csrf_error)
+                    {
+                        log.warn("Unable to apply the CSRF filter. This message will not be displayed again");
+                    }
+                    else
+                    {
+                        csrf_error = true;
+                    }
+                }
+            }
+        };
+    }
+
+    private CsrfTokenRepository csrfTokenRepository()
+    {
+        HttpSessionCsrfTokenRepository repository = new HttpSessionCsrfTokenRepository();
+        repository.setHeaderName("X-XSRF-TOKEN");
+        return repository;
+    }
+
+    @Bean
+    public CookieSerializer cookieSerializer()
+    {
+        DefaultCookieSerializer serializer = new DefaultCookieSerializer();
+        serializer.setCookiePath("/");
+        return serializer;
+    }
 }

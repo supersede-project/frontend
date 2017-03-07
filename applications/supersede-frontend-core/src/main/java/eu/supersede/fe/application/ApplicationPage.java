@@ -19,96 +19,155 @@ import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+/**
+ * Generic page for applications handled by the frontend.
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ApplicationPage {
+public class ApplicationPage
+{
+    private String applicationName;
+    private String applicationPage;
+    private Map<String, String> applicationPageLabels;
+    private List<String> profilesRequired;
 
-	private String applicationName;
-	private String applicationPage;
-	private Map<String, String> applicationPageLabels;
-	private List<String> profilesRequired;
-	
-	public ApplicationPage()
-	{}
-	
-	public ApplicationPage(String applicationName, 
-			String applicationPage,
-			Map<String, String> applicationPageLabels, 
-			List<String> profilesRequired) {
-		this.applicationName = applicationName;
-		this.applicationPage = applicationPage;
-		this.setApplicationPageLabels(applicationPageLabels);
-		this.setProfilesRequired(profilesRequired);
-	}
+    /**
+     * Is this necessary?
+     */
+    public ApplicationPage()
+    {
+    }
 
-	public String getId()
-	{
-		return applicationName + applicationPage;
-	}
-	
-	public String getApplicationName() {
-		return applicationName;
-	}
-	
-	public void setApplicationName(String applicationName) {
-		this.applicationName = applicationName;
-	}
+    /**
+     * Default constructor.
+     * @param applicationName
+     * @param applicationPage
+     * @param applicationPageLabels
+     * @param profilesRequired
+     */
+    public ApplicationPage(String applicationName, String applicationPage, Map<String, String> applicationPageLabels,
+            List<String> profilesRequired)
+    {
+        this.applicationName = applicationName;
+        this.applicationPage = applicationPage;
+        this.setApplicationPageLabels(applicationPageLabels);
+        this.setProfilesRequired(profilesRequired);
+    }
 
-	public String getApplicationPage() {
-		return applicationPage;
-	}
-	
-	public void setApplicationPage(String applicationPage) {
-		this.applicationPage = applicationPage;
-	}
+    /**
+     * Return the id of the page.
+     */
+    public String getId()
+    {
+        return applicationName + applicationPage;
+    }
 
-	public String getLocalizedApplicationPageLabel(String lang) {
-		if(applicationPageLabels.containsKey(lang))
-		{
-			return applicationPageLabels.get(lang);
-		}
-		
-		return applicationPageLabels.get("");
-	}
-	
-	public Map<String, String> getApplicationPageLabels() {
-		return applicationPageLabels;
-	}
+    /**
+     * Return the name of the application associated to the page.
+     */
+    public String getApplicationName()
+    {
+        return applicationName;
+    }
 
-	public void setApplicationPageLabels(Map<String, String> applicationPageLabels) {
-		this.applicationPageLabels = applicationPageLabels;
-	}
+    /**
+     * Set the name of the application associated to the page.
+     * @param applicationName
+     */
+    public void setApplicationName(String applicationName)
+    {
+        this.applicationName = applicationName;
+    }
 
-	public List<String> getProfilesRequired() {
-		return profilesRequired;
-	}
+    /**
+     * Return the name of the page.
+     */
+    public String getApplicationPage()
+    {
+        return applicationPage;
+    }
 
-	public void setProfilesRequired(List<String> profilesRequired) {
-		this.profilesRequired = profilesRequired;
-	}
+    /**
+     * Set the name of the page.
+     * @param applicationPage
+     */
+    public void setApplicationPage(String applicationPage)
+    {
+        this.applicationPage = applicationPage;
+    }
 
-	@Override
-	public int hashCode()
-	{
-		return applicationName.hashCode() + applicationPage .hashCode();
-	}
-	
-	@Override
-	public boolean equals(Object obj)
-	{
-		if (this == obj)
-		{
-			return true;
-		}
-		if (obj == null)
-		{
-			return false;
-		}
-		if (ApplicationPage.class != obj.getClass())
-		{
-			return false;
-		}
-		ApplicationPage other = (ApplicationPage)obj;
-		return this.applicationName.equals(other.applicationName) && 
-				this.applicationPage.equals(other.applicationPage);
-	}
+    /**
+     * Get the page label for the given language.
+     * @param language
+     */
+    public String getLocalizedApplicationPageLabel(String language)
+    {
+        if (applicationPageLabels.containsKey(language))
+        {
+            return applicationPageLabels.get(language);
+        }
+
+        return applicationPageLabels.get("");
+    }
+
+    /**
+     * Return the localised labels of the page.
+     */
+    public Map<String, String> getApplicationPageLabels()
+    {
+        return applicationPageLabels;
+    }
+
+    /**
+     * Set the localised labels of the page.
+     * @param applicationPageLabels
+     */
+    public void setApplicationPageLabels(Map<String, String> applicationPageLabels)
+    {
+        this.applicationPageLabels = applicationPageLabels;
+    }
+
+    /**
+     * Return the profiles required for the page.
+     */
+    public List<String> getProfilesRequired()
+    {
+        return profilesRequired;
+    }
+
+    /**
+     * Set the profiles required for the page.
+     * @param profilesRequired
+     */
+    public void setProfilesRequired(List<String> profilesRequired)
+    {
+        this.profilesRequired = profilesRequired;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return applicationName.hashCode() + applicationPage.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (this == obj)
+        {
+            return true;
+        }
+
+        if (obj == null)
+        {
+            return false;
+        }
+
+        if (ApplicationPage.class != obj.getClass())
+        {
+            return false;
+        }
+
+        ApplicationPage other = (ApplicationPage) obj;
+        return this.applicationName.equals(other.applicationName) && this.applicationPage.equals(other.applicationPage);
+    }
 }

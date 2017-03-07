@@ -18,6 +18,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import eu.supersede.fe.model.User;
 
-public interface UsersJpa extends JpaRepository<User, Long> {
+public interface UsersJpa extends JpaRepository<User, Long>
+{
 
 }

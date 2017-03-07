@@ -17,17 +17,20 @@ package eu.supersede.fe.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+/**
+ * Custom exception for unauthorised exception.
+ */
 @SuppressWarnings("serial")
 @ResponseStatus(HttpStatus.UNAUTHORIZED)
-public class UnauthorizedException extends SupersedeRuntimeException {
+public class UnauthorizedException extends SupersedeRuntimeException
+{
+    public UnauthorizedException()
+    {
+        super();
+    }
 
-	public UnauthorizedException() {
-		super();
-	}
-	
-	public UnauthorizedException(String message)
-	{
-		super(message);
-	}
-	
+    public UnauthorizedException(String message)
+    {
+        super(message);
+    }
 }

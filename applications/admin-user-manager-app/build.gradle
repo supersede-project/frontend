@@ -1,18 +1,18 @@
-apply plugin: 'java'
-apply plugin: 'eclipse'
-apply plugin: 'idea'
-apply plugin: 'spring-boot'
-apply plugin: 'io.spring.dependency-management'
-apply plugin: 'war'
-apply plugin: 'maven'
-apply plugin: 'maven-publish'
+apply plugin: "java"
+apply plugin: "eclipse"
+apply plugin: "idea"
+apply plugin: "org.springframework.boot"
+apply plugin: "io.spring.dependency-management"
+apply plugin: "war"
+apply plugin: "maven"
+apply plugin: "maven-publish"
 apply plugin: "com.jfrog.artifactory"
 
-version = '0.2-SNAPSHOT'
-group = 'eu.supersede'
+version = "0.2.1-SNAPSHOT"
+group = "eu.supersede"
 
 war {
-    baseName = 'admin-user-manager-app'
+    baseName = "admin-user-manager-app"
 }
 
 sourceCompatibility = 1.8
@@ -20,21 +20,24 @@ targetCompatibility = 1.8
 
 buildscript {
     ext {
-        springBootVersion = '1.4.1.RELEASE'
+        springBootVersion = "1.4.3.RELEASE"
     }
     repositories {
         mavenCentral()
         maven {
-            url 'http://supersede.es.atos.net:10080/artifactory/libs-snapshot'
-            name = 'maven-supersede-snapshot'
+            url "https://plugins.gradle.org/m2/"
+        }
+        maven {
+            url "http://supersede.es.atos.net:10080/artifactory/libs-snapshot"
+            name = "maven-supersede-snapshot"
             credentials {
                 username = "${artifactory_user}"
                 password = "${artifactory_password}"
             }
         }
         maven {
-            url 'http://supersede.es.atos.net:10080/artifactory/libs-release'
-            name = 'maven-supersede-release'
+            url "http://supersede.es.atos.net:10080/artifactory/libs-release"
+            name = "maven-supersede-release"
             credentials {
                 username = "${artifactory_user}"
                 password = "${artifactory_password}"
@@ -43,9 +46,9 @@ buildscript {
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-        classpath('io.spring.gradle:dependency-management-plugin:0.6.1.RELEASE')
+        classpath("io.spring.gradle:dependency-management-plugin:0.6.1.RELEASE")
         //Check for the latest version here: http://plugins.gradle.org/plugin/com.jfrog.artifactory
-        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.4.7"
+        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.4.12"
     }
 }
 
@@ -60,26 +63,27 @@ configurations {
 }
 
 dependencies {
-    compile('org.springframework.boot:spring-boot-starter-security')
-    compile('org.springframework.boot:spring-boot-starter-web')
+    compile("org.springframework.boot:spring-boot-starter-security:${springBootVersion}")
+    compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
 
-    testCompile('org.springframework.boot:spring-boot-starter-test')
-    compile('commons-collections:commons-collections:3.2.2')
-    compile('org.apache.velocity:velocity:1.7')
+    testCompile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
+    compile("commons-collections:commons-collections:3.2.2")
+    compile("org.apache.velocity:velocity:1.7")
 
-    compile("org.springframework.boot:spring-boot-starter-jdbc")
-    compile("org.springframework.boot:spring-boot-starter-data-jpa")
+    compile("org.springframework.boot:spring-boot-starter-jdbc:${springBootVersion}")
+    compile("org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}")
     compile("org.postgresql:postgresql:9.4.1211.jre7")
 
-    providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
+    providedRuntime("org.springframework.boot:spring-boot-starter-tomcat:${springBootVersion}")
 
-    compile("org.springframework.boot:spring-boot-starter-mail")
+    compile("org.springframework.boot:spring-boot-starter-mail:${springBootVersion}")
 
     compile("org.springframework.session:spring-session:1.2.2.RELEASE")
-    compile("org.springframework.boot:spring-boot-starter-data-redis")
+    compile("org.springframework.boot:spring-boot-starter-data-redis:${springBootVersion}")
 	
-    compile("eu.supersede:supersede-client:0.2-SNAPSHOT")
-    compile("eu.supersede:supersede-frontend-core:0.2-SNAPSHOT")
+    compile("eu.supersede.if:eu.supersede.if.api:0.3.0-SNAPSHOT")
+    compile files("../supersede-client/build/libs/supersede-client-0.2.1-SNAPSHOT.jar")
+    compile files("../supersede-frontend-core/build/libs/supersede-frontend-core-0.2.1-SNAPSHOT.jar")
 	
 }
 
@@ -87,12 +91,13 @@ configurations.all {
 	//Avoids conflict: SL4J Multiple bindings were found on the class path
 	exclude group: "org.slf4j", module: "slf4j-log4j12"
     // check for updates at every build
-    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+    resolutionStrategy.cacheChangingModulesFor 0, "seconds"
+    resolutionStrategy.cacheDynamicVersionsFor 0, "seconds"
 }
 
 eclipse {
     classpath {
-         containers.remove('org.eclipse.jdt.launching.JRE_CONTAINER')
-         containers 'org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8'
+         containers.remove("org.eclipse.jdt.launching.JRE_CONTAINER")
+         containers "org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"
     }
 }

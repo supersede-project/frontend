@@ -14,34 +14,40 @@
 
 package eu.supersede.fe.model;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
-@Table(name="users_dashboard")
-public class UserDashboard {
+@Table(name = "users_dashboard")
+public class UserDashboard
+{
+    @Id
+    private Long userId;
+    private Long panels;
 
-	@Id
-	private Long userId;
-	private Long panels;
-	
-	public UserDashboard() 
-	{
+    public UserDashboard()
+    {
 
-	}
-	
-	public Long getUserId() {
-		return userId;
-	}
-	
-	public void setUserId(Long userId) {
-		this.userId = userId;
-	}
-	
-	public Long getPanels() {
-		return panels;
-	}
-	
-	public void setPanels(Long panels) {
-		this.panels = panels;
-	}
+    }
+
+    public Long getUserId()
+    {
+        return userId;
+    }
+
+    public void setUserId(Long userId)
+    {
+        this.userId = userId;
+    }
+
+    public Long getPanels()
+    {
+        return panels;
+    }
+
+    public void setPanels(Long panels)
+    {
+        this.panels = panels;
+    }
 }

@@ -27,9 +27,9 @@ import org.hibernate.context.spi.CurrentTenantIdentifierResolver;
 import org.hibernate.engine.jdbc.connections.spi.MultiTenantConnectionProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -38,49 +38,62 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 @Configuration
 @PropertySource("classpath:wp5_application.properties")
 @EnableConfigurationProperties(JpaProperties.class)
-public class MultiTenancyJpaConfiguration {
+public class MultiTenancyJpaConfiguration
+{
+    private final static String HBM2DDL_AUTO_PROPERTY = "application.multitenancy.hibernate.hbm2ddl.auto";
 
-	@Value("${application.multitenancy.models.packages}")
-	private String MODELS_PACKAGES;
-	
-	@Autowired(required=false)
-	private DataSource dataSource;
-	
-	@Autowired
-	private JpaProperties jpaProperties;
+    @Value("${application.multitenancy.models.packages}")
+    private String MODELS_PACKAGES;
 
-	@Autowired
-	private MultiTenantConnectionProvider multiTenantConnectionProvider;
+    @Autowired(required = false)
+    private DataSource dataSource;
 
-	@Autowired
-	private CurrentTenantIdentifierResolver currentTenantIdentifierResolver;
+    @Autowired
+    private JpaProperties jpaProperties;
 
-	@Bean
-	public LocalContainerEntityManagerFactoryBean entityManagerFactory(EntityManagerFactoryBuilder builder) {
-		if(dataSource == null)
-		{
-			return null;
-		}
-		Map<String, Object> hibernateProps = new LinkedHashMap<>();
-		hibernateProps.putAll(jpaProperties.getHibernateProperties(dataSource));
+    @Autowired
+    private MultiTenantConnectionProvider multiTenantConnectionProvider;
 
-		hibernateProps.put(Environment.MULTI_TENANT, MultiTenancyStrategy.DATABASE);
-		hibernateProps.put(Environment.MULTI_TENANT_CONNECTION_PROVIDER, multiTenantConnectionProvider);
-		hibernateProps.put(Environment.MULTI_TENANT_IDENTIFIER_RESOLVER, currentTenantIdentifierResolver);
-		hibernateProps.put(Environment.DIALECT, "org.hibernate.dialect.PostgreSQLDialect");
+    @Autowired
+    private CurrentTenantIdentifierResolver currentTenantIdentifierResolver;
 
-		Set<String> packages = new HashSet<>();
-		String[] tmp = MODELS_PACKAGES.split(",");
-		for(String t : tmp)
-		{
-			packages.add(t.trim());
-		}
-		packages.add("eu.supersede.fe.notification.model");
-		
-		return builder.dataSource(dataSource)
-				.packages(packages.toArray(new String[packages.size()]))
-				.properties(hibernateProps)
-				.jta(false)
-				.build();
-	}
+    @Autowired
+    private org.springframework.core.env.Environment env;
+
+    @Bean
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory(EntityManagerFactoryBuilder builder)
+    {
+        if (dataSource == null)
+        {
+            return null;
+        }
+
+        Map<String, Object> hibernateProps = new LinkedHashMap<>();
+        hibernateProps.putAll(jpaProperties.getHibernateProperties(dataSource));
+
+        hibernateProps.put(Environment.MULTI_TENANT, MultiTenancyStrategy.DATABASE);
+        hibernateProps.put(Environment.MULTI_TENANT_CONNECTION_PROVIDER, multiTenantConnectionProvider);
+        hibernateProps.put(Environment.MULTI_TENANT_IDENTIFIER_RESOLVER, currentTenantIdentifierResolver);
+        hibernateProps.put(Environment.DIALECT, "org.hibernate.dialect.PostgreSQLDialect");
+
+        String HBM2DDL_AUTO = env.getProperty(HBM2DDL_AUTO_PROPERTY);
+
+        if (HBM2DDL_AUTO != null)
+        {
+            hibernateProps.put(Environment.HBM2DDL_AUTO, HBM2DDL_AUTO);
+        }
+
+        Set<String> packages = new HashSet<>();
+        String[] tmp = MODELS_PACKAGES.split(",");
+
+        for (String t : tmp)
+        {
+            packages.add(t.trim());
+        }
+
+        packages.add("eu.supersede.fe.notification.model");
+
+        return builder.dataSource(dataSource).packages(packages.toArray(new String[packages.size()]))
+                .properties(hibernateProps).jta(false).build();
+    }
 }

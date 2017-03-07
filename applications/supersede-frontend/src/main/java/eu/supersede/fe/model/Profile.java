@@ -29,54 +29,62 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name="profiles")
-public class Profile {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+@Table(name = "profiles")
+public class Profile
+{
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long profileId;
     private String name;
-    
-    @ManyToMany(cascade=CascadeType.ALL, mappedBy="profiles", fetch=FetchType.LAZY)  
+
+    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "profiles", fetch = FetchType.LAZY)
     private List<User> users;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "profile")
-	private List<ProfileLabel> labels;
-    
-    public Profile() {
+    private List<ProfileLabel> labels;
+
+    public Profile()
+    {
     }
- 
-    public Profile(String name) {
+
+    public Profile(String name)
+    {
         this.name = name;
     }
- 
-    public Long getProfileId() {
+
+    public Long getProfileId()
+    {
         return profileId;
     }
- 
-    public void setProfileId(Long profileId) {
+
+    public void setProfileId(Long profileId)
+    {
         this.profileId = profileId;
     }
- 
-    public String getName() {
+
+    public String getName()
+    {
         return name;
     }
- 
-    public void setName(String name) {
+
+    public void setName(String name)
+    {
         this.name = name;
     }
-    
+
     @JsonIgnore
     public List<User> getUsers()
     {
-    	return users;
+        return users;
     }
 
-	public List<ProfileLabel> getLabels() {
-		return labels;
-	}
+    public List<ProfileLabel> getLabels()
+    {
+        return labels;
+    }
 
-	public void setLabels(List<ProfileLabel> labels) {
-		this.labels = labels;
-	}
+    public void setLabels(List<ProfileLabel> labels)
+    {
+        this.labels = labels;
+    }
 }

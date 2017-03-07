@@ -16,34 +16,48 @@ package eu.supersede.fe.rest;
 
 import javax.annotation.PostConstruct;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.annotation.PropertySources;
+import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import eu.supersede.fe.configuration.ApplicationConfiguration;
+
 @RestController
 @RequestMapping("/tenant")
-@PropertySources({
-	@PropertySource(value = "file:../conf/multitenancy.properties", ignoreResourceNotFound=true),
-	@PropertySource(value = "file:../conf/multitenancy_${application.name}.properties", ignoreResourceNotFound=true)
-  })
-public class TenantRest {
+@PropertySource("file:../conf/multitenancy.properties")
+public class TenantRest
+{
+    @Autowired
+    Environment env;
 
-	@Value("#{'${application.multitenancy.names}'.split(',')}") 
-	private String[] multitenancyNames;
-	
-	@PostConstruct
-	private void load() {
-		for(int i = 0; i < multitenancyNames.length; i++)
-		{
-			multitenancyNames[i] = multitenancyNames[i].trim();
-		}
-	}
-	
-	@RequestMapping("")
-	public String[] getTenants() {
-		return multitenancyNames;
-	}
-	
+    private String[] tenantNames;
+
+    @PostConstruct
+    private void load()
+    {
+        String applicationName = ApplicationConfiguration.getApplicationName();
+        String tmpTenants = env.getProperty(applicationName + ".multitenancy.names");
+
+        // Read values of the default application
+        if (tmpTenants == null)
+        {
+            applicationName = ApplicationConfiguration.DEFAULT_APPLICATION_NAME;
+            tmpTenants = env.getProperty(applicationName + ".multitenancy.names");
+        }
+
+        tenantNames = tmpTenants.split(",");
+
+        for (int i = 0; i < tenantNames.length; i++)
+        {
+            tenantNames[i] = tenantNames[i].trim();
+        }
+    }
+
+    @RequestMapping("")
+    public String[] getTenants()
+    {
+        return tenantNames;
+    }
 }
