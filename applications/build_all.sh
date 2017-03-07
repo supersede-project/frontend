@@ -1,7 +1,7 @@
 #!/bin/bash
 
-cd supersede-frontend-core/ && ./gradlew build &&
-cd ../supersede-frontend && ./gradlew build &&
-cd ../supersede-client && ./gradlew build &&
-cd ../admin-user-manager-app && ./gradlew build &&
-cd ../redis-sessions-inspector && ./gradlew build
+cd supersede-frontend-core/ && sh gradlew build &&
+cd ../supersede-frontend && sh gradlew build &&
+cd ../supersede-client && sh gradlew build &&
+cd ../admin-user-manager-app && sh gradlew build &&
+cd ../redis-sessions-inspector && sh gradlew build
