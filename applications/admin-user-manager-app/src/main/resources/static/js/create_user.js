@@ -67,7 +67,7 @@ app.controllerProvider.register('create_user', function($scope, $http, $location
             { input: '#passwordInput', message: 'Password must be between 4 and 12 characters!', action: 'keyup, blur', rule: 'length=4,12' },
             { input: '#passwordConfirmInput', message: 'Password is required!', action: 'keyup, blur', rule: 'required' },
             {
-                input: '#passwordConfirmInput', message: 'Passwords doesn\'t match!', action: 'keyup, focus', rule: function (input, commit) {
+                input: '#passwordConfirmInput', message: 'Passwords don\'t match!', action: 'keyup, focus', rule: function (input, commit) {
                     // call commit with false, when you are doing server validation and you want to display a validation error on this field.
                     if (input.val() === $('#passwordInput').val()) {
                         return true;

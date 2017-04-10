@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.wso2.carbon.user.core.UserStoreException;
@@ -139,13 +140,13 @@ public class UserRest
             }
             catch (UserStoreException e)
             {
-                log.error("IFAuthenticationManager thrown an exception: ");
+                log.error("IFAuthenticationManager throw an exception: ");
                 e.printStackTrace();
                 throw new InternalServerErrorException(e.getMessage());
             }
             catch (MalformedURLException e)
             {
-                log.error("IFAuthenticationManager thrown an exception: ");
+                log.error("IFAuthenticationManager throw an exception: ");
                 e.printStackTrace();
                 throw new InternalServerErrorException(e.getMessage());
             }
@@ -166,6 +167,33 @@ public class UserRest
         user = users.save(user);
 
         return user;
+    }
+
+    @RequestMapping(value = "/update", method = RequestMethod.PUT)
+    public void updateUser(Authentication authentication, @RequestBody User user, @RequestParam String oldPassword,
+            @RequestParam String newPassword)
+    {
+        DatabaseUser currentUser = (DatabaseUser) authentication.getPrincipal();
+        String tenant = currentUser.getTenantId();
+
+        if (currentUser.getToken() != null)
+        {
+            try
+            {
+                proxy.getIFAuthenticationManager(tenant).updateUserCredential(toSecurityUser(user, tenant), newPassword,
+                        oldPassword);
+            }
+            catch (UserStoreException e)
+            {
+                log.error("IFAuthenticationManager throw an exception: ");
+                e.printStackTrace();
+                throw new InternalServerErrorException(e.getMessage());
+            }
+        }
+        else
+        {
+            log.warn("IF Authentication Manager disable, user token is NULL");
+        }
     }
 
     @RequestMapping("/{userId}")

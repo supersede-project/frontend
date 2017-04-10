@@ -133,8 +133,34 @@ app.controllerProvider.register('edit_user', function($scope, $http, $location) 
             { input: '#emailInput', message: 'Invalid e-mail!', action: 'keyup', rule: 'email' }]
     };
 
+    $scope.passwordValidatorSettings = {
+        hintType: 'label',
+        animationDuration: 0,
+        rules: [
+            { input: '#oldPasswordInput', message: 'Old password is required!', action: 'keyup, blur', rule: 'required' },
+            { input: '#newPasswordInput', message: 'New password is required!', action: 'keyup, blur', rule: 'required' },
+            { input: '#newPasswordInput', message: 'Password must be between 4 and 12 characters!', action: 'keyup, blur', rule: 'length=4,12' },
+            { input: '#confirmPasswordInput', message: 'Password is required!', action: 'keyup, blur', rule: 'required' },
+            {
+                input: '#confirmPasswordInput', message: 'Passwords don\'t match!', action: 'keyup, focus', rule: function (input, commit) {
+                    // call commit with false, when you are doing server validation and you want to display a validation error on this field.
+                    if (input.val() === $('#newPasswordInput').val()) {
+                        return true;
+                    }
+
+                    return false;
+                }
+            }
+        ]
+    };
+
     // validate
     $scope.validate = function () {
         $scope.validatorSettings.apply('validate');
+    };
+
+    // validate password
+    $scope.validatePassword = function () {
+        $scope.passwordValidatorSettings.apply('validate');
     };
 });
