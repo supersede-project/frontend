@@ -22,6 +22,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
@@ -34,8 +36,11 @@ public class Profile
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long profileId;
+
     private String name;
-    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "profiles", fetch = FetchType.LAZY)
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @JoinTable(name = "users_profiles", joinColumns = @JoinColumn(name = "profile_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<User> users;
 
     public Profile()

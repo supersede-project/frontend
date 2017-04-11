@@ -168,10 +168,22 @@ app.controllerProvider.register('edit_user', function($scope, $http, $location) 
         $http({
             url: "admin-user-manager-app/user/update",
             data: $scope.user,
-            params: { oldPassword: $scope.oldPassword, newPassword: $scope.newPassword },
             method: 'PUT'
         }).success(function (data) {
             alert("Password successfully updated");
+        }).error(function (err) {
+            alert(err.message);
+        });
+    };
+
+    $scope.deleteUser = function () {
+        $http({
+            url: "admin-user-manager-app/user/delete",
+            data: $scope.user,
+            method: 'PUT'
+        }).success(function (data) {
+            alert("User successfully deleted");
+            $location.url('admin-user-manager-app/list_users');
         }).error(function (err) {
             alert(err.message);
         });

@@ -74,8 +74,7 @@ public class UserRest
             }
             catch (UserStoreException e)
             {
-                log.error("IFAuthenticationManager thrown an exception: ");
-                e.printStackTrace();
+                log.error("IFAuthenticationManager thrown an exception: " + e.getMessage());
                 throw new InternalServerErrorException(e.getMessage());
             }
         }
@@ -86,6 +85,7 @@ public class UserRest
 
         // re-attach detached profiles
         List<Profile> ps = user.getProfiles();
+
         for (int i = 0; i < ps.size(); i++)
         {
             ps.set(i, profiles.findOne(ps.get(i).getProfileId()));
@@ -139,8 +139,7 @@ public class UserRest
             }
             catch (UserStoreException e)
             {
-                log.error("IFAuthenticationManager throw an exception: ");
-                e.printStackTrace();
+                log.error("IFAuthenticationManager throw an exception: " + e.getMessage());
                 throw new InternalServerErrorException(e.getMessage());
             }
             catch (MalformedURLException e)
@@ -168,7 +167,7 @@ public class UserRest
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.PUT)
-    public void updateUser(Authentication authentication, @RequestBody User user)
+    public void updateUserCredentials(Authentication authentication, @RequestBody User user)
     {
         DatabaseUser currentUser = (DatabaseUser) authentication.getPrincipal();
         String tenant = currentUser.getTenantId();
@@ -185,6 +184,32 @@ public class UserRest
                 log.error("IFAuthenticationManager throw an exception: " + e.getMessage());
                 throw new InternalServerErrorException(e.getMessage());
             }
+        }
+        else
+        {
+            log.warn("IF Authentication Manager disable, user token is NULL");
+        }
+    }
+
+    @RequestMapping(value = "/delete", method = RequestMethod.PUT)
+    public void deleteUser(Authentication authentication, @RequestBody User user)
+    {
+        DatabaseUser currentUser = (DatabaseUser) authentication.getPrincipal();
+        String tenant = currentUser.getTenantId();
+
+        if (currentUser.getToken() != null)
+        {
+            try
+            {
+                proxy.getIFAuthenticationManager(tenant).deleteUser(toSecurityUser(user, tenant));
+            }
+            catch (UserStoreException e)
+            {
+                log.error("IFAuthenticationManager throw an exception: " + e.getMessage());
+                throw new InternalServerErrorException(e.getMessage());
+            }
+
+            users.delete(user.getUserId());
         }
         else
         {
