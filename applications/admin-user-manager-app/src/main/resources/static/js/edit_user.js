@@ -163,4 +163,17 @@ app.controllerProvider.register('edit_user', function($scope, $http, $location) 
     $scope.validatePassword = function () {
         $scope.passwordValidatorSettings.apply('validate');
     };
+
+    $scope.updatePassword = function () {
+        $http({
+            url: "admin-user-manager-app/user/update",
+            data: $scope.user,
+            params: { oldPassword: $scope.oldPassword, newPassword: $scope.newPassword },
+            method: 'PUT'
+        }).success(function (data) {
+            alert("Password successfully updated");
+        }).error(function (err) {
+            alert(err.message);
+        });
+    };
 });

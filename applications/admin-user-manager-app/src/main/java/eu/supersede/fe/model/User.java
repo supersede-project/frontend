@@ -41,8 +41,16 @@ public class User
     private String firstName;
     private String lastName;
     private String email;
+
     @Transient
     private String password;
+
+    @Transient
+    private String oldPassword;
+
+    @Transient
+    private String newPassword;
+
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "users_profiles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "profile_id"))
     private List<Profile> profiles;
@@ -120,6 +128,30 @@ public class User
     public void setPassword(String password)
     {
         this.password = password;
+    }
+
+    @JsonIgnore
+    public String getOldPassword()
+    {
+        return oldPassword;
+    }
+
+    @JsonProperty("oldPassword")
+    public void setOldPassword(String oldPassword)
+    {
+        this.oldPassword = oldPassword;
+    }
+
+    @JsonIgnore
+    public String getNewPassword()
+    {
+        return newPassword;
+    }
+
+    @JsonProperty("newPassword")
+    public void setNewPassword(String newPassword)
+    {
+        this.newPassword = newPassword;
     }
 
     public List<Profile> getProfiles()

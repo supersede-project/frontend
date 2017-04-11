@@ -30,7 +30,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.wso2.carbon.user.core.UserStoreException;
@@ -146,8 +145,7 @@ public class UserRest
             }
             catch (MalformedURLException e)
             {
-                log.error("IFAuthenticationManager throw an exception: ");
-                e.printStackTrace();
+                log.error("IFAuthenticationManager throw an exception: " + e.getMessage());
                 throw new InternalServerErrorException(e.getMessage());
             }
         }
@@ -170,8 +168,7 @@ public class UserRest
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.PUT)
-    public void updateUser(Authentication authentication, @RequestBody User user, @RequestParam String oldPassword,
-            @RequestParam String newPassword)
+    public void updateUser(Authentication authentication, @RequestBody User user)
     {
         DatabaseUser currentUser = (DatabaseUser) authentication.getPrincipal();
         String tenant = currentUser.getTenantId();
@@ -180,13 +177,12 @@ public class UserRest
         {
             try
             {
-                proxy.getIFAuthenticationManager(tenant).updateUserCredential(toSecurityUser(user, tenant), newPassword,
-                        oldPassword);
+                proxy.getIFAuthenticationManager(tenant).updateUserCredential(toSecurityUser(user, tenant),
+                        user.getNewPassword(), user.getOldPassword());
             }
             catch (UserStoreException e)
             {
-                log.error("IFAuthenticationManager throw an exception: ");
-                e.printStackTrace();
+                log.error("IFAuthenticationManager throw an exception: " + e.getMessage());
                 throw new InternalServerErrorException(e.getMessage());
             }
         }
