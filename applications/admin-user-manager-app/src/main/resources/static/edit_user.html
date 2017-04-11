@@ -1,7 +1,7 @@
 <script src="admin-user-manager-app/js/edit_user.js"></script>
 
 <style>
-    h1, h2 {
+    h1 {
         text-align: center;
     }
 </style>
@@ -12,7 +12,7 @@
 	
 	<div style="font-family: Verdana; font-size: 13px; width: 350px;">
 		<form jqx-validator jqx-settings="validatorSettings" id="testForm" 
-			jqx-on-validation-success="editUser()" style="overflow: hidden; margin: 10px;">
+			jqx-on-validation-success="editUser()" style="margin: 10px">
 			<table class="register-table">
 				<tr>
 					<td colspan="2">First Name</td>
@@ -58,17 +58,40 @@
 				</tr>
 			</table>
 		</form>
-
-        <h2>Update Password</h2>
-        <form jqx-validator jqx-settings="passwordValidatorSettings" jqx-on-validation-success="updatePassword()" style="overflow: hidden">
-            <p>Old password</p>
-            <jqx-input jqx-width="300" jqx-height="20" id="oldPasswordInput" />
-            <p>New password</p>
-            <jqx-input jqx-width="300" jqx-height="20" id="newPasswordInput" />
-            <p>Confirm your new password</p>
-            <jqx-input jqx-width="300" jqx-height="20" id="confirmPasswordInput" />
-            <br>
-            <jqx-button ng-click="validatePassword()">Save</jqx-button>
-        </form>
 	</div>
+
+    <h2>Update Password</h2>
+    <form jqx-validator jqx-settings="passwordValidatorSettings" jqx-on-validation-success="updatePassword()">
+        <table class="register-table">
+            <tr>
+                <td colspan="2">Old Password</td>
+            </tr>
+            <tr>
+                <td>
+                    <jqx-input jqx-width="300" jqx-height="20" id="oldPasswordInput" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">New Password</td>
+            </tr>
+            <tr>
+                <td>
+                    <jqx-input jqx-width="300" jqx-height="20" id="newPasswordInput" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">Confirm New Password</td>
+            </tr>
+            <tr>
+                <td>
+                    <jqx-input jqx-width="300" jqx-height="20" id="confirmPasswordInput" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <jqx-button ng-click="validatePassword()">Save</jqx-button>
+                </td>
+            </tr>
+        </table>
+    </form>
 </div>
