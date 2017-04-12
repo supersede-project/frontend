@@ -28,7 +28,7 @@ var app = angular.module('w5app', ['ngRoute', 'jqwidgets'])
     app.provide = $provide;
 });
 
-app.controller('navigation', function($rootScope, $scope, $http, $location, $route, $interval) {
+app.controller('navigation', function ($rootScope, $scope, $http, $location, $route, $interval) {
     $scope.tab = function(route) {
         return $route.current && route === $route.current.controller;
     };
@@ -44,6 +44,7 @@ app.controller('navigation', function($rootScope, $scope, $http, $location, $rou
     $rootScope.user = {};
     $rootScope.currentLang = "any";
     $rootScope.langs = [];
+    $rootScope.authenticated = false;
 
     var authenticate = function (credentials, callback) {
 
@@ -123,13 +124,12 @@ app.controller('navigation', function($rootScope, $scope, $http, $location, $rou
     $scope.login = function() {
         authenticate($scope.credentials, function (authenticated) {
             if (authenticated) {
-                console.log("Login succeeded");
                 $location.path("/");
                 $scope.error = false;
                 $rootScope.authenticated = true;
             }
             else {
-                console.log("Login failed");
+                alert("Login failed");
                 $location.path("/login");
                 $scope.error = true;
                 cleanAuth();
@@ -142,7 +142,7 @@ app.controller('navigation', function($rootScope, $scope, $http, $location, $rou
             cleanAuth();
             $location.path("/");
         }).error(function (data) {
-            console.log("Logout failed");
+            alert("Logout failed");
             cleanAuth();
             $location.path("/");
         });
@@ -170,17 +170,23 @@ app.controller('navigation', function($rootScope, $scope, $http, $location, $rou
         });
     };
 
-    getTenants();
-
-    $scope.navigationMenuSettings =
-    {
+    $scope.navigationMenuSettings = {
         width: '90%',
         height: '30px'
     };
+
+    $("#navigationMenu").on('initialized', function () {
+        $("#welcome").css("float", "right");
+        $("#language").css("float", "right");
+        $("#notifications").css("float", "right");
+        $("#login").css("float", "right");
+        $("#logout").css("float", "right");
+    });
+
+    getTenants();
 });
 
 app.controller('notifications', function($scope, $http) {
-
     $scope.createWidget = false;
     $scope.notifications = [];
     $scope.dataAdapter = {};
@@ -297,7 +303,7 @@ app.controller('notifications', function($scope, $http) {
 
 var numGadgetRendered = 0;
 
-app.directive('renderGadgets', [ '$timeout', function($timeout) {
+app.directive('renderGadgets', ['$timeout', function ($timeout) {
     return function(scope, element, attrs) {
         numGadgetRendered++;
         if (numGadgetRendered == scope.gadgets.length){
@@ -320,14 +326,13 @@ app.directive('renderGadgets', [ '$timeout', function($timeout) {
 }]);
 
 app.controller('dashboard', function($scope, $http) {
-
     $scope.gadgets = [];
     $scope.availableGadgets = [];
     $scope.panels = [];
 
     $http.get('gadget/panel').success(function(data)
     {
-        for(var i = 0; i < data; i++)
+        for (var i = 0; i < data; i++)
         {
             $scope.panels.push(i);
         }
@@ -336,7 +341,7 @@ app.controller('dashboard', function($scope, $http) {
     $http.get('gadget').success(function(data)
     {
         $scope.gadgets.length = 0;
-        for(var i = 0; i < data.length; i++)
+        for (var i = 0; i < data.length; i++)
         {
             $scope.gadgets.push(data[i]);
         }
@@ -385,7 +390,7 @@ app.controller('dashboard', function($scope, $http) {
         }).success(function (data) {
 
         }).error(function (err) {
-            console.log(err);
+            alert(err.message);
         });
     };
 
@@ -460,7 +465,7 @@ app.controller('dashboard', function($scope, $http) {
                 }).success(function (data) {
                     window.location.reload();
                 }).error(function (err) {
-                    console.log(err);
+                    alert(err.message);
                 });
             }
         }
@@ -468,7 +473,6 @@ app.controller('dashboard', function($scope, $http) {
 });
 
 app.controller('main_home', function($scope, $http, $location) {
-
     $scope.goHome = function(appName, homePage) {
         $location.path('/' + appName + '/' + homePage);
     };

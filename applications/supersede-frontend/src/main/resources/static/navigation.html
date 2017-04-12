@@ -1,6 +1,6 @@
 <div ng-controller="navigation">
 
-    <jqx-menu id="navigationMenu" jqx-theme="'summer'" style="margin: 0 auto;" jqx-settings="navigationMenuSettings">
+    <jqx-menu id="navigationMenu" style="margin: 0 auto" jqx-theme="summer" jqx-settings="navigationMenuSettings">
         <ul>
             <li>
                 <a href="#/">Home</a>
@@ -8,7 +8,6 @@
             <li ng-show="authenticated">
                 <a href="#/dashboard">Dashboard</a>
             </li>
-
             <li ng-show="authenticated && checkApplicationUrl()">
                 <a>{{currentApplication.applicationLabel?currentApplication.applicationLabel:currentApplication.applicationName}}</a>
                 <ul>
@@ -19,37 +18,39 @@
                     </li>
                 </ul>
             </li>
-
-            <div style="float: right;">
-                <li style="cursor: default;" ng-show="authenticated"><a >Welcome, {{user.name}}</a></li>
-
-                <li ng-show="authenticated">
-                  <img ng-src="img/flags/{{currentLang}}2.png" height="20" width="32" style="position: relative; top: -2px;">
-                      <ul>
-                        <li ng-repeat="l in langs" class="jqx-item jqx-menu-item jqx-rc-all"
-                            ng-class="{'jqx-fill-state-hover jqx-menu-item-hover ':hovering}" ng-mouseenter="hovering=true"
-                            ng-mouseleave="hovering=false" role="menuitem">
-                              <a ng-click="setCurrentLang()"><img ng-src="img/flags/{{l.lang}}2.png" height="20" width="32"/>
-                                  <span style="position: relative; top: -4px;">{{l.language}}</span>
-                              </a>
-                          </li>
-                      </ul>
-                  </li>
-
-                <li ng-show="authenticated">
-                     <a style="position: relative; top: -6px;">{{notificationsCount}} </a>
-                     <img src="img/envelope.png" height="20" width="20" style="position: relative; top: -2px;"/>
-                     <ul>
-                        <li>
-                            <a href="#/notifications">Show all</a>
-                        </li>
-                       </ul>
-                 </li>
-
-                <li ng-show="!(authenticated)"><a href="#/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-                <li ng-show="authenticated"><a href="" ng-click="logout()">
-                    <span class="glyphicon glyphicon-log-out"></span>Logout</a></li>
-            </div>
+            <li id="logout" ng-show="authenticated">
+                <a href="" ng-click="logout()">
+                    <span class="glyphicon glyphicon-log-out"></span>Logout
+                </a>
+            </li>
+            <li id="login" ng-show="!(authenticated)">
+                <a href="#/login">
+                    <span class="glyphicon glyphicon-log-in"></span> Login
+                </a>
+            </li>
+            <li id="notifications" ng-show="authenticated">
+                <a style="position: relative; top: -6px;">{{notificationsCount}} </a>
+                <img src="img/envelope.png" height="20" width="20" style="position: relative; top: -2px;" />
+                <ul>
+                    <li>
+                        <a href="#/notifications">Show all</a>
+                    </li>
+                </ul>
+            </li>
+            <li id="language" ng-show="authenticated">
+                <img ng-src="img/flags/{{currentLang}}2.png" height="20" width="32" style="position: relative; top: -2px;">
+                <ul>
+                    <li ng-repeat="l in langs" class="jqx-item jqx-menu-item jqx-rc-all"
+                        ng-class="{'jqx-fill-state-hover jqx-menu-item-hover ':hovering}" ng-mouseenter="hovering=true"
+                        ng-mouseleave="hovering=false" role="menuitem">
+                        <a ng-click="setCurrentLang()">
+                            <img ng-src="img/flags/{{l.lang}}2.png" height="20" width="32" />
+                            <span style="position: relative; top: -4px;">{{l.language}}</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li id="welcome" style="cursor: default;" ng-show="authenticated">Welcome, {{user.name}}</li>
         </ul>
      </jqx-menu>
 </div>
