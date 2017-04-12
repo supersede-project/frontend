@@ -1,54 +1,50 @@
 <!doctype html>
 <html>
 <head>
-<title>Supersede</title>
-<link href="css/wp5app.css" rel="stylesheet">
+    <title>Supersede</title>
+    <link href="css/wp5app.css" rel="stylesheet">
 
-<link href="jqx/styles/jqx.base.css" rel="stylesheet">
-<link href="jqx/styles/jqx.bootstrap.css" rel="stylesheet">
-<link href="jqx/styles/jqx.summer.css" rel="stylesheet">
+    <link href="jqx/styles/jqx.base.css" rel="stylesheet">
+    <link href="jqx/styles/jqx.bootstrap.css" rel="stylesheet">
+    <link href="jqx/styles/jqx.summer.css" rel="stylesheet">
 
-<style type="text/css">
-[ng\:cloak], [ng-cloak], .ng-cloak {
-  display: none !important;
-}
-</style>
-
-<style type="text/css">
-	html, body {
-		height: 100%;
-		width: 100%;
-		margin: 0px;
-		padding: 0px;
-		//overflow: hidden;
-	}
-</style>
+    <style>
+        [ng\:cloak], [ng-cloak], .ng-cloak {
+            display: none !important;
+        }
+        html, body {
+            height: 100%;
+            width: 100%;
+            margin: 0px;
+            padding: 0px;
+        }
+    </style>
 
 </head>
 
-    <body ng-app="w5app" ng-cloak class="ng-cloak">
-        
-        <div id="page">
-			<div style="width: 100%; height: 100px;">
-				<div ng-include src="'header.html'"></div>
-	        	
-				<ng-include src="'navigation.html'"></ng-include>
-        	</div>
-	        
-	        <div style="margin-top: 20px; margin-bottom: 20px; width: 100%; height: 100%; min-height: 400px;">
-			    <div ng-view style="margin: 0 auto; width: 90%;" id="content"></div>
-		    </div>	        
-		    
-		    <div style="position: absolute; /*bottom: 0;*/ background-color: #2a2d30;  width: 100%; height: 300px;">
-				<ng-include src="'footer.html'"></ng-include>
-			</div>
+<body ng-app="w5app" ng-cloak class="ng-cloak">
+
+    <div id="page">
+        <div style="width: 100%; height: 100px;">
+            <div ng-include src="'header.html'"></div>
+
+            <ng-include src="'navigation.html'"></ng-include>
         </div>
-        
-        <script src="js/jquery-2.1.4.min.js"></script>
-        <script src="js/angular.min.js"></script>
-        <script src="js/angular-route.min.js"></script><
-        <script src="js/w5app.js"></script>
-        
-        <script src="jqx/jqx-all.js"></script>
-    </body>
+
+        <div style="margin-top: 20px; margin-bottom: 20px; width: 100%; height: 100%; min-height: 400px;">
+            <div ng-view style="margin: 0 auto; width: 90%;" id="content"></div>
+        </div>
+
+        <div style="position: absolute; background-color: #2a2d30;  width: 100%; height: 300px;">
+            <ng-include src="'footer.html'"></ng-include>
+        </div>
+    </div>
+
+    <script src="js/jquery-2.1.4.min.js"></script>
+    <script src="js/angular.min.js"></script>
+    <script src="js/angular-route.min.js"></script><
+    <script src="js/w5app.js"></script>
+
+    <script src="jqx/jqx-all.js"></script>
+</body>
 </html>
