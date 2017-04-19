@@ -77,6 +77,7 @@ public class UserRest
                 log.error("IFAuthenticationManager thrown an exception: " + e.getMessage());
                 throw new InternalServerErrorException(e.getMessage());
             }
+
         }
         else
         {
@@ -90,22 +91,22 @@ public class UserRest
         {
             Profile profile = ps.get(i);
 
+            // Check if the profile has been selected in the UI
             if (profile != null)
             {
-                System.out.print("Searching for profile with id " + ps.get(i).getProfileId() + " and name "
-                        + ps.get(i).getName());
-                if (profiles.findOne(ps.get(i).getProfileId()) == null)
+                Profile savedProfile = profiles.findOne(profile.getProfileId());
+
+                // Check if the profile is present in the corresponding database table
+                if (savedProfile == null)
                 {
-                    System.out.println("Profile with id " + ps.get(i).getProfileId() + " not found");
+                    throw new InternalServerErrorException("Profile with id " + profile.getProfileId()
+                            + " not found, unable to associate it to the new user");
                 }
                 else
                 {
+                    // Update the profile
                     ps.set(i, profiles.findOne(ps.get(i).getProfileId()));
                 }
-            }
-            else
-            {
-                System.out.println("Profile at index " + i + " has not been selected");
             }
         }
 
