@@ -86,9 +86,27 @@ public class UserRest
         // re-attach detached profiles
         List<Profile> ps = user.getProfiles();
 
+        if (ps != null)
+        {
+            System.out.println("User profiles: " + ps.size());
+        }
+        else
+        {
+            System.out.println("User profiles is null");
+        }
+
         for (int i = 0; i < ps.size(); i++)
         {
-            ps.set(i, profiles.findOne(ps.get(i).getProfileId()));
+            System.out.print(
+                    "Searching for profile with id " + ps.get(i).getProfileId() + " and name " + ps.get(i).getName());
+            if (profiles.findOne(ps.get(i).getProfileId()) == null)
+            {
+                System.out.println("Profile with id " + ps.get(i).getProfileId() + " not found");
+            }
+            else
+            {
+                ps.set(i, profiles.findOne(ps.get(i).getProfileId()));
+            }
         }
 
         user = users.save(user);
