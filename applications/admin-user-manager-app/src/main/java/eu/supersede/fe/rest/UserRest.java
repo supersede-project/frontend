@@ -84,31 +84,7 @@ public class UserRest
             log.warn("IF Authentication Manager disable, user token is NULL");
         }
 
-        // re-attach detached profiles
-        List<Profile> ps = user.getProfiles();
-
-        for (int i = 0; i < ps.size(); i++)
-        {
-            Profile profile = ps.get(i);
-
-            // Check if the profile has been selected in the UI
-            if (profile != null)
-            {
-                Profile savedProfile = profiles.findOne(profile.getProfileId());
-
-                // Check if the profile is present in the corresponding database table
-                if (savedProfile == null)
-                {
-                    throw new InternalServerErrorException("Profile with id " + profile.getProfileId()
-                            + " not found, unable to associate it to the new user");
-                }
-                else
-                {
-                    // Update the profile
-                    ps.set(i, profiles.findOne(ps.get(i).getProfileId()));
-                }
-            }
-        }
+        reattachProfiles(user);
 
         user = users.save(user);
 
@@ -172,17 +148,40 @@ public class UserRest
             log.warn("IF Authentication Manager disable, user token is NULL");
         }
 
+        reattachProfiles(user);
+
+        user = users.save(user);
+
+        return user;
+    }
+
+    private void reattachProfiles(User user)
+    {
         // re-attach detached profiles
         List<Profile> ps = user.getProfiles();
 
         for (int i = 0; i < ps.size(); i++)
         {
-            ps.set(i, profiles.findOne(ps.get(i).getProfileId()));
+            Profile profile = ps.get(i);
+
+            // Check if the profile has been selected in the UI
+            if (profile != null)
+            {
+                Profile savedProfile = profiles.findOne(profile.getProfileId());
+
+                // Check if the profile is present in the corresponding database table
+                if (savedProfile == null)
+                {
+                    throw new InternalServerErrorException("Profile with id " + profile.getProfileId()
+                            + " not found, unable to associate it to the new user");
+                }
+                else
+                {
+                    // Update the profile
+                    ps.set(i, profiles.findOne(ps.get(i).getProfileId()));
+                }
+            }
         }
-
-        user = users.save(user);
-
-        return user;
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.PUT)
