@@ -1,29 +1,29 @@
 <div class="alert alert-danger" ng-show="error">
-	There was a problem logging in. Please try again.
+    There was a problem logging in. Please try again.
 </div>
 <form role="form" ng-submit="login()">
-	<table class="register-table">
-		<tr>
-			<td>Tenant:</td>
-			<td>
-				<jqx-combo-box ng-model="selectedTenant" jqx-source="tenants" jqx-width="300"></jqx-combo-box>
-  			</td>
-		</tr>
-		<tr>
-			<td colspan="1">Username:</td>
-			<td>
-				<jqx-input jqx-width="300" jqx-height="20" id="username" name="username" ng-model="credentials.username"/>
-			</td>
-		</tr>
-		<tr>
-			<td colspan="1">Password:</td>
-			<td>
-				<jqx-password-input jqx-width="294" jqx-height="20"
-					type="password" id="password" name="password" ng-model="credentials.password"/>	
-			</td>
-		</tr>
-	</table>
-	<jqx-button jqx-on-click="submitClick(event)" type="submit">Login</jqx-button>
+    <table class="register-table">
+        <tr>
+            <td>Tenant:</td>
+            <td>
+                <jqx-combo-box ng-model="selectedTenant" jqx-source="tenants" jqx-width="300"></jqx-combo-box>
+              </td>
+        </tr>
+        <tr>
+            <td colspan="1">Username:</td>
+            <td>
+                <jqx-input jqx-width="300" jqx-height="20" id="username" name="username" ng-model="credentials.username"/>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="1">Password:</td>
+            <td>
+                <jqx-password-input jqx-width="294" jqx-height="20"
+                    type="password" id="password" name="password" ng-model="credentials.password"/>
+            </td>
+        </tr>
+    </table>
+    <jqx-button jqx-on-click="submitClick(event)" type="submit">Login</jqx-button>
 </form>
 <input style="visibility: hidden;" type="password" class="form-control" name="password" ng-model="credentials.password"/>
 <input style="visibility: hidden;" type="text" class="form-control" name="username" ng-model="credentials.username"/>

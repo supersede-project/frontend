@@ -74,22 +74,17 @@ public class UserRest
             }
             catch (UserStoreException e)
             {
-                log.error("IFAuthenticationManager thrown an exception: ");
-                e.printStackTrace();
+                log.error("IFAuthenticationManager thrown an exception: " + e.getMessage());
                 throw new InternalServerErrorException(e.getMessage());
             }
+
         }
         else
         {
             log.warn("IF Authentication Manager disable, user token is NULL");
         }
 
-        // re-attach detached profiles
-        List<Profile> ps = user.getProfiles();
-        for (int i = 0; i < ps.size(); i++)
-        {
-            ps.set(i, profiles.findOne(ps.get(i).getProfileId()));
-        }
+        reattachProfiles(user);
 
         user = users.save(user);
 
@@ -139,14 +134,12 @@ public class UserRest
             }
             catch (UserStoreException e)
             {
-                log.error("IFAuthenticationManager thrown an exception: ");
-                e.printStackTrace();
+                log.error("IFAuthenticationManager throw an exception: " + e.getMessage());
                 throw new InternalServerErrorException(e.getMessage());
             }
             catch (MalformedURLException e)
             {
-                log.error("IFAuthenticationManager thrown an exception: ");
-                e.printStackTrace();
+                log.error("IFAuthenticationManager throw an exception: " + e.getMessage());
                 throw new InternalServerErrorException(e.getMessage());
             }
         }
@@ -155,17 +148,91 @@ public class UserRest
             log.warn("IF Authentication Manager disable, user token is NULL");
         }
 
+        reattachProfiles(user);
+
+        user = users.save(user);
+
+        return user;
+    }
+
+    private void reattachProfiles(User user)
+    {
         // re-attach detached profiles
         List<Profile> ps = user.getProfiles();
 
         for (int i = 0; i < ps.size(); i++)
         {
-            ps.set(i, profiles.findOne(ps.get(i).getProfileId()));
+            Profile profile = ps.get(i);
+
+            // Check if the profile has been selected in the UI
+            if (profile != null)
+            {
+                Profile savedProfile = profiles.findOne(profile.getProfileId());
+
+                // Check if the profile is present in the corresponding database table
+                if (savedProfile == null)
+                {
+                    throw new InternalServerErrorException("Profile with id " + profile.getProfileId()
+                            + " not found, unable to associate it to the new user");
+                }
+                else
+                {
+                    // Update the profile
+                    ps.set(i, profiles.findOne(ps.get(i).getProfileId()));
+                }
+            }
         }
+    }
 
-        user = users.save(user);
+    @RequestMapping(value = "/update", method = RequestMethod.PUT)
+    public void updateUserCredentials(Authentication authentication, @RequestBody User user)
+    {
+        DatabaseUser currentUser = (DatabaseUser) authentication.getPrincipal();
+        String tenant = currentUser.getTenantId();
 
-        return user;
+        if (currentUser.getToken() != null)
+        {
+            try
+            {
+                proxy.getIFAuthenticationManager(tenant).updateUserCredential(toSecurityUser(user, tenant),
+                        user.getNewPassword(), user.getOldPassword());
+            }
+            catch (UserStoreException e)
+            {
+                log.error("IFAuthenticationManager throw an exception: " + e.getMessage());
+                throw new InternalServerErrorException(e.getMessage());
+            }
+        }
+        else
+        {
+            log.warn("IF Authentication Manager disable, user token is NULL");
+        }
+    }
+
+    @RequestMapping(value = "/delete", method = RequestMethod.PUT)
+    public void deleteUser(Authentication authentication, @RequestBody User user)
+    {
+        DatabaseUser currentUser = (DatabaseUser) authentication.getPrincipal();
+        String tenant = currentUser.getTenantId();
+
+        if (currentUser.getToken() != null)
+        {
+            try
+            {
+                proxy.getIFAuthenticationManager(tenant).deleteUser(toSecurityUser(user, tenant));
+            }
+            catch (UserStoreException e)
+            {
+                log.error("IFAuthenticationManager throw an exception: " + e.getMessage());
+                throw new InternalServerErrorException(e.getMessage());
+            }
+
+            users.delete(user.getUserId());
+        }
+        else
+        {
+            log.warn("IF Authentication Manager disable, user token is NULL");
+        }
     }
 
     @RequestMapping("/{userId}")

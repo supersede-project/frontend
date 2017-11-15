@@ -1,7 +1,8 @@
 <div id="home" ng-show="authenticated">
-	<div ng-repeat="application in applications" class="home_side">
-		<jqx-button style="cursor: pointer; width: 97%; height: 97%; margin: 20px;" ng-click="goHome(application.applicationName, application.homePage);">{{application.applicationLabel}}</jqx-button>
-	</div>
-	<div style="clear: both;"></div>
-	
+    <div ng-repeat="application in applications" class="home_side">
+        <jqx-button style="cursor: pointer; width: 97%; height: 97%; margin: 20px;"
+            ng-click="goHome(application.applicationName, application.homePage);">{{application.applicationLabel}}
+        </jqx-button>
+    </div>
+    <div style="clear: both;"></div>
 </div>
